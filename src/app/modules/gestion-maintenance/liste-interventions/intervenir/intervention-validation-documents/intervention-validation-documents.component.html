@@ -1,0 +1,70 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Validation des documents</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="dialog-carte">
+    <ng-container *ngIf="diagnostique$ | async as diagnostiquestate">
+      <div *ngIf="diagnostiquestate?.interventionState =='LOADING'" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+      <ng-container *ngIf="diagnostiquestate?.interventionState =='SUCCESS'">
+        <ng-container *ngIf="diagnostiquestate?.intervention as intervention">
+          <div class="flex justify-center items-center bg-[#400069] w-5/12 rounded-lg h-14 text-white mx-auto" (click)="printBonCommande(intervention?.path?.path)">
+            <mat-icon>insert_drive_file</mat-icon>
+            <p class="pl-2">Bon de commande interne N° {{ demande|| '---'}}</p>
+            <p class="pl-5"><mat-icon class="cursor-pointer">print</mat-icon></p>
+          </div>
+          <div class="mt-10">
+            <ng-container>
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of intervention?.data">
+                    <td class="p-3">{{(item?.piece_name) || '---'}}</td>
+                    <td class="p-3">{{(item?.quantite) || 0}}</td>
+                    <!-- <td class="p-3">{{(item?.prix_unitaire) || 0}}</td> -->
+                    <!-- <td class="p-3">{{(item?.montant_ht) || 0}}</td>
+                    <td class="p-3">{{(item?.tva) || 0}}</td>
+                    <td class="p-3">{{(item?.montant_ttc) || 0}}</td> -->
+                  </tr>
+                  <!-- <tr>
+                    <td></td>
+                    <td class="p-3 text-[#0C8040] font-medium">Total</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(intervention?.data, 'prix_unitaire') | number) || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(intervention?.data, 'montant_ht') | number)  || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(intervention?.data, 'tva') | number)  || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(intervention?.data, 'montant_ttc') | number)  || 0}} Dhs</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div></div>
+    <div class="text-right">
+      <button mat-dialog-close [routerLink]="['/listeinterventions']"
+          class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+          Fermer
+        </button>
+    </div>
+    <!-- <div class="text-right">
+      <button pButton pRipple type="submit" label="Valider" class="p-button-rounded p-button-success"></button>
+    </div> -->
+  </div>

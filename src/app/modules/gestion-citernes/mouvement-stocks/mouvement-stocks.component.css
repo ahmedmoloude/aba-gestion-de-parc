@@ -1,0 +1,7 @@
+::ng-deep mat-divider {
+    height: 70%;
+    margin: auto !important;
+}
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }

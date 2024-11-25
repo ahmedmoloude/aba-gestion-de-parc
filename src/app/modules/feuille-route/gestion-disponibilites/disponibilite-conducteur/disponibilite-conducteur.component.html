@@ -1,0 +1,90 @@
+<div class="p-4">
+  <!-- filter -->
+  <!-- <div class="grid grid-cols-4 gap-2 mb-6 mt-5" *ngIf="!spinner">
+    <mat-form-field appearance="fill" class="w-11/12 mb-4">
+      <mat-label>Conaducteur</mat-label>
+      <input
+        matInput
+        (keyup)="getConducteur2($event)"
+        type="text"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-11/12 mb-4">
+      <mat-label>Immatriculation</mat-label>
+      <input
+        matInput
+        (keyup)="getMatricule($event)"
+        type="text"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-[100%] mb-4">
+      <mat-label>Statut</mat-label>
+      <mat-select  (selectionChange)="getStatut($event)" matNativeControl required>
+        <mat-option value="1">Disponible</mat-option>
+        <mat-option value="0">Indisponible</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      (click)="getPersonnelsWithFiltre()"
+      pButton pRipple
+      type="submit"
+      label="Filtre"
+      icon="pi pi-filter" iconPos="left"
+      class="p-button-rounded p-button-success h-[38px] w-1/2">
+    </button>
+  </div> -->
+  <div class="grid">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filtrer($event)"
+    ></app-shared-filter>
+  </div>
+  <!-- filter -->
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <div class="overflow-x-auto relative mt-4">
+    <ng-container *ngIf="!spinner">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }} <mat-icon>unfold_more</mat-icon>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of conducteur_dispo"
+          >
+            <td class="p-3">{{item.id}}</td>
+            <td class="p-3">{{item.first_name}}  {{item.last_name}} </td>
+            <td class="p-3">{{item.matricule}}</td>
+            <!-- <td class="p-3">{{getNumberOfMissionByMounth( item.convoyages , item.transferts , item.tours) }}  </td> -->
+            <td class="p-3">{{getNumberOfMission( item.missions ) }}  </td>
+            <td class="p-3">{{getKmParcouru(item.froute_closed)}}</td>
+            <!-- <td class="p-3">vvv</td> -->
+            <td class="p-3" >{{lastDateOfMission(item.convoyages , item.transferts ,item.tours )}}</td>
+            <td class="p-3">
+              <button  class="disponible" *ngIf="item.disponible.status && item.statut && item.availablity.length ===0">Disponible</button>
+              <button class="indisponible"  *ngIf="!item.disponible.status || !item.statut || item.availablity.length !=0"> Indisponible </button>
+            </td>
+            <td class="p-3" >{{item.disponible.motif}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+  <div class="mt-10" >
+    <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+  </div>
+</div>
+

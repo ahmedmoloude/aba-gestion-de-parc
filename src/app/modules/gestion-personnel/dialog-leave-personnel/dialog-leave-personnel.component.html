@@ -1,0 +1,130 @@
+<!-- <div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+    <h2 mat-dialog-title class="col-span-2">  Gérer la disponibilité </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+    <mat-dialog-content>
+        <h2 class="mt-4" style="margin-top: 5%; margin-left: 5%;">
+          Motif :
+         </h2>
+         <div>
+          <mat-button-toggle-group style="margin-left: 40%;" class="mt-10" >
+            <mat-button-toggle  (change)="onValChange($event.value)" *ngFor="let motif of motifs" value="{{motif.motif}}">
+              {{motif.motif}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+              <form  [formGroup]="form" >
+                <div class="grid grid-cols-2 gap-4 mt-3" *ngIf="ShowDate" style="margin-top: 5%;">
+                   <div>
+                  <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Date debut</mat-label>
+                    <input
+                      matInput
+                      formControlName="start_date"
+                      [matDatepicker]="Date_debut"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="Date_debut"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #Date_debut></mat-datepicker>
+                  </mat-form-field>
+                   </div>
+
+                   <div>
+                  <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Date de fin </mat-label>
+                    <input
+                      matInput
+                      formControlName="end_date"
+                      [matDatepicker]="Date_de_fin"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="Date_de_fin"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #Date_de_fin></mat-datepicker>
+                  </mat-form-field>
+                   </div>
+                </div>
+
+              </form>
+
+
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button *ngIf="!spinner"  mat-button (click)="addConge()"  color="primary" cdkFocusInitial>Enregistrer</button>
+      <div *ngIf="spinner"  style="margin-left:50%">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+    </mat-dialog-actions>
+</div> -->
+
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Gérer la disponibilité</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="form">
+      <div class="pl-4 pr-4 mb-3">
+        <p class="text-[#0C8040] mb-4">Motif :</p>
+        <mat-radio-group aria-label="Select an option" class="ml-4">
+          <mat-radio-button (change)="onValChange($event.value)" *ngFor="let motif of motifs" value="{{motif.motif}}">{{motif.motif == 'conge'? 'congé': motif.motif}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="grid grid-cols-2 gap-3 pl-4 pr-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date début</mat-label>
+            <input formControlName="start_date" matInput type="date" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date fin</mat-label>
+            <input formControlName="end_date" matInput type="date" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+          *ngIf="!spinner"
+            class="underline w-32 pt-2 font-bold text-[18px]"
+            mat-dialog-close
+          >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button
+          *ngIf="!spinner"  mat-button (click)="addConge()"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          >
+            Valider
+          </button> -->
+          <button
+            *ngIf="!spinner"
+            (click)="addConge()"
+            pButton pRipple
+            label="Valider"
+            class="p-button-rounded p-button-success">
+          </button>
+          <div *ngIf="spinner"  style="margin-left:50%">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

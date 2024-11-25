@@ -1,0 +1,534 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full">
+  <div class="grid grid-cols-2 gap-2 mb-4">
+    <!-- <div> -->
+    <div class="flex">
+      <mat-icon class="pt-1">description</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">Fournisseur</h2>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer mr-4" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcel()">Exporter</h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <div class="grid grid-cols-3 gap-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>GPS</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ gps.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('GPS')"
+              *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')"
+              class="mr-2">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('GPS')"
+              *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of gps">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('GPS', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('GPS')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Visite technique</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ visites.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('VISITE')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('VISITE')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of visites">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('VISITE', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('VISITE')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Assurance</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ assurances.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('ASSURANCE')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('ASSURANCE')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of assurances">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('ASSURANCE', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('ASSURANCE')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Contrat</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ contrats.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('CONTRAT')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('CONTRAT')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of contrats">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('CONTRAT', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('CONTRAT')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Achat extincteur</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ achat_extincteurs.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('ACHAT_EXTINCTEUR')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('ACHAT_EXTINCTEUR')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of achat_extincteurs">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('ACHAT_EXTINCTEUR', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('ACHAT_EXTINCTEUR')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Recharge extincteur</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ recharge_extincteurs.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('RECHARGE_EXTINCTEUR')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')" class="mr-2">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('RECHARGE_EXTINCTEUR')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of recharge_extincteurs">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('RECHARGE_EXTINCTEUR', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('RECHARGE_EXTINCTEUR')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Société de location</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ locations.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('LOCATION')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')" class="mr-2">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('LOCATION')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of locations">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('LOCATION', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('LOCATION')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Société de leasing</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ leasings.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('LEASING')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('LEASING')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of leasings">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('LEASING', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('LEASING')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Citerne</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ citernes.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('CITERNE')"  *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')"class="mr-2">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('CITERNE')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of citernes">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('CITERNE', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('CITERNE')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Carte</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ cartes.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('CARTE')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('CARTE')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of cartes">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('CARTE', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('CARTE')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div
+          class="grid grid-cols-4 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div class="col-span-2">
+            <p>Carburant</p>
+          </div>
+          <div class="text-center">
+            <span class="text-[#fff]">{{ fuel_suppliers?.length }}</span>
+          </div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="addDialog('FUEL')" class="mr-2" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcel('FUEL')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of fuel_suppliers">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addDialog('FUEL', 'edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'R')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="detailsDoc('FUEL')">
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

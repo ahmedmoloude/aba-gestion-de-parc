@@ -1,0 +1,6 @@
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }
+  ::ng-deep .ngx-pagination .current {
+    background: #0C8040 !important;
+}

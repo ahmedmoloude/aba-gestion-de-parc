@@ -1,0 +1,106 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+      <h2 mat-dialog-title class="col-span-2">{{ form_btn }} une nature de dépense</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <form [formGroup]="createNature">
+<!--
+      <div class="grid grid-cols-1 gap-2 p-4 mt-4">
+        <div class="flex justify-center">
+          <div>
+            <img
+              [src]="image_src"
+              class="w-48 mb-3 rounded-xl"
+              *ngIf="display_img"
+            />
+            <p class="text-center">{{ picture_name }}</p>
+          </div>
+          <div
+            class="file-images flex justify-center items-center cursor-pointer"
+          >
+            <input
+              #imgInput
+              hidden="true"
+              type="file"
+              onclick="this.value=null"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageNature($event)"
+            />
+            <div class="text-center" (click)="imgInput.click()">
+              <mat-icon>add_circle</mat-icon>
+              <p>Ajouter une image</p>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="grid grid-cols-2 gap-2 p-4 mt-4 formprestatire">
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'nature de dépense'" formControlName="name" ></i-field>
+        </div>
+        <div class="w-[100%]" style="align-content: end;">
+          <!-- <i-field [type]="'text'" [label]="'nature de dépense'" formControlName="name" ></i-field> -->
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Fournisseur</mat-label>
+            <mat-select matNativeControl formControlName="fournisseur_depence_id">
+              <mat-option *ngFor="let item of fournisseurs" [value]="item.id">{{
+                item.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'date'" [label]="'Date'" formControlName="date" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'GSM société'" formControlName="gsm_socite" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'E-mail société'" formControlName="mail_societe" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'Contact'" formControlName="contact" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'GSM contact'" formControlName="gsm_contact" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'E-mail contact'" formControlName="mail_contact" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'Fixe'" formControlName="fix" ></i-field>
+        </div>
+        <div mat-dialog-content class="w-[100%]">
+          <i-field [type]="'text'" [label]="'Adresse siége'" formControlName="adresse" ></i-field>
+        </div> -->
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <button [disabled]="createNature.invalid" *ngIf="!spinnerAdd"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          (click)="addNature()">{{ form_btn }}
+        </button>
+        <span *ngIf="spinnerAdd">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+     <!-- <div
+          *ngIf="expedetionForm.get('expeditions')['controls'].length > 1"
+          class="pl-2 cursor-pointer"
+          (click)="removeOrClearExpedetion(i)"
+          >
+            <mat-icon class="text-danger pt-4">delete_forever</mat-icon>
+          </div> -->

@@ -1,0 +1,26 @@
+<div class="p-4">
+  <h1 class="text-[#06152B] text-[22px] font-normal">
+    Valeur poids volumétrique
+  </h1>
+  <form [formGroup]="data" (submit)="addPV()" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+    <div class="grid grid-cols-4 gap-4">
+      <div class="w-[100%] pl-0 mt-4 pr-7 mb-4">
+        <i-field [type]="'number'" [label]="'Valeur'" formControlName="valeur" ></i-field>
+        <!-- <mat-form-field appearance="fill" class="w-[100%] pl-0 mt-4 pr-7 mb-4">
+          <mat-label>Valeur</mat-label>
+          <input matInput formControlName="valeur" type="text" required/>
+        </mat-form-field> -->
+      </div>
+    </div>
+
+    <div class="flex">
+      <!-- <button
+        class="cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        type="submit" [disabled]="data.invalid"
+      >
+        Enregistrer
+      </button> -->
+      <button [disabled]="data.invalid" pButton pRipple type="submit" label="Enregistrer" class="p-button-rounded p-button-success"></button>
+    </div>
+  </form>
+</div>

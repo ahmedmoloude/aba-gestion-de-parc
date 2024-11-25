@@ -1,0 +1,25 @@
+::ng-deep mat-divider {
+    height: 70%;
+    margin: auto !important;
+}
+.btn-filter{
+    padding: 10px !important;
+}
+.width-check {
+    width: 3%;
+    text-align: center;
+}
+
+.width-content {
+    width: 25%
+}
+::ng-deep .ngx-pagination .current {
+    background: #0C8040 !important;
+}
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #0C8040 ;
+}
+::ng-deep .borderbtn{
+    border:1px solid #0C8040;
+    border-radius: 20px;
+    }

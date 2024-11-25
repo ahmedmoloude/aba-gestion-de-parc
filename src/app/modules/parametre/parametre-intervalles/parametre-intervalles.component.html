@@ -1,0 +1,82 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">
+        Intervalles des valeurs
+      </h1>
+    </div>
+    <div class="text-right" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialogAdd('', 'add')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+          Ajouter une limitation
+        </h2>
+      </div>
+    </div>
+  </div>
+  <!-- filter -->
+  <form [formGroup]="filter">
+    <div class="grid grid-cols-3 gap-1 mb-6 mt-5">
+      <mat-select formControlName="type" class="p-3 mx-2 border rounded-3xl border-[#DBDBDB] filter-width"
+        placeholder="Limitation sur">
+        <mat-option value="">Sélectionner</mat-option>
+        <mat-option *ngFor="let t of types" value="{{ t.name }}">
+          {{ t.libelle }}
+        </mat-option>
+      </mat-select>
+      <button mat-button class="text-white p-3 bg-btn-green text-[18px] w-[50%]" (click)="filterLimitation()">
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filtre</span>
+      </button>
+    </div>
+  </form>
+  <!-- filter -->
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <ng-container *ngIf="!spinner">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex justify-end">Actions</div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of limitations  | paginate : {  id: 'pagination-hors_normes',  itemsPerPage: 6,  currentPage: page}">
+          <td class="p-3">{{ type(item.type)?.libelle }}</td>
+          <td *ngIf="item.valeur_type == 'min_max'" class="p-3">{{ convertStringToJson(item.valeur).min }} {{'\<->'}}
+              {{convertStringToJson(item.valeur).max}}</td>
+          <td *ngIf="item.valeur_type == 'min_max_value'" class="p-3">{{ convertStringToJson(item.valeur).min }}
+            {{'\<->'}} {{convertStringToJson(item.valeur).max}}</td>
+          <td class="p-3">{{ item.accepted_value_type}}</td>
+
+          <td class="p-3 text-right cursor-pointer">
+            <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openDialogAdd(item, 'edit')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                Modification
+              </button>
+              <button mat-menu-item (click)="deletLimitation(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                Supprimer
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <pagination-controls id="pagination-hors_normes" previousLabel="" nextLabel=""
+        (pageChange)="page = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

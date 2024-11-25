@@ -1,0 +1,202 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">{{ form_btn }} une agence</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <!-- <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Number</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           (keyup)="filterCity($event)"
+           [matAutocomplete]="auto">
+    <mat-icon matPrefix class="my-icon">search</mat-icon>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let city of citiesFilter" [value]="city.id">
+        {{ city.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field> -->
+
+  <form [formGroup]="createAgence">
+    <div mat-dialog-content>
+      <!-- <div
+        *ngIf="spinnergetCities"
+        class="flex items-center justify-center mt-6 mb-6">
+        <mat-spinner [diameter]="35"></mat-spinner>
+      </div> -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" ><!--*ngIf="!spinnergetCities"-->
+        <div class="w-[100%] pl-7 mb-4">
+          <app-shared-autcomplete 
+            [opended]="true"
+            [hasIcon]="false"
+            [type]="'single'" 
+            [contentStyle]="contentStyle" 
+            [inputStyle]="searchStyle" 
+            [charToGetAll]="'*'" 
+            [data]="cities" 
+            [keys]="['code', 'name']" 
+            [lengthToStart]="3" 
+            [display]="['code', 'name']" 
+            [placeholer]="'Rechercher la ville...'" 
+            (dataEvent)="cityChange($event)">
+          </app-shared-autcomplete>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 mb-4">
+            <mat-label>Ville</mat-label>
+            <input type="text"
+                   placeholder="Ville"
+                   aria-label="Ville"
+                   matInput
+                   (keyup)="filterCity($event)"
+                   [matAutocomplete]="auto"
+                   formControlName="city"
+                   >
+            <mat-icon matPrefix class="my-icon">search</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="cityChange($event)">
+              <mat-option *ngFor="let city of citiesFilter" [value]="city.name">
+                {{ city.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
+        </div>
+        <div>
+          <!-- <span *ngIf="!spinnergetZones">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span> -->
+          <mat-form-field appearance="fill" class="w-[100%] mb-4" *ngIf="spinnergetZones">
+            <mat-label>Zone</mat-label>
+            <mat-select placeholder="Zone" formControlName="zone_id" (selectionChange)="zoneChange($event)">
+              <mat-option *ngFor="let zone of zones" [value]="zone.id">
+                {{ zone.name }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <span *ngIf="!spinnergetZones && !spinnergetSecteurs">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span> -->
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4" *ngIf="spinnergetZones && spinnergetSecteurs">
+            <mat-label>Secteur</mat-label>
+            <mat-select placeholder="Secteur" formControlName="sector_id">
+              <mat-option *ngFor="let secteur of secteurs" [value]="secteur.id">
+                {{ secteur.name }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Nom de l’agence</mat-label>
+            <input matInput type="text" formControlName="name" autocomplete="off" (input)="changeTextToUppercase('name')"/>
+          </mat-form-field>
+        </div> -->
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'text'" [label]="'Nom de l’agence'" formControlName="name" (input)="changeTextToUppercase('name')"></i-field>
+        </div>
+
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'text'" [label]="'Adresse'" formControlName="adress" (input)="changeTextToUppercase('adress')"></i-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Adresse</mat-label>
+            <input matInput type="text" formControlName="adress" autocomplete="off" (input)="changeTextToUppercase('adress')"/>
+          </mat-form-field>
+        </div> -->
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <section class="check-section pl-7 pr-7 mb-4">
+            <mat-checkbox class="check-margin" aria-checked="true" formControlName="has_home_delivery">à domicile</mat-checkbox>
+            <mat-checkbox class="check-margin" aria-checked="true" formControlName="has_agency_delivery">En gare</mat-checkbox>
+          </section>
+        </div>
+        <div>
+          <section class="check-section pl-7 pr-7 mb-4">
+            <mat-checkbox class="check-margin" aria-checked="true" formControlName="is_hub">Hub</mat-checkbox>
+          </section>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 mb-4">
+            <mat-label>Nom et Prénom</mat-label>
+            <input matInput type="text"  formControlName="nameUser" autocomplete="off"  (input)="changeTextToUppercase('nameUser')"/>
+          </mat-form-field>
+        </div> -->
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'text'" [label]="'Nom et Prénom'" formControlName="nameUser" (input)="changeTextToUppercase('nameUser')"></i-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-label>Login</mat-label>
+            <input matInput type="text"  formControlName="email" autocomplete="off"/>
+          </mat-form-field>
+        </div> -->
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'email'" [label]="'Login'" formControlName="email"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 mb-4">
+            <mat-label>Mot de passe</mat-label>
+            <input matInput type="password"  formControlName="password" autocomplete="off"/>
+          </mat-form-field>
+        </div> -->
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'password'" [label]="'Mot de passe'" formControlName="password"></i-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-label>Confirmation mot de passe</mat-label>
+            <input matInput type="password"  formControlName="confirmPassword" autocomplete="off"/>
+          </mat-form-field>
+        </div> -->
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'password'" [label]="'Confirmation mot de passe'" formControlName="confirmPassword"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 pl-7 pr-7 mb-4">
+        <h1 class="text-[#0C8040] text-[20px] font-medium">
+          Ajouter le point géographique
+        </h1>
+        <div style="height: 300px" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 pt-2 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abondonner
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          type="submit" (click)="addAgence()" *ngIf="!spinner" [disabled]="createAgence.invalid">
+          {{ form_btn }}
+        </button> -->
+        <button 
+            (click)="addAgence()"
+            *ngIf="!spinner" [disabled]="createAgence.invalid" 
+            pButton pRipple 
+            type="submit" 
+            label="Ajouter"
+            class="p-button-rounded p-button-success">
+          </button>
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

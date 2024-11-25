@@ -1,0 +1,12 @@
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }
+.truck-status::first-letter{
+  text-transform: uppercase;
+}
+.disponible {
+  background-color: #7fffd4;border-radius: 3 px; color:white;  width:100%
+}
+.indisponible {
+  background-color: rgb(246, 120, 97); color:white ; border-radius: 3px; width:100%
+}

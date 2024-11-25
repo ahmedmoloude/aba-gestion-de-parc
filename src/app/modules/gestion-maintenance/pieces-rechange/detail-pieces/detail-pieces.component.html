@@ -1,0 +1,148 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">settings</mat-icon>
+
+      <h2 class="text-[#636363] font-semibold pl-2 cursor-pointer" [routerLink]="['/piecesrechange']">Pièces de rechange ><span class="text-[#0C8040] pl-2">Détails</span></h2>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="p-4" *ngIf="!spinner">
+    <p>Saisi par : <span class="pl-4 font-bold">{{ (piece.user?.name) || '---'}}</span></p>
+    <p>Date de saisie : <span class="pl-4 font-bold">{{ (piece.created_at | date : "dd/MM/yyyy") || '---'  }}</span></p>
+  </div>
+  <div class="detail-vehicules p-4 mb-5" *ngIf="!spinner">
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-44 p-2 rounded-[12px_12px_0px_0px]">
+        Informations
+      </p>
+    </div>
+    <div class="grid grid-cols-4 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date d’entrée</p>
+        <p class="font-medium">{{ (piece?.date_entree | date : "dd/MM/yyyy") || '---'  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Référence</p>
+        <p class="font-medium">{{ (piece?.reference) || '---'  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Nom de pièce</p>
+        <p class="font-medium">{{ (piece?.name?.name) || '---'  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Famille</p>
+        <p class="font-medium">{{ (piece?.family?.name) || '---'  }}</p>
+      </div>
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">Fournisseur</p>
+        <p class="font-medium">{{ (piece?.prestataire?.name) || (piece?.stock[item?.stock?.length - 1]?.prestataire?.name)  || '---'  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Stock minimal</p>
+        <p class="font-medium">{{ (piece?.stock_min) || 0  }}</p>
+      </div> -->
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Quantité</p>
+        <p class="font-medium">{{ (piece?.quantite) || 0  }}</p>
+      </div>
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">Prix unitaire</p>
+        <p class="font-medium">{{ (piece?.stock[0]?.prix_unitaire) || 0  }}</p>
+      </div> -->
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">Monrtant HT</p>
+        <p class="font-medium">{{ (piece?.stock[piece?.stock?.length - 1]?.montant_ht) || 0  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">TVA</p>
+        <p class="font-medium">{{ (piece?.stock[piece?.stock?.length - 1]?.tva) || 0  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant TTC</p>
+        <p class="font-medium">{{ (piece?.stock[piece?.stock?.length - 1]?.montant_ttc) || 0 }}</p>
+      </div> -->
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">Pièce jointe</p>
+        <p class="font-medium">
+          <span *ngIf="!(piece?.file)">---</span>
+          <a *ngIf="piece?.file" [href]="piece?.file?.url" target="_blank" class="flex items-center">
+            {{piece?.file?.name}}
+            <mat-icon class="pl-[5px] file-icon">attach_file</mat-icon>
+          </a>
+        </p>
+      </div> -->
+    </div>
+  </div>
+  <div class=" overflow-auto" *ngIf="!spinner">
+    <table class="w-full text-left text-gray-500  d-block">
+      <thead>
+        <tr>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Référence d'Achat</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Date d’entrée</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Qté entrante</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Fournisseur</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Saisi par</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Prix unitaire</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Montant HT</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>TVA</p>
+          </th>
+          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <p>Montant TTC</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of entrees">
+          <td class="p-3">
+            <p class="text-[#636363]">{{ item?.reference }}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.created_at | date: 'dd/MM/yyyy'}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.quantite}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.prestataire?.name}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.user?.name}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.prix_unitaire}} Dhs</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.montant_ht}} Dhs</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.tva}} Dhs</p>
+          </td>
+          <td class="p-3">
+            <p>{{ item?.montant_ttc}} Dhs</p>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

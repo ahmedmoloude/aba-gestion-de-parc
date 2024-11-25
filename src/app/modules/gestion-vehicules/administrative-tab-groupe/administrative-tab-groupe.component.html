@@ -1,0 +1,728 @@
+<div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6" *ngIf="!spinner">
+  <div class="grid grid-cols-3 gap-2">
+    <div class="flex mt-1">
+      <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">Détails véhicule</h2>
+    </div>
+    <div class="flex justify-between">
+      <div class="text-[#636363]">
+        Date de création:
+        <span class="text-[#0C8040]">{{
+          vehicule.created_at | date: "dd/MM/yyyy"
+          }}</span>
+      </div>
+      <div class="text-[#636363]">
+        Crée par :
+        <span class="text-[#0C8040]">{{
+          vehicule.user_id == null ? "SYSTEME" : vehicule.user?.name
+          }}</span>
+      </div>
+    </div>
+    <div class="text-right" *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'U')">
+      <button class="text-[#636363] font-medium" (click)="openDialog('edit', vehicule)">
+        Modifier
+      </button>
+    </div>
+  </div>
+  <!-- <div class="bg-[#E3FFDF] p-3 font-medium w-20 rounded-[18px] mb-5 text-center" >
+    Détails :
+  </div> -->
+  <div class="grid grid-cols-3 gap-4 mt-2 pl-3 pb-3">
+    <div *ngIf="vehicule.images.length">
+      <!-- <div *ngFor="let image of vehicule.images">
+        <img
+          src="{{ url + vehicule.id + '/' }}{{ image.file }}" class="img-vh"
+        />
+      </div> -->
+
+      <p-galleria [(value)]="images" [(visible)]="displayCustom" [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ 'max-width': '850px' }" [numVisible]="7" [circular]="true" [fullScreen]="false"
+        [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="3" [showIndicators]="true"
+        [showItemNavigatorsOnHover]="true" [showIndicatorsOnItem]="true">
+        >
+        <ng-template pTemplate="item" let-item>
+          <img [src]="item" style="width: 100%; display: block" class="img-vh" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+          <div class="p-grid p-nogutter p-justify-center">
+            <img [src]="item" style="display: block" />
+          </div>
+        </ng-template>
+      </p-galleria>
+      <!-- <img [src]="images[0]" alt="" class="img-vh cursor-pointer" (click)="displayCustom = true"/> -->
+    </div>
+    <div *ngIf="!vehicule.images.length">
+      <img src="../../../../assets/img/camion.png" class="img-vh" />
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px]">
+      <div class="grid grid-cols-2 gap-4 bg-[#0C8040] rounded-[11px_11px_0px_0px]">
+        <div class="border-b-4 border-[#0C8040]">
+          <p class="flex justify-center items-center text-[#fff] w-full text-center p-2">
+            <mat-icon>restore</mat-icon>
+            <span class="pl-1 text-base">Statut</span>
+          </p>
+        </div>
+        <div class="text-right">
+          <button mat-mini-fab class="btn-history" (click)="Voirhistoriquestaatut(vehicule)">
+            <mat-icon class="text-[18px]">history</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-3 pb-3">
+        <div class="pl-3 pb-3">
+          <p class="text-[#0C8040] text-[11px] font-medium">Statut :</p>
+          <p class="font-medium">{{ vehicule.last_status?.status }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px]">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon> place</mat-icon>
+          <span class="pl-1 text-base">GPS</span>
+        </p>
+      </div>
+      <div *ngIf="vehicule.gps && vehicule.gps.length">
+        <div class="grid grid-cols-2 gap-4 mt-4 pl-3 pb-3">
+          <div>
+            <p class="text-[#0C8040] text-[11px] font-medium">GPS :</p>
+            <p class="font-medium" *ngIf="
+                vehicule.gps[vehicule.gps.length - 1].pivot.statut == 'ASSOCIE'
+              ">
+              {{ vehicule.gps[vehicule.gps.length - 1].imei_gps }}
+            </p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px] font-medium">
+              Date d'association :
+            </p>
+            <p class="font-medium" *ngIf="
+                vehicule.gps[vehicule.gps.length - 1].pivot.statut == 'ASSOCIE'
+              ">
+              {{
+              vehicule.gps[vehicule.gps.length - 1].pivot?.date_association
+              | date: "dd/MM/yyyy"
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4 pl-3 pb-3">
+          <div>
+            <p class="text-[#0C8040] text-[11px] font-medium">Prestataire :</p>
+            <p class="font-medium" *ngIf="
+                vehicule.gps[vehicule.gps.length - 1].pivot.statut == 'ASSOCIE'
+              ">
+              {{ vehicule.gps[vehicule.gps.length - 1].prestataire?.name }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px]"> -->
+    <!-- <div class="border-b-4 border-[#0C8040]">
+            <p class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]" >
+              <mat-icon> place</mat-icon>
+              <span class="pl-1 text-base">GPS</span>
+            </p>
+    </div>  -->
+    <!--<div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+       <div *ngFor="let gps of vehicule.gps">
+        <p class="text-[#0C8040] text-[11px] font-medium">GPS :</p>
+        <p class="font-medium">
+          {{ gps.imei_gps }}
+        </p>
+      </div> -->
+    <!-- <div *ngIf="vehicule.gps == true">
+      <p class="text-[#0C8040] text-[11px] font-medium">IMEI GPS</p>
+      <p class="font-medium">{{ vehicule.imei_gps }}</p>
+    </div>
+    <div *ngIf="vehicule.gps == true">
+      <p class="text-[#0C8040] text-[11px] font-medium">Date d’installation GPS</p>
+      <p class="font-medium">{{ vehicule.date_installation_gps }}</p>
+    </div>
+    <div *ngIf="vehicule.gps == true">
+      <p class="text-[#0C8040] text-[11px] font-medium">Prestataire</p>
+      <p class="font-medium">{{ vehicule.prestataire }}</p>
+    </div>
+  </div>-->
+    <!-- </div> -->
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon> local_shipping</mat-icon>
+          <span class="pl-1 text-base">Informations générales </span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Code interne :</p>
+          <p class="font-medium">{{ vehicule.code_interne }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">WW :</p>
+          <p class="font-medium">{{ vehicule.n_w }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Immatriculation :</p>
+          <p class="font-medium">{{ vehicule.matricule }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Marque :</p>
+          <p class="font-medium">{{ vehicule.brand?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Modèle :</p>
+          <p class="font-medium">{{ vehicule.modele?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Gamme :</p>
+          <p class="font-medium">{{ vehicule.gamme?.name }}</p>
+        </div>
+      </div>
+      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Type de véhicule :
+          </p>
+          <p class="font-medium">{{ vehicule.truck_type?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Catégorie :</p>
+          <p class="font-medium">Utilitaire</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">N° de châssis :</p>
+          <p class="font-medium">{{ vehicule.n_chassis }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Date de sortie</p>
+          <p class="font-medium">
+            {{ vehicule.date_sortie | date: "dd/MM/yyyy" }}
+          </p>
+        </div>
+      </div>
+      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">DMC</p>
+          <p class="font-medium">
+            {{ vehicule.date_circulation | date: "dd/MM/yyyy" }}
+          </p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Date d'entrée</p>
+          <p class="font-medium">
+            {{ vehicule.date_entree_vehicule | date: "dd/MM/yyyy" }}
+          </p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Couleur :</p>
+          <p class="font-medium">{{ vehicule.color?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Nombre de scellé</p>
+          <p class="font-medium">{{ vehicule.nbr_scelle }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon>assignment_turned_in</mat-icon>
+          <span class="pl-1 text-base">Affectation</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Ville :</p>
+          <p class="font-medium">{{ vehicule?.city?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Sous parc :</p>
+          <p class="font-medium">{{ vehicule?.parc?.name }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Activité :</p>
+          <p class="font-medium">Activite 1</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Service :</p>
+          <p class="font-medium" [matTooltip]="joinService(vehicule.services)" matTooltipPosition="above">
+            {{ joinService(vehicule.services) | truncate: [15, "..."] }}
+          </p>
+        </div>
+      </div>
+      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Zone :</p>
+          <p class="font-medium">{{ vehicule?.zone?.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-4">
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon>perm_data_setting</mat-icon>
+          <span class="pl-1 text-base">Carburant</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Carburant :</p>
+          <p class="font-medium">{{ vehicule?.carburant }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Tonnage :</p>
+          <p class="font-medium">{{ vehicule?.tonnage?.name }}T</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Kilométrage initial
+          </p>
+          <p class="font-medium">{{ vehicule?.km_initial }} Km</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Taille de réservoir :
+          </p>
+          <p class="font-medium">{{ vehicule?.taille_reservoir }} litres</p>
+        </div>
+      </div>
+      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            % consommation de carburant
+          </p>
+          <p class="font-medium">{{ vehicule?.consomation_carburant }}%</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            % consommation réelle
+          </p>
+          <p class="font-medium">{{ vehicule?.consomation_carburant_reel }}%</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Puissance fiscale
+          </p>
+          <p class="font-medium">{{ vehicule?.puissance_fiscale }} CV</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon>assignment</mat-icon>
+          <span class="pl-1 text-base">Adblue</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Adblue</p>
+          <p class="font-medium">
+            {{ vehicule?.adblue == false ? "Non" : "" }}
+            {{ vehicule?.adblue == true ? "Oui" : "" }}
+          </p>
+        </div>
+        <div *ngIf="vehicule?.adblue == true">
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            % Capacité de consommation
+          </p>
+          <p class="font-medium">{{ vehicule?.capacite_consommation }}%</p>
+        </div>
+        <div *ngIf="vehicule?.adblue == true">
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            % Taux de consommation théorique
+          </p>
+          <p class="font-medium">{{ vehicule?.taux_consommation_theorique }}%</p>
+        </div>
+      </div>
+      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-3 pb-3">
+        <div *ngIf="vehicule.adblue == true">
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            % Taux de consommation réelle
+          </p>
+          <p class="font-medium">{{ vehicule?.taux_consommation_reel }}%</p>
+        </div>
+      </div>
+      <!-- <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div> -->
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div *ngIf="vehicule?.status == 'REFORME'">
+          <p class="text-[#0C8040] text-[11px] font-medium">Date d’entrée :</p>
+          <p class="font-medium">
+            {{ vehicule?.date_entree | date: "dd/MM/yyyy" }}
+          </p>
+        </div>
+        <div *ngIf="vehicule.status == 'REFORME'">
+          <p class="text-[#0C8040] text-[11px] font-medium">Kilométrage :</p>
+          <p class="font-medium">{{ vehicule.kilometrage }} Km</p>
+        </div>
+        <div *ngIf="vehicule.status == 'REFORME'">
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Date de réforme :
+          </p>
+          <p class="font-medium">
+            {{ vehicule.date_reforme | date: "dd/MM/yyyy" }}
+          </p>
+        </div>
+        <div *ngIf="vehicule.status == 'REFORME'">
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Type de réforme :
+          </p>
+          <p class="font-medium">{{ vehicule.type_reforme }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mb-5">
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon>settings</mat-icon>
+          <span class="pl-1 text-base">Historique d'intervention</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3" *ngIf="vehicule.demandes_interventions">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            N° d'intervention :
+          </p>
+          <p class="font-medium">{{ vehicule.demandes_interventions[0]?.n_demande|| '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Date d'intervention :
+          </p>
+          <p class="font-medium">{{ (vehicule.demandes_interventions[0]?.date_fin_reelle | date: 'dd/MM/yyyy')|| '---'}}
+          </p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Demandeur :</p>
+          <p class="font-medium">{{ vehicule.demandes_interventions[0]?.demandeur?.name|| '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Catégorie d'intervention :</p>
+          <p class="font-medium text-center">
+            <mat-icon mat-button [matMenuTriggerFor]="menu" class="align-middle cursor-pointer">
+              more_vert
+            </mat-icon>
+            <mat-menu #menu="matMenu">
+              <p mat-menu-item
+                *ngFor="let item of getInterventioncategories(vehicule.demandes_interventions[0]?.diagnostiques)">
+                {{item}}
+              </p>
+            </mat-menu>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p
+          class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+          <mat-icon>power_settings_new</mat-icon>
+          <span class="pl-1 text-base">Dernière mission</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Date début :</p>
+          <p class="font-medium">26/04/2023</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Date fin :</p>
+          <p class="font-medium">26/04/2023</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Lieu départ :</p>
+          <p class="font-medium">12</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Lieu d'arrivée :</p>
+          <p class="font-medium">13</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">
+            Distance parcouru :
+          </p>
+          <p class="font-medium">26/04/2023</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Type :</p>
+          <p class="font-medium">26/04/2023</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Camion :</p>
+          <p class="font-medium">12</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Chauffeur :</p>
+          <p class="font-medium">13</p>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-40 p-2 rounded-[11px_11px_0px_0px]">
+        Documents :
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de contrat</p>
+        <p class="font-medium">
+          {{ contrats["0"]?.num_contract }}
+        </p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° d'assurance</p>
+        <p class="font-medium">{{ asurances["0"]?.n_police }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de vignette</p>
+        <p class="font-medium"></p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de visite technique</p>
+        <p class="font-medium"></p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Autorisation de circulation</p>
+        <p class="font-medium">{{ autorisations["0"]?.n_autorisation }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° Carte grise</p>
+        <p class="font-medium">{{ carteGrises["0"]?.n_carte_grise }}</p>
+      </div>
+    </div> -->
+    <!-- <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[11px_11px_0px_0px]">
+        Historique de réparation:
+      </p>
+    </div> -->
+    <!-- <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Objet :</p>
+        <p class="font-medium">Changement de pneus</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Code</p>
+        <p class="font-medium">001122337788</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date</p>
+        <p class="font-medium">12/01/2012</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Lieu</p>
+        <p class="font-medium">Casablanca</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant TTC</p>
+        <p class="font-medium">250 DH</p>
+      </div>
+    </div> -->
+    <!-- <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[11px_11px_0px_0px]">
+        Opération:
+      </p>
+    </div> -->
+    <!-- <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° voyage</p>
+        <p class="font-medium">1234567</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Conducteur</p>
+        <p class="font-medium">Amine Haddadi</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Trajet</p>
+        <p class="font-medium">Tanger <-> Casablanca</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début</p>
+        <p class="font-medium">12/01/2022</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin</p>
+        <p class="font-medium">25/01/2025</p>
+      </div>
+    </div> -->
+  </div>
+  <div class="bg-[#E3FFDF] p-3 font-medium w-48 rounded-[18px] mb-5 text-center">
+    Gestion administrative :
+  </div>
+  <div class="absolute right-10 z-50">
+    <div *ngIf="selectedTabIndex === 0">
+      <div class="flex justify-between">
+        <div class="flex cursor-pointer" style="opacity: 0">
+          <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+        </div>
+        <div class="flex cursor-pointer pl-4 pr-4" style="opacity: 0">
+          <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+        </div>
+        <div *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'U')" class="flex cursor-pointer"
+          (click)="ajoutercontrat(vehicule, '', 'add')">
+          <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="selectedTabIndex === 1">
+      <div class="flex justify-between">
+        <div class="flex cursor-pointer" style="opacity: 0;">
+          <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+        </div>
+        <div class="flex cursor-pointer pl-4 pr-4" [matMenuTriggerFor]="menu1" style="opacity: 0;">
+          <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+        </div>
+        <div
+          class="flex cursor-pointer"
+          (click)="AddDialogAssurance(uuid, 'add')"
+        >
+          <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+        </div>
+      </div>
+    </div> -->
+    <div *ngIf="selectedTabIndex === 2">
+      <div class="flex justify-between">
+        <div class="flex cursor-pointer" style="opacity: 0">
+          <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+        </div>
+        <div class="flex cursor-pointer pl-4 pr-4" style="opacity: 0">
+          <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+        </div>
+        <div *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'U')" class="flex cursor-pointer"
+          (click)="AddDialogSinistres(vehicule, 'add')">
+          <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+          <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur" *ngIf="!spinner">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab label="Type de contrat">
+        <ng-template matTabContent>
+          <app-type-contrat [item]="vehicule"></app-type-contrat>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Assurance, Vignette, Visite technique...">
+        <ng-template matTabContent>
+          <app-assurance [item]="vehicule"></app-assurance>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Gestion des sinistres">
+        <ng-template matTabContent>
+          <app-gestion-sinistres [item]="vehicule"></app-gestion-sinistres>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-- Start Type de Contrat -->
+<!-- <mat-menu #menu="matMenu">
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <label class="block mb-2 font-medium text[#0C8040" for="excel_file"
+      >Importer un fichier</label
+    >
+    <input
+      class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-4"
+      id="excel_file"
+      type="file"
+      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+    />
+    <div class="grid grid-cols-2 mt-5">
+      <div><button class="underline">Guide</button></div>
+      <div class="text-right">
+        <button mat-button class="bg-btn-green text-[18px] text-white p-3">
+          Importer
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-menu> -->
+<!-- End Type de Contrat -->
+
+<!-- Start Assurance -->
+<!-- <mat-menu #menu1="matMenu">
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <label class="block mb-2 font-medium text[#0C8040" for="excel_file"
+      >Importer un fichier</label
+    >
+    <input
+      class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-4"
+      id="excel_file"
+      type="file"
+      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+    />
+    <div class="grid grid-cols-2 mt-5">
+      <div><button class="underline">Guide</button></div>
+      <div class="text-right">
+        <button mat-button class="bg-btn-green text-[18px] text-white p-3">
+          Importer
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-menu> -->
+<!-- End Assurance -->
+
+<!-- Start Gestion des sinistres  -->
+<!-- <mat-menu #menu2="matMenu">
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <label class="block mb-2 font-medium text[#0C8040" for="excel_file"
+      >Importer un fichier</label
+    >
+    <input
+      class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-4"
+      id="excel_file"
+      type="file"
+      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+    />
+    <div class="grid grid-cols-2 mt-5">
+      <div><button class="underline">Guide</button></div>
+      <div class="text-right">
+        <button mat-button class="bg-btn-green text-[18px] text-white p-3">
+          Importer
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-menu> -->
+<!-- End  Gestion des sinistres  -->

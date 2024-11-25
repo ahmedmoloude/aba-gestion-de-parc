@@ -1,0 +1,195 @@
+<!-- <div class="flex mt-4">
+  <div class="w-5/6">
+    <div class="flex flex-row mb-5">
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Infractions"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="number"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Matricule"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Conducteur"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Prochaine visite"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Payant"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="w-1/6 flex items-start">
+    <button
+      class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3"
+    >
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filter</span>
+    </button>
+  </div>
+</div> -->
+<mat-tab-group>
+  <mat-tab label="Infraction">
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!spinner">
+      <div *ngIf="infractions?.length == 0">
+        La liste des infractions est vide
+      </div>
+      <div *ngIf="infractions?.length">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Motif</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Description</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Date et heure</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Conducteur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Payé</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Nature de paiement</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Payeur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Montant </div>
+              </th>
+              <!-- <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">Photos</div>
+            </th> -->
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let infraction of infractions">
+              <td class="font-medium p-2">{{ infraction.motif || '---' }}</td>
+              <td class="font-medium p-2">{{ infraction.description || '---' }}</td>
+              <td class="font-medium p-2">{{ (infraction.date_sinistre | date: 'dd/MM/yyyy - hh:mm')}}</td>
+              <td class="font-medium p-2">{{ (infraction.driver?.first_name + ' ' + infraction.driver?.last_name) ||
+                '---' }}</td>
+              <td class="font-medium p-2">
+                {{ infraction.paye == false ? "Non" : "Oui" }}
+              </td>
+              <td class="font-medium p-2">{{ infraction.nature_paiement || '---'}}</td>
+              <td class="font-medium p-2">{{ infraction.payeur || '---' }}</td>
+              <td class="font-medium p-2">{{ formatNumber(infraction.montant) }} Dhs</td>
+              <!-- <td>
+              <a *ngIf="infraction.image" href="{{ url + infraction.id + '/' }}{{ infraction.image }}" target="_blank">
+                <mat-icon>file_copy</mat-icon>
+              </a>
+            </td> -->
+              <td class="font-medium p-2 flex">
+                <mat-icon [matTooltip]="'Voir plus'" class="cursor-pointer"
+                  (click)="Voirplus('Infractions', item['id'])">
+                  remove_red_eye
+                </mat-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </mat-tab>
+
+  <mat-tab label="Accident">
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+    <ng-container *ngIf="!spinner">
+      <div *ngIf="accidents?.length == 0">
+        La liste des accidents est vide
+      </div>
+
+      <div *ngIf="accidents?.length">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Motif</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Lieu</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Description</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Conducteur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Assureur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Type de constat</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Date et heure</div>
+              </th>
+              <!-- <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">Photos</div>
+            </th> -->
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let accident of accidents">
+              <td class="font-medium p-2">{{ accident.motif || '---' }}</td>
+              <td class="font-medium p-2">{{ accident.city?.name || '---' }}</td>
+              <td class="font-medium p-2">{{ accident.description || '---' }}</td>
+              <td class="font-medium p-2">{{ (accident.driver?.first_name + ' ' + accident.driver?.last_name) || '---'
+                }}</td>
+              <td class="font-medium p-2">{{ accident.prestataire?.name || '---' }}</td>
+              <td class="font-medium p-2">{{ accident.type_constat || '---'}}</td>
+              <td class="font-medium p-2">{{ (accident.date_sinistre | date: 'dd/MM/yyyy - hh:mm')}}</td>
+              <!-- <td>
+              <a *ngIf="accident.image" href="{{ url + accident.id + '/' }}{{ accident.image }}" target="_blank">
+                <mat-icon>file_copy</mat-icon>
+              </a>
+            </td> -->
+              <td class="font-medium p-2 flex">
+                <mat-icon [matTooltip]="'Voir plus'" class="cursor-pointer" (click)="Voirplus('Accidents', item['id'])">
+                  remove_red_eye
+                </mat-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </mat-tab>
+</mat-tab-group>

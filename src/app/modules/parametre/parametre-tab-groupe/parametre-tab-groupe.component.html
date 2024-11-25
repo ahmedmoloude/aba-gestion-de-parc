@@ -1,0 +1,148 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6  parametregroupe"
+>
+  <mat-tab-group class="parametre">
+    <mat-tab label="TVA + TAXE">
+      <ng-template matTabContent>
+        <app-parametre-tva></app-parametre-tva>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Nature de produit">
+      <ng-template matTabContent>
+        <app-parametre-produit></app-parametre-produit>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Hors normes">
+      <ng-template matTabContent>
+        <app-parametre-horsnormes></app-parametre-horsnormes>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Valeur poids volumétrique">
+      <ng-template matTabContent>
+        <app-parametre-volumetrique></app-parametre-volumetrique>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Services">
+      <ng-template matTabContent>
+        <app-parametre-services></app-parametre-services>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Plan itinéraire">
+      <ng-template matTabContent>
+        <app-parametre-axe></app-parametre-axe>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Agence">
+      <ng-template matTabContent>
+        <app-parametre-agence></app-parametre-agence>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Voyage automatique">
+      <ng-template matTabContent>
+        <app-parametre-destination></app-parametre-destination>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Intervalles des valeurs">
+      <ng-template matTabContent>
+        <app-parametre-intervalles></app-parametre-intervalles>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Pays">
+      <ng-template matTabContent>
+        <app-parametre-country></app-parametre-country>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Gestion de parc" disabled >
+    </mat-tab>
+    <mat-tab label="Couleurs">
+      <ng-template matTabContent>
+        <app-parametre-colors></app-parametre-colors>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Extincteur">
+      <ng-template matTabContent
+        ><app-extincteur-tab-groupe></app-extincteur-tab-groupe>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Paramétrage des véhicules">
+      <ng-template matTabContent>
+        <app-vehicule-tab-groupe></app-vehicule-tab-groupe>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Paramètre GPS">
+      <ng-template matTabContent>
+        <app-parametre-gps></app-parametre-gps>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Fournisseur">
+      <ng-template matTabContent>
+        <app-parametre-prestataire></app-parametre-prestataire>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Gestion commerciale" disabled >
+    </mat-tab>
+    <mat-tab label="Type rendez-vous/Motif">
+      <ng-template matTabContent>
+        <app-type-rdv></app-type-rdv>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Contact">
+      <ng-template matTabContent>
+        <app-parametre-contact></app-parametre-contact>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Liste des objectifs">
+      <ng-template matTabContent>
+        <app-parametre-objectif></app-parametre-objectif>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Workflow de validation">
+      <ng-template matTabContent>
+        <app-workflow-validation></app-workflow-validation>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Affrètement" disabled ></mat-tab>
+    <mat-tab label="Prix de gasoil">
+      <ng-template matTabContent>
+        <app-prix-gasoil></app-prix-gasoil>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Type d'affrètement">
+      <ng-template matTabContent>
+        <app-type-affretement></app-type-affretement>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Distance des villes">
+      <ng-template matTabContent>
+        <app-distance-villes></app-distance-villes>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Pourcentage Retour transport">
+      <ng-template matTabContent>
+        <app-aff-percentage></app-aff-percentage>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Habilitation">
+      <ng-template matTabContent>
+        <app-habilitation></app-habilitation>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Agence" disabled ></mat-tab>
+    <mat-tab label="Fournisseur + Nature de dépense">
+      <ng-template matTabContent>
+        <app-parametre-prestataire-nature-depense></app-parametre-prestataire-nature-depense>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Ramassage / Livraison" disabled ></mat-tab>
+    <mat-tab label="Ramassage">
+      <ng-template matTabContent>
+        <app-paramtre-ramassage></app-paramtre-ramassage>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Livraison">
+      <ng-template matTabContent>
+        <app-paramtre-livraison></app-paramtre-livraison>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

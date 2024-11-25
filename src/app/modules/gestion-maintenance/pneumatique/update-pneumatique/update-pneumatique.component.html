@@ -1,0 +1,128 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Ajouter un pneu</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="pneuForm">
+    <div mat-dialog-content>
+      <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="90.892" height="90.892" viewBox="0 0 90.892 90.892"
+          class="mx-auto">
+          <path id="icons8-wheel"
+            d="M47.446,2A45.446,45.446,0,1,0,92.892,47.446,45.5,45.5,0,0,0,47.446,2Zm0,13.831c.6,0,1.179.056,1.768.089a1.918,1.918,0,0,0-.089.587l.918,18a1.985,1.985,0,0,0,1.324,1.768,11.786,11.786,0,0,1,3.8,2.184,1.963,1.963,0,0,0,2.231.235l15.973-8.695a1.881,1.881,0,0,0,.274-.232,31.629,31.629,0,0,1,1.852,3.145,1.942,1.942,0,0,0-.795.3L59.911,43.1a1.975,1.975,0,0,0-.837,2.026,11.985,11.985,0,0,1,.228,2.319,11.838,11.838,0,0,1-.232,2.319,1.971,1.971,0,0,0,.834,2.022L74.966,61.925a1.934,1.934,0,0,0,.448.216,31.619,31.619,0,0,1-1.845,3.08,1.915,1.915,0,0,0-.394-.332L64.7,60.224a1.947,1.947,0,0,0-.4-.216l-6.9-3.8a1.973,1.973,0,0,0-2.238.232,11.8,11.8,0,0,1-3.8,2.188,1.973,1.973,0,0,0-1.32,1.764L49.121,78.3a1.962,1.962,0,0,0,.1.672c-.592.033-1.179.089-1.779.089s-1.184-.056-1.775-.089a1.94,1.94,0,0,0,.1-.656L44.96,60.444a1.975,1.975,0,0,0-1.335-1.787,11.754,11.754,0,0,1-3.979-2.3,1.971,1.971,0,0,0-2.238-.251L21.161,64.982a31.624,31.624,0,0,1-1.837-3.157,1.935,1.935,0,0,0,.81-.289l14.823-9.883a1.981,1.981,0,0,0,.845-2.011,11.465,11.465,0,0,1,0-4.392,1.978,1.978,0,0,0-.845-2.011L20.134,33.371a1.967,1.967,0,0,0-.81-.3,31.634,31.634,0,0,1,1.941-3.327,1.917,1.917,0,0,0,.714.714l15.433,8.324a1.965,1.965,0,0,0,2.238-.251,11.751,11.751,0,0,1,3.975-2.3,1.977,1.977,0,0,0,1.335-1.783l.81-17.953a1.923,1.923,0,0,0-.089-.575C46.268,15.888,46.848,15.831,47.442,15.831Zm-5.623.529-.363,8.147a23.5,23.5,0,0,0-10.748,6.167l-6.85-3.7a1.889,1.889,0,0,0-.367-.112A31.583,31.583,0,0,1,41.819,16.36Zm11.253,0a31.576,31.576,0,0,1,18.142,10.3l-7.147,3.886a23.827,23.827,0,0,0-10.578-6.028Zm23.942,20a31.047,31.047,0,0,1,0,22.175l-6.784-4.569a23.405,23.405,0,0,0,.012-13.025l6.653-4.457C76.942,36.456,76.969,36.4,77.015,36.366Zm-59.2.166c.048.039.075.093.127.127L24.607,41.1a23.454,23.454,0,0,0,.008,12.7l-6.673,4.45c-.05.034-.077.086-.123.123a31.019,31.019,0,0,1,0-21.839Zm29.631,3.01a7.9,7.9,0,1,0,7.9,7.9A7.912,7.912,0,0,0,47.446,39.542Zm0,3.952a3.952,3.952,0,1,1-3.952,3.952A3.956,3.956,0,0,1,47.446,43.494ZM30.7,64.214a23.823,23.823,0,0,0,10.756,6.163l.367,8.116c0,.014.007.025.008.039A31.573,31.573,0,0,1,23.6,68.143Zm33.34.154,7.12,3.921a31.576,31.576,0,0,1-18.1,10.242c0-.01.007-.017.008-.027l.417-8.139A23.852,23.852,0,0,0,64.036,64.368Z"
+            transform="translate(-2 -2)" fill="#b2b2b2" />
+        </svg>
+      </div>
+      <div class="grid grid-cols-5 gap-3 pl-4 pr-4 mt-4">
+        <div>
+          <i-field [type]="'text'" [label]="'Code pneu'" formControlName="code_pneu"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Fournisseur'" formControlName="fournisseur"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Marque'" formControlName="marque"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Modèle'" formControlName="modele"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type pneu</mat-label>
+            <mat-select matNativeControl formControlName="type_pneu">
+              <mat-option value="ete">Eté</mat-option>
+              <mat-option value="hiver">Hiver</mat-option>
+              <mat-option value="toute saison">Toute saison</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Indice de vitesse</mat-label>
+            <mat-select matNativeControl formControlName="indice_vitesse">
+              <mat-option value="H > 210 Km/h">H > 210 Km/h</mat-option>
+              <mat-option value="V > 240 km/h">V > 240 km/h</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Indice de charge</mat-label>
+            <mat-select matNativeControl formControlName="indice_charge">
+              <mat-option value="100 > 800 Kg">100 > 800 Kg</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Etat</mat-label>
+            <mat-select matNativeControl formControlName="etat">
+              <mat-option value="neuf">Neuf</mat-option>
+              <mat-option value="occasion">Occasion</mat-option>
+
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Durée de vie'" formControlName="duree_vie"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'date'" [label]="'Date d’acquisition'" formControlName="date_acquisition"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Km d’acquisition'" formControlName="km_acquisition"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'date'" [label]="'DMC'" formControlName="dmc"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Position</mat-label>
+            <mat-select matNativeControl formControlName="position">
+              <mat-option value="avant">Avant</mat-option>
+              <mat-option value="droit">Droit</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'% d\'usure'" formControlName="usure"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Pression'" formControlName="pression"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Profondeur'" formControlName="profondeur"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Montant HT'" formControlName="montant_ht"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'TVA'" formControlName="tva"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Montant TTC'" formControlName="montant_ttc"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-3 pl-4 pr-4 mt-4">
+        <i-field [type]="'textarea'" [label]="'Commentaire'" formControlName="comment" [cols]="30" [rows]="2" maxlength="500"
+          class="w-full"></i-field>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+      <div>
+        <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close>
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <button *ngIf="!spinner" (click)="onAddPneu()" [disabled]="pneuForm.invalid" pButton pRipple type="button" label="Modifier" class="p-button-rounded p-button-success">
+        </button>
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,82 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">Hors normes</h1>
+    </div>
+    <div class="text-right" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialogDetails()">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+          Ajouter un hors norme
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- filter -->
+  <!-- <div class="grid grid-cols-3 gap-1 mb-6 mt-5">
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Nature de la marchandise"
+    />
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Valeur"
+    />
+    <button mat-button class="text-white p-3 bg-btn-green text-[18px] w-[50%]">
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filtre</span>
+    </button>
+  </div> -->
+  <!-- filter -->
+  <div *ngIf="isLoading$ | async" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+  <ng-container *ngIf="(isLoading$ | async) === false">
+    <div class="overflow-x-auto relative mt-4">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of natures_horsnorm  | paginate: {id: 'pagination-hors_normes',itemsPerPage: 6,currentPage: page  }">
+            <th class="p-3 flex">
+              <img *ngIf="item.image" src="{{ url }}{{ item.image }}" style="max-width: 2%" />
+              <span class="pl-2 font-normal text-[#000]">{{ item.type }}</span>
+            </th>
+            <td class="p-3">{{ item.title }}</td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openProductCategoryupdate(item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                  Modification
+                </button>
+                <button mat-menu-item (click)="delete(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                  Supprimer
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-10">
+      <pagination-controls id="pagination-hors_normes" previousLabel="" nextLabel=""
+        (pageChange)="page = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

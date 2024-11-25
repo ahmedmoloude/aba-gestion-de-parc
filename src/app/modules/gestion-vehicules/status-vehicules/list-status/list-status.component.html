@@ -1,0 +1,161 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Statut ( {{ status }} )
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+      (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="overflow-x-auto relative mt-4" *ngIf="!spinner">
+    <ng-container>
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th scope="col" class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+              <div>Actions</div>
+            </th>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of vehicules">
+            <td class="p-2 flex">
+              <mat-icon [matTooltip]="'Détails'" class="cursor-pointer" (click)="detailsVehi(item.uuid)">
+                remove_red_eye
+              </mat-icon>
+            </td>
+            <td class="p-2">{{ item.city?.name }}</td>
+            <td class="p-2">{{ item.parc?.name }}</td>
+            <td class="p-2">{{ item?.activity }}</td>
+            <td class="p-2" [matTooltip]="joinService(item.services)" matTooltipPosition="above"> {{
+              joinService(item?.services) | truncate: [15, "..."] }}
+            </td>
+            <td class="p-2">{{ item?.code_interne }}</td>
+            <td class="p-2">{{ item?.matricule }}</td>
+            <td class="p-2">{{ item?.brand?.name }}</td>
+            <td class="p-2">{{ item?.gamme?.name }}</td>
+            <td class="p-2">{{ item?.truck_type?.name }}</td>
+            <td class="p-2">{{ item?.tonnage?.name }} T</td>
+            <td class="p-2">{{ item?.modele?.name }}</td>
+            <td class="p-2">{{ item?.date_circulation | date: 'dd/MM/yyyy'}}</td>
+            <td class="p-2">{{ item?.date_entree_vehicule | date: 'dd/MM/yyyy'}}</td>
+            <td class="p-2">{{ item?.km_reel }} Km</td>
+            <td class="p-2">{{ item?.carburant }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+  <div class="mt-10"  >
+    <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+      (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+    </p-paginator>
+  </div>
+<!--
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <ng-container *ngIf="!spinner">
+    <div class="mt-10">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px]"
+        *ngFor=" let item of trucks | paginate: { itemsPerPage: 6, currentPage: p } ">
+
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Code interne :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.code_interne }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Matricule :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.matricule }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Marque :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.brand.name }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Modele :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.modele?.name }} j</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Carburant :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.carburant }} </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Nombre de scellé :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.nbr_scelle }} </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </ng-container> -->
+</div>

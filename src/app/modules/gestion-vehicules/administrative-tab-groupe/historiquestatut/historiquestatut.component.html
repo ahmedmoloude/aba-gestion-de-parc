@@ -1,0 +1,37 @@
+<div class="dialog h-screen overflow-auto bg-[#E9E9E9]">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] pt-4 pl-4 pr-4"
+    >
+    <div class="flex justify-left col-span-2">
+      <h2 mat-dialog-title  class="flex text-[#0C8040]" >
+        <mat-icon class="text-black">history</mat-icon>
+        <span class="pl-1 text-base">Historique Statut</span> 
+      </h2>
+    </div>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+      <div>
+        <mat-list role="list" *ngFor="let status of item.status">
+          <mat-list-item class="text-[#B2B2B2]" role="listitem"
+            >
+            <div class="flex">
+              <mat-icon class="text-lg text-[#0C8040]">date_range</mat-icon>
+              <p class="text-base margin">Date  :<span>{{ status.created_at | date: 'dd/MM/yyyy' }}</span> </p>
+            </div>
+          </mat-list-item>
+          <mat-list-item role="listitem" class="list-historique">
+            <div class="flex">
+              <mat-icon class="text-lg text-[#0C8040]">history</mat-icon>
+              <p class="text-base margin">Statut  :<span>{{ status.status }}</span> </p>
+            </div>
+            <div class="ml-5">
+                <p class="text-[#B2B2B2]">Modifié par   :<span class="text-black ml-1">{{ status.user?.name }}</span> </p>
+            </div>
+          </mat-list-item>
+          <div class="border-b-2 border-[#B2B2B2] mt-4 ml-auto mr-auto w-10/12"></div>
+        </mat-list>
+      </div>
+  </div>
+  

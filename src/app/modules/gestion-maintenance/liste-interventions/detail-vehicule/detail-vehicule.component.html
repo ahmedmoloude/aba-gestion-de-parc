@@ -1,0 +1,63 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+      <h2 mat-dialog-title class="col-span-2">
+        Détails véhicule : {{truck?.code_interne || '---'}} / {{ truck?.matricule || '---' }}
+      </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+        <div mat-dialog-content >
+          <div class="grid grid-cols-1 gap-3 pl-4 pr-4">
+            <img src="../../../../../assets/img/camion.png" class="mx-auto">
+          </div>
+          <div class="ml-3 mr-3">
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+                <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                    Informations
+                </p>
+              </div>
+              <div class="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                  <p class="text-[#000000] text-base">Code interne :<strong>{{truck?.code_interne || '---'}}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Immatriculation :<strong>{{ truck?.matricule || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Marque :<strong>{{ truck?.brand?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Type :<strong>{{ truck?.truck_type?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Modèle :<strong>{{ truck?.modele?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Gamme :<strong>{{ truck?.gamme?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Tonnage :<strong>{{ truck?.tonnage?.name || '---' }} T</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Fournisseur :<strong>{{ truck?.brand?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Date fin garantie :<strong>{{ (truck?.date_entree_vehicule | date: 'dd/MM/yyyy') || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Conducteur :<strong>{{ truck?.driver?.name || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Index kilométrique :<strong>{{ truck?.km_reel || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Date fin garantie :<strong>{{ (truck?.date_entree_vehicule | date: 'dd/MM/yyyy') || '---' }}</strong></p>
+                </div>
+                <div>
+                    <p class="text-[#000000] text-base">Activité :<strong>{{ truck?.activity || '---' }}</strong></p>
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>

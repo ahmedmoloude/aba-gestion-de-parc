@@ -1,0 +1,39 @@
+.header-filter {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #707070;
+  width: 512px;
+  height: 58px;
+  border-radius: 29px;
+  opacity: 1;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep mat-form-field {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+::ng-deep .icon-down {
+  color: #138742 ;
+  opacity: 1;
+  font-size: 36px !important;
+  width: 512px;
+  height: 58px;
+}
+
+::ng-deep .mat-select-arrow {
+  border-left: unset !important;
+  border-right: unset !important;
+  display: none;
+
+}
+
+::ng-deep mat-divider {
+  height: 90%; 
+  margin-top: 5px; 
+  margin-bottom: 5px;
+
+}

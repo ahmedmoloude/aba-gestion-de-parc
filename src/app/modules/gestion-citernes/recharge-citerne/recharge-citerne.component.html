@@ -1,0 +1,146 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Recharger la citerne</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="recharge">
+      <div class="text-center mb-8">
+        <img
+          class="p-4 w-36 mx-auto"
+          src="../../../assets/img/icons8-bulk_gas_tanker.png"
+        />
+        <p><span class="text-[#0C8040]">Qté réelle</span> : {{ citerne.qte_reel }} L</p>
+      </div>
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>N° de citerne</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="n_citerne"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'text'" [label]="'N° de citerne'" formControlName="n_citerne" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Nom</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="name"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'text'" [label]="'Nom'" formControlName="name" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Capacité (L)</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="capacite"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'number'" [label]="'Capacité (L)'" formControlName="capacite" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date d’installation</mat-label>
+            <input matInput type="date" autocomplete="off" formControlName="date_installation"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'date'" [label]="'Date d’installation'" formControlName="date_installation" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Sous parc</mat-label>
+            <mat-select matNativeControl required formControlName="parc_id">
+              <mat-option *ngFor="let parc of parcs" [value]="parc.id">{{ parc.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Stock min(L)</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="stock_min"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'number'" [label]="'Stock min(L)'" formControlName="stock_min" ></i-field> -->
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Quantité à alimenter(L)</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="quantite"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Quantité à alimenter(L)'" formControlName="quantite" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Montant(DH)</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="montant"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Montant(DH)'" formControlName="montant" ></i-field>
+        </div>
+        <div class="mb-3">
+          <i-field [type]="'number'" [label]="'Compteur(L)'" formControlName="compteur" ></i-field>
+        </div>
+        <mat-form-field appearance="fill" class="w-[100%] mb-4">
+          <mat-label>fournisseur du carburant</mat-label>
+          <mat-select matNativeControl  formControlName="supplier_id">
+            <mat-option *ngFor="let supplier of fuel_suppliers" [value]="supplier.id">{{ supplier.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <div>
+          <div class=" flex ">
+            <i-field [type]="'number'" [label]="'1234'" formControlName="carNumberPart1" [maxlength]="4" [minValue]="0" [maxValue]="9999" (input)="limitInputLength($event)" ></i-field>
+            <i-field [type]="'text'" [label]="'A'" formControlName="carNumberPart2" [maxlength]="1" ></i-field>
+            <i-field [type]="'number'" [label]="'5'" formControlName="carNumberPart3" [maxlength]="2" [minValue]="0" [maxValue]="99" (input)="limitInputOneLength($event)"></i-field>
+          </div>
+        </div>
+        <div>
+            <i-field [type]="'text'" [label]="'chauffeur du fournisseur'" formControlName="supplier_driver" ></i-field>
+        </div>
+
+        <i-field [type]="'text'" [label]="'CIN du chauffeur'" formControlName="supplier_driver_cin" ></i-field>
+
+        <i-field [type]="'text'" [label]="'BL'" formControlName="bl" ></i-field>
+
+        <!-- <div class="flex items-center ">
+
+
+          <mat-form-field appearance="fill">
+            <input matInput placeholder="#"  maxlength="1">
+          </mat-form-field>
+        </div> -->
+
+
+        <div>
+          <mat-label>Document</mat-label>
+          <input #imgInput
+            type="file"
+            accept="image/jpeg,image/png,image/jpg"
+            (change)="onSelectImage($event)"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button  *ngIf="!spinner"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          (click)="recharger()">Recharger</button> -->
+          <button
+          *ngIf="!spinner"
+          (click)="recharger()"
+          pButton pRipple
+          type="button"
+          label="Recharger"
+          class="p-button-rounded p-button-success">
+        </button>
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

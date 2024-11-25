@@ -1,0 +1,184 @@
+<form [formGroup]="interventionForm">
+  <div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px]  p-6 mt-4">
+    <div class="border-b-2 border-[#CEF4C9] mt-5">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Intervenir
+      </p>
+    </div>
+    <div class="mt-4" formArrayName="categories">
+      <ng-container *ngFor="let category of categoryList | keyvalue; let i = index" [formGroupName]="i">
+        <p>Catégorie : <span class="text-[#0C8040]  pl-4">{{category.key}}</span></p>
+
+        <mat-radio-group formControlName="place">
+          <mat-radio-button value="INTERNE" checked>Interne</mat-radio-button>
+          <mat-radio-button value="EXTERNE" class="ml-5">Externe</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="mt-4">
+          <!-- <div *ngIf="interventionForm.get('categories')?.at(i).get('place').value === 'INTERNE'"> -->
+            <div *ngIf="categories?.at(i)?.get('place')?.value === 'INTERNE'">
+              <table class="w-3/4 text-left text-gray-500 mt-3" *ngIf="category?.value[0]?.piece_rechange">
+              <thead>
+                <tr>
+                  <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                  <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                  <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                  <!-- <th></th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of category.value"
+                  class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                  <td class="p-3">
+
+                    {{item?.piece_rechange?.reference || '---'}} / {{item?.piece_rechange?.name?.name || '---'}}
+                  </td>
+                  <td class="p-3">{{item?.type_piece_rechange || '---'}}</td>
+                  <td class="p-3">{{item?.quantity || 0}}</td>
+                  <!-- <td class="p-3 flex">
+                    <p>Prix moyen TTC : </p>
+                    <p> {{(getPiecesPrices(item?.quantity, item?.piece_rechange.prix_unitaire).prixTTC | number) || '---'}} Dhs</p>
+                    <p>
+                      <mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <div class="grid grid-cols-2 gap-2 p-2">
+                          <div>
+                            <p>PU : <strong> {{(item?.piece_rechange?.prix_unitaire | number)  || '---'}} DH</strong></p>
+                          </div>
+                          <div>
+                            <p>Total HT : <strong> {{(getPiecesPrices(item?.quantity, item?.piece_rechange?.prix_unitaire).prixHT | number) || '---'}} DH</strong></p>
+                          </div>
+                          <div>
+                            <p>TVA : <strong> {{(getPiecesPrices(item?.quantity, item?.piece_rechange?.prix_unitaire).tva | number) || '---'}} DH</strong></p>
+                          </div>
+                          <div>
+                            <p>Total TTC : <strong> {{(getPiecesPrices(item?.quantity, item?.piece_rechange?.prix_unitaire).prixTTC | number) || '---'}} DH</strong></p>
+                          </div>
+                        </div>
+                      </mat-menu>
+                    </p>
+                  </td> -->
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="mt-2 mb-2">
+              <p class="text-[#0C8040]">Liste des intervenants :</p>
+            </div>
+            <div formArrayName="reparators">
+              <table class="w-3/4 text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Code / Agent intervenant</th>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Fonction</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let reparator of categories?.at(i).get('reparators').controls; let j = index" [formGroupName]="j">
+                    <td class="p-3">
+                      <div>
+                        <app-shared-autcomplete class="w-[100%]" #searchComponent3 [hasIcon]="false" [type]="'single'"
+                          [opended]="true" [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'"
+                          [data]="reparatorList" [keys]="['code', 'first_name', 'last_name']" [lengthToStart]="1"
+                          [display]="['code','-', 'first_name', 'last_name']" [placeholer]="''"
+                          [label]="'Code / Agent intervenant'" (dataEvent)="selectReparator($event, j , i )">
+                        </app-shared-autcomplete>
+                      </div>
+                    </td>
+                    <td class="p-3">
+                      <p>Réparateur</p>
+                    </td>
+                    <td>
+                      <mat-icon class="text-red-600 cursor-pointer" (click)="removeReparator(j, i)">delete</mat-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex col-start-1 col-end-3 mt-4 mb-4">
+              <mat-icon class="pt-1">add_circle</mat-icon>
+              <button (click)="addReparator(i)" class="text-[#636363] pl-2  text-base pt-1">
+                Ajouter des intervenants
+              </button>
+            </div>
+          </div>
+          <!--
+            *******************************************************************************
+            ************************************************[appCustomRouterLink]="*********
+            ********************************************************************************
+           -->
+          <div *ngIf="categories?.at(i).get('place').value=== 'EXTERNE'">
+
+
+            <div formArrayName="pieces">
+              <table class="w-3/4 text-left text-gray-500" *ngIf="category.value[0]?.piece_rechange">
+                <thead>
+                  <tr>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité à récupérer du stock</th>
+                    <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité à commander</th>
+                    <!-- <th></th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of category.value; let j = index" [formGroupName]="j"
+                    class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <input type="hidden" formControlName="id" [value]="item?.id">
+                    <td class="p-3">{{item?.piece_rechange?.reference || '---'}} /
+                      {{item?.piece_rechange?.name?.name ||'---'}}</td>
+                    <td class="p-3">{{item?.type_piece_rechange || '---'}}</td>
+                    <td class="p-3 flex">
+                      <i-field [type]="'number'" [label]="'Qte'" [value]="getQuantiteARecuperer(item?.quantity, item?.quantity_stock)" min="0" [max]="item?.quantity"
+                        formControlName="quantity"></i-field> <mat-icon class="pt-1 cursor-pointer">edit</mat-icon>
+                    </td>
+                    <td class="p-3 text-center">{{getQuantiteAAcheter(categories?.at(i)?.get('pieces')?.at(j).get('quantity').value , item?.quantity_stock)}}</td>
+                    <!-- <td class="p-3 text-center">{{(item?.quantity - categories?.at(i)?.get('pieces')?.at(j).get('quantity').value) || 0}}</td> -->
+                    <!-- <td class="p-3 ">
+                      <div class="flex">
+                        <p>Prix moyen TTC : </p>
+                        <p> {{(getPiecesPrices(categories?.at(i)?.get('pieces')?.at(j).get('quantity').value, item?.piece_rechange?.prix_unitaire).prixTTC | number)|| '---'}} Dhs</p>
+                        <p>
+                          <mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon>
+                        </p>
+                        <mat-menu #menu="matMenu">
+                          <div class="grid grid-cols-2 gap-2 p-2">
+                            <div>
+                              <p>PU : <strong> {{(item?.piece_rechange?.prix_unitaire | number) || '---'}} DH</strong></p>
+                            </div>
+                            <div>
+                              <p>Total Ht : <strong> {{(getPiecesPrices(categories?.at(i)?.get('pieces')?.at(j).get('quantity').value, item?.piece_rechange?.prix_unitaire).prixHT | number) || '---'}} DH</strong></p>
+                            </div>
+                            <div>
+                              <p>TVA : <strong> {{(getPiecesPrices(categories?.at(i)?.get('pieces')?.at(j).get('quantity').value, item?.piece_rechange?.prix_unitaire).tva | number)|| '---'}} DH</strong></p>
+                            </div>
+                            <div>
+                              <p>Total TTC : <strong> {{(getPiecesPrices(categories?.at(i)?.get('pieces')?.at(j).get('quantity').value, item?.piece_rechange?.prix_unitaire).prixTTC | number)|| '---'}} DH</strong></p>
+                            </div>
+                          </div>
+                        </mat-menu>
+                      </div>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+      <button mat-dialog-close class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+        Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <button (click)="createIntervention()" pButton pRipple type="submit" label="Valider"
+        class="p-button-rounded p-button-success"></button>
+    </div>
+  </div>
+</form>

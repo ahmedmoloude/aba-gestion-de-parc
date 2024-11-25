@@ -1,0 +1,294 @@
+<div *ngIf="!isLoading" class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+
+      <h2 class="text-[#0C8040] font-semibold pl-2">Gestion du personnel</h2>
+    </div>
+  </div>
+  <div class="bg-[#E3FFDF] p-3 font-medium w-20 rounded-[18px] mb-5 text-center">
+    Détails :
+  </div>
+  <div class="detail-vehicules p-4 mb-5">
+    <div class="border-b-4 border-[#0C8040]">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Informations personnelles
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Photo :</p>
+        <img *ngIf="!image_src" src="../../../../assets/img/camion.png" />
+        <img *ngIf="image_src" [src]="image_src" />
+      </div>
+    </div>
+    <div class="grid grid-cols-8 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Matricule :</p>
+        <p class="font-medium">{{ personnel.matricule==='null' ? ' ' : personnel.matricule }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">CIN :</p>
+        <p class="font-medium">{{ personnel.cin==='null' ? ' ' : personnel.cin}}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin CIN :</p>
+        <p class="font-medium">{{ personnel.end_date_cin==='null' ? ' ' : personnel.end_date_cin }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Nom :</p>
+        <p class="font-medium">{{ personnel.first_name ==='null' ? ' ' : personnel.first_name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Prènom :</p>
+        <p class="font-medium">{{ personnel.last_name==='null' ? ' ' : personnel.last_name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de naissance :</p>
+        <p class="font-medium">{{ personnel.birth_date==='null' ? '':personnel.birth_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Lieu de naissance :</p>
+        <p class="font-medium">{{ personnel.birth_place==='null' ? ' ':personnel.birth_place }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Ville :</p>
+        <p class="font-medium">{{ personnel.town==='null' ? ' ':personnel.birth_place }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Situation familiale :</p>
+        <p class="font-medium">{{ personnel.family_situation === 'null' ? ' ' : personnel.family_situation}}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Nombre d’enfants :</p>
+        <p class="font-medium">{{ personnel.children_number=== 'null' ? ' ' : personnel.children_number }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Adresse :</p>
+        <p class="font-medium">{{ personnel.adress ==='null' ? ' ' : personnel.adress }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Situation du personnel :
+      </p>
+    </div>
+    <div class="grid grid-cols-8 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Direction :</p>
+        <p class="font-medium">{{ personnel.direction==='null' ? '' : personnel.direction }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Département :</p>
+        <p class="font-medium">{{ personnel.departement==='null' ? '' :personnel.departement }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Service :</p>
+        <p class="font-medium number-service cursor-pointer" [matMenuTriggerFor]="menu">{{personnel.service.length}}</p>
+        <mat-menu #menu="matMenu" class="p-3">
+          <p *ngFor="let service of personnel.service">{{ service.name}}</p>
+        </mat-menu>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Parc :</p>
+        <p class="font-medium">{{ personnel.parc?.name==='null' ? '' : personnel.parc?.name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Lieu de naissance :</p>
+        <p class="font-medium">{{ personnel.birth_place==='null' ? '' : personnel.birth_place }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Fonction :</p>
+        <p class="font-medium">{{ personnel.function === 'null' ?'' : personnel.function }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rôle :</p>
+        <p class="font-medium">{{ personnel?.role?.name || '---'  }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Code :</p>
+        <p class="font-medium">{{ personnel.code === 'null' ? '' : personnel.code }}</p>
+      </div>
+      <!-- <div >
+        <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
+        <p class="font-medium" *ngFor="let tonnage of personnel.tonnages">{{ tonnage.name }}T</p>
+      </div> -->
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
+        <p class="font-medium text-[#0C8040] cursor-pointer" [matMenuTriggerFor]="menu1">
+          <mat-icon>remove_red_eye</mat-icon></p>
+        <mat-menu #menu1="matMenu" class="p-3">
+          <p *ngFor="let tonnage of personnel.tonnages">{{ tonnage.name }}T</p>
+        </mat-menu>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        {{ personnel.contract_type === 'null' ? ' ' : personnel.contract_type }}
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Type de contrat :</p>
+        <p class="font-medium">{{ personnel.contract_type === null ? ' ' : personnel.contract_type }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Sté d’interim :</p>
+        <p class="font-medium">{{ personnel.interim_company==='null' ? ' ' : personnel.interim_company }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date d’entrée :</p>
+        <p class="font-medium">{{ personnel.entry_date === 'null' ? ' ' : personnel.entry_date }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Contact
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">GSM professionnel :</p>
+        <p class="font-medium">{{gsm_professionnel==='null' ? ' ' : gsm_professionnel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">GSM personnel :</p>
+        <p class="font-medium">{{ gsm_personnel==='null' ? ' ' : gsm_personnel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Fixe professionnel :</p>
+        <p class="font-medium">{{ fixe_professionnel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">GSM</p>
+        <p class="font-medium">{{ gsm_personnel==='null'? ' ' : gsm_personnel }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Contact en cas d’urgence
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Contact 1 :</p>
+        <p class="font-medium">{{ contact1==='null' ? '': contact1 }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">GSM :</p>
+        <p class="font-medium">{{ contact_1_gsm==='null' ? ' ': contact_1_gsm }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Situation CNSS
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de CNSS :</p>
+        <p class="font-medium">{{ personnel.cnss_number === 'null' ? '': personnel.cnss_number }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de carte professionnel :</p>
+        <p class="font-medium">{{ personnel.cart_pro_num === 'null' ? '': personnel.cart_pro_num }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Expériences
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Niveau d’études :</p>
+        <p class="font-medium">{{ studies_level==='null' ? '': studies_level }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Expérience pro. :</p>
+        <p class="font-medium">{{ pro_experience==='null' ?'' : pro_experience }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Formation et diplômes :</p>
+        <p class="font-medium">{{ diplome==='null'? ' ': diplome }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Dernier employeur :</p>
+        <p class="font-medium">{{ former_job ==='null'? ' ' :former_job }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Email :</p>
+        <p class="font-medium">{{ email }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Gestion des EPI</h2>
+      </div>
+    </div>
+    <div class="flex justify-end" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion du personnel', 'U')">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="openDialog(personnel.uuid)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex mt-4">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input type="text" class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]" placeholder="EPI" />
+        </div>
+        <div class="basis-1/3">
+          <input type="number" class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Date d’attribution" />
+        </div>
+        <div class="basis-1/3">
+          <input type="text" class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Date mise a jour" />
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-start">
+      <button class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3">
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div>
+  <table class="w-full mx-auto text-left text-gray-500">
+    <thead>
+      <tr>
+        <th *ngFor="let header of headerColumuns" scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+          <div class="flex items-center">
+            {{ header }}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let epi of epis">
+        <td class="p-3">{{ epi.type }}</td>
+        <td class="p-3">{{ epi.date_attr }}</td>
+        <td class="p-3">{{ epi.amount }} DH</td>
+      </tr>
+    </tbody>
+  </table>
+  <div
+    class="cursor-pointer bg-[#636363] shadow[0px_3px_6px_#00000029] rounded-[28px] w-40 text-center p-[10px] text-white"
+    (click)="Voirhistorique(personnel.uuid)">
+    Historique EPI >
+  </div>
+</div>
+<div *ngIf="isLoading" class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</div>

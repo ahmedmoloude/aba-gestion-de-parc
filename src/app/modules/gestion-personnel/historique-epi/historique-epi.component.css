@@ -1,0 +1,14 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel{
+    margin-left: 130px;
+}
+::ng-deep .padd-content{
+    padding-left: 35px;
+    padding-right: 35px;
+}

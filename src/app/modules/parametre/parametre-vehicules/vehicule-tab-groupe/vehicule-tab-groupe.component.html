@@ -1,0 +1,446 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2 mb-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">description</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Paramétrage des véhicules
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <div class="grid grid-cols-3 gap-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Marque</p>
+          </div>
+          <div class="text-center"> <span class="text-[#fff]">{{ brands.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon  (click)="openDialogAjoutermarque()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelMarque()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of brands">
+              <div class="grid grid-cols-3 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div>
+                  <a *ngIf="item.file" href="{{ url + item.id + '/' }}{{ item.file }} " target="_blank">
+                    <mat-icon>file_copy</mat-icon>
+                  </a>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjoutermarque(item, 'edit')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletMarque(item.uuid)">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+            >
+            Afficher
+            </h2>
+          </div> -->
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Modèle</p>
+          </div>
+          <div class="text-center"> <span class="text-[#fff]">{{ modeles.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="openDialogAjoutermodele()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelModele()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 pl-3 pr-3 pb-0 pt-2">
+          <div>
+            <p class="text-[#636363] font-medium">Marque</p>
+          </div>
+          <div>
+            <p class="text-[#636363] font-medium">Modèle</p>
+          </div>
+        </div>
+        <div class="max-h-40 h-40 overflow-auto">
+          <div *ngFor="let item of modeles">
+            <div class="grid grid-cols-3 gap-3 pt-3 pl-3 pr-3 pb-0">
+              <div>
+                <p class="text-[#636363]">{{ item.brand?.name }}</p>
+              </div>
+              <div>
+                <p class="text-[#636363]">{{ item.name }}</p>
+              </div>
+              <div class="text-right cursor-pointer">
+                <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openDialogAjoutermodele(item, 'edit')">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                  <button mat-menu-item (click)="deletModele(item.uuid)">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="border-t-2 border-[#00000029]"></div>
+        <div class="flex cursor-pointer justify-center mt-2">
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2
+            class="font-semibold text-size mb-detail"
+          >
+          Afficher
+          </h2>
+        </div> -->
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Catégorie</p>
+          </div>
+          <div class="text-center"> <span class="text-[#fff]">{{ categories.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon  (click)="openDialogAjoutercategorie()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelCategorie()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of categories">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjoutercategorie(item, 'edit')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletCategorie(item.uuid)">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+            >
+            Afficher
+            </h2>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-5 pt-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Type</p>
+          </div>
+          <div class="text-center"><span class="text-[#fff]">{{ types.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="openDialogAjoutertype()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelType()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of types">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjoutertype(item, 'edit')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletType(item.uuid)">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+            >
+            Afficher
+            </h2>
+          </div> -->
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Tonnage</p>
+          </div>
+          <div class="text-center"><span class="text-[#fff]">{{ tonnages.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="openDialogAjoutertonnage()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelTonnage()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of tonnages">
+              <!-- <p class="text-[#636363]">{{ item.name }} T</p> -->
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }} T</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjoutertonnage(item, 'edit')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletTonnage(item.uuid)">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+            >
+            Afficher
+            </h2>
+          </div> -->
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-3 bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Parc</p>
+          </div>
+          <div class="text-center"><span class="text-[#fff]">{{ parcs.length }}</span></div>
+          <div class="cursor-pointer text-right">
+            <mat-icon (click)="openDialogAjouterparc()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelParc()">cloud_download</mat-icon>
+          </div>
+          </div>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of parcs">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjouterparc(item, 'edit')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletParc(item.uuid)">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+            >
+            Afficher
+            </h2>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-5 pt-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <div class="grid grid-cols-3 gap-4 bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          <div>
+            <p>Gamme</p>
+          </div>
+          <div class="text-center"><span class="text-[#fff]">{{ gammes.length }}</span></div>
+          <div class="cursor-pointer text-right" >
+            <mat-icon  (click)="openDialogAjoutergamme()">add_circle_outline</mat-icon>
+            <mat-icon (click)="exportExcelGamme()">cloud_download</mat-icon>
+          </div>
+        </div>
+        <div class="flex flex-row pl-3 pr-3 pb-0 pt-2">
+          <div class="basis-1/4">
+            <p class="text-[#636363] font-medium">Marque</p>
+          </div>
+          <div class="basis-1/4">
+            <p class="text-[#636363] font-medium">Modèle</p>
+          </div>
+          <div  class="basis-1/3">
+            <p class="text-[#636363] font-medium">Gamme</p>
+          </div>
+        </div>
+        <div class="max-h-40 h-40 overflow-auto ">
+          <div *ngFor="let item of gammes">
+            <div class="flex flex-row pt-3 pl-3 pr-3 pb-0">
+              <div class="basis-1/4">
+                <p class="text-[#636363]">{{ item.brand?.name }}</p>
+              </div>
+              <div class="basis-1/4">
+                <p class="text-[#636363]">{{ item.modele?.name }}</p>
+              </div>
+              <div class="basis-1/3">
+                <p class="text-[#636363]">{{ item.name }}</p>
+              </div>
+              <div class="text-right cursor-pointer basis-1/6">
+                <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openDialogAjoutergamme(item, 'edit')">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                  <button mat-menu-item (click)="deletGamme(item.uuid)">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="border-t-2 border-[#00000029]"></div>
+        <div class="flex cursor-pointer justify-center">
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2
+            class="font-semibold text-size mb-detail"
+            
+          >
+            Afficher
+          </h2>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="ml-6 mr-6 p-6 vehiculetabs">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Paramétrage des véhicules
+      </h2>
+    </div>
+  </div>
+  <div class="absolute right-10 z-50">
+    <div *ngIf="selectedTabIndex === 0">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutermarque()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 1">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutermodele()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 2">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutercategorie()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 3">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutertype()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 4">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutertonnage()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>Marque</ng-template>
+        <app-parametre-marque></app-parametre-marque>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Modèle </ng-template>
+        <app-parametre-modele></app-parametre-modele>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Catégorie </ng-template>
+        <app-parametre-categorie></app-parametre-categorie>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Type </ng-template>
+        <app-parametre-type></app-parametre-type>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Tonnage </ng-template>
+        <app-parametre-tonnage></app-parametre-tonnage>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div> -->

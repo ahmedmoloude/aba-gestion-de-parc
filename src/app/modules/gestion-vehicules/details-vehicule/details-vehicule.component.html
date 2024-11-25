@@ -1,0 +1,87 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full" >
+    <div class="grid grid-cols-1 gap-2 mb-4">
+      <div>
+        <div class="flex col-start-1 col-end-3">
+          <mat-icon class="pt-1">description</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">Détails véhicule</h2>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+  
+    <div *ngIf="!spinner">
+      <div class="grid grid-cols-2 gap-5">
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            Accident
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.accident) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('ACCIDENT')" >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            Infraction
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.infraction) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('INFRACTION')"
+              >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            Demandes d'interventions
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.intervention) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('Intervention')" >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

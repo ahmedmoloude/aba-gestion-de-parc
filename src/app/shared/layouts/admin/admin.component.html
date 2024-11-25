@@ -1,0 +1,75 @@
+<!-- <div>
+    <mat-toolbar>
+      Responsive side navigation
+    </mat-toolbar>
+    
+    <mat-sidenav-container>
+        <mat-sidenav class="mat-elevation-z8">
+          <app-sidebar></app-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <div class="content mat-elevation-z8">
+              <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div> -->
+<!-- Creates a layout with a left-positioned sidenav and explicit content. -->
+<!-- <ng-container>
+      <div class="nav-container">
+        <div class="col-2 sidenav">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-10 sidenav-content">
+            <router-outlet></router-outlet>           
+        </div>
+    </div>
+  </ng-container> -->
+
+<!-- <mat-drawer-container class="flex flex-row example-container">
+  <mat-drawer
+    [opened]="screenWidth > 840"
+    [mode]="screenWidth > 840 ? 'side' : 'over'"
+    #drawer
+    class="sidebarmenu"
+  >
+    <app-sidebar [sidenavWidth]="screenWidth" [callapsed]='callapsed'></app-sidebar>
+    <footer class="absolute bottom-0">
+      <mat-icon (click)="toogleMinSidebar()">fast_forward</mat-icon>
+    </footer>
+  </mat-drawer>
+  <mat-drawer-content>
+    <button
+      type="button"
+      mat-button
+      (click)="drawer.toggle()"
+      class="button-menu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <app-layout-header></app-layout-header>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container> -->
+<mat-sidenav-container class="flex flex-row example-container">
+  <mat-sidenav mode="side" opened #drawer class="sidebarmenu">
+    <app-sidebar
+      [sidenavWidth]="screenWidth"
+      [callapsed]="callapsed"
+    ></app-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content
+    [@onMainContentChange]="onSideNavChange ? 'open' : 'close'"
+  >
+    <button
+      type="button"
+      mat-button
+      (click)="drawer.toggle()"
+      class="button-menu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <app-layout-header></app-layout-header>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

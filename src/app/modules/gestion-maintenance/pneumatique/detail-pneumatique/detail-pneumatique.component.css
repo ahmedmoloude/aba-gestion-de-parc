@@ -1,0 +1,67 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel{
+    margin-left: 130px;
+}
+:host .mat-dialog-content{
+    margin-top: 40px;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding: 0px;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+    background-color: #fff;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before{
+    display: none !important;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+    display: none !important;
+  }
+::ng-deep .historique{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.rotate1{
+    position: absolute;
+    right: -68px;
+    border: 1px dashed #898989;
+    bottom: 68px;
+    width: 78px;
+    transform: rotate(45deg);
+}
+.rotate2{
+    position: absolute;
+    right: -63px;
+    border: 1px dashed #898989;
+    bottom: 122px;
+    width: 81px;
+    transform: rotate(126deg);
+}
+.rotate3{
+    position: absolute;
+    left: -79px;
+    border: 1px dashed #898989;
+    bottom: 68px;
+    width: 94px;
+    transform: rotate(-49deg);
+}
+.rotate4{
+    position: absolute;
+    left: -70px;
+    border: 1px dashed #898989;
+    bottom: 95px;
+    width: 76px;
+    transform: rotate(213deg);
+}
+.rotate1:hover,
+.rotate2:hover,
+.rotate3:hover,
+.rotate4:hover{
+  border: 1px dashed #0C8040;
+}

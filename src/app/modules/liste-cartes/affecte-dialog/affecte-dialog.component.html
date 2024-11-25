@@ -1,0 +1,120 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Affectation carte N° {{ carte.n_carte }}</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="createAffectation">
+    <div mat-dialog-content>
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date début</mat-label>
+            <input matInput type="date" formControlName="start_date" (change)="setDateDebut($event)" [max]="end_time"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date début'" formControlName="start_date" (changeValue)="setDateDebut($event)" [maxValue]="end_time"></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date fin</mat-label>
+            <input matInput type="date" formControlName="end_date" (change)="setDateFin($event)" [min]="start_time"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date fin'" formControlName="end_date" (changeValue)="setDateFin($event)" [minValue]="start_time"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Affecté à</mat-label>
+            <mat-select formControlName="type_affectation" (selectionChange)="affectation($event)">
+              <mat-option value = "CONDUCTEUR">CONDUCTEUR </mat-option>
+              <mat-option value = "VEHICULE">VEHICULE </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="affect == 'CONDUCTEUR'" class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Conducteur</mat-label>
+            <mat-select formControlName="driver_id" >
+              <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                {{ driver.first_name }} {{ driver.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete
+            #searchComponent1
+            [opended]="true"
+            [type]="'single'"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="drivers"
+            [keys]="['first_name', 'last_name']"
+            [lengthToStart]="3"
+            [display]="['first_name', 'last_name']"
+            [placeholer]="'Rechercher le conducteur...'"
+            [hasIcon]="false"
+            (dataEvent)="filterConducteur($event)"
+          >
+          </app-shared-autcomplete>
+        </div>
+        <div *ngIf="affect == 'VEHICULE'" class="w-[100%] mb-4">
+            <app-shared-autcomplete
+              #searchComponent1
+              [opended]="true"
+              [type]="'single'"
+              [contentStyle]="contentStyle"
+              [inputStyle]="searchStyle"
+              [charToGetAll]="'*'"
+              [data]="vehicules"
+              [keys]="['code', 'matricule']"
+              [lengthToStart]="3"
+              [display]="['code', 'matricule']"
+              [placeholer]="'Rechercher le véhicule...'"
+              [hasIcon]="false"
+              (dataEvent)="filterVehicule($event)"
+            >
+          </app-shared-autcomplete>
+
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Vehicule</mat-label>
+            <mat-select formControlName="truck_id">
+              <mat-option *ngFor="let v of vehicules" [value]="v.id">
+                {{ v.matricule }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 pt-2 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abondonner
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        [disabled]="createAffectation.invalid" *ngIf="!spinnerAdd"
+        (click)="addAffectation()">Affecter</button> -->
+        <button
+          [disabled]="createAffectation.invalid"
+          *ngIf="!spinnerAdd"
+          (click)="addAffectation()"
+          pButton pRipple
+          type="button"
+          label="Affecter"
+          class="p-button-rounded p-button-success">
+        </button>
+        <span *ngIf="spinnerAdd">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

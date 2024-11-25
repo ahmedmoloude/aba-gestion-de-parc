@@ -1,0 +1,111 @@
+<form     *ngIf="!loading"
+[formGroup]="form" (ngSubmit)="onSubmit()" class="p-5">
+    <div class="flex gap-4 pl-3 pr-3 mt-5 ml-8">
+      <div class="w-40 pt-3">
+        <label>Type de livraison</label>
+      </div>
+      <div class="w-96">
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-select formControlName="delivery_type">
+            <mat-option value="domicile">Domicile</mat-option>
+            <mat-option value="agence">En Gare</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="flex gap-4 pl-3 pr-3 mt-5 ml-8">
+      <div class="w-40 pt-3">
+        <label>Ville</label>
+      </div>
+      <div class="w-96">
+        <app-shared-autcomplete
+          #searchComponent1
+          [opended]="true"
+          [hasIcon]="false"
+          [type]="'single'"
+          [contentStyle]="contentStyle"
+          [inputStyle]="searchStyle"
+          [charToGetAll]="'*'"
+          [data]="cities"
+          [keys]="['code', 'name']"
+          [lengthToStart]="3"
+          [display]="['code', 'name']"
+          [placeholer]="'Rechercher la ville...'"
+          (dataEvent)="departChange($event)"
+        ></app-shared-autcomplete>
+      </div>
+    </div>
+    <div class="flex gap-4 pl-3 pr-3 mt-5 ml-8">
+      <div class="w-40 pt-3">
+        <label>Agence / Secteur</label>
+      </div>
+      <div class="w-96">
+        <app-shared-autcomplete
+          #searchComponent1
+          [opended]="true"
+          [hasIcon]="false"
+          [type]="'single'"
+          [contentStyle]="contentStyle"
+          [inputStyle]="searchStyle"
+          [charToGetAll]="'*'"
+          [data]="is_delivery_type_domicile ? secteurs : agences"
+          [keys]="['code', 'name']"
+          [lengthToStart]="3"
+          [display]="['code', 'name']"
+          [placeholer]="'Rechercher la Agence / Secteur...'"
+          (dataEvent)="departAgence($event)"
+        ></app-shared-autcomplete>
+      </div>
+    </div>
+    <div class="flex gap-4 pl-3 pr-3 mt-5 ml-8">
+      <div class="w-40 pt-3">
+        <label>Chauffeur</label>
+      </div>
+      <div class="w-96">
+        <app-shared-autcomplete
+          #searchComponent1
+          [opended]="true"
+          [hasIcon]="false"
+          [type]="'single'"
+          [contentStyle]="contentStyle"
+          [inputStyle]="searchStyle"
+          [charToGetAll]="'*'"
+          [data]="chauffeurs"
+          [keys]="['code', 'first_name', 'last_name' , 'name']"
+          [lengthToStart]="3"
+          [display]="['code', 'first_name', 'last_name' , 'name']"
+          [placeholer]="'Rechercher Chauffeur...'"
+          (dataEvent)="departChauffeur($event)"
+        ></app-shared-autcomplete>
+      </div>
+    </div>
+    <div class="flex gap-4 pl-3 pr-3 mt-8 ml-8">
+      <div class="w-40 pt-3">
+        <button
+          class="underline pt-2 font-bold text-[18px]"
+          mat-dialog-close
+        >
+          Abandonner
+        </button>
+      </div>
+      <div class="flex justify-end w-96">
+        <button
+          pButton
+          pRipple
+          type="submit"
+          label="Valider"
+          class="p-button-rounded p-button-success"
+        ></button>
+      </div>
+    </div>
+  </form>
+
+
+
+  <div
+    *ngIf="loading"
+    class="flex items-center justify-center mt-6 mb-6"
+    >
+    <mat-spinner [diameter]="80"></mat-spinner>
+</div>
+  

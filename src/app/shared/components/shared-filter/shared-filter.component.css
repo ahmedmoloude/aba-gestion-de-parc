@@ -1,0 +1,28 @@
+form{
+    border-bottom: 1px solid #0c804099;
+    padding-bottom: 18px;
+}
+.filter-btn{
+    background: #0c8040;
+    padding: 0 20px;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: inherit;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+.extra-search{
+    display: flex;
+    width: 50px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    height: 39px;
+    border-radius: 12px;
+    background: #cccc;
+}

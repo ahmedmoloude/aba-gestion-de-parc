@@ -1,0 +1,49 @@
+<div class="p-4">
+    <div class="grid grid-cols-2">
+        <div>
+            <h1 class="text-[#06152B] text-[22px] font-normal">Workflow de validation</h1>
+        </div>
+        <div class="text-right" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+            <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialog()">
+            <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+            <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+                Ajouter un workflow
+            </h2>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-x-auto relative mt-4">
+        <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    Model
+                  </div>
+                </th>
+                <th scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    Nombre de niveau
+                  </div>
+                </th>
+                <!-- <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex justify-end">Actions</div>
+                </th> -->
+              </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of listWorkflow">
+                    <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                        <td class="p-3">{{item.type == "REMISE" ? 'Remise' : 'Devis'}}</td>
+                        <td class="p-3">{{item.total}}</td>
+                    </tr>
+                </ng-container>
+              
+              
+            </tbody>
+          </table>
+    </div>
+</div>

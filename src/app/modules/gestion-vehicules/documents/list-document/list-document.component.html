@@ -1,0 +1,506 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Documents ( {{ type }} )
+        </h2>
+      </div>
+    </div>
+    <!-- <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]" (click)="openDialog()">
+         Ajouter
+        </h2>
+      </div>
+    </div> -->
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer mr-4">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcel()">Exporter</h2>
+      </div>
+      <!-- <div
+        class="flex cursor-pointer mr-4"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+      </div> -->
+      <div class="flex cursor-pointer" *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'U')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="openDialog()">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="flex">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Matricule"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="N° d’ordre"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Code"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Derniére visite"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-start">
+      <button
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div> -->
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFilter" [extraInputs]="extraInputsFilter"
+      (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <div class="mt-5" *ngIf="documents?.length <= 0">
+      <div class="mt-36 mb-36 text-center">
+        <p class="text-[#636363] text-[22px]">
+          La Liste des documents de type {{type}} est vide
+        </p>
+      </div>
+    </div>
+
+    <ng-container *ngIf="documents?.length > 0">
+      <div class="mt-10 overflow-auto">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" *ngIf=" type == 'Assurance' ">
+                <div class="flex items-center">N° de police</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" *ngIf=" type == 'Vignette' ">
+                <div class="flex items-center">Puissance fiscale</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Viste technique' ">
+                <div class="flex items-center">Fournisseur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" *ngIf=" type == 'Carte grise'">
+                <div class="flex items-center">N° châssis</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Autorisation de circulation'">
+                <div class="flex items-center">Objet</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Carnet tachygraphe'">
+                <div class="flex items-center">N° Ordre</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" *ngIf=" type == 'Taxe Essieu'">
+                <div class="flex items-center">N° Taxe</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Date de début</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Date de fin </div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Echéance</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Rappel avant</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Assurance' || type == 'Vignette' || type == 'Viste technique' || type == 'Taxe Essieu'">
+                <div class="flex items-center">Montant</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" *ngIf=" type == 'Carte grise'">
+                <div class="flex items-center">N° Carte Grise</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Autorisation de circulation'">
+                <div class="flex items-center">N° Autorisation</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Carnet tachygraphe'">
+                <div class="flex items-center">Code</div>
+              </th>
+
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                *ngIf=" type == 'Assurance'">
+                <div class="flex items-center">Fournisseur</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Code interne</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Immatriculation</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Marque</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Type</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">Document</div>
+              </th>
+              <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor=" let item of documents | paginate: { itemsPerPage: 6, currentPage: p } ">
+              <td class="p-3" *ngIf=" type == 'Assurance' ">{{ item.n_police }}</td>
+              <td class="p-3" *ngIf=" type == 'Vignette' ">{{ item.truck?.puissance_fiscale }} CV</td>
+              <td class="p-3" *ngIf=" type == 'Viste technique' ">{{ item.prestataire?.name }}</td>
+              <td class="p-3" *ngIf=" type == 'Carte grise'">{{ item.n_chassis }}</td>
+              <td class="p-3" *ngIf=" type == 'Autorisation de circulation'">{{ item.objet }}</td>
+              <td class="p-3" *ngIf=" type == 'Carnet tachygraphe'">{{ item.n_ordre }}</td>
+              <td class="p-3" *ngIf=" type == 'Taxe Essieu'">{{ item.n_taxe }}</td>
+
+              <td class="p-3">{{ item.start_date | date:'dd/MM/yyy'}}</td>
+              <td class="p-3">{{ item.end_date | date: 'dd/MM/yyyy'}}</td>
+              <td class="p-3">{{ item.end_date ? diffrenceDate(item.end_date) +'j' : '' }} </td>
+              <td class="p-3">{{ item.rappel? item.rappel+'j' : '' }} </td>
+              <td class="p-3"
+                *ngIf=" type == 'Assurance' || type == 'Vignette' || type == 'Viste technique' || type == 'Taxe Essieu'">
+                {{ formatNumber(item.montant) }} DH</td>
+              <td class="p-3" *ngIf=" type == 'Carte grise'">{{ item.n_carte_grise }}</td>
+              <td class="p-3" *ngIf=" type == 'Autorisation de circulation'">{{ item.n_autorisation }}</td>
+              <td class="p-3" *ngIf=" type == 'Carnet tachygraphe'">{{ item.code }}</td>
+
+              <td class="p-3" *ngIf=" type == 'Assurance'">{{ item.prestataire?.name }}
+              </td>
+              <td class="p-3">{{ item.truck?.code_interne }}</td>
+              <td class="p-3">{{ item.truck?.matricule }}</td>
+              <td class="p-3">{{ item.truck?.brand?.name }}</td>
+              <td class="p-3">{{ item.truck?.truck_type?.name }}</td>
+              <td class="p-3">
+                <div>
+                  <a *ngIf="item.file" href="{{ url + item.id + '/' }}{{ item.file }} " target="_blank">
+                    <mat-icon>file_copy</mat-icon>
+                  </a>
+                </div>
+              </td>
+              <td class="p-3 text-center cursor-pointer">
+                <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="editTruckDocument('edit', item)">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                  <button mat-menu-item (click)="deletTruckDocument(item.uuid)">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
+                </mat-menu>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-10">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </ng-container>
+  </ng-container>
+  <!-- <ng-container>
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px]"
+        *ngFor="
+          let item of documents
+            | paginate: { itemsPerPage: 6, currentPage: p } "> -->
+
+  <!-- <div class="flex width-content" *ngIf=" type == 'Assurance' ">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° de police :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_police }} </p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Vignette' ">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Puissance fiscale :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.puissance_fiscale }} CV</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Viste technique' ">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Fournisseur :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.prestataire?.name }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Carte grise'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° châssis :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_chassis }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Autorisation de circulation'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Objet :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.objet }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Carnet tachygraphe'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° Ordre :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_ordre }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Taxe Essieu'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° Taxe :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_taxe }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date de début :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.start_date }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date de fin :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.end_date }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Echéance :</p>
+              <p class="text-[12px] text-[#000000]">20 j</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Rappel avant :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.rappel }} j</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content" *ngIf=" type == 'Assurance' || type == 'Vignette' || type == 'Viste technique' || type == 'Taxe Essieu'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Montant :</p>
+              <p class="text-[12px] text-[#000000]">{{ formatNumber(item.montant) }} DH</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Carte grise'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° Carte Grise :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_carte_grise }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Autorisation de circulation'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° Autorisation :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_autorisation }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="flex width-content" *ngIf=" type == 'Carnet tachygraphe'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Code :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.code }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Fournisseur :</p>
+              <p class="text-[12px] text-[#000000]"></p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Code interne :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.code_interne }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Immatriculation :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.matricule }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Marque :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.code_interne }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Type :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.matricule }}</p>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="p-3">
+              <p class="text-[#b5b5b5] text-[10px]">Document :</p>
+              <a *ngIf="item.file" href="{{ url + item.id + '/' }}{{ item.file }} " target="_blank">
+                <mat-icon>file_copy</mat-icon>
+              </a>
+            </div>
+          </div>
+        </div> -->
+  <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="p-3 text-center cursor-pointer">
+          <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editTruckDocument('edit', item)">
+              <mat-icon>edit</mat-icon>
+              Modifier
+            </button>
+            <button mat-menu-item (click)="deletTruckDocument(item.uuid)">
+              <mat-icon>delete</mat-icon>
+              Supprimer
+            </button>
+          </mat-menu>
+        </div> -->
+  <!-- </div>
+    </ng-container> -->
+
+
+</div>

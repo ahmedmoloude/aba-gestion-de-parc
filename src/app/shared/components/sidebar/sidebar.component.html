@@ -1,0 +1,25 @@
+<div class="profile-card mb-0">
+  <!-- <img *ngIf="sideNavState" src="../../../../assets/img/logo-sdtm.png" /> -->
+
+
+  <div class="text-red-500 mt-8 flex items-center justify-center gap-2">
+
+    <h2>ABA</h2>
+    <h2>PARC</h2>
+  </div>
+</div>
+<mat-nav-list
+  [ngClass]="!sideNavState ? 'callapsed-sidenav' : 'side-navnar'"
+  [@onSideNavChange]="sideNavState ? 'open' : 'close'"
+>
+  <p-tieredMenu [model]="items" [routerLinkActiveOptions]="{ exact: true }">
+  </p-tieredMenu>
+  <!-- <mat-list-item
+    (click)="logout()"
+    class="p-menuitem"
+    routerLinkActive="active"
+  >
+    <span class="pi pi-fw pi-power-off"></span>
+    <p [@animateText]="linkText ? 'show' : 'hide'" class="pl-1">Déconnexion</p>
+  </mat-list-item> -->
+</mat-nav-list>

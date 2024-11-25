@@ -1,0 +1,58 @@
+<div class="adresse_block">
+    <h3 class="text-[#0C8040] font-normal pt-4">Adresse siège</h3>
+    <div
+      class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+      formGroupName="adresse_siege"
+    >
+      <input
+        class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+        type="text"
+        formControlName="adress"
+        placeholder="Adresse siège"
+      />
+      <span class="text-danger text-xs">{{
+        getMsgErrors("adresse_siege.adress", ["required"])
+      }}</span>
+      <div class="grid grid-cols-3 items-center">
+        <div class="text-[12px] pl-4">
+          <span
+            >Lon :
+            {{
+              f.adresse_siege.value?.position?.long
+                | toNumber
+                | number: "1.2-2"
+            }}
+          </span>
+          <span class="ml-2"
+            >Lat :
+            {{
+              f.adresse_siege.value?.position?.lat
+                | toNumber
+                | number: "1.2-2"
+            }}
+          </span>
+        </div>
+        <span
+          class="underline font-normal text-[12px] cursor-pointer col-span-2"
+          (click)="
+            openDialog(
+              isNumber(f.adresse_siege.value?.id),
+              addressType.HEADQUARTERS,
+              1,
+              f.adresse_siege.value?.position
+            )
+          "
+        >
+          la carte géographique
+        </span>
+        <span class="text-[12px] pl-4 pt-2 pb-2">
+          Zone :
+          {{ f.adresse_siege.value?.zone }}
+        </span>
+        <span class="text-[12px] pl-4 pt-2 pb-2">
+          Secteur :
+          {{ f.adresse_siege.value?.sector }}
+        </span>
+      </div>
+    </div>
+  </div>

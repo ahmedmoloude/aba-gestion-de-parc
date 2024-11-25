@@ -1,0 +1,65 @@
+<div
+  class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12 bg-login"
+>
+  <div class="relative py-3 w-11/12 max-w-xl sm:mx-auto">
+    <div class="mb-6 flex justify-center">
+      <!-- <img src="../../../../assets/img/logo-sdtm.png" /> -->
+    </div>
+    <div class="relative p-8 bg-white shadow-sm rounded-[29px_0px]">
+      <h1 class="text-center font-bold pb-5 text-[22px]">Authentification</h1>
+      <form class="w-full" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="mb-5 relative">
+          <input
+            formControlName="email"
+            (blur)="focus = false"
+            (focus)="focus = true"
+            type="email"
+            id="email"
+            class="peer pt-2 pl-12 border border-gray-200 focus:outline-none rounded-[28px] focus:border-gray-500 focus:shadow-sm w-full p-3 h-16 placeholder-transparent"
+            placeholder="name@example.com"
+            autocomplete="off"
+          />
+          <span class="absolute inset-y-0 inline-flex items-center left-4">
+            <mat-icon class="text-[#0C8040]">alternate_email</mat-icon>
+          </span>
+        </div>
+        <div class="mb-5 relative">
+          <input
+            formControlName="password"
+            placeholder="Password"
+            (blur)="focus1 = false"
+            (focus)="focus1 = true"
+            type="password"
+            id="password"
+            class="peer pt-2 pl-12 border border-gray-200 focus:outline-none rounded-[28px] focus:border-gray-500 focus:shadow-sm w-full p-3 h-16 placeholder-transparent"
+            autocomplete="off"
+          />
+          <span class="absolute inset-y-0 inline-flex items-center left-4">
+            <mat-icon class="text-[#0C8040]">vpn_key</mat-icon>
+          </span>
+        </div>
+        <!-- <button
+          *ngIf="!isLoading"
+          [disabled]="loginForm.invalid"
+          type="submit"
+          name="action"
+          class="w-full text-white p-3 rounded-md bg-btn-green"
+        >
+          Se connecter
+        </button> -->
+        <button 
+            *ngIf="!isLoading"
+            [disabled]="loginForm.invalid"  
+            pButton pRipple 
+            type="submit" 
+            label="Se connecter" 
+            name="action"
+            class="p-button-rounded p-button-success w-full p-3">
+        </button>
+        <div *ngIf="isLoading" class="flex justify-center">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

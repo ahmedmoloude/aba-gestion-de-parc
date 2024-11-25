@@ -1,0 +1,180 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Déclarer un plein</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+
+    <div *ngIf="isLoading" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+    <form *ngIf="!isLoading" [formGroup]="plein">
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4 mt-4">
+        <div class="w-[100%] mb-4">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Nom de citerne</mat-label>
+            <mat-select
+              matNativeControl
+              required
+              formControlName="citerne_id"
+              (selectionChange)="citerne($event)"
+            >
+              <mat-option
+                *ngFor="let citerne of citernes"
+                [value]="citerne.id"
+                >{{ citerne.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="citernes" [keys]="['name']" [lengthToStart]="3"
+            [display]="['name']" [placeholer]="''" [label]="'Rechercher la citerne...'" [hasIcon]="false"
+            (dataEvent)="filterCiterne($event)">
+          </app-shared-autcomplete>
+        </div>
+        <div class="w-[100%] mb-4">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Conducteur</mat-label>
+            <mat-select matNativeControl required formControlName="driver_id">
+              <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                {{ driver.first_name }} {{ driver.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete #searchComponent2 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="drivers" [keys]="['first_name', 'last_name']"
+            [lengthToStart]="3" [display]="['first_name', 'last_name']" [placeholer]="''"
+            [label]="'Rechercher le conducteur...'" [hasIcon]="false" (dataEvent)="filterConducteur($event)">
+          </app-shared-autcomplete>
+        </div>
+        <div class="w-[100%] mb-4">
+          <app-shared-autcomplete #searchComponent3 [hasIcon]="false" [type]="'single'" [opended]="true"
+            [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="vehicules"
+            [keys]="['code_interne', 'matricule']" [lengthToStart]="3" [display]="['code_interne', 'matricule']"
+            [placeholer]="''" [label]="'Rechercher véhicule...'"
+            (dataEvent)="truckSelected($event)"></app-shared-autcomplete>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <input
+              type="text"
+              placeholder="Immatriculation"
+              aria-label="Matricule"
+              matInput
+              (keyup)="filterMatricule($event)"
+              [matAutocomplete]="autoo"
+            />
+            <mat-icon matPrefix class="my-icon">search</mat-icon>
+            <mat-autocomplete
+              #autoo="matAutocomplete"
+              (optionSelected)="truckSelected($event)"
+            >
+              <mat-option
+                *ngFor="let truck of trucks"
+                [value]="truck.matricule"
+              >
+                {{ truck.matricule }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Marque</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="brand" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Tonnage (T)</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="tonnage" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Dernier Kilométrage (KM)</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="old_km" />
+          </mat-form-field>
+          <!-- <i-field [type]="'number'" [label]="'Dernier Kilométrage'" formControlName="old_km" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Code véhicule</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="code" />
+          </mat-form-field>
+          <!-- <i-field [type]="'text'" [label]="'Code véhicule'" formControlName="code" ></i-field> -->
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Taille réservoir(L)</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="taille_reservoir" />
+          </mat-form-field>
+          <!-- <i-field [type]="'text'" [label]="'Taille résérvoir'" formControlName="taille_reservoir" ></i-field> -->
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Kilométrage</mat-label>
+            <input
+              matInput
+              type="number"
+              autocomplete="off"
+              formControlName="kilometrage"
+            />
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Kilométrage actuel (KM)'" formControlName="kilometrage"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%]" style="color: black;">
+            <mat-label>Qté alimentée (L)
+              <!-- <i *ngIf="plein?.controls?.quantite?.hasError('required')" class="text-danger">*</i> -->
+            </mat-label>
+            <input
+              matInput
+              type="number"
+              autocomplete="off"
+              formControlName="quantite"
+              min="0"
+              [max]="reservoir"
+            />
+          </mat-form-field>
+          <div *ngIf="plein.controls.quantite.invalid && (plein.controls.quantite.dirty || plein.controls.quantite.touched)" class="invalid">
+            <div *ngIf="plein?.controls?.quantite?.errors?.required">Champs obligatoire</div>
+            <div *ngIf="plein?.controls?.quantite?.errors?.max">
+              la quantité alimentée est supérieure à la taille de réservoir
+            </div>
+          </div>
+          <!-- <i-field [type]="'number'" [label]="'Qté alimentée (L)'" formControlName="quantite"
+            [max]="reservoir">
+          </i-field> -->
+        </div>
+        <i-field [type]="'text'" [label]="'N° de bon du Gasoil'" formControlName="fuel_coupon_number"></i-field>
+        <i-field [type]="'number'" [label]="'Carburant de base'" formControlName="carburant_base"></i-field>
+        <div>
+          <mat-label>Document</mat-label>
+          <input #imgInput
+            type="file"
+            accept="image/jpeg,image/png,image/jpg,application/pdf,image/x-eps"
+            (change)="onSelectImage($event)"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close>
+            Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <button [disabled]="plein.invalid" *ngIf="!spinner"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="add()">
+            {{ dialogData.editMode ? "Modifier" : "Enregistrer" }}
+          </button>
+
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

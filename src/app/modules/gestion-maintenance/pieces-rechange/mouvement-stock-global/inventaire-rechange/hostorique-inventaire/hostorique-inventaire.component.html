@@ -1,0 +1,52 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Historique</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <!-- <mat-icon class="pt-[5px]">cloud_download</mat-icon> -->
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content class="historique">
+
+
+    <div class="list mt-1 mb-5">
+      <p><strong>Nom de pièce :</strong> {{ piece?.name?.name || '---'}}</p>
+      <p><strong>Référence :</strong> {{ piece?.reference || '---'}}</p>
+      <p><strong>Famille :</strong> {{ piece?.family?.name || '---'}}</p>
+    </div>
+    <ng-container *ngIf="inventory$ | async as inventoryState">
+
+      <div *ngIf="inventoryState?.historicState =='LOADING'" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+
+      <ng-container *ngIf="inventoryState?.historicState == 'SUCCESS' &&  inventoryState?.inventoryHistoric?.length > 0">
+        <div class="overflow-auto mt-5">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let item of inventoryState?.inventoryHistoric  | paginate: { itemsPerPage: 5, currentPage: p };">
+                <td class="p-3">{{item?.user?.name || '---'}}</td>
+                <td class="p-3">{{(item?.created_at | date: 'dd/MM/yyyy') || '---'}}</td>
+                <td class="p-3">{{item?.stock_reel || 0}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

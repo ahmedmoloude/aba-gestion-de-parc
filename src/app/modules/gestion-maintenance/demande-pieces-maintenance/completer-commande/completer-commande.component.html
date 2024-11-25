@@ -1,0 +1,78 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Completer la commande</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <ng-container *ngIf="demandePiece$ | async as demandePieceState">
+    <div *ngIf="demandePieceState?.BonCommandeState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div mat-dialog-content class="dialog-carte">
+      <!-- <div class="flex justify-center items-center bg-[#00688E] w-5/12 rounded-lg h-14 text-white mx-auto">
+            <mat-icon>assignment</mat-icon>
+            <p class="pl-2">Bon de sortie N° 98377266</p>
+        </div> -->
+        <div class="flex justify-center items-center bg-[#00688E] w-5/12 rounded-lg h-14 text-white mx-auto">
+            <mat-icon>assignment</mat-icon>
+            <p class="pl-2">Bon de sortie </p>
+        </div>
+
+      <ng-container *ngIf="demandePieceState?.BonCommandeState == 'SUCCESS'">
+        <ng-container *ngIf="demandePieceState?.BonCommande as BonCommande">
+          <div class="mt-10">
+            <ng-container *ngIf="BonCommande?.data?.length > 0">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let item of  BonCommande?.data">
+                    <td class="p-3">{{(item?.reference) || '---'}}</td>
+                    <td class="p-3">{{(item?.designation) || '---'}} </td>
+                    <td class="p-3">{{(item?.quantity_demande - item?.quantity_livred) || 0}} </td>
+                    <!-- <td class="p-3">{{(item?.prix_unitaire) || 0}} </td>
+                    <td class="p-3">{{(item?.total_ht) || 0}} </td>
+                    <td class="p-3">{{(item?.tva) || 0}} </td>
+                    <td class="p-3">{{(item?.total_ttc) || 0}} </td> -->
+                  </tr>
+                  <!-- <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="p-3 text-[#0C8040] font-medium">Total</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(BonCommande?.data, 'prix_unitaire') ) || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(BonCommande?.data, 'total_ht') ) || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(BonCommande?.data, 'tva') ) || 0}} Dhs</td>
+                    <td class="p-3 text-[#0C8040] font-medium">{{(calculateSum(BonCommande?.data, 'total_ttc') ) || 0}} Dhs</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+      <div>
+        <button mat-dialog-close class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <button *ngIf="!spinner" (click)="CompleteCommande()" pButton pRipple type="submit" label="Valider" class="mr-5 p-button-rounded p-button-success"></button>
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </ng-container>

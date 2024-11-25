@@ -1,0 +1,124 @@
+name: SDTM BO STAG GCP
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gcp-deploy]
+  
+
+env:
+  APP_NAME: devcorp-sdtm-bo-stag
+  SERVICE_NAME: sdtm_bo
+jobs:
+  build:
+    name: build and push image
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set build tag
+        shell: bash
+        run: |
+          echo "BUILD_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Update environment.prod.ts 
+        run: |
+          echo '
+          export const environment = {
+          production: true,
+          STORAGE: "${{ secrets.STORAGE_STAG }}",
+          URL: "${{ secrets.URL_STAG }}"
+          };' > src/environments/environment.prod.ts
+              
+      - name: Cache NPM dependencies
+        id: cache-npm
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-cache-
+            ${{ runner.os }}-
+            
+      - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run:  npm install --force
+        
+      - name: Build App
+        run: |
+           #npx ng build --configuration production
+           node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --configuration production
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+           docker context create builders
+          
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+          endpoint: builders   
+      
+      - name: Verify Buildx installation
+        run: docker buildx ls
+  
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          file: ./Dockerfile
+          tags: digieye/${{ env.APP_NAME}}:${{ env.BUILD_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    name: deploy image to gcp
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set build tag
+        shell: bash
+        run: |
+          echo "BUILD_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          sudo chmod 600 ~/.ssh/id_rsa
+
+    #   - name: Change app image version
+    #     run: |
+    #       scp -o 'StrictHostKeyChecking no' -T -i ~/.ssh/id_rsa .env.example ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/sdtm/.env
+
+      - name: Change app image version
+        run: |
+            ssh -o 'StrictHostKeyChecking no' -T -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+            echo "Start Updating image tag ..."
+            cd ~/sdtm
+            sed 's|${{ env.APP_NAME }}:.*$|${{ env.APP_NAME }}:${{ env.BUILD_TAG }}|' -i ./docker-compose.yml
+            echo "restart api container"
+            docker-compose up -d --no-deps --force-recreate  ${{ env.SERVICE_NAME }}
+            EOF
+            
+           

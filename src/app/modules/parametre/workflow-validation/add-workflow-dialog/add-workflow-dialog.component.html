@@ -1,0 +1,57 @@
+<!-- Dialog Component -->
+<div class="dialog-container">
+    <header class="dialog-header">
+      <h2 mat-dialog-title>Configuration du workflow</h2>
+      <button mat-icon-button mat-dialog-close aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </header>
+  
+    <form (ngSubmit)="onSubmit()" class="dialog-form">
+      <!-- Related to Selector -->
+      <div class="form-field">
+        <select id="relatedTo" [(ngModel)]="workflowItems.relatedTo" name="relatedTo">
+          <option value="">Related to</option>
+          <option value="QUOTESVERSION" selected>Devis</option>
+          <option value="REMISE" selected>Remise</option>
+        </select>
+      </div>
+  
+      <!-- Workflow Items Table -->
+      <table class="workflow-table">
+        <tbody>
+          <tr *ngFor="let item of workflowItems.workflow; let i = index">
+            <!-- Validator Type Selector -->
+            <td>
+              <select [(ngModel)]="item.validatorType" name="validatorType-{{i}}">
+                <option value="">Validateur type</option>
+                <option value="role" selected>Role</option>
+              </select>
+            </td>
+            <!-- Validator Selector -->
+            <td>
+              <select [(ngModel)]="item.validator" name="validator-{{i}}">
+                <option value="" selected>Validateur</option>
+                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+              </select>
+            </td>
+            <!-- Add/Delete Buttons -->
+            <td>
+              <button type="button" (click)="addLigne()"><mat-icon style="color:green">add_circle</mat-icon></button>
+            </td>
+            <td>
+              <button type="button" [disabled]="workflowItems.workflow.length == 1" (click)="deleteLigne(i)"><mat-icon style="color:red">cancel</mat-icon></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button type="button" mat-dialog-close class="cancel-button">Abandonner</button>
+        <button *ngIf="!isSaving" type="submit" class="save-button">Ajouter</button>
+        <button *ngIf="isSaving" disabled class="save-button loading">Chargement ...</button>
+      </div>
+    </form>
+  </div>
+  

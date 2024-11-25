@@ -1,0 +1,117 @@
+<div class="absolute right-10 z-50">
+  <div *ngIf="selectedTabIndex === 0">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterAssurance(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 1">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterVignette(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 2">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterVisite(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 3">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterCarte(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 4">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterAutorisation(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 5">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterCarnet(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTabIndex === 6">
+    <div class="flex justify-between">
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="ajouterTaxe(item)">
+          Ajouter
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="relative tabs-utilisateur">
+  <mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="Assurance">
+      <ng-template matTabContent>
+        <app-assurance [item]="item"></app-assurance>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Vignette">
+      <ng-template matTabContent>
+        <app-vignette [item]="item"></app-vignette>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Visite technique">
+      <ng-template matTabContent>
+        <app-visite [item]="item"></app-visite>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Carte grise">
+      <ng-template matTabContent>
+        <app-carte-grise [item]="item"></app-carte-grise>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Autorisation de circulation">
+      <ng-template matTabContent>
+        <app-autorisation [item]="item"></app-autorisation>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Carnet tachygraphe">
+      <ng-template matTabContent>
+        <app-tachygraphe [item]="item"></app-tachygraphe>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Taxe d'essieu">
+      <ng-template matTabContent>
+        <app-taxe [item]="item"></app-taxe>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

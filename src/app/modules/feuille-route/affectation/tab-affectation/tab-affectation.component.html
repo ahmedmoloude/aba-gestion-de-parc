@@ -1,0 +1,104 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 vehiculetabs"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">check_circle_outline</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">Affectation</h2>
+    </div>
+  </div>
+  <div
+    class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px] items-center"
+  >
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="icon ml-1">
+          <mat-icon class="text-[23px] text-[#138742]">person_pin</mat-icon>
+        </div>
+        <div class="pl-3">
+          <p class="text-[#000000] text-[19px] font-medium">Sous parc</p>
+          <p class="text-[16px] text-[#138742]">{{ parcs }}</p>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="icon ml-1">
+          <mat-icon class="text-[23px] text-[#138742]">person</mat-icon>
+        </div>
+        <div class="pl-3">
+          <p class="text-[#000000] text-[19px] font-medium">
+            Conducteurs disponibles
+          </p>
+          <p class="text-[16px] text-[#138742]">{{Conducteur_disponible}}</p>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="icon ml-1">
+          <mat-icon class="text-[23px] text-[#138742]">local_shipping</mat-icon>
+        </div>
+        <div class="pl-3">
+          <p class="text-[#000000] text-[19px] font-medium">
+            Camions disponibles
+          </p>
+          <div class="flex">
+            <p class="text-[16px] text-[#138742]"> {{truck_dispo}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab label="Ramassage">
+        <ng-template matTabContent>
+          <app-ramassage></app-ramassage>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Transfert">
+        <ng-template matTabContent>
+          <app-transfert></app-transfert>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Livraison">
+        <ng-template matTabContent>
+          <app-livraison></app-livraison>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Convoyage">
+        <ng-template matTabContent>
+          <app-convoyage></app-convoyage>
+        </ng-template>
+      </mat-tab>
+      <!-- <mat-tab label="Affrètement">
+        <ng-template matTabContent>
+          <app-affretement></app-affretement>
+        </ng-template>
+      </mat-tab> -->
+      <!-- <mat-tab>
+        <ng-template mat-tab-label>Ramassage</ng-template>
+        <app-ramassage></app-ramassage>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Transfert </ng-template>
+        <app-transfert></app-transfert>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Livraison </ng-template>
+        <app-livraison></app-livraison>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Convoyage </ng-template>
+        <app-convoyage></app-convoyage>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Affrètement </ng-template>
+        <app-affretement></app-affretement>
+      </mat-tab> -->
+    </mat-tab-group>
+  </div>
+</div>

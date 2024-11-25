@@ -1,0 +1,11 @@
+<nav aria-label="Page navigation example">
+    <ul class="inline-flex items-center -space-x-px">
+      <li *ngFor="let link of  Links  ">
+          <button *ngIf="link.label.includes('Next')  " [disabled]="IsLength" (click)="getTheNext(link)" class="inline-flex leading-none h-8 w-8 items-center justify-center rounded border border-gray-100" #templateName><mat-icon>navigate_next</mat-icon>
+          </button>
+          <button *ngIf="link.label.includes('Previous') " [disabled]="IsLength"  (click)="getTheNext(link)" class="inline-flex leading-none h-8 w-8 items-center justify-center rounded border border-gray-100" #templateName ><mat-icon>navigate_before</mat-icon>
+          </button>
+          <button *ngIf="!link.label.includes('Next') && !link.label.includes('Previous')" (click)="getTheNext(link)" class="inline-flex leading-none	 h-8 w-8 items-center justify-center rounded border border-gray-100" #templateName>{{link.label}}</button>
+      </li>
+    </ul>
+  </nav>

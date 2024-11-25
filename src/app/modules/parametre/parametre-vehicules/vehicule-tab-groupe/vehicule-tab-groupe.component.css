@@ -1,0 +1,43 @@
+
+
+:host /deep/ .vehiculetabs .mat-tab-group {
+    flex-direction: column;
+  }
+  :host /deep/ .vehiculetabs .mat-tab-header {
+    border-bottom: 1px solid #ccc;
+  }
+  :host /deep/ .vehiculetabs .mat-tab-header-pagination {
+    display: none !important;
+  }
+  ::ng-deep .vehiculetabs .mat-tab-labels {
+    flex-direction: inherit ;
+  }
+  :host /deep/ .vehiculetabs .mat-ink-bar {
+    height: 100%;
+    left: 99% !important;
+  }
+  :host /deep/ .vehiculetabs .mat-tab-body-wrapper {
+    flex: 1 1 auto;
+  }
+  ::ng-deep .vehiculetabs .mat-tab-group.mat-primary .mat-ink-bar{
+    background-color: #B2B2B252;
+  }
+  ::ng-deep  .vehiculetabs .mat-tab-label{
+    border-bottom: 1px solid #B2B2B252;
+    opacity: 1 !important; 
+  }
+  ::ng-deep .ngx-pagination .current {
+    background: #0C8040 !important;
+  }
+  
+  .example-tab-icon {
+    margin-right: 8px;
+  }
+  ::ng-deep .vehiculetabs .mat-tab-label{
+    padding-left: 0px;
+    justify-content: left;
+  }
+  ::ng-deep .vehiculetabs .mat-tab-label-active{
+    color: #0C8040;
+    border-bottom: 2px solid;
+  }

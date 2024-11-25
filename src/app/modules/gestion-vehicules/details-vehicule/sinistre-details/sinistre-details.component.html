@@ -1,0 +1,181 @@
+<div class="dialog h-screen overflow-auto bg-[#E9E9E9]">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] pt-4 pl-4 pr-4" >
+    <h2 mat-dialog-title class="col-span-2 text-[#0C8040]">
+      Historique des {{ type+'S' | lowercase}} :
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div *ngIf="infractions">
+    <div class="padd-content pb-6" *ngFor="let item of infractions">
+      <div class="bg-[#F6F8F5] border-[2px] border-[#E5E5E5] rounded-[20px] mt-4">
+        <div class="grid grid-cols-2 gap-4 mt-4 pl-4 pr-4 mb-2">
+          <div><strong>Infraction N° :</strong> {{ item.id }}</div>
+          <div><strong>Conducteur :</strong> {{ item.driver?.first_name }} {{ item.driver?.last_name }}</div>
+          <div><strong>Code de véhicule :</strong> {{ item.truck?.code_interne }}</div>
+          <div><strong>Date :</strong> {{ item.date_sinistre }}</div>
+        </div>
+        <div class="border-b-2 border-[#00000029]"></div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+          <!-- <div>
+            <p class="text-[#0C8040] text-[11px]">Feuille de mission :</p>
+            <p class="font-medium">{{ item.feuille_mission }}</p>
+          </div> -->
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Type :</p>
+            <p class="font-medium">{{ item.motif }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Conducteur :</p>
+            <p class="font-medium">{{ item.driver?.first_name }} {{ item.driver?.last_name }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Payé :</p>
+            <p class="font-medium">
+              {{ item.paye == false ? "Non" : "" }}
+              {{ item.paye == true ? "Oui" : "" }}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+          <div *ngIf="item.nature_paiement">
+            <p class="text-[#0C8040] text-[11px]">Nature de paiement :</p>
+            <p class="font-medium">{{ item.nature_paiement }}</p>
+          </div>
+          <div *ngIf="item.payeur">
+            <p class="text-[#0C8040] text-[11px]">Payeur :</p>
+            <p class="font-medium">{{ item.payeur }}</p>
+          </div>
+          <div *ngIf="item.date_echeance">
+            <p class="text-[#0C8040] text-[11px]">Date d'écheance :</p>
+            <p class="font-medium">{{ item.date_echeance }}</p>
+          </div>
+          <div *ngIf="item.rappel">
+            <p class="text-[#0C8040] text-[11px]">Rappel :</p>
+            <p class="font-medium">{{ item.rappel }} j</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Montant :</p>
+            <p class="font-medium">{{ formatNumber(item.montant) }} DH</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Description :</p>
+            <p class="font-medium">{{ item.description }}</p>
+          </div>
+        </div>
+        <div class="border-b-2 border-[#00000029] pt-3 pb-3"></div>
+        <div class="flex mt-4 pl-4 pr-4 photo">
+          <mat-icon class="text-xl pt-1">photo</mat-icon>
+          <h2 class="text-[#000] font-semibold pt-1">Photos {{ item.type_image }}</h2>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-4 pl-4 pr-4 pb-4">
+          <app-galleria [imageList]="item.images" [id]="item.id" [maxWidth]="'450px'" [urlName]="urlName" ></app-galleria>
+          <!-- <div>
+            <img src="{{ url + item.id + '/' }}{{ item.image }}"
+              class="w-48 mb-3 rounded-xl" />
+          </div> -->
+          <!-- <p class="text-center">GD32.PNG</p> -->
+          <!-- <div>
+            <img
+              src="../../../../assets/img/Kawasaki.jpg"
+              class="w-48 mb-3 rounded-xl"
+            />
+            <p class="text-center">GD32.PNG</p>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="accidents">
+    <div class="padd-content pb-6" *ngFor="let item of accidents">
+      <div class="bg-[#F6F8F5] border-[2px] border-[#E5E5E5] rounded-[20px] mt-4">
+        <!-- <mat-list role="list">
+          <mat-list-item role="listitem" ><strong>Accident N° :</strong> {{ item.id }}</mat-list-item >
+          <mat-list-item role="listitem" ><strong>Conducteur :</strong> {{ item.driver?.first_name }} {{ item.driver?.last_name }}</mat-list-item >
+          <mat-list-item role="listitem" ><strong>Code de véhicule :</strong> {{ item.truck?.code_interne }}</mat-list-item >
+          <mat-list-item role="listitem" ><strong>Date :</strong> {{ item.date_sinistre }}</mat-list-item >
+        </mat-list> -->
+        <div class="grid grid-cols-2 gap-4 mt-4 pl-4 pr-4 mb-2">
+          <div><strong>Accident N°  :</strong> {{ item.id }}</div>
+          <div><strong>Conducteur :</strong> {{ item.driver?.first_name }} {{ item.driver?.last_name }}</div>
+          <div><strong>Code de véhicule :</strong> {{ item.truck?.code_interne }}</div>
+          <div><strong>Date :</strong> {{ item.date_sinistre }}</div>
+        </div>
+        <div class="border-b-2 border-[#00000029]"></div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+          <!-- <div>
+            <p class="text-[#0C8040] text-[11px]">Feuille de mission :</p>
+            <p class="font-medium">{{ item.feuille_mission }}</p>
+          </div> -->
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Type :</p>
+            <p class="font-medium">{{ item.motif }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Adresse :</p>
+            <p class="font-medium">{{ item.adresse }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Ville :</p>
+            <p class="font-medium">{{ item.city?.name }}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Conducteur :</p>
+            <p class="font-medium">{{ item.driver?.first_name }} {{ item.driver?.last_name }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Assureur :</p>
+            <p class="font-medium">{{ item.assureur }}</p>
+          </div>
+          <!-- <div>
+            <p class="text-[#0C8040] text-[11px]">Montant :</p>
+            <p class="font-medium">{{ item.montant }} DH</p>
+          </div> -->
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Type de constat :</p>
+            <p class="font-medium">{{ item.type_constat }}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Reference constat :</p>
+            <p class="font-medium">{{ item.reference_constat }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Responsabilité :</p>
+            <p class="font-medium">{{ item.responsabilite }}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Description :</p>
+            <p class="font-medium">{{ item.description }}</p>
+          </div>
+        </div>
+        <div class="border-b-2 border-[#00000029] pt-3 pb-3"></div>
+        <div class="flex mt-4 pl-4 pr-4 photo">
+          <mat-icon class="pt-2">photo</mat-icon>
+          <h2 class="text-[#000] font-semibold pl-1 pt-1">Photo PV</h2>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4 pb-4">
+          <app-galleria [imageList]="item.images" [id]="item.id" [maxWidth]="'450px'" [urlName]="urlName" ></app-galleria>
+        <!--
+          <div>
+            <img src="{{ url + item.id + '/' }}{{ item.image }}"
+              class="w-48 mb-3 rounded-xl" />
+          </div> -->
+          <!-- <div>
+            <img
+              src="../../../../assets/img/Kawasaki.jpg"
+              class="w-48 mb-3 rounded-xl"
+            />
+            <p class="text-center">GD32.PNG</p>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

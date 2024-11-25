@@ -1,0 +1,36 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Créer un rôle</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form>
+    <div mat-dialog-content>
+      <div class="w-[100%] pl-7 pr-7 mb-4 mt-4">
+        <i-field [type]="'text'" [label]="'Nom'" [formControl]="name"></i-field>
+      </div>
+    </div>
+    <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4 mt-4">
+      <mat-label>Fonction</mat-label>
+      <mat-select [formControl]="function" matNativeControl required>
+        <mat-option *ngFor="let func of functions | keyvalue" [value]="func.value">{{ func.key }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close>
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <button *ngIf="!spinner" pButton pRipple type="submit" label="Ajouter" class="p-button-rounded p-button-success"
+          (click)="addRole()">
+        </button>
+        <div *ngIf="spinner" class="flex items-center p-7">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

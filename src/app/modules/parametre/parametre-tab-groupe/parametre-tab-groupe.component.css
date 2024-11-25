@@ -1,0 +1,39 @@
+:host /deep/ .parametregroupe .mat-tab-group {
+  flex-direction: row;
+}
+:host /deep/ .parametregroupe .mat-tab-header {
+  border-bottom: none;
+}
+:host /deep/ .parametregroupe .mat-tab-header-pagination {
+  display: none !important;
+}
+::ng-deep .parametregroupe .mat-tab-labels {
+  flex-direction: column ;
+}
+:host /deep/ .parametregroupe .mat-ink-bar {
+  height: 100%;
+  left: 99% !important;
+}
+:host /deep/ .parametregroupe .mat-tab-body-wrapper {
+  flex: 1 1 auto;
+}
+::ng-deep .parametregroupe .mat-tab-group.mat-primary .mat-ink-bar{
+  background-color: #B2B2B252;
+}
+::ng-deep  .parametregroupe .mat-tab-label{
+  border-bottom: 1px solid #B2B2B252;
+  opacity: 1 !important; 
+}
+::ng-deep  .parametregroupe .mat-tab-label-active{
+  color: #0C8040;
+}
+::ng-deep .ngx-pagination .current {
+  background: #0C8040 !important;
+}
+::ng-deep .parametre .mat-tab-label.mat-tab-disabled {
+  cursor: default;
+    justify-content: start;
+    color: #0C8040;
+    padding-left: 10px;
+    background-color: #d7d7d7;
+}

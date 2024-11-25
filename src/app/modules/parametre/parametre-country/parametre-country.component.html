@@ -1,0 +1,62 @@
+<div class="p-4">
+    <div class="grid grid-cols-2">
+        <div>
+          <h1 class="text-[#06152B] text-[22px] font-normal">Pays</h1>
+        </div>
+        <div class="text-right">
+          <div
+            class="flex col-end-7 col-span-2 justify-end cursor-pointer"
+            (click)="openDialogAjoutertype()"
+            *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')"
+          >
+            <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+            <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+              Ajouter un pays
+            </h2>
+          </div>
+        </div>
+      </div>
+    <ng-container>
+      <table class="w-full text-left text-gray-500 mb-4">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of colors">
+            <td class="p-3">{{ item.name }}</td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialogAjoutertype('edit', item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">Modifier</button>
+                <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')"> Supprimer </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <pagination-controls
+        id="pagination-nature_product"
+        previousLabel=""
+        nextLabel=""
+        (pageChange)="p = $event"
+      ></pagination-controls> -->
+    </ng-container>
+  </div>

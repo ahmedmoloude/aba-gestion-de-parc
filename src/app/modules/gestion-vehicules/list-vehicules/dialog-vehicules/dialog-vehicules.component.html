@@ -1,0 +1,547 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4 pb-2">
+    <h2 mat-dialog-title class="col-span-2">
+      {{ form_btn }} véhicule {{ code }}
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="content-dialog">
+    <form [formGroup]="createVehicule">
+      <div class="flex  mb-4">
+        <div *ngIf="type == 'edit'" class="flex">
+          <div *ngFor="let image of images_aff; let i = index">
+            <button class="btn-remove" (click)="deletImage(image.uuid)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <div>
+              <!-- {{ url + image.id + '/' }}{{ image.file }} -->
+              <img src="{{ url + item.id+ '/' }}{{ image.file }}" class="w-48 mb-3 rounded-xl image-vehicule" />
+            </div>
+          </div>
+        </div>
+
+        <div *ngFor="let image of images; let i = index">
+          <button class="btn-remove" (click)="removeImage(i)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <div *ngIf="display_img">
+            <img [src]="image.file" class="w-48 mb-3 rounded-xl image-vehicule" />
+          </div>
+          <!-- <p class="text-center">{{ image.name }}</p> -->
+        </div>
+        <div class="file-images flex justify-center items-center cursor-pointer">
+          <input #imgInput hidden="true" type="file" onclick="this.value=null" (change)="onSelectImage($event)"
+            accept=".jpeg,.png,.svg" />
+          <div class="text-center" (click)="imgInput.click()">
+            <mat-icon>add_circle</mat-icon>
+            <p class="text-xs">Ajouter une image</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2  rounded-[11px_11px_0px_0px]">
+              <mat-icon>assignment_turned_in</mat-icon>
+              <span class="pl-1 text-base">Affectation</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 pt-8 pl-3 pr-3">
+            <div>
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities" [keys]="['code', 'name']"
+                [lengthToStart]="3" [display]="['code', 'name']" [placeholer]="''" [label]="'Rechercher la ville...'"
+                [hasIcon]="false" (dataEvent)="filterCity($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Sous Parc</mat-label>
+                <mat-select formControlName="parc_id">
+                  <mat-option *ngFor="let parc of parcs" [value]="parc.id">
+                    {{ parc.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="parcs" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher le parc...'" [hasIcon]="false"
+                (dataEvent)="filterParc($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Activité</mat-label>
+                <mat-select formControlName="activity">
+                  <mat-option value="Messagerie">Messagerie </mat-option>
+                  <mat-option value="Afferetement">Affrèttement </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Service</mat-label>
+                <mat-select multiple (selectionChange)="onChange($event)" formControlName="service">
+                  <mat-option *ngFor="let service of services" [value]="service.id">{{ service.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Zone</mat-label>
+                <mat-select formControlName="zone_id">
+                  <mat-option *ngFor="let zone of zones" [value]="zone.id">
+                    {{ zone.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="zones" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher la zone...'" [hasIcon]="false"
+                (dataEvent)="filterZone($event)">
+              </app-shared-autcomplete>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+              <mat-icon> local_shipping</mat-icon>
+              <span class="pl-1 text-base">Informations générales </span>
+            </p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3 mt-7">
+            <div>
+              <i-field [type]="'text'" [label]="'Code interne'" formControlName="code_interne"></i-field>
+            </div>
+            <div>
+              <i-field [type]="'text'" [label]="'WW'" formControlName="n_w"></i-field>
+            </div>
+            <!-- <div>
+              <i-field [type]="'text'" [label]="'Immatriculation'" formControlName="matricule" (input)="formatMatricule($event)" [maxlength]="8"></i-field>
+              <div class="invalid">* Le matricule doit suivre le format suivant "NNNN L N" ex "1234 A 5" </div>
+            </div> -->
+            <div>
+              <div class=" flex ">
+                <i-field [type]="'number'" [label]="'1234'" formControlName="carNumberPart1"[minValue]="0"></i-field>
+                <i-field [type]="'text'" [label]="'A'" formControlName="carNumberPart2" [maxlength]="1" ></i-field>
+                <i-field [type]="'number'" [label]="'5'" formControlName="carNumberPart3" [minValue]="0" [maxValue]="99" (input)="limitInputOneLength($event)" [maxlength]="2" ></i-field>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
+            <div>
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="brands" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher la marque...'" [hasIcon]="false"
+                (dataEvent)="filterBrand($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="modeles" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher le modéle...'" [hasIcon]="false"
+                (dataEvent)="filterModele($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="gammes" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher la gamme...'" [hasIcon]="false"
+                (dataEvent)="filterGamme($event)">
+              </app-shared-autcomplete>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
+            <div>
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                  <mat-label>Type de véhicule</mat-label>
+                  <mat-select formControlName="truck_type_id">
+                    <mat-option *ngFor="let t of types" [value]="t.id">
+                      {{ t.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="types" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher le type...'" [hasIcon]="false"
+                (dataEvent)="filterType($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                  <mat-label>Catégorie</mat-label>
+                  <mat-select formControlName="truck_category_id">
+                    <mat-option
+                      *ngFor="let categorie of categories"
+                      [value]="categorie.id"
+                    >
+                      {{ categorie.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="categories" [keys]="['name']"
+                [lengthToStart]="3" [display]="['name']" [placeholer]="''" [label]="'Rechercher la catégorie...'"
+                [hasIcon]="false" (dataEvent)="filterCategorie($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <i-field [type]="'text'" [label]="'N° de châssis'" formControlName="n_chassis"></i-field>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
+            <div>
+              <i-field [type]="'date'" [label]="'Date de sortie'" formControlName="date_sortie"
+                (changeValue)="setDateDebut($event)"></i-field>
+            </div>
+            <div>
+              <i-field [type]="'date'" [label]="'Date de mise en circulation'" formControlName="date_circulation"
+                [minValue]=date_sortie></i-field>
+            </div>
+            <div>
+              <i-field [type]="'date'" [label]="'Date entrée'" formControlName="date_entree_vehicule"
+                [minValue]=date_sortie></i-field>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
+            <div>
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                  <mat-label>Couleur</mat-label>
+                  <mat-select formControlName="color_id">
+                    <mat-option *ngFor="let color of colors" [value]="color.id">
+                      {{ color.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="colors" [keys]="['name']" [lengthToStart]="3"
+                [display]="['name']" [placeholer]="''" [label]="'Rechercher la couleur...'" [hasIcon]="false"
+                (dataEvent)="filterColor($event)">
+              </app-shared-autcomplete>
+            </div>
+            <div>
+              <i-field [type]="'number'" [label]="'Nombre de scellé'" formControlName="nbr_scelle"></i-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+              <mat-icon>perm_data_setting</mat-icon>
+              <span class="pl-1 text-base">Carburant</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 pt-8 mb-4 pl-3 pr-3">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Carburant</mat-label>
+                <mat-select formControlName="carburant">
+                  <mat-option *ngFor="let carburant of carburants" value="{{ carburant }}">
+                    {{ carburant }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Tonnage</mat-label>
+                <mat-select formControlName="tonnage_id">
+                  <mat-option *ngFor="let tonnage of tonnages" [value]="tonnage.id">
+                    {{ tonnage.name }} T
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <i-field [type]="'number'" [label]="'Kilommetrage initial (KM)'" formControlName="km_initial"></i-field>
+            </div>
+            <div>
+              <i-field [type]="'number'" [label]="'Taille de réservoir(L)'"
+                formControlName="taille_reservoir"></i-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>%Consommation de carburant</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="consomation_carburant"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div> -->
+            <div>
+              <i-field [type]="'number'" [label]="'%Consommation de carburant'"
+                formControlName="consomation_carburant"></i-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Consomation réel</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="consomation_carburant_reel"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div> -->
+            <div class="mb-3">
+              <i-field [type]="'number'" [label]="'Consommation réelle (L)'"
+                formControlName="consomation_carburant_reel"></i-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Puissance fiscale</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="puissance_fiscale"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div> -->
+            <div>
+              <i-field [type]="'number'" [label]="'Puissance fiscale (CV)'"
+                formControlName="puissance_fiscale"></i-field>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+              <mat-icon>assignment</mat-icon>
+              <span class="pl-1 text-base">Adblue</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-8 pl-3 pr-3">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Adblue</mat-label>
+                <mat-select formControlName="adblue" (selectionChange)="statusAdblue($event)">
+                  <mat-option value="1">Oui</mat-option>
+                  <mat-option value="0">Non</mat-option>
+                </mat-select>
+                <!-- <input matInput type="text" formControlName="adblue" autocomplete="off"/> -->
+              </mat-form-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Capacité de consommation (L)</mat-label>
+                <input matInput type="number" formControlName="capacite_consommation" autocomplete="off" />
+              </mat-form-field>
+            </div> -->
+            <div>
+              <i-field
+                [type]="'number'"
+                [label]="'Capacité de consommation (L)'"
+                formControlName="capacite_consommation"
+              ></i-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Taux de consommation théorique (%)</mat-label>
+                <input matInput type="number" formControlName="taux_consommation_theorique" autocomplete="off" />
+              </mat-form-field>
+            </div> -->
+            <div>
+              <i-field
+                [type]="'number'"
+                [label]="'Taux de consommation théorique (%)'"
+                formControlName="taux_consommation_theorique"
+              ></i-field>
+            </div>
+            <!-- <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Taux de consommation réelle (%)</mat-label>
+                <input matInput type="number" formControlName="taux_consommation_reel" autocomplete="off" />
+              </mat-form-field>
+            </div> -->
+            <div>
+              <i-field
+                [type]="'number'"
+                [label]="'Taux de consommation réelle (%)'"
+                formControlName="taux_consommation_reel"
+              ></i-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <div class=" bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] " *ngIf="type == 'edit'">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+              <mat-icon>restore</mat-icon>
+              <span class="pl-1 text-base">Statut</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-3 gap-4 pt-8 pl-3 pr-3">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Statut</mat-label>
+                <mat-select formControlName="status" (selectionChange)="statusReforme($event)">
+                  <mat-option *ngFor="let s of status" value="{{ s }}">
+                    {{ s }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngIf="vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date de vente</mat-label>
+                <input matInput type="date" formControlName="date_vente" autocomplete="off" [max]="date_now" />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date d'entrée</mat-label>
+                <input matInput type="date" formControlName="date_entree" autocomplete="off" />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Kilométrage (KM)</mat-label>
+                <input matInput type="number" formControlName="kilometrage" autocomplete="off" />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date de réforme</mat-label>
+                <input matInput type="date" formControlName="date_reforme" autocomplete="off" />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Type de réforme</mat-label>
+                <mat-select formControlName="type_reforme">
+                  <mat-option *ngFor="let type of TypeReformes" value="{{ type }}">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class=" bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] ">
+          <div class="border-b-4 border-[#0C8040]">
+            <p
+              class="flex justify-center items-center bg-[#0C8040] text-[#fff] w-full text-center p-2 rounded-[11px_11px_0px_0px]">
+              <mat-icon>comment</mat-icon>
+              <span class="pl-1 text-base">Commentaire</span>
+            </p>
+          </div>
+          <div class="grid grid-cols-1 gap-4 pt-8 pl-3 pr-3">
+            <textarea placeholder="Ecrivez votre commentaire..." formControlName="commentaire" name="" id="" cols="30"
+              rows="4" maxlength="281" class="remarque" (input)="setMaxSize($event)">
+            </textarea>
+            <div class="text-right" style="margin-top: -2%; margin-right: 1%;">{{maxSize}}/281</div>
+          </div>
+          <!-- <div class="grid grid-cols-3 gap-4 pt-8 pl-3 pr-3">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Statut</mat-label>
+                <mat-select
+                  formControlName="status"
+                  (selectionChange)="statusReforme($event)"
+                >
+                  <mat-option *ngFor="let s of status" value="{{ s }}">
+                    {{ s }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngIf="vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date de vente</mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="date_vente"
+                  autocomplete="off"
+                  [max]="date_now"
+                />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date d'entrée</mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="date_entree"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Kilométrage (KM)</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="kilometrage"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Date de réforme</mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="date_reforme"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+            <div *ngIf="!vente">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Type de réforme</mat-label>
+                <mat-select formControlName="type_reforme">
+                  <mat-option *ngFor="let type of TypeReformes" value="{{ type }}">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+      <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close>
+        Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <!-- <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+
+        *ngIf="!spinnerAdd"
+        (click)="addVehicule()"
+      >
+        {{ form_btn }}
+      </button> -->
+      <button *ngIf="!spinnerAdd" (click)="addVehicule()" pButton pRipple type="submit" [label]="form_btn"
+        class="p-button-rounded p-button-success"></button>
+      <span *ngIf="spinnerAdd">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- [disabled]="createVehicule.invalid" -->

@@ -1,0 +1,158 @@
+name: SDTM BO STAG
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [deploy-stag]
+  
+
+env:
+  APP_NAME: devcorp-sdtm-bo-stag
+  NAMESPACE: devcorp-sdtm-stag
+  DOMAIN_NAME: ${{ secrets.DOMAIN_NAME_STAG}}
+  ENABLED_INGRESS: ${{ secrets.ENABLED_INGRESS_STAG }}
+  ENABLED_CERTIF: ${{ secrets.ENABLED_CERTIF_STAG }}
+
+
+jobs:
+  build:
+    name: build and push image
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set build tag
+        shell: bash
+        run: |
+          echo "BUILD_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Update environment.prod.ts 
+        run: |
+          echo '
+          export const environment = {
+          production: true,
+          STORAGE: "${{ secrets.STORAGE_STAG }}",
+          URL: "${{ secrets.URL_STAG }}"
+          };' > src/environments/environment.prod.ts
+              
+      - name: Cache NPM dependencies
+        id: cache-npm
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-cache-
+            ${{ runner.os }}-
+            
+      - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run:  npm i --force
+        
+      - name: Build App
+        run: npm run build
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+           docker context create builders
+          
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+          endpoint: builders   
+      
+      - name: Verify Buildx installation
+        run: docker buildx ls
+  
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image to DockerHub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          file: ./Dockerfile
+          tags: digieye/${{ env.APP_NAME}}:${{ env.BUILD_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    name: deploy image to k8s
+    runs-on: ${{ vars.RUNNER }}
+    env:
+      GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+      GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+      CHART_NAME: digieye-wkr
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set build tag
+        shell: bash
+        run: |
+          echo "BUILD_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Setup kubectl
+        uses: ThomasKliszowski/setup-kubectl@v1
+        with:
+          kube-config: ${{ secrets.KUBE_CONFIG_DATA }}
+
+      - name: Install helm
+        run: |
+          curl -LO https://get.helm.sh/helm-v3.8.0-linux-amd64.tar.gz
+          tar -zxvf helm-v3.8.0-linux-amd64.tar.gz
+          sudo mv linux-amd64/helm /usr/local/bin/helm
+          helm version
+      - name: Add credentials
+        env:
+          GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        run: |
+          echo "${GCLOUD_SERVICE_ACCOUNT_KEY}" > service-account.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=service-account.json" >> $GITHUB_ENV
+      - name: Helm config
+        env:
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          HELM_GCS_VERSION: 0.3.1
+        run: |
+          helm plugin install https://github.com/hayorov/helm-gcs --version ${HELM_GCS_VERSION}
+          helm repo add digieye ${{ env.GCS_BUCKET_NAME }}
+
+      - name: Create configuration file
+        run: |
+          echo '
+          nodeSelector:
+              devcorp.worker: "true"
+          ' > values-dev.yaml  
+              
+      - name: Debug
+        run: |
+          helm upgrade --install --dry-run --debug --atomic --timeout 1m ${{ env.APP_NAME }} \
+            digieye/${{ env.CHART_NAME }}  --namespace ${{ env.NAMESPACE }} \
+            --set ingress.enabled=${{ env.ENABLED_INGRESS }} --set ingress.host=${{ env.DOMAIN_NAME }} \
+            --set certificate.enabled=${{ env.ENABLED_CERTIF }} --set image.tag=${{ env.BUILD_TAG }} \
+             --set image.repository=digieye/${{ env.APP_NAME}} --version 0.1.0 -f values-dev.yaml
+
+      - name: Deploy
+        run: |
+          helm upgrade --install --atomic --timeout 3m ${{ env.APP_NAME }} digieye/${{ env.CHART_NAME }}  \
+          --namespace ${{ env.NAMESPACE }} \
+          --set ingress.enabled=${{ env.ENABLED_INGRESS }} --set ingress.host=${{ env.DOMAIN_NAME }} \
+          --set certificate.enabled=${{ env.ENABLED_CERTIF }} --set image.tag=${{ env.BUILD_TAG }} \
+          --set image.repository=digieye/${{ env.APP_NAME}} --version 0.1.0  -f values-dev.yaml

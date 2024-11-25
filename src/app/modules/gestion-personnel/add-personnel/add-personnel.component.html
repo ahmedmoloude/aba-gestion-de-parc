@@ -1,0 +1,515 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">supervised_user_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Gestion du personnel</h2>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="f" (ngSubmit)="submit()" id="addPersonnelForm">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Informations personnelles
+          </p>
+        </div>
+        <div>
+          <div class="flex mt-2">
+            <mat-icon class="pt-[5px]">perm_media</mat-icon>
+            <h2 class="text-[#000000] font-semibold pl-2">Photo de profil</h2>
+          </div>
+        </div>
+        <div class="flex">
+          <div>
+            <img [src]="image_src" class="w-48 mb-3 rounded-xl" *ngIf="display_img" />
+            <p class="text-center">{{ picture_name }}</p>
+          </div>
+          <div class="file-images flex justify-center items-center cursor-pointer" *ngIf="!files">
+            <input #imgInput hidden="true" type="file" onclick="this.value=null" (change)="imgInputChange($event)"
+              accept="image/png, image/svg+xml, image/jpeg, image/jpg"/>
+            <div class="text-center" (click)="imgInput.click()">
+              <mat-icon>add_circle</mat-icon>
+              <p>Ajouter une image</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-5">
+          <div>
+            <i-field [type]="'text'" [label]="'Matricule'" formControlName="matricule"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'text'" [label]="'CIN'" formControlName="cin"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'date'" [label]="'Date de fin CIN'" formControlName="end_date_cin"></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <i-field [type]="'text'" [label]="'Nom'" formControlName="first_name"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'text'" [label]="'Prénom'" formControlName="last_name"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'date'" [label]="'Date de naissance'" formControlName="birth_date"></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Lieu de naissance</mat-label>
+              <mat-select matNativeControl formControlName="birth_place">
+                <mat-option value="Casablanca">Casablanca</mat-option>
+                <mat-option value="Marrakech">Marrakech</mat-option>
+                <mat-option value="Agadir">Agadir</mat-option>
+                <mat-option value="Rabat">Rabat</mat-option>
+                <mat-option value="Tanger">Tanger</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Ville</mat-label>
+              <mat-select matNativeControl formControlName="town">
+                <mat-option value="Casablanca">Casablanca</mat-option>
+                <mat-option value="Marrakech">Marrakech</mat-option>
+                <mat-option value="Agadir">Agadir</mat-option>
+                <mat-option value="Rabat">Rabat</mat-option>
+                <mat-option value="Tanger">Tanger</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Situation familiale</mat-label>
+              <mat-select matNativeControl formControlName="family_situation">
+                <mat-option value="marie">Marié</mat-option>
+                <mat-option value="célibataire">célibataire</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Nombre d'enfants</mat-label>
+              <mat-select matNativeControl formControlName="children_number">
+                <mat-option *ngFor="let Children of Childrens" [value]="Children">{{ Children }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-span-2">
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Adresse</mat-label>
+              <input  formControlName="adress" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Adresse'" formControlName="adress"></i-field>
+          </div>
+        </div>
+
+        <div class="border-b-4 border-[#CEF4C9] mt-3">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Situation CNSS
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4 mb-4">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° de CNSS</mat-label>
+              <input  matInput type="text" formControlName="cnss_number" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'N° de CNSS'" formControlName="cnss_number"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° de carte professionnel</mat-label>
+              <input  matInput type="text" formControlName="cart_pro_num" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'N° de carte professionnel'" formControlName="cart_pro_num"></i-field>
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Contact
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>GSM professionnel</mat-label>
+              <input  matInput type="text" formControlName="gsm_professionnel" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'GSM professionnel'" formControlName="gsm_professionnel"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>GSM personnel</mat-label>
+              <input matInput type="text"  formControlName="gsm_personnel" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'GSM personnel'" formControlName="gsm_personnel"></i-field>
+          </div>
+          <div *ngIf="!Conducteur">
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Fixe professionnel</mat-label>
+              <input
+
+                matInput
+                type="text"
+                formControlName="fixe_professionnel"
+              />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Fixe professionnel'" formControlName="fixe_professionnel"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Email</mat-label>
+              <input required  matInput type="email" formControlName="email" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Email'" formControlName="email"></i-field>
+          </div>
+        </div>
+        <!-- End Contact -->
+      </div>
+      <!-- Start Situation du personnel -->
+      <div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Situation du personnel
+          </p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Direction</mat-label>
+              <mat-select formControlName="direction" matNativeControl required>
+                <mat-option value="Gestion de parc">Gestion de parc</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Département</mat-label>
+              <mat-select formControlName="departement" matNativeControl required>
+                <mat-option value="Logistique">Logistique</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Service</mat-label>
+              <mat-select multiple formControlName="service_id" matNativeControl required>
+                <mat-option *ngFor="let service of services" [value]="service.id">
+                  {{ service.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Parc</mat-label>
+              <mat-select formControlName="parc" matNativeControl required>
+                <mat-option *ngFor="let parc of parcs" [value]="parc.id">{{
+                  parc.name
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date d'entrée</mat-label>
+              <input
+                formControlName="entry_date"
+                matInput
+                required
+                [matDatepicker]="entree"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="entree"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #entree></mat-datepicker>
+            </mat-form-field> -->
+            <i-field [type]="'date'" [label]="'Date d\'entrée'" formControlName="entry_date" (changeValue)="setDateDebut($event)"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Code Intern </mat-label>
+              <input required formControlName="code" matInput type="number" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'code interne'" formControlName="code"></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Type de contrat *</mat-label>
+              <mat-select (selectionChange)="typeOfContrartChange($event)" formControlName="contract_type"
+                matNativeControl required>
+                <mat-option value="Interim">Interim</mat-option>
+                <mat-option value="cdi">CDI</mat-option>
+                <mat-option value="cdd">CDD</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="steInterimShow">
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Sté d’interim</mat-label>
+              <input formControlName="interim_company" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Sté d’interim'" formControlName="interim_company"></i-field>
+          </div>
+          <div *ngIf="showEndDate">
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin contrat</mat-label>
+              <input
+                matInput
+                [matDatepicker]="date_end_contrart"
+                formControlName="date_end_contrart"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="date_end_contrart"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #date_end_contrart></mat-datepicker>
+            </mat-form-field> -->
+            <i-field [type]="'date'" [label]="'Date de fin contrat'" formControlName="date_end_contrart" [minValue]="start_time"></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Fonction</mat-label>
+              <mat-select formControlName="function" matNativeControl required (selectionChange)="getFonction($event)">
+                <mat-option value="DRIVER">Conducteur</mat-option>
+                <mat-option value="POINTER">Pointeur</mat-option>
+                <mat-option value="POMPISTE">Pompiste</mat-option>
+                <mat-option value="COMMERCIAL">Commercial</mat-option>
+                <mat-option value="CAISSIER">Caissier</mat-option>
+                <mat-option value="SEUPERVISORCAISSIER">Super viseur caissier</mat-option>
+                <mat-option value="REPARATOR">Reparateur</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Fonction</mat-label>
+              <mat-select formControlName="function" matNativeControl required (selectionChange)="getFonction($event)">
+                <mat-option *ngFor="let func of functions | keyvalue" [value]="func.value">{{ func.key }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <div *ngIf="f.value.function == 'DRIVER'">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Affectation</mat-label>
+                <mat-select multiple formControlName="affectation" matNativeControl [required]="Conducteur">
+                  <mat-option *ngFor="let tonnage of tonnages" [value]="tonnage.id">{{ tonnage.name }}T</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="f.value.function == 'COMMERCIAL'">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Zonne</mat-label>
+                <mat-select multiple matNativeControl formControlName="zonne">
+                  <mat-option f *ngFor="let zonne of zonnes" [value]="zonne.id">
+                    {{ zonne.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+
+            <!--  ,   -->
+            <div *ngIf="  f.value.function == 'CHEF_D_AGENCE' ||  f.value.function == 'POINTEUR' ||  f.value.function == 'CAISSIER' || f.value.function == 'SEUPERVISORCAISSIER' || f.value.function == 'POINTER'">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Agence</mat-label>
+                <mat-select formControlName="agency_id">
+                  <mat-option f *ngFor="let agence of agencies" [value]="agence.id">
+                    {{ agence.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div *ngIf="f.value.function == 'COMMERCIAL'">
+            <i-field [type]="'color'" [label]="'Couleur'" formControlName="color"></i-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Statut</mat-label>
+              <mat-select formControlName="statut" matNativeControl required>
+                <mat-option value="1">Actif</mat-option>
+                <mat-option value="0">Inactif</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="showRolesInput">
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rôle</mat-label>
+              <mat-select formControlName="role_id" matNativeControl required >
+                <mat-option *ngFor="let item of tempRoles" [value]="item.id">{{item?.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3" *ngIf="Conducteur && !isCommerciale">
+          <div>
+            <i-field [type]="'text'" [label]="'N°de permis'" formControlName="dirver_licence_numero"></i-field>
+          </div>
+          <div *ngIf="Conducteur && !isCommerciale">
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Type de permis 1</mat-label>
+              <mat-select multiple matNativeControl formControlName="dirver_licence_type">
+                <mat-option value="A">A</mat-option>
+                <mat-option value="AM">AM</mat-option>
+                <mat-option value="A1">A1</mat-option>
+                <mat-option value="B">B</mat-option>
+                <mat-option value="EB">EB</mat-option>
+                <mat-option value="C">C</mat-option>
+                <mat-option value="D">D</mat-option>
+                <mat-option value="ED">ED</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="!isCommerciale">
+            <i-field [type]="'date'" [label]="'Date de validité'"
+              formControlName="dirver_licence_validity_date"></i-field>
+          </div>
+        </div>
+        <!-- ENd  Situation du personnel -->
+        <!-- Start Contacter en cas d'urgence -->
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Contacter en cas d'urgence
+          </p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-3 mb-4">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Contact 1</mat-label>
+              <input formControlName="contact_contact_1" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Contact 1'" formControlName="contact_contact_1"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>GSM</mat-label>
+              <input  formControlName="contact_1_gsm" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'GSM'" formControlName="contact_1_gsm"></i-field>
+          </div>
+
+          <div class="mt-4" *ngIf="!isaddConatct">
+            <mat-icon (click)="addConatct()" style="cursor: pointer">add_circle</mat-icon>
+          </div>
+          <div class="mt-4" *ngIf="isaddConatct">
+            <mat-icon (click)="moinContact()" style="cursor: pointer">remove_circle</mat-icon>
+          </div>
+        </div>
+        <div *ngIf="isaddConatct" class="grid grid-cols-2 gap-4 mt-3">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Contact 2</mat-label>
+              <input formControlName="contact_contact_2" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Contact 2'" formControlName="contact_contact_2"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>GSM</mat-label>
+              <input formControlName="contact_2_gsm" matInput type="text" />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'GSM'" formControlName="contact_2_gsm"></i-field>
+          </div>
+        </div>
+        <!-- ENd Contacter en cas d'urgence     -->
+        <!-- Start Expériences -->
+        <div class="border-b-4 border-[#CEF4C9] mt-3">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Expériences
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-3">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Niveau d'études</mat-label>
+              <mat-select formControlName="experience_studies_level" matNativeControl>
+                <mat-option value="Niveau bac">Niveau bac</mat-option>
+                <mat-option value="Bac ">Bac </mat-option>
+                <mat-option value="Bac + 1">Bac + 1</mat-option>
+                <mat-option value="Bac + 2">Bac + 2</mat-option>
+                <mat-option value="Bac + 3">Bac + 3</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Formation et diplômes</mat-label>
+              <input
+                formControlName="experience_diplome"
+                matInput
+
+                type="text"
+              />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Formation et diplômes'" formControlName="experience_diplome"></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-3">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Expérience pro.</mat-label>
+              <input
+                formControlName="experience_pro_experience"
+                matInput
+
+                type="text"
+              />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Expérience pro'" formControlName="experience_pro_experience"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Ancien employeur</mat-label>
+              <input
+                formControlName="experience_former_job"
+                matInput
+
+                type="text"
+              />
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Ancien employeur'" formControlName="experience_former_job"></i-field>
+          </div>
+        </div>
+        <!-- ENd Expériences    -->
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 pt-4">
+      <div>
+        <button class="underline w-32 pt-2  font-bold text-[18px]" mat-dialog-close>
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button
+          *ngIf="!isLoading"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        >
+          Enregistrer
+        </button> -->
+        <button *ngIf="!isLoading" pButton pRipple label="Enregistrer" class="p-button-rounded p-button-success">
+        </button>
+        <div *ngIf="isLoading" class="flex justify-end">
+          <mat-spinner class="p-4 mr-3" [diameter]="40"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

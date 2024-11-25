@@ -1,0 +1,67 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Ajouter un service</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <form [formGroup]="createRubric">
+  <div mat-dialog-content>
+    <!-- <mat-form-field class="w-[100%] pl-7 pr-7 mb-4" appearance="fill">
+      <mat-label>Rubrique</mat-label>
+      <input matInput placeholder="rubrique" formControlName="title" autocomplete="off" required (input)="changeTextToUppercase('title')"/>
+    </mat-form-field> -->
+    <div class="w-[100%] pl-7 pr-7 mb-4 mt-4">
+      <i-field [type]="'text'" [label]="'Rubrique'" formControlName="title" ></i-field>
+    </div>
+    <mat-form-field class="w-[100%] pl-7 pr-7 mb-4" appearance="fill">
+      <mat-label>Base de calcul</mat-label>
+      <mat-select  multiple (selectionChange)="onChange($event)">
+        <mat-option *ngFor="let calcul of BasisCalculs" [value]="calcul.id">{{ calcul.title_affichage }}</mat-option>
+      </mat-select>
+      <!--<span *ngIf="spinnerBasisCalcul">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>-->
+    </mat-form-field>
+    <!-- <mat-form-field class="w-[100%] pl-7 pr-7 mb-4" appearance="fill">
+      <mat-label>Taxe</mat-label>
+      <input matInput placeholder="Taxe" formControlName="taxe" autocomplete="off" required/>
+    </mat-form-field> -->
+    <div class="w-[100%] pl-7 pr-7 mb-4">
+      <i-field [type]="'text'" [label]="'Taxe'" formControlName="taxe" ></i-field>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+    <div>
+      <button
+        class="cursor-pointer underline w-32 pt-2 mr-3 font-bold text-[18px]"
+        mat-dialog-close
+      >
+      Abondonner
+      </button>
+    </div>
+    <div class="flex justify-end">
+      <!-- <button
+        class="cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        type="submit" (click)="addRubric()" *ngIf="!spinner"
+      >
+        Enregistrer
+      </button> -->
+        <button
+          *ngIf="!spinner" 
+          (click)="addRubric()" 
+          pButton pRipple 
+          type="submit" 
+          label="Enregistrer"
+          class="p-button-rounded p-button-success">
+        </button>
+      <span *ngIf="spinner">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>
+    </div>
+  </div>
+</form>
+</div>

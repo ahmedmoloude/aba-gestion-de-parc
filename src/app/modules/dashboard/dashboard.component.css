@@ -1,0 +1,6 @@
+.chart-color{
+    background: transparent linear-gradient(180deg, #FFFFFF 0%, #F3F3F3 100%) 0% 0% no-repeat padding-box;
+}
+.chart-colorgreen{
+    background: transparent linear-gradient(180deg, #000000 0%, #0C8040 100%) 0% 0% no-repeat padding-box;
+}

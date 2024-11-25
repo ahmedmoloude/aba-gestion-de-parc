@@ -1,0 +1,27 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Validation des documents</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-carte">
+    <div>
+      <ng-container *ngIf="fileExtension && fileExtension?.toLowerCase() == 'pdf'">
+        <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false" style=" height: 300px">
+        </pdf-viewer>
+      </ng-container>
+      <ng-container *ngIf="fileExtension && fileExtension?.toLowerCase() !== 'pdf'">
+        <img [src]="pdfSrc" alt="Bon">
+      </ng-container>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+    </div>
+    <div mat-dialog-close class="text-right">
+      <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+        Fermer
+      </button>
+    </div>
+  </div>

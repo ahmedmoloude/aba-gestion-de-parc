@@ -1,0 +1,667 @@
+<div class="p-4">
+  <div class="text-center mb-4 mt-2">
+    <p class="text-lg">Rôle : <span class="text-[#0C8040]">Planificateur</span></p>
+  </div>
+  <!-- Start Tournée -->
+  <div class="tournee">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi pi-share-alt"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Tournée</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleDiv()">{{
+          !showDiv ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showDiv">
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des tournées</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Demande de ramassage</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Génération d’un passage planifié</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Tournées Régulieres</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Tournée -->
+
+  <!-- Start Gestion de parc -->
+  <div class="parc">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-percentage"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Gestion de parc</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleParc()">{{
+          !showParc ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showParc">
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span class="text-[#0C8040] font-normal text-base">Gestion de
+              véhicules</span><mat-icon class="cursor-pointer absolute right-11" (click)="toggleVehicules()">{{
+              !showVehicules ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showVehicules">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Véhicules</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Status véhicules</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Détails véhicules</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Documents</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Véhicule de remplacement</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">GPS</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Extincteur</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Gestion du personnel</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span class="text-[#0C8040] font-normal text-base">Gestion
+              maintenance</span><mat-icon class="cursor-pointer absolute right-11" (click)="toggleMaintenance()">{{
+              !showMaintenance ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showMaintenance">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Liste des interventions</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Pièces de rechange</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Demande de pièces</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Pneumatique</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Planning</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Demande d’intervention</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des cartes</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span class="text-[#0C8040] font-normal text-base">Feuille de
+              route</span><mat-icon class="cursor-pointer absolute right-11" (click)="toggleFeuille()">{{
+              !showFeuille ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showFeuille">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Gestion des disponibilités</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Liste des feuilles de route</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Affectation</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span
+              class="text-[#0C8040] font-normal text-base">Consommation/Dépenses</span><mat-icon
+              class="cursor-pointer absolute right-11" (click)="toggleConsommation()">{{
+              !showConsommation ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showConsommation">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Plein et suivi d’approvisionnement</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Carburant / Autoroute</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Gestion des citernes</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+
+  </div>
+  <!-- End Gestion de parc -->
+
+  <!-- Start Gestion commerciale -->
+  <div class="commerciale">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-file-o"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Gestion commerciale</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleCommerciale()">{{
+          !showCommerciale ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showCommerciale">
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span class="text-[#0C8040] font-normal text-base">Grille
+              tarifaire</span><mat-icon class="cursor-pointer absolute right-11" (click)="toggleTarifaire()">{{
+              !showTarifaire ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showTarifaire">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Offre Standard</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Offre sectorielle</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Offre commerciale</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Grille affretement</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Calendrier</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Rendez-Vous</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Tâches</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Contacts</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Clients</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Commerciaux</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Prospects</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Devis</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Objectifs</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Gestion commerciale -->
+
+  <!-- Start Facturation -->
+  <div class="facturations">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-file-pdf"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Facturation</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleFacturation()">{{
+          !showFacturation ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showFacturation">
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des factures</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Avoir</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div>
+        <div class="grid grid-cols-6 gap-4 brp">
+          <div class="col-span-2 relative"><span class="text-[#0C8040] font-normal text-base">Créances
+              client</span><mat-icon class="cursor-pointer absolute right-11" (click)="toggleCreances()">{{
+              !showCreances ? "keyboard_arrow_down" : "keyboard_arrow_up"
+              }}</mat-icon></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        </div>
+        <ng-container *ngIf="showCreances">
+          <div class="grid grid-cols-6 gap-4  brp">
+            <div class="col-span-2"><span class="pl-4">Recouvrement</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Encaissement</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+          <div class="grid grid-cols-6 gap-4 brp">
+            <div class="col-span-2"><span class="pl-4">Gestion des impayés</span></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+            <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Remise</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Facturation -->
+
+  <!-- Start Caisse -->
+  <div class="caisse">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-money-bill"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Caisse</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleCaisse()">{{
+          !showCaisse ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showCaisse">
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Affectation des cartes</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Validation de versement</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Validation retour CRBT</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Versement</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Réception des chèques et traites</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Réception BL et factures</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Caisse -->
+
+  <!-- Start Affrètement -->
+  <div class="affretement">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-truck"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Affrètement</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleAffretement()">{{
+          !showAffretement ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showAffretement">
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des demandes clients</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Missions approuvées /refusées par chauffeurs</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Suivi des missions</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Affectation</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des demandes confirmées</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Liste des documents et fonds</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Affrètement -->
+
+  <!-- Start Configuration -->
+  <div class="configuration">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-cog"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Configuration</span><mat-icon
+          class="cursor-pointer absolute right-11" (click)="toggleConfiguration()">{{
+          !showConfiguration ? "keyboard_arrow_down" : "keyboard_arrow_up"
+          }}</mat-icon></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+    <ng-container *ngIf="showConfiguration">
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Paramètre</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Matrice de livraison</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+      <div class="grid grid-cols-6 gap-4 brp">
+        <div class="col-span-2">Geofencing</div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+        <div><mat-checkbox class="example-margin"></mat-checkbox></div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- End Configuration -->
+
+  <!-- Start Réclamations -->
+  <div class="reclamations">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-exclamation-triangle"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Réclamations</span></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+  </div>
+  <!-- End Réclamations -->
+
+  <!-- Start Réclamations -->
+  <div class="reclamations">
+    <div class="grid grid-cols-6 gap-4 brp">
+      <div class="col-span-2 relative"><i class="pi pi-sliders-h"></i><span
+          class="text-[#0C8040] pl-3 font-semibold text-base">Convoyage</span></div>
+      <div><mat-checkbox class="example-margin">Consulter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Ajouter</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Editer</mat-checkbox></div>
+      <div><mat-checkbox class="example-margin">Supprimer</mat-checkbox></div>
+    </div>
+  </div>
+  <!-- End Réclamations -->
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-16 mb-5">
+  <div>
+  </div>
+  <div class="text-right">
+    <button *ngIf="true"
+      class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9font-bold text-[18px]"
+      type="submit" (click)="validateHabilitation()">
+      Valider
+    </button>
+  </div>
+</div>

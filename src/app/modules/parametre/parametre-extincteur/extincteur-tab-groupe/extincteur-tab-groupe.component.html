@@ -1,0 +1,35 @@
+<div class="ml-6 mr-6 p-6 vehiculetabs">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <h2 class="text-[#0C8040] font-semibold pl-2">Extincteur</h2>
+    </div>
+  </div>
+  <div class="absolute right-10 z-50">
+    <div *ngIf="selectedTabIndex === 0">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutertype()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 1">
+      <div class="flex cursor-pointer" (click)="openDialogAjoutervolume()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>Type</ng-template>
+        <app-type-extincteur></app-type-extincteur>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label> Volume </ng-template>
+        <app-volume-extincteur></app-volume-extincteur>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

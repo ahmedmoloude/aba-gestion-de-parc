@@ -1,0 +1,145 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+    <h2 mat-dialog-title class="col-span-2">{{ form_btn }} d'une carte</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="createCarte">
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4 mt-6">
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Sous parc</mat-label>
+            <mat-select matNativeControl required formControlName="parc_id">
+              <mat-option *ngFor="let parc of parcs" [value]="parc.id">{{ parc.name }}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete
+            #searchComponent1
+            [opended]="true"
+            [type]="'single'"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="parcs"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="''"
+            [label]="'Rechercher le parc...'"
+            [hasIcon]="false"
+            (dataEvent)="filterParc($event)"
+          >
+          </app-shared-autcomplete>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type de carte</mat-label>
+            <mat-select matNativeControl required formControlName="type" autocomplete="off" (selectionChange)="typeCarte($event)">
+              <mat-option *ngFor="let type of types" [value]="type">{{ type }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label> {{ type == 'JAWAZ' ? "N° de tag" : "N° de carte" }} </mat-label>
+            <input matInput type="text" formControlName="n_carte" autocomplete="off"/>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Commentaire</mat-label>
+            <input matInput type="text" formControlName="libelle" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Commentaire'" formControlName="libelle" ></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Service</mat-label>
+            <mat-select matNativeControl required formControlName="service_id" autocomplete="off">
+              <mat-option *ngFor="let service of services" [value]="service.id">{{ service.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Fournisseur</mat-label>
+            <input matInput type="text" formControlName="fournisseur" autocomplete="off"/>
+          </mat-form-field> -->
+          <!-- <i-field [type]="'text'" [label]="'Fournisseur'" formControlName="fournisseur" ></i-field> -->
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Fournisseur</mat-label>
+            <mat-select matNativeControl required formControlName="prestataire_id">
+              <mat-option *ngFor="let prestataire of prestataires" [value]="prestataire.id">{{ prestataire.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date début</mat-label>
+            <input matInput type="date" formControlName="start_date" 
+            (change)="setDateDebut($event)" [max]="end_time"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date début'" formControlName="start_date" (changeValue)="setDateDebut($event)" [maxValue]="end_time"></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date d'expiration</mat-label>
+            <input matInput type="date" formControlName="end_date" 
+            (change)="setDateFin($event)" [min]="start_time"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date d\'expiration'" formControlName="end_date" (changeValue)="setDateFin($event)" [minValue]="start_time"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Statut</mat-label>
+            <mat-select matNativeControl required formControlName="status">
+              <mat-option value="1">Actif</mat-option>
+              <mat-option value="0">Innactif</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Solde (DH)</mat-label>
+            <input matInput type="number" formControlName="solde" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Solde (DH)'" formControlName="solde" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Plafond (DH)</mat-label>
+            <input matInput type="number" formControlName="plafond" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Plafond (DH)'" formControlName="plafond" ></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button [disabled]="createCarte.invalid" *ngIf="!spinnerAdd"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]" 
+            (click)="addCarte()">{{ form_btn }}
+          </button> -->
+          <button 
+          *ngIf="!spinnerAdd"
+          [disabled]="createCarte.invalid"
+          (click)="addCarte()" 
+          pButton pRipple 
+          type="button" 
+          label="Ajouter"
+          class="p-button-rounded p-button-success">
+      </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

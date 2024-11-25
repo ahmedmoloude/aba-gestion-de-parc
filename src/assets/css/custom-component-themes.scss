@@ -1,0 +1,7 @@
+
+
+@import "./toast.scss-theme.scss";
+
+@mixin custom-components-theme($notifications-theme) {
+  @include notification-theme($notifications-theme);
+}

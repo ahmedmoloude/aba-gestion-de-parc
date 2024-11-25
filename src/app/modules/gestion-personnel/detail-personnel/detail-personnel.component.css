@@ -1,0 +1,24 @@
+
+.example-tab-icon {
+    margin-right: 8px;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-label{
+    padding-left: 0px;
+    justify-content: left;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-label-active{
+    color: #0C8040;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #0C8040;
+}
+.number-service{
+  display: flex;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #0C8040;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}

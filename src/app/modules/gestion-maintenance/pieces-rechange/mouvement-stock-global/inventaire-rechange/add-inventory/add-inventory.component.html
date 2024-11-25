@@ -1,0 +1,17 @@
+
+<ng-container *ngIf="!edit">
+  <div>
+    {{ stockReel || 0}}
+    <mat-icon class="text-gray-400 cursor-pointer" (click)="edit=true">edit</mat-icon>
+  </div>
+</ng-container>
+<ng-container *ngIf="edit">
+  <div *ngIf="!spinner">
+    <i-field [type]="'text'" [formControl]="stock"></i-field>
+    <mat-icon class="text-green-600 cursor-pointer" (click)="addInventory()">check_circle</mat-icon>
+    <mat-icon class="text-red-500 cursor-pointer" (click)="edit=false">cancel</mat-icon>
+  </div>
+  <span *ngIf="spinner">
+    <mat-spinner [diameter]="40"></mat-spinner>
+  </span>
+</ng-container>

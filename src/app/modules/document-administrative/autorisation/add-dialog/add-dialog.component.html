@@ -1,0 +1,97 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">{{mode == 'edit'? 'Modification': 'Ajout'}} d'une autorisation de
+      circulation <span *ngIf="is_truck">{{ vehicule.code_interne }}</span></h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="createAutorisation">
+    <div mat-dialog-content>
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div class="w-[100%] pl-7 pr-7 mb-4" *ngIf="!is_truck">
+          <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [type]="'single'" [opended]="true"
+            [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="trucks"
+            [keys]="['code_interne', 'matricule']" [lengthToStart]="3" [display]="['code_interne', 'matricule']"
+            [placeholer]="''" [label]="'Rechercher véhicule...'"
+            [required]="createAutorisation.controls.truck_id?.hasError('required')" (dataEvent)="onTruckChange($event)">
+          </app-shared-autcomplete>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>N° d’autorisation
+              <i *ngIf="createAutorisation.controls.n_autorisation?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="text" formControlName="n_autorisation" autocomplete="off" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Objet
+              <i *ngIf="createAutorisation.controls.objet?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="text" formControlName="objet" autocomplete="off" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Date début
+              <i *ngIf="createAutorisation.controls.start_date?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="date" formControlName="start_date" autocomplete="off" (change)="setDateDebut($event)"
+              [max]="end_time" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Date fin
+              <i *ngIf="createAutorisation.controls.end_date?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="date" formControlName="end_date" autocomplete="off" (change)="setDateFin($event)"
+              [min]="start_time" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Rappel avant (J)
+              <i *ngIf="createAutorisation.controls.rappel?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="number" formControlName="rappel" autocomplete="off" />
+          </mat-form-field>
+        </div>
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <input
+            class="block w-full text-sm text-black bg-white border-[2px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+            type="file" accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+            (change)="onSelectImageAutorisation($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close>
+          Abondonner
+        </button>
+      </div>
+      <div class="text-right">
+        <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          [disabled]="createAutorisation.invalid" *ngIf="!spinnerAdd" (click)="addAutorisation()">Enregistrer
+        </button>
+        <span *ngIf="spinnerAdd">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
