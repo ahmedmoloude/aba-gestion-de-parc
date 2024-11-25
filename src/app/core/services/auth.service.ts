@@ -52,16 +52,7 @@ export class AuthService {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url;
-
-
-
-        console.log('cure route: ' , currentRoute)
-        // Check if the current route is "X" and skip logout if needed
-        // if (currentRoute === '/') {
-        //   // Do something (e.g., show a message or redirect to another page)
-        //   console.log('Cannot logout from route X');
-        //   return;
-        // }
+        console.log('cure route: ' , currentRoute) 
       }
     });
   }
