@@ -1,0 +1,98 @@
+
+<div class="flex justify-between items-center mb-3">
+    <div class="name text-left text-[#0C8040] pb-3 text-xs font-medium">
+      {{ type_tree === "tree-offer-affretement" ? "Offre commerciale" : "Tarification" }}
+    </div>
+    <span
+      class="margin-class" class="text-white bg-[#728FCE] pl-2 pr-2 pt-1 pb-1 rounded-[20px] text-xs "
+      >Affretment</span
+    >
+  </div>
+  
+  <div class="grid grid-cols-2 gap-2 text-xs">
+    <div class="text-left">
+      <!-- <p class="pb-2">Titre: <strong>PDR Avril 22</strong></p> -->
+      <p class="pb-2">
+        {{ type_tree === "tree-offer-affretement" ? "Référence:" : "N° Devis:" }}
+        <!-- Référence: -->
+        <strong>{{
+          type_tree === "tree-offer-affretement"
+            ? offer?.reference
+            : offer.quote_parent.reference
+        }}</strong>
+      </p>
+      <p class="pb-2">
+        {{
+          isProspect() ? "Prospect" : "Client"
+        }} : 
+        <strong class="client-name">{{
+          type_tree === "tree-offer-affretement"
+            ? offer?.customer?.name || "--"
+            : offer.quote_parent.customer?.name || "--"
+        }}</strong>
+      </p>
+      <p *ngIf="type_tree !== 'tree-offer-affretement'" class="pb-2">
+        Statut :
+        <span
+          *ngIf="offer.status === 'DRAFT'"
+          class="text-white bg-orange-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+          >Devis</span
+        >
+        <span
+          *ngIf="offer.status === 'CREATED'"
+          class="text-white bg-[#728FCE] pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+          >Confirmé</span
+        >
+        <span
+          *ngIf="offer.status === 'ACCEPTED'"
+          class="text-white bg-green-500 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+          >Accepté</span
+        >
+        <span
+          *ngIf="offer.status === 'REJECTED'"
+          class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+          >Non Accepté</span
+        >
+        <span
+          *ngIf="offer.status === 'CANCELED'"
+          class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+          >Archivé</span
+        >
+      </p>
+    </div>
+  
+    <div class="text-left">
+      <p class="pb-2">
+        {{ type_tree === "tree-offer-affretement" ? "Date d'activation:" : "Date de devis:" }} <strong>{{ offer.start_date }}</strong>
+      </p>
+      <p class="pb-2">
+        Date d’expiration: <strong>{{ offer.end_date || "--" }}</strong>
+      </p>
+      <p *ngIf="type_tree !== 'tree-offer-affretement'" class="pb-2">
+        Version: <strong>{{ offer.version }}</strong>
+      </p>
+    </div>
+  </div>
+  <div class="border-b-2 border-[#B2B2B252]"></div>
+  <div class="grid grid-cols-3 mb-3 gap-2" *ngIf="(disableActions$ | async) === false">
+    <div
+      class="flex cursor-pointer text-[#404040] text-xs button-convention"
+      (click)="openDialog('transport')"
+    >
+      <p class="p-0">Convention transport</p>
+    </div>
+    <div
+      class="flex cursor-pointer text-[#0C8040] text-xs justify-center button-convention"
+      (click)="openDialog('service-global')"
+    >
+      <p class="p-0">Convention service global</p>
+    </div>
+
+    <div
+        class="flex cursor-pointer text-[#0C8040] text-xs justify-center button-convention"
+        (click)="openDialog('services')"
+    >
+        <p class="p-0">Convention service par type de camion </p>
+    </div>
+  </div>
+  

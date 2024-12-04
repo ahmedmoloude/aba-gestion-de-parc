@@ -1,0 +1,49 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "./dist/out-tsc",
+    "paths": {
+      "app/core": [
+        "app/core/index.ts"
+      ],
+      "app/modules": [
+        "app/modules/index.ts"
+      ],
+      "app/configs": [
+        "app/configs/index.ts"
+      ],
+      "app/enums": [
+        "app/enums/index.ts"
+      ],
+      "app/services": [
+        "app/core/services/index.ts"
+      ],
+      "app/pipes": [
+        "app/shared/pipes/index.ts"
+      ],
+      "app/directives": [
+        "app/shared/directives/index.ts"
+      ],
+      "app/components": [
+        "app/shared/components/index.ts"
+      ]
+    },
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false
+  }
+}

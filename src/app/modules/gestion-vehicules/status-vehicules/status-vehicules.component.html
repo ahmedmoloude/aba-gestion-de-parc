@@ -1,0 +1,122 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full" >
+    <div class="grid grid-cols-1 gap-2 mb-4">
+      <div>
+        <div class="flex col-start-1 col-end-3">
+          <mat-icon class="pt-1">description</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">Statut véhicule</h2>
+          <!-- <h1> &#128513; </h1>
+          <h1> &#128514; </h1>
+          <p>Grinning face : <span> 😀 </span> </p>
+          <p>Face having tears of joy : <span> 😂 </span> </p>
+          <p>Fire : <span> 🔥 </span> </p>
+          <p>Thumbs up : <span> 👍 </span> </p>
+          <p>Bell : <span> 🔔 </span> </p> -->
+        </div>
+        <div *ngIf="!spinner">
+          <h2 class="text-[#0C8040] font-semibold pl-2">
+            Nombre total de véhicules :
+            <span class="text-[#000]">{{ formatNumber(result.vehicule) }}</span>
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <div *ngIf="!spinner">
+      <div class="grid grid-cols-2 gap-5">
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            En circulation
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.circulation) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('En circulation')" >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            En panne
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.panne) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('En panne')"
+              >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+          <p class="bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+            Vendus
+          </p>
+          <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+            <div>
+              <p class="text-[#636363]">
+                Total :
+                <span class="text-[#0C8040]">{{ formatNumber(result.vendue) }}</span>
+              </p>
+            </div>
+            <div class="border-t-2 border-[#00000029]"></div>
+            <div class="flex cursor-pointer justify-center">
+              <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+              <h2
+                class="font-semibold text-size mb-detail"
+                (click)="detailsDoc('Vendue')" >
+                Afficher
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+            <p class="bg-[#F2B263] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3" >
+                Reformés
+            </p>
+            <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+              <div>
+                <p class="text-[#636363]">
+                  Total :
+                  <span class="text-[#0C8040]">{{ formatNumber(result.reforme) }}</span>
+                </p>
+
+              </div>
+              <div class="border-t-2 border-[#00000029]"></div>
+              <div class="flex cursor-pointer justify-center">
+                <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+                <h2
+                  class="font-semibold text-size mb-detail"
+                  (click)="detailsDoc('REFORME')" >
+                  Afficher
+                </h2>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>

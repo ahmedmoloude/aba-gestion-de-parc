@@ -1,0 +1,63 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">Confirmation de transfert</h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <table class="w-11/12 mx-auto text-left text-gray-500">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let header of headerColumuns"
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of [0, 1, 2]"
+        >
+          <td class="p-3">R-9312082020</td>
+          <td class="p-3">1202625601</td>
+          <td class="p-3">Vial Medical</td>
+          <td>Vial Medical</td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-form-field class="w-[50%] mt-6 ml-8" appearance="fill">
+      <mat-label>Selectinner l’agence</mat-label>
+      <select matNativeControl required>
+        <option value="agence1">agence 1</option>
+        <option value="Aagence2">agence 2</option>
+      </select>
+    </mat-form-field>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+    <div>
+      <button
+        class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+        mat-dialog-close
+      >
+        Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-72 p-4 mr-3 font-bold text-[18px]"
+        type="submit"
+      >
+        Confirmer le transfert
+      </button>
+    </div>
+  </div>
+</div>

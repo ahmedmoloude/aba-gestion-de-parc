@@ -1,0 +1,63 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Détails</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <!-- <mat-icon class="pt-[5px]">cloud_download</mat-icon> -->
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <ng-container *ngIf="demandePiece$ | async as demandePieceState">
+    <div *ngIf="demandePieceState?.demandeState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="demandePieceState?.demandeState == 'SUCCESS'">
+      <ng-container *ngIf="demandePieceState?.demande as demandePiece">
+        <div mat-dialog-content class="historique">
+          <div class="list mt-1 mb-5">
+            <p><strong>N° de demande :</strong> {{(demande?.n_demande) || '---'}}</p>
+            <p><strong>Date de demande :</strong> {{(demande?.date | date: 'dd/MM/yyyy') || '---'}}</p>
+            <p><strong>Demandeur :</strong> {{(demande?.demandeur) || '---'}}</p>
+          </div>
+          <ng-container *ngIf="demandePiece?.length>0">
+            <div class="overflow-auto mt-5">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <!-- <th
+                      scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                    >
+                      <div class="flex justify-end"></div>
+                    </th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let item of demandePiece  | paginate: { itemsPerPage: 5, currentPage: p };">
+                    <td class="p-3">{{(item?.reference) || '---'}}</td>
+                    <td class="p-3">{{(item?.created_at| date: 'dd/MM/yyyy') || '---' || '---'}}</td>
+                    <td class="p-3">{{getType(item?.type) || '---'}}</td>
+                    <td class="p-3">
+                      Détails
+                      <mat-icon class="pl-1 cursor-pointer"
+                        (click)="VoirBon(item)">remove_red_eye</mat-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-10">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

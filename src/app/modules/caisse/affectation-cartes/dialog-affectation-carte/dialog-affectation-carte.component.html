@@ -1,0 +1,64 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Ajouter une nouvelle carte</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="addCarteForm">
+  <div mat-dialog-content class="dialog-carte">
+    <svg xmlns="http://www.w3.org/2000/svg" width="98" height="89.617" viewBox="0 0 98 89.617" class="mx-auto">
+      <g id="Group_9601" data-name="Group 9601" transform="translate(-892 -376.383)">
+        <path id="icons8-add"
+          d="M45.308,2A43.308,43.308,0,1,0,88.616,45.308,43.337,43.337,0,0,0,45.308,2Zm0,3.766A39.542,39.542,0,1,1,5.766,45.308,39.514,39.514,0,0,1,45.308,5.766Zm-.029,24.453a1.883,1.883,0,0,0-1.854,1.909v11.3h-11.3a1.883,1.883,0,1,0,0,3.766h11.3v11.3a1.883,1.883,0,1,0,3.766,0v-11.3h11.3a1.883,1.883,0,1,0,0-3.766h-11.3v-11.3a1.883,1.883,0,0,0-1.912-1.909Z"
+          transform="translate(890 374.383)" fill="#e8e8e8" />
+        <g id="Ellipse_6158" data-name="Ellipse 6158" transform="translate(940 416)" fill="#fff" stroke="#e8e8e8"
+          stroke-width="2">
+          <circle cx="25" cy="25" r="25" stroke="none" />
+          <circle cx="25" cy="25" r="24" fill="none" />
+        </g>
+        <path id="icons8-debit_card"
+          d="M5.19,9A3.2,3.2,0,0,0,2,12.19V26.227a3.2,3.2,0,0,0,3.19,3.19H28.16a3.2,3.2,0,0,0,3.19-3.19V12.19A3.2,3.2,0,0,0,28.16,9Zm0,1.276H28.16a1.905,1.905,0,0,1,1.914,1.914V26.227a1.905,1.905,0,0,1-1.914,1.914H5.19a1.905,1.905,0,0,1-1.914-1.914V12.19A1.905,1.905,0,0,1,5.19,10.276ZM7.1,13.466a1.285,1.285,0,0,0-1.276,1.276v1.914A1.285,1.285,0,0,0,7.1,17.933H9.657a1.285,1.285,0,0,0,1.276-1.276V14.742a1.285,1.285,0,0,0-1.276-1.276Zm0,1.276H9.657v1.914H7.1Zm11.305,0a.644.644,0,1,0,.179,1.276h8.295a.638.638,0,1,0,0-1.276H18.41ZM6.287,21.123A.644.644,0,1,0,6.466,22.4h3.19a.638.638,0,1,0,0-1.276H6.287Zm5.742,0a.644.644,0,1,0,.179,1.276H15.4a.638.638,0,1,0,0-1.276h-3.37Zm5.742,0a.644.644,0,1,0,.179,1.276h3.19a.638.638,0,1,0,0-1.276h-3.37Zm5.742,0a.644.644,0,0,0,.179,1.276h3.19a.638.638,0,1,0,0-1.276h-3.37ZM6.287,24.313a.644.644,0,1,0,.179,1.276h8.295a.638.638,0,1,0,0-1.276H6.287Z"
+          transform="translate(948.324 421.791)" fill="#e8e8e8" />
+      </g>
+    </svg>
+
+    <div class="grid grid-cols-3 gap-3 mt-5 mb-8">
+      <div>
+        <i-field [type]="'text'" [label]="'Libellé'" formControlName="libelle"></i-field>
+      </div>
+      <div>
+        <i-field [type]="'text'" [label]="'Banque'" formControlName="banque"></i-field>
+      </div>
+      <div>
+        <i-field [type]="'text'" [label]="'Plafond (Dhs)'" formControlName="plafond"></i-field>
+      </div>
+
+    </div>
+    <div class="grid grid-cols-4 gap-3 mt-5 mb-5">
+      <div class="col-span-2">
+        <i-field [type]="'text'" [label]="'Numéro de carte'" formControlName="n_carte"></i-field>
+      </div>
+      <div>
+        <i-field [type]="'date'" [label]="'Date d’expiration'" formControlName="expiration_date"></i-field>
+      </div>
+      <div>
+        <i-field [type]="'text'" [label]="'CVV'" formControlName="cvv"></i-field>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+      <button mat-dialog-close class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+        Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <button pButton pRipple type="submit" label="Créer" (click)="addCarte()" [disabled]="addCarteForm.invalid"  *ngIf="!spinner" class="mr-5 p-button-rounded p-button-success"></button>
+      <span *ngIf="spinner">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>
+    </div>
+  </div>
+</form>
+</div>

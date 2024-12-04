@@ -1,0 +1,169 @@
+<div class="dialog h-screen overflow-auto bg-[#E9E9E9]">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] pt-4 pl-4 pr-4"
+  >
+    <h2 mat-dialog-title class="col-span-2 text-[#0C8040]">Historique</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h4 class="text-[#B2B2B2] pl-3 mb-0">
+        {{ item.typeActivity == 'RDV' ? "Rendez-vous :" : "" }}
+        {{ item.typeActivity == 'Task' ? "Tâche :" : "" }}
+      </h4>
+      <mat-list role="list" *ngFor="let history of item.historiques; let i = index" class="box-history">
+        <div *ngIf="i == (item.historiques.length - 1)">
+          <div class="history-title">
+            <span>
+              Création
+            </span>
+          </div>
+        </div>
+        <div *ngIf="i < (item.historiques.length - 1)" >
+          <div class="history-title">
+            <span *ngIf="history.startTime != item.historiques[i+1].startTime || history.endTime != item.historiques[i+1].endTime" class="text-[#B2B2B2]" role="listitem">
+              La date a été reportée
+            </span>
+            <span *ngIf="history.customer_id != item.historiques[i+1].customer_id">
+              Le client a été changé
+            </span>
+            <span *ngIf="history.subject != item.historiques[i+1].subject" class="text-[#B2B2B2]" role="listitem">
+              Le sujet a été changé
+            </span>
+            <span *ngIf="history.status != item.historiques[i+1].status" class="text-[#B2B2B2]" role="listitem">
+              Le statut a été changé
+            </span>
+            <span *ngIf="history.priority != item.historiques[i+1].priority" class="text-[#B2B2B2]" role="listitem">
+              L'importance a été changée
+            </span>
+            <span *ngIf="history.description != item.historiques[i+1].description" class="text-[#B2B2B2]" role="listitem">
+              La description a été modifiée
+            </span>
+            <span *ngIf="history.location != item.historiques[i+1].location" class="text-[#B2B2B2]" role="listitem">
+              Le lieu a été modifiée
+            </span>
+          </div>
+          <div *ngIf="item.typeActivity == 'RDV'">
+            <mat-list-item class="rdv-detail" *ngIf="history.motif" >Motif &nbsp;:&nbsp;<strong>{{ history.motif }}</strong></mat-list-item >
+          </div>
+          <mat-list-item class="rdv-detail" role="listitem"><span>Modifié par&nbsp;:&nbsp;<strong>{{ history.createur?.name }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>Le:&nbsp;&nbsp;<strong>{{ history.created_at | date: 'dd/MM/yyyy hh:mm' }}</strong></span></mat-list-item >
+        </div>
+        <div class="grid grid-cols-2">
+          <div class="relative">
+            <div *ngIf="i < (item.historiques.length - 1)" class="w-[340px]">
+              <h4 class="text-center p-0 m-0 font-bold">
+                <u>Avant</u>
+                <div class="absolute arrow">
+                  <mat-icon>arrow_forward_ios_cirlce</mat-icon>
+                </div>
+              </h4>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Sujet&nbsp;:&nbsp;
+                <strong *ngIf="history.subject == item.historiques[i+1].subject">{{ item.historiques[i+1].subject}}</strong>
+                <strong style="color:#0c8040" *ngIf="history.subject != item.historiques[i+1].subject">{{ item.historiques[i+1].subject}}</strong>
+               </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de début&nbsp;:&nbsp;
+                <strong *ngIf="history.startTime == item.historiques[i+1].startTime">{{ item.historiques[i+1].startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.startTime != item.historiques[i+1].startTime">{{ item.historiques[i+1].startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de fin&nbsp;:&nbsp;
+                <strong *ngIf="history.endTime == item.historiques[i+1].endTime">{{ item.historiques[i+1].endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.endTime != item.historiques[i+1].endTime">{{ item.historiques[i+1].endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              </mat-list-item>
+              <!-- <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" *ngIf="history.customer_id == item.historiques[i+1].customer_id">Client/Prospect&nbsp;:&nbsp;<strong>{{ item.historiques[i+1].customer?.name}}</strong> </mat-list-item> -->
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Client/Prospect&nbsp;:&nbsp;
+                <strong *ngIf="history.customer_id == item.historiques[i+1].customer_id">{{ item.historiques[i+1].customer?.name}}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.customer_id != item.historiques[i+1].customer_id">{{ item.historiques[i+1].customer?.name}}</strong> 
+              </mat-list-item>
+              <mat-list-item class="rdv-detail" role="listitem" >Statut&nbsp;:&nbsp;
+                <strong style="color:#0c8040" *ngIf="history.status != item.historiques[i+1].status" class="text-[#B2B2B2]">{{ item.historiques[i+1].status }}</strong>
+                <strong *ngIf="history.status == item.historiques[i+1].status" class="text-[#B2B2B2]">{{ item.historiques[i+1].status }}</strong>
+                &nbsp;&nbsp;/&nbsp;&nbsp;Importance&nbsp;:&nbsp;
+                <strong style="color:#0c8040" *ngIf="history.priority != item.historiques[i+1].priority">{{ item.historiques[i+1].priority}}</strong>
+                <strong *ngIf="history.priority == item.historiques[i+1].priority">{{ item.historiques[i+1].priority}}</strong>
+              </mat-list-item >
+              <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Description&nbsp;:&nbsp;
+                <strong *ngIf="history.description == item.historiques[i+1].description">{{ item.historiques[i+1].description}}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.description != item.historiques[i+1].description">{{ item.historiques[i+1].description}}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Lieu&nbsp;:&nbsp;
+                <strong *ngIf="history.location == item.historiques[i+1].location">{{ item.historiques[i+1].location}}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.location != item.historiques[i+1].location">{{ item.historiques[i+1].location}}</strong> 
+              </mat-list-item>
+            </div>
+            <div *ngIf="i == (item.historiques.length - 1)" class="w-[340px]">
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Sujet&nbsp;:&nbsp;
+                <strong *ngIf="history.subject == item.historiques[i+1]?.subject">{{ history?.subject}}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.subject != item.historiques[i+1]?.subject">{{ history.subject}}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de début&nbsp;:&nbsp;
+                <strong *ngIf="history.startTime == item.historiques[i+1]?.startTime">{{ history.startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.startTime != item.historiques[i+1]?.startTime">{{ history.startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de fin&nbsp;:&nbsp;
+                <strong *ngIf="history.endTime == item.historiques[i+1]?.endTime">{{ history.endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.endTime != item.historiques[i+1]?.endTime">{{ history.endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Client/Prospect&nbsp;:&nbsp;
+                <strong *ngIf="history.customer?.name == item.historiques[i+1]?.customer?.name">{{ history.customer?.name}}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.customer?.name != item.historiques[i+1]?.customer?.name">{{ history.customer?.name}}</strong> 
+              </mat-list-item>
+              <mat-list-item class="rdv-detail" role="listitem" >Statut&nbsp;:&nbsp;
+                <strong *ngIf="history.description == item.historiques[i+1]?.description">{{ history.status }}</strong>
+                <strong style="color:#0c8040" *ngIf="history.description != item.historiques[i+1]?.description">{{ history.status }}</strong>
+                &nbsp;&nbsp;/&nbsp;&nbsp;Importance&nbsp;:&nbsp;
+                <strong *ngIf="history.priority == item.historiques[i+1]?.priority">{{ history.priority}}</strong>
+                <strong style="color:#0c8040" *ngIf="history.priority != item.historiques[i+1]?.priority">{{ history.priority}}</strong>
+              </mat-list-item >
+              <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Description&nbsp;:&nbsp;
+                <strong *ngIf="history.description == item.historiques[i+1]?.description">{{ history.description }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.description != item.historiques[i+1]?.description">{{ history.description }}</strong> 
+              </mat-list-item>
+              <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Lieu&nbsp;:&nbsp;
+                <strong *ngIf="history.location == item.historiques[i+1]?.location">{{ history.location }}</strong> 
+                <strong style="color:#0c8040" *ngIf="history.location != item.historiques[i+1]?.location">{{ history.location }}</strong> 
+              </mat-list-item>
+            </div>
+              
+          </div>
+          <div class="pl-8" *ngIf="i < (item.historiques.length - 1)" class="w-[340px]">
+            <h4 class="text-center p-0 m-0 font-bold"><u>Après</u></h4>
+            <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Sujet&nbsp;:&nbsp;
+              <strong *ngIf="history.subject == item.historiques[i+1].subject">{{ history.subject}}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.subject != item.historiques[i+1].subject">{{ history.subject}}</strong> 
+            </mat-list-item>
+            <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de début&nbsp;:&nbsp;
+              <strong *ngIf="history.startTime == item.historiques[i+1].startTime">{{ history.startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.startTime != item.historiques[i+1].startTime">{{ history.startTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+            </mat-list-item>
+            <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Date de fin&nbsp;:&nbsp;
+              <strong *ngIf="history.endTime == item.historiques[i+1].endTime">{{ history.endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.endTime != item.historiques[i+1].endTime">{{ history.endTime | date: 'dd/MM/yyyy hh:mm' }}</strong> 
+            </mat-list-item>
+            <mat-list-item class="text-[#B2B2B2] rdv-detail" role="listitem" >Client/Prospect&nbsp;:&nbsp;
+              <strong *ngIf="history.customer?.name == item.historiques[i+1].customer?.name">{{ history.customer?.name}}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.customer?.name != item.historiques[i+1].customer?.name">{{ history.customer?.name}}</strong> 
+            </mat-list-item>
+            <mat-list-item class="rdv-detail" role="listitem" >Statut&nbsp;:&nbsp;
+              <strong *ngIf="history.status == item.historiques[i+1].status">{{ history.status }}</strong>
+              <strong style="color:#0c8040" *ngIf="history.status != item.historiques[i+1].status">{{ history.status }}</strong>
+              &nbsp;&nbsp;/&nbsp;&nbsp;Importance&nbsp;:&nbsp;
+              <strong *ngIf="history.priority == item.historiques[i+1].priority">{{ history.priority}}</strong>
+              <strong style="color:#0c8040" *ngIf="history.priority != item.historiques[i+1].priority">{{ history.priority}}</strong>
+            </mat-list-item >
+            <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Description&nbsp;:&nbsp;
+              <strong *ngIf="history.description == item.historiques[i+1].description">{{ history.description }}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.description != item.historiques[i+1].description">{{ history.description }}</strong> 
+            </mat-list-item>
+            <mat-list-item class="text-[#B2B2B2] rdv-detail description" role="listitem" >Lieu&nbsp;:&nbsp;
+              <strong *ngIf="history.location == item.historiques[i+1].location">{{ history.location }}</strong> 
+              <strong style="color:#0c8040" *ngIf="history.location != item.historiques[i+1].location">{{ history.location }}</strong> 
+            </mat-list-item>
+          </div>
+        </div>
+        
+      </mat-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6" [formGroup]="taxationFormGroup">
+
+
+
+    <div *ngIf="!loading" class="mt-10">
+    
+      <div formArrayName="details" class="flex  flex-col gap-3" >
+        <div class="flex items-center gap-3" *ngFor="let item of taxationFormGroup.get('details')['controls']; let i = index" [formGroupName]="i">
+  
+          <div class="flex items-center  gap-2 w-full">
+            <div class="text-gray-400">
+              KM GPS  :
+            </div>
+            <div class="font-bold">
+              ({{taxationFormGroup.get('details').value[i].KM_GPS}} KM)
+            </div>
+          </div>
+                  
+          <i-field [type]="'text'" [label]="'Matricule  de camion'" formControlName="matricule"></i-field>
+          <i-field [type]="'text'" [label]="'Type de camion'" formControlName="truckType"></i-field>
+          <i-field [type]="'text'" [label]="'Tonnage de camion'" formControlName="truckTonnage"></i-field>
+          <i-field [type]="'number'" [label]="'KM'" formControlName="KM"></i-field>
+
+
+          <i-field [type]="'number'" [label]="taxationFormGroup.get('details').value[i].montant_sup < 0 ? 'Montant remise' : 'Montant supplémentaire'" formControlName="montant_sup"></i-field>
+          <i-field [type]="'number'" [label]="'Montant HT'" formControlName="montant_ht"></i-field>
+        <i-field [type]="'number'" [label]="'Montant TVA'" formControlName="montant_tva"></i-field>
+          <i-field [type]="'number'" [label]="'Montant TTC'" formControlName="montant_ttc"></i-field>
+
+
+          <!-- <div class="flex flex-col gap-2">
+
+            <span>
+              Montant
+            </span>
+
+            <span>
+              {{}}
+
+            </span>
+            
+          </div> -->
+        </div>
+      </div>
+  
+      <div class="flex items-center justify-end mt-6 mb-8">
+
+
+          <div class=" flex items-center gap-3">
+
+            <button  *ngIf="!submitloader" class="p-2 bg-green-600 text-white font-bold" (click)="submit()">
+        
+                <span>
+                  Calculer
+                </span>
+              
+                 
+            </button>
+            <button  *ngIf="!submitloader" class="p-2 bg-green-600 text-white font-bold" (click)="submit(true)">
+        
+                <span>
+                  Valider
+                </span>
+              
+                 
+            </button>
+          </div>
+        
+        </div>
+      
+  
+  
+    </div>
+    
+  
+  
+  
+  
+  
+    <div *ngIf="loading" class="flex items-center justify-center w-full h-full">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+  </div>
+    

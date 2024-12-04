@@ -1,0 +1,43 @@
+
+
+<div class="grid grid-cols-3">
+    <h2 mat-dialog-title class="col-span-2">Choisir le type du camion</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </div>
+</div>
+<div mat-dialog-content>
+    
+    <form [formGroup]="typeForm" (ngSubmit)="addType()">
+        <table class="choix-type">
+          <tr>
+            <td>Type :</td>
+            <td>
+              <select formControlName="type">
+                <option [value]="type.id" *ngFor="let type of truckTypes">{{type.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Tonnage :</td>
+            <td>
+              <select formControlName="tonnage">
+                <option [value]="t.id" *ngFor="let t of tonnage">{{t.name}}T</option>
+              </select>
+            </td>
+          </tr>
+          <tr *ngIf="data['hasMinimumPrice']">
+            <td>Prix min/mois :</td>
+            <td>
+              <input type="number" formControlName="prix_min">
+            </td>
+          </tr>
+          <tr>
+            <td><button type="button" class="cancel-choix">Annuler</button></td>
+            <td class="text-right"><button type="submit" class="valid-choix">Ajouter</button></td>
+          </tr>
+        </table>
+      </form>
+      
+
+</div>

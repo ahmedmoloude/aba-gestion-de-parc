@@ -1,0 +1,108 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2" *ngIf="data.type == 'CITY'">Ajouter une nouvelle ville</h2>
+      <h2 mat-dialog-title class="col-span-2" *ngIf="data.type == 'ZONE'">Ajouter une nouvelle zone</h2>
+      <h2 mat-dialog-title class="col-span-2" *ngIf="data.type == 'SECTOR'">Ajouter un nouveau</h2>
+      <div class="text-right cursor-pointer" mat-button  (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <form [formGroup]="form" class="pr-4" *ngIf="data.type=='CITY'">
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field  class="zone-name-input mt-4">
+            <mat-label>Entrer le nom de la ville</mat-label>
+            <input matInput formControlName="city_name" placeholder="Ex: Casablanca">
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field class="zone-name-input mt-4">
+            <mat-label>Entrer le code de la ville</mat-label>
+            <input matInput formControlName="city_code" placeholder="Ex: 00123">
+        </mat-form-field>
+      </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" (click)="closeDialog()">
+              Abondonner
+            </button>
+          </div>
+          <div class="text-right">
+            <button  *ngIf="!spinner"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addEntity(data)">Enregistrer</button>
+     
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="form" class="pr-4" *ngIf="data.type=='ZONE'">
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field  class="zone-name-input mt-4">
+            <mat-label>Entrer le nom de la zone</mat-label>
+            <input matInput formControlName="zone_name" placeholder="Ex: Hay hassani">
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field class="zone-name-input mt-4">
+            <mat-label>Entrer le code de la zone</mat-label>
+            <input matInput formControlName="zone_code" placeholder="Ex: 00123">
+        </mat-form-field>
+      </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" (click)="closeDialog()">
+              Abondonner
+            </button>
+          </div>
+          <div class="text-right">
+            <button  *ngIf="!spinner"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addEntity(data)">Enregistrer</button>
+     
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="form" class="pr-4" *ngIf="data.type=='SECTOR'">
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field  class="zone-name-input mt-4">
+            <mat-label>Entrer le nom de du secteur</mat-label>
+            <input matInput formControlName="sector_name" placeholder="Ex: Tit mellil">
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <mat-form-field class="zone-name-input mt-4">
+            <mat-label>Entrer le code de du secteur</mat-label>
+            <input matInput formControlName="sector_code" placeholder="Ex: 00123">
+        </mat-form-field>
+      </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" (click)="closeDialog()">
+              Abondonner
+            </button>
+          </div>
+          <div class="text-right">
+            <button  *ngIf="!spinner"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addEntity(data)">Enregistrer</button>
+     
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

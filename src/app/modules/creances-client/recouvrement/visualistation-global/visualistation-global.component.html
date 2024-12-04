@@ -1,0 +1,84 @@
+<div class="dialog">
+      <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Visualisation globale - {{(customer?.code)?customer.code:'---'}} -  {{(customer?.name)?customer.name:'---'}}</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content >
+      <div *ngIf="recouvrement$ | async as recouvrementState">
+        <div *ngIf="recouvrementState?.recouvrement?.length <= 0 && recouvrementState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+          <mat-spinner [diameter]="80"></mat-spinner>
+        </div>
+        <div *ngIf="recouvrementState?.recouvrement?.length <= 0 && recouvrementState?.dataState=='SUCCESS'" class="flex flex-col items-center">
+          <h2>La liste des Factures est vide</h2>
+        </div>
+        <ng-container *ngIf="recouvrementState?.recouvrement?.length > 0">
+            <table class="w-full text-left text-gray-500">
+            <thead>
+                <tr>
+                  <th colspan="7">Facturation</th>
+                  <th colspan="2">Réglement</th>
+                  <th>Solde</th>
+
+                </tr>
+                <tr>
+                <th
+                    *ngFor="let header of headerColumuns"
+                    scope="col"
+                    class="p-2 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                    <div class="flex items-center">
+                    {{ header }}
+                    </div>
+                </th>
+                <!-- <th
+                    scope="col"
+                    class="p-2 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                    <div class="flex justify-end">Actions</div>
+                </th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let facture of recouvrementState?.recouvrement"
+                >
+                <td class="p-2">{{(facture?.facture_date) ? (facture.facture_date | date: 'dd/MM/yyyy') : '---'}}</td>
+                <td class="p-2">{{(facture?.reference) ? facture.reference : '---'}}</td>
+                <td class="p-2">{{(facture?.montant_ht) ? (facture.montant_ht | number) : '---'}}</td>
+                <td class="p-2">{{(facture?.remise_montant) ? (facture.remise_montant | number) : '---'}}</td>
+                <td class="p-2">{{(facture?.montant_ttc) ? (facture.montant_ttc| number) : '---'}}</td>
+                <td class="p-2">{{(getSum(facture?.avoirs,montant_avoir) | number) || '---'}}</td>
+                <td class="p-2">{{(getDifference(facture?.montant_ttc,getSum(facture?.avoirs, montant_avoir)) | number) || '---'}}</td>
+                <td class="p-2">{{(facture?.name) ? facture.name : '---'}}</td>
+                <td class="p-2">{{getSum(facture?.paiements,reglement) || '---'}}</td>
+                <td class="p-2">{{(getDifference(getDifference(facture?.montant_ttc,getSum(facture?.avoirs, montant_avoir)),getSum(facture?.paiements, reglement)) | number) || '---'}}</td>
+                </tr>
+            </tbody>
+            </table>
+        </ng-container>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+            <div>
+              <!-- <button
+                class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+                mat-dialog-close
+              >
+                Annuler
+              </button> -->
+            </div>
+            <div class="text-right">
+              <button
+                class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+                mat-dialog-close
+              >
+              Fermer
+              </button>
+            </div>
+          </div>
+    </div>
+    </div>
+
+
+</div>

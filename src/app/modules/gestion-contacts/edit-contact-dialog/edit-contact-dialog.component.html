@@ -1,0 +1,166 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h1 mat-dialog-title class="col-span-2">Modification d'un contact</h1>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <form class="mt-7 mb-7" [formGroup]="contacts">
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <div class="row-span-3">
+            <div *ngIf="file == 'null'" class="bg-slate-400 h-full message-contact" > Pour l'affichage d'une image veuillez choisir un client</div>
+            <img *ngIf="file == 'with_logo_customer'" class="pl-7 pr-7 w-36 h-24 mx-auto" src="{{ url + customer.id + '/' }}{{ customer.logo_path }}">
+            <img *ngIf="file == 'no_logo_customer' " class="pl-7 pr-7 w-36 h-24 mx-auto" src="../../../../assets/img/user.png">
+          </div>
+          <div class="w-[100%] pr-7">
+            <!-- <mat-form-field class="w-[100%]  pr-7" appearance="fill">
+              <mat-label>Client</mat-label>
+              <mat-select formControlName="customer_id">
+                <mat-option *ngIf="nbr == 0"> No data </mat-option>
+                <mat-option *ngFor="let option of client" [value]="option.id">
+                  {{ option.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+              <app-shared-autcomplete
+                #searchComponent1
+                [hasIcon]="false"
+                [type]="'single'"
+                [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle"
+                [opended]="true"
+                [charToGetAll]="'*'"
+                [apiUrl]="apiUri"
+                [keys]="['code', 'first_name', 'last_name', 'name']"
+                [lengthToStart]="3"
+                [display]="['code', 'name']"
+                [placeholer]="'Rechercher le client/prospect...'"
+                (dataEvent)="onClientChange($event)"
+              ></app-shared-autcomplete>
+              <p class="mt-contact">
+                <!-- <i-field
+                [type]="'text'"
+                [label]="'Fonction'"
+                formControlName="fonction_id"
+              ></i-field> -->
+                <app-shared-autcomplete
+                      #searchComponent1
+                      [hasIcon]="false"
+                      [type]="'single'"
+                      [opended]="true"
+                      [contentStyle]="contentStyle"
+                      [inputStyle]="searchStyle"
+                      [charToGetAll]="'*'"
+                      [data]="departements"
+                      [keys]="['name']"
+                      [lengthToStart]="3"
+                      [display]="['name']"
+                      [placeholer]="'Rechercher le département...'"
+                      (dataEvent)="onDepartementChange($event)"
+                  ></app-shared-autcomplete>
+              </p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <!-- <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>Prénom</mat-label>
+              <input matInput type="text" formControlName="last_name" autocomplete="off"/>
+            </mat-form-field>
+          </div> -->
+          <!-- <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>Nom</mat-label>
+              <input matInput type="text" formControlName="first_name" autocomplete="off"/>
+            </mat-form-field>
+          </div> -->
+          <div class="w-[100%] pl-7 mb-4 relative">
+            <i-field [type]="'text'" [label]="'Prénom'" formControlName="last_name" ></i-field>
+          </div>
+          <div class="w-[100%]  pr-7 mb-4 relative">
+            <i-field [type]="'text'" [label]="'Nom'" formControlName="first_name" ></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <!-- <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>Téléphone</mat-label>
+              <input matInput type="number" formControlName="phone" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>E-mail</mat-label>
+              <input matInput type="mail" formControlName="email"/>
+            </mat-form-field>
+          </div> -->
+          <div class="w-[100%] pl-7  mb-4 relative">
+            <i-field [type]="'text'" [label]="'Téléphone'" formControlName="phone" ></i-field>
+          </div>
+          <div class="w-[100%] pr-7 mb-4 relative">
+            <i-field [type]="'mail'" [label]="'E-mail'" formControlName="email" ></i-field>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <!-- <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>Fax</mat-label>
+              <input matInput type="number" formControlName="fax" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+              <mat-label>Departement</mat-label>
+              <input matInput type="text" formControlName="departement" autocomplete="off"/>
+            </mat-form-field>
+          </div> -->
+          <div class="w-[100%] pl-7  mb-4 relative">
+            <i-field [type]="'text'" [label]="'GSM'" formControlName="fax" ></i-field>
+          </div>
+          <div class="w-[100%]  pr-7 mb-4 relative">
+            <app-shared-autcomplete
+            #searchComponent1
+            [hasIcon]="false"
+            [opended]="true"
+            [type]="'single'"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="fonctions"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher la fonction...'"
+            (dataEvent)="onFonctionChange($event)"
+        ></app-shared-autcomplete>
+            <!-- <i-field [type]="'text'" [label]="'Département'" formControlName="departement" ></i-field> -->
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abandonner
+        </button>
+      </div>
+      <div class="text-right">
+        <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+          type="submit"  *ngIf="!spinner" (click)="editContact()" [disabled]="contacts.invalid"
+          ><!--[disabled]="contact.invalid"-->
+          Enregistrer
+        </button>
+
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </div>

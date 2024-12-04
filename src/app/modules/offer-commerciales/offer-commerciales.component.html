@@ -1,0 +1,119 @@
+<div [ngClass]="
+    merchant_uuid
+      ? ''
+      : 'bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6'
+  ">
+  <div class="grid grid-cols-6 gap-4" *ngIf="!merchant_uuid">
+    <div class="flex col-start-1 col-end-3">
+      <mat-icon>list</mat-icon>
+
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Liste des offres commerciales
+      </h2>
+    </div>
+    <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialog()"
+      *ngIf="permissionService.hasPermission('Gestion commerciale', 'Normale', 'C')">
+      <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+      <h2 class="text-[#0C8040] font-normal pl-2">Offre commerciale</h2>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" (filter)="filter($event)"></app-shared-filter>
+  </div>
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <table class="table-auto w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <th scope="col" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre commerciale', 'U')"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              Pièce jointe
+            </div>
+          </th>
+          <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex justify-end">Actions</div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of offers | paginate: { itemsPerPage: 15, currentPage: p }">
+          <td class="p-3">{{ item.service.name }}</td>
+          <td class="p-3">{{ item.reference }}</td>
+          <!-- <td class="p-3">{{ item.title || "--" }}</td> -->
+          <td class="p-3">{{ item.customer?.reference || "--" }}</td>
+          <td class="p-3">
+            {{ item.customer.first_name || item.customer.name }}
+          </td>
+          <td class="p-3">{{ item.action_date || "--" }}</td>
+          <td class="p-3">{{ item.start_date }}</td>
+          <td class="p-3">{{ item.end_date || "--" }}</td>
+          <!-- <td class="p-3">PDR</td> -->
+          <td class="p-3" >
+            <input hidden="true" type="file" accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onFileSelected($event, item?.uuid)" #fileUpload />
+            <div *ngIf="item?.attached_piece_path" class="flex gap-2 items-center cursor-pointer"
+              (click)="download(item?.attached_piece_path, item?.id)">
+              <mat-icon>cloud_download</mat-icon>
+              <span class="font-bold cursor-pointer">
+                télécharger le fichier
+              </span>
+            </div>
+          </td>
+          <td class="p-3 text-right cursor-pointer">
+            <div class="ml-3 cursor-pointer">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon class="cursor-pointer text-[22px] text-[#909090]">more_vert</mat-icon>
+              </button>
+            </div>
+            <mat-menu #menu="matMenu">
+              <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre commerciale', 'R')">
+                <button mat-menu-item (click)="detailsOffer(item.uuid)" *ngIf="item.id_service != 2">
+                  <mat-icon>remove_red_eye</mat-icon>
+                  <span>Détails</span>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre commerciale', 'U')">
+                <button mat-menu-item *ngIf="item.id_service != 2" (click)="editOffer(item.uuid)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Éditer</span>
+                </button>
+                <button mat-menu-item *ngIf="item.id_service == 2" (click)="edit(item.uuid)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Modifier</span>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre commerciale', 'R')">
+
+                <button mat-menu-item (click)="downloadOffer(item.id)">
+                  <mat-icon>print</mat-icon>
+                  <span>Imprimer</span>
+                </button>
+
+                <button *ngIf="!item?.attached_piece_path" mat-menu-item (click)="fileUpload.click()">
+                  <mat-icon>attach_file</mat-icon>
+                  <span> Télécharger un fichier</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+    </div>
+  </ng-container>
+</div>

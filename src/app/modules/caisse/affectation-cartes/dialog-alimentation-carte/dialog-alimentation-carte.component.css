@@ -1,0 +1,63 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel{
+    margin-left: 130px;
+}
+:host .mat-dialog-content{
+    margin-top: 40px;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding: 0px;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+    background-color: #fff;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before{
+    display: none !important;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+    display: none !important;
+  }
+  .piece-jointe{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-left: 28px;
+    border-radius: 4px;
+    width: 86%;
+    /* display: none; */
+  }
+  .custom-file-input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  .file-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .file-name {
+    color: #555;
+  }
+
+  .upload-icon {
+    color: #999;
+  }
+
+  .hidden {
+    display: none;
+  }
+

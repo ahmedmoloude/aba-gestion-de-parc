@@ -1,0 +1,336 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+<div *ngIf="spinner" style="margin-left: 47%; margin-top: 2%;">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+  <div *ngIf="!spinner">
+    <div class="grid grid-cols-1 gap-2">
+      <div class="flex">
+        <mat-icon class="pt-[5px]">check_circle_outline</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Feuille de route > Feuille de route N° {{RoadMap.id}}
+        </h2>
+        <div class="flex items-end">
+          <div class="pl-3">
+            <button class=" text-[#1AD598] p-3"
+             style="background: #7fffd4;border-radius: 15px; margin-left: 56rem ;" *ngIf="RoadMap.status==='OPENED'"
+              >Ouvert </button>
+            <button class=" text-[#fff] p-3"
+            style="background: rgb(255, 146, 127); border-radius: 15px;  margin-left: 56rem ;"
+             *ngIf="RoadMap.status==='CLOSED'" >Cloturé </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-vehicules p-4 mb-5">
+      <div class="border-b-4 border-[#0C8040]">
+        <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+          Détails
+        </p>
+      </div>
+      <div class="grid grid-cols-5 gap-4 mt-4">
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Véhicule</p>
+          <p class="font-medium">{{(RoadMap.truck?.code_interne || RoadMap.truck?.matricule)? (RoadMap.truck?.code_interne + ' - ' + RoadMap.truck?.matricule) : '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Conducteur</p>
+          <p class="font-medium">{{(RoadMap.driver?.first_name || RoadMap.driver?.last_name)? (RoadMap.driver?.first_name + ' ' + RoadMap.driver?.last_name) : '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Km départ</p>
+          <p class="font-medium">{{RoadMap.km_depart || '---'}} KM</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Date et heure de début</p>
+          <p class="font-medium">{{(RoadMap.start_date | date: 'dd/MM/yyyy-hh:mm') || '---' }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Qté carburant départ</p>
+          <p class="font-medium">{{RoadMap.qte_carburant_depart || '---'}} L</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Lieu d’approvisionnement</p>
+          <p class="font-medium" > {{getParck(RoadMap.truck.parc_id) || '---'}}</p>
+        </div>
+        <div *ngIf="RoadMap.end_date!=null">
+          <p class="text-[#0C8040] text-[11px]">Date et heure de fin</p>
+          <p class="font-medium">{{(RoadMap.end_date  | date: 'dd/MM/yyyy-hh:mm') || '---' }}</p>
+        </div>
+        <div *ngIf="RoadMap.km_fin!=null">
+          <p class="text-[#0C8040] text-[11px]">Km fin </p>
+          <p class="font-medium">{{RoadMap.km_fin || '---'}} KM</p>
+        </div>
+        <div *ngIf="RoadMap.km_fin!=null">
+          <p class="text-[#0C8040] text-[11px]">Distance parcourue</p>
+          <p class="font-medium">{{(RoadMap.km_fin - RoadMap.km_depart ) || '---'}} KM</p>
+        </div>
+      </div>
+      <div class="border-b-4 border-[#0C8040] mt-5">
+        <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+          Missions
+        </p>
+      </div>
+      <div class="grid grid-cols-5 gap-4 mt-4 border-b-2 border-gray-400 " *ngFor="let mission of RoadMap.missions ; let index =i ">
+
+
+        <div>
+          <p class="text-[#0C8040] text-[11px]" >Activité</p>
+          <p class="font-medium" >{{mapTypeToName[mission?.type]}}</p>
+        </div>
+
+
+        <ng-container  *ngIf="mission.type == 'TRANSFERT'">
+          <div>
+            <div class="flex gap-2 text-[11px]">
+              <p class="text-[#0C8040]">Reference de mission</p>
+            </div>
+            <p class="font-medium">{{mission.missionable?.reference}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Agence de départ</p>
+            <p class="font-medium" >{{mission.agency_from || '---'}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Agence d'arrivée</p>
+            <p class="font-medium" >{{mission.agency_dest || '---'}}</p>
+          </div>
+
+        </ng-container>
+
+
+        <ng-container  *ngIf="mission.type == 'COVOYAGE'">
+          <div>
+            <div class="flex gap-2 text-[11px]">
+              <p class="text-[#0C8040]">Reference de mission</p>
+              <!-- <mat-icon class=" cursor-pointer "  (click)="redirectToDetails('AFFRETMENT', mission.missionable?.uuid )">open_in_new</mat-icon> -->
+            </div>
+            <p class="font-medium">{{mission.missionable?.reference}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Ville de départ</p>
+            <p class="font-medium" >{{mission.city_from || '---'}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Ville d'arrivée</p>
+            <p class="font-medium" >{{mission.city_dest || '---'}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Kilométrage</p>
+            <p class="font-medium" >{{mission.kilometrage + ' KM' || '---'}}</p>
+          </div>
+
+        </ng-container>
+
+        <ng-container  *ngIf="mission.type == 'AFFRETMENT'">
+          <div>
+            <div class="flex gap-2 text-[11px]">
+              <p class="text-[#0C8040]">Reference de mission</p>
+              <mat-icon class=" cursor-pointer "  (click)="redirectToDetails('AFFRETMENT', mission.missionable?.uuid )">open_in_new</mat-icon>
+            </div>
+            <p class="font-medium">{{mission.missionable?.reference}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Adresse de départ</p>
+            <p class="font-medium" >{{mission.adresse_depart || '---'}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Adresse d'arrivée</p>
+            <p class="font-medium" >{{mission.adresse_arrivee || '---'}}</p>
+          </div>
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Kilométrage</p>
+            <p class="font-medium" >{{mission.kilometrage + ' KM' || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Trajet</p>
+            <div class="flex gap-2">
+              <div class="flex gap-2" *ngFor="let trajet of mission.trajet ; let node_index = index">
+                <p class="font-medium" >{{trajet?.city }}</p>
+                <span *ngIf="node_index < mission.trajet.length - 1" class="arrow-icon">
+                  <mat-icon>arrow_right_alt</mat-icon>
+                </span>
+              </div>
+
+            </div>
+          </div>
+    
+        </ng-container>
+
+        <ng-container  *ngIf="mission.type == 'TOUR'">
+          <div>
+            <div class="flex gap-2 text-[11px]">
+              <p class="text-[#0C8040]">Reference de mission</p>
+              <mat-icon class=" cursor-pointer "  (click)="redirectToDetails('TOUR', mission.missionable?.uuid , mission.missionable?.status )">open_in_new</mat-icon>
+            </div>
+            <p class="font-medium">{{mission.missionable?.reference}}</p>
+          </div>
+
+
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Type de tournée  </p>
+            <p class="font-medium">{{mapTypeTour[mission.missionable?.type_tour]}}</p>
+          </div>
+          
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Date et Heure  </p>
+            <p class="font-medium">{{(mission.missionable?.start_time | date: 'dd/MM/yyyy-hh:mm') || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Zone : </p>
+            <p class="font-medium">{{mission.missionable?.zone?.name || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Ville : </p>
+            <p class="font-medium">{{getCity(mission.missionable?.zone?.city_id) || '---'}}</p>
+          </div>
+        </ng-container>
+      </div>
+      <div *ngIf="RoadMap.missions.length== 0">
+        <p class="text-[#0C8040] text-[11px]">Aucune mission a été affecté </p>
+      </div>
+      <div class="border-b-4 border-[#0C8040] mt-5">
+        <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+          Dépenses
+        </p>
+      </div>
+      <div class="mt-5 mb-2">
+        <p class="bg-[#E3FFDF] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+          Carburant externe
+        </p>
+      </div>
+      <div class="grid grid-cols-6 gap-4 mt-1" *ngFor="let depense of RoadMap.depenses ">
+        <ng-container *ngIf="depense.type==='CARBURANT'">
+          <!-- <div>
+            <p class="text-[#0C8040] text-[11px]">Qté externe</p>
+            <p class="font-medium">{{depense.quantite || '---'}}</p>
+          </div> -->
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Type de carte</p>
+            <p class="font-medium">{{depense.carte?.type || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">N° de carte</p>
+            <p class="font-medium" >{{depense.carte?.n_carte || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Qté (L)</p>
+            <p class="font-medium" >{{depense.quantite || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]" >Montant</p>
+            <p class="font-medium">{{depense.montant || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Station</p>
+            <p class="font-medium"  >{{depense.station || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Km en alimentation</p>
+            <p class="font-medium" >{{depense.kilometrage || '---'}} KM</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040] text-[11px]">Document</p>
+            <p class="font-medium">
+              <!-- <img *ngIf="checkFileType(depense.images[0].images)==='IMG'"   style="width:50%" src="{{ url + '/depense/'+  depense.images[0].id  + '/' }}{{ depense.images[0].images }}"/> -->
+              <a
+                href="{{ url + depense.id + '/' }}{{ depense.images['0']?.images }} "
+                target="_blank"
+                ><mat-icon>file_copy</mat-icon>
+              </a>
+              <!-- <button (click)="getPdf(depense.images[0].images,depense.images[0].id )" *ngIf="checkFileType(depense.images[0].images)==='PDF'">
+                Consulter le pdf
+              </button> -->
+              <span *ngIf="checkFileType(depense.images[0]?.images)==='none'">
+                Le fichier n'est pas au bon format
+              </span>
+            </p>
+          </div>
+        </ng-container>
+      </div>
+      <div class="mt-5 mb-2" >
+        <p class="bg-[#E3FFDF] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]" >
+          Autoroute
+        </p>
+      </div>
+      <div class="grid grid-cols-6 gap-4 mt-1 " *ngFor="let depense of RoadMap.depenses">
+        <ng-container *ngIf="depense.type!='CARBURANT'">
+
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Type de carte</p>
+          <p class="font-medium" >{{depense.carte?.type || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">N° de carte</p>
+          <p class="font-medium" >{{depense.carte?.n_carte || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Montant</p>
+          <p class="font-medium" >{{depense.montant || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Document</p>
+          <p class="font-medium">
+            <a
+              href="{{ url + depense.id + '/' }}{{ depense.images['0']?.images }} "
+              target="_blank"
+              ><mat-icon>file_copy</mat-icon>
+            </a>
+            <!-- <img *ngIf="checkFileType(depense.images[0].images)==='IMG'"   style="width:50%" src="{{ url + '/depense/'+  depense.images[0].id  + '/' }}{{ depense.images[0].images }}"/> -->
+            <!-- <button (click)="getPdf(depense.images[0].images,depense.images[0].id )" *ngIf="checkFileType(depense.images[0].images)==='PDF'">
+              Consulter le pdf
+            </button> -->
+            <span *ngIf="checkFileType(depense.images[0]?.images)==='none'">
+              le fichier n'est pas au bon format
+            </span>
+          </p>
+        </div>
+        </ng-container>
+      </div>
+      <div class="mt-5">
+        <p class="bg-[#E3FFDF] text-[#000] w-52 p-2 rounded-[12px_12px_0px_0px]">
+          Sinistres :
+        </p>
+      </div>
+      <div class="grid grid-cols-6 gap-4 mt-4" *ngFor="let infraction of RoadMap.infractions">
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Type</p>
+          <p class="font-medium">{{infraction.type || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Date et Heure</p>
+          <p class="font-medium">{{(infraction.date_sinistre | date: 'dd/MM/yyyy-hh:mm')|| '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Payé</p>
+          <p class="font-medium" *ngIf="infraction.paye">Oui</p>
+          <p class="font-medium" *ngIf="!infraction.paye">Non</p>
+        </div>
+        <div  *ngIf="infraction.type!='ACCIDENT'">
+          <p class="text-[#0C8040] text-[11px]">Montant</p>
+          <p class="font-medium">{{infraction.montant || '---'}}</p>
+        </div>
+        <div *ngIf="infraction.images">
+          <p class="text-[#0C8040] text-[11px]">Document</p>
+          <!-- <p class="font-medium">{{infraction.montant}}</p> -->
+          <a
+              href="{{ url_infraction + infraction.id + '/' }}{{ infraction.images?.get('0') }}"
+              target="_blank"
+              ><mat-icon>file_copy</mat-icon>
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

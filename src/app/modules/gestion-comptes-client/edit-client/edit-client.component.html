@@ -1,0 +1,1358 @@
+
+<div *ngIf="!spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+<div 
+class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+*ngIf="spinner"
+>
+<div>
+  <form
+    #myForm="ngForm"
+    [formGroup]="CustomerFormGroup"
+    (ngSubmit)="onSubmit()"
+    class="mt-7 mb-7"
+  >
+  <div class="border-b-4 border-[#CEF4C9]">
+    <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+      Description client
+    </p>
+  </div>
+ 
+  <div class="flex gap-2 justify-between mt-3 items-center ">
+    <div class="grid grid-cols-5 gap-4 mb-4 items-center ">
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            <mat-option value="entity">Entreprise</mat-option>
+            <mat-option value="individual">Particulier</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>{{f.type.value  == 'entity' ? "Raison Sociale" : "Nom" }}</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code" type="text" />
+        </mat-form-field>
+      </div>
+      <div *ngIf="f.type.value  == 'entity'">
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Forme juridique</mat-label>
+          <mat-select formControlName="legal_status">
+            <mat-option value="Société à responsabilité limitée (SARL)">Société à responsabilité limitée (SARL)</mat-option>
+            <mat-option value="Société anonyme (SA)">Société anonyme (SA)</mat-option>
+            <mat-option value="Entreprise individuelle">Entreprise individuelle</mat-option>
+            <mat-option value="Société en participation">Société en participation</mat-option>
+            <mat-option value="Société anonyme simplifiée (SAS)">Société anonyme simplifiée (SAS)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="f.type.value  == 'entity'">
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Registre du commerce N°:</mat-label>
+          <input matInput formControlName="commercial_register" type="text" />
+        </mat-form-field>
+      </div>
+  
+   
+      <div *ngIf="f.type.value  == 'entity'">
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Sect. Activité</mat-label>
+          <mat-select formControlName="activity_id">
+            <mat-option [value]=""> Choisissez une activité </mat-option>
+            <mat-option *ngFor="let item of activities" [value]="item.id">
+              {{ item.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="f.type.value  == 'entity'">
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Référence</mat-label>
+          <input matInput type="text" formControlName="reference" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Pays</mat-label>
+          <mat-select>
+            <mat-option [value]="">Maroc</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <app-shared-autcomplete 
+        #searchCityComponent [type]="'single'" [charToGetAll]="'*'" 
+        [data]="cities" [keys]="['code', 'name']" [lengthToStart]="3" [display]="['code','name']"
+         [placeholer]="'Rechercher la ville...'" [label]="'Ville'" (dataEvent)="oncityChange($event)">
+        </app-shared-autcomplete>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label> Agence de rattachement</mat-label>
+          <mat-select formControlName="agency_id">
+            <mat-option [value]=""> Choisissez une  Agence de rattachement </mat-option>
+            <mat-option *ngFor="let item of filterAgencies" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Gestion retour CRBT :</mat-label>
+          <mat-select  formControlName="return_fund_management">
+            <mat-option value="Check">Chèque</mat-option>
+            <mat-option value="bank_transfer">Virement</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Téléphone</mat-label>
+          <input formControlName="phone" matInput type="text" [pattern]="phonePattern" maxlength="10"  />
+        </mat-form-field>
+        <div *ngIf="f?.phone?.errors?.pattern" class="text-danger text-xs">
+          Numéro de téléphone non valide.
+        </div> 
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="customer_type">
+            <mat-option value="en_compte">En Compte</mat-option>
+            <mat-option value="guichet">Cash</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-100%">
+          <mat-label>E-mail (siège)</mat-label>
+          <input matInput type="text" 
+          formControlName="email"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="file-images flex mt-4 mb-4 mr-4" *ngIf="!logo_image">
+      <input
+        #imgInput
+        hidden="true"
+        (change)="selectFile($event , 'LOGO')"
+        type="file"
+        accept="image/jpeg,image/gif,image/png,image/x-eps"
+      />
+      <button mat-flat-button type='button' (click)="imgInput.click()">
+        <mat-icon>add_circle</mat-icon>
+        <p>Ajouter un logo</p>
+      </button>
+    </div>
+    <div class="file-images flex mt-4 mb-4 mr-4" *ngIf="logo_image || data?.logo_path">
+        <img [src]="getSrcLogo" alt="logo">
+    </div>
+    <!-- <div class="file-images flex mt-4 mb-4 mr-4">
+        <img [src]="getSrcLogo" alt="">
+    </div> -->
+  </div>
+
+
+    <div class="flex gap-4">
+      <div class="input_identity">
+        <input 
+          #ImgIdentityInput
+          hidden="true"
+          (change)="selectFile($event , 'IDENTITY')"
+          type="file"
+          accept="image/jpeg,image/gif,image/png"
+        >
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>
+            {{f.type.value  == 'entity' ? "I.C.E" : "CIN" }}</mat-label>
+          <input formControlName="identity_number" matInput type="text" />
+          <div class="flex items-center gap-2 cursor-pointer " matSuffix   (click)="download()" >
+            <span>
+              Visualiser
+            </span>
+            <mat-icon  class="p-0" >image</mat-icon>
+          </div>
+        </mat-form-field>
+        <span class="text-danger text-xs">{{
+          getMsgErrors("identity_number", ["required", "minlength"])
+        }}</span>
+      </div>
+      <div class="grid grid-cols-5 gap-2 mb-4 mt-4 ">
+        <div>
+          <mat-slide-toggle
+            class="example-margin"
+            formControlName="is_active"
+            aria-checked="true"
+            >
+            <span>Actif</span>
+            </mat-slide-toggle
+          >
+        </div>
+      <div>
+        <mat-slide-toggle class="example-margin"    formControlName="is_visible"
+          >Visible</mat-slide-toggle
+        >
+      </div>
+      <div>
+        <mat-slide-toggle class="example-margin" formControlName="subject_to_TVA"
+          >Assujetti TVA</mat-slide-toggle
+        >
+      </div>
+      <div>
+        <mat-slide-toggle
+          class="example-margin"
+          formControlName="GMS"
+          class="w-[100%] "
+          >GMS</mat-slide-toggle
+        >
+      </div>
+      <div>
+        <mat-slide-toggle formControlName="use_grid"
+          > 
+            Conventionné
+          </mat-slide-toggle
+        >
+      </div>
+      </div>
+    </div>
+
+    <div class="adresse_block">
+      <h3 class="text-[#0C8040] font-normal pt-4">
+        Adresse Siège
+      </h3>
+      <div
+        class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+        formGroupName="adresse_siege"
+      >
+        <input
+          class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+          type="text"
+          formControlName="adress"
+          placeholder="Adresse Siège"
+        />
+        <span class="text-danger text-xs">{{
+          getMsgErrors("adresse_siege.adress", [
+            "required",
+          ])
+        }}</span>
+        <div class="grid grid-cols-3 gap-4 items-center">
+          <div class="col-span-2 text-[12px] pl-4 pt-2 pb-2">
+            <span
+              >Lon :
+              {{
+                f.adresse_siege.value?.position?.long
+              }}
+            </span>
+            <span class="ml-2"
+              >Lat :
+              {{
+                f.adresse_siege.value?.position?.lat
+              }}
+            </span>
+          </div>
+          <div class="flex items-center pr-2">
+            <span
+              class="underline font-normal text-[12px] cursor-pointer"
+              (click)="
+                openDialog(
+                  isNumber(
+                    f.adresse_siege.value?.id
+                  ),
+                  addressType.HEADQUARTERS,
+                  1,
+                  f.adresse_siege.value?.position 
+                )
+              "
+            >
+              la carte géographique
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+
+    <div class="border-b-4 border-[#CEF4C9] mt-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Client Adresses
+      </p>
+    </div>
+
+    <div class="flex flex-col mb-4">
+
+        <div class="grid grid-cols-2 gap-4 mb-4">        
+          <div>
+            <h3 class="text-[#0C8040] font-normal pt-4">
+              Adresse de dépôt des retours fonds et documents
+            </h3>
+            <div
+              class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+              formGroupName="adresse_return_document_and_fond"
+            >
+              <input
+                class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+                type="text"
+                placeholder="Adresse de dépôt des retours fonds et documents"
+                formControlName="adress"
+  
+              />
+              <span class="text-danger text-xs">{{
+                getMsgErrors("adresse_return_document_and_fond.adress", [
+                  "required",
+                ])
+              }}</span>
+              <div class="grid grid-cols-3 gap-4 items-center">
+                <div class="col-span-2 text-[12px] pl-4 pt-2 pb-2">
+                  <span
+                    >Lon :
+                    {{
+                      f.adresse_return_document_and_fond.value?.position?.long
+                    }}
+                  </span>
+                  <span class="ml-2"
+                    >Lat :
+                    {{
+                      f.adresse_return_document_and_fond.value?.position?.lat
+                    }}
+                  </span>
+                </div>
+                <div class="flex items-center pr-2">
+                  <span
+                    class="underline font-normal text-[12px] cursor-pointer"
+                    (click)="
+                      openDialog(
+                        isNumber(
+                          f.adresse_return_document_and_fond.value?.id
+                        ),
+                        addressType.RETURN,
+                        1,
+                        f.adresse_return_document_and_fond.value?.position 
+                      )
+                    "
+                  >
+                    la carte géographique
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div>
+            <h3 class="text-[#0C8040] font-normal pt-4">
+              Adresse de dépôt des factures
+            </h3>
+            <div
+              class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+              formGroupName="adresse_facturation"
+            >
+              <input
+                class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+                type="text"
+                placeholder="Adresse de dépôt des factures"
+                formControlName="adress"
+                
+              />
+              <span class="text-danger text-xs">{{
+                getMsgErrors("adresse_facturation.adress", [
+                  "required",
+                ])
+              }}</span>
+              <div class="grid grid-cols-3 gap-4 items-center">
+                <div class="col-span-2 text-[12px] pl-4 pt-2 pb-2">
+                  <span
+                    >Lon :
+                    {{
+                      f.adresse_facturation.value?.position?.long
+                    }}
+                  </span>
+                  <span class="ml-2"
+                    >Lat :
+                    {{
+                      f.adresse_facturation.value?.position?.lat
+                    }}
+                  </span>
+                </div>
+                <div class="flex items-center pr-2">
+                  <span
+                    class="underline font-normal text-[12px] cursor-pointer"
+                    (click)="
+                      openDialog(
+                        isNumber(
+                          f.adresse_facturation.value?.id
+                        ),
+                        addressType.FACTURATION,
+                        1,
+                        f.adresse_facturation.value?.position 
+                      )
+                    "
+                  >
+                    la carte géographique
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <mat-list formArrayName="address_pickup">
+              <mat-list-item
+                *ngFor="
+                  let pickup of CustomerFormGroup.get('address_pickup')['controls'];
+                  let index = index
+                "
+              >
+                <h3 class="text-[#0C8040] font-normal pt-4">
+                  Adresse de ramassage {{ [index + 1] }}
+                </h3>
+                <div
+                  [formGroupName]="index"
+                  class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+                >
+                  <input
+                    class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+                    type="text"
+                    placeholder="Adresse de ramassage {{ index + 1 }}"
+                    formControlName="adress"
+                  />
+                  <span class="text-danger text-xs">{{
+                    getMsgErrors("address_pickup." + index + ".adress", [
+                      "required",
+                      "minlength"
+                    ])
+                  }}</span>
+                  <div class="grid grid-cols-3 gap-4 items-center">
+                    <div class="col-span-2 text-[12px] pl-4 pt-2 pb-2">
+                      <span
+                        >Lon :
+                        {{
+                          this.CustomerFormGroup.value.address_pickup[index]
+                            .position.long
+                        }}
+                      </span>
+                      <span class="ml-2"
+                        >Lat :
+                        {{
+                          this.CustomerFormGroup.value.address_pickup[index]
+                            .position.lat
+                        }}
+                      </span>
+                    </div>
+                    <div class="flex items-center pr-2">
+                      <span
+                        class="underline font-normal text-[12px] cursor-pointer"
+                        (click)="
+                          openDialog(
+                            isNumber(
+                              this.CustomerFormGroup.value.address_pickup[index]
+                                .id
+                            ),
+                            addressType.PICKUP,
+                            index,
+                            this.CustomerFormGroup.value.address_pickup[index]
+                              .position
+                          )
+                        "
+                      >
+                        la carte géographique
+                      </span>
+                      <span
+                        *ngIf="
+                          !this.CustomerFormGroup.value.address_pickup[index]
+                            .id &&
+                          this.CustomerFormGroup.value.address_pickup.length > 1
+                        "
+                        class="ml-3 cursor-pointer"
+                        (click)="removeAddress(addressType.PICKUP, index)"
+                      >
+                        <mat-icon class="text-danger">delete</mat-icon>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-list>
+            <p class="text-right" (click)="addAddress(addressType.PICKUP)">
+              <mat-icon class="text-[#0C8040] relative top-[6px] cursor-pointer"
+                >add_circle_outline</mat-icon
+              >
+              <button class="pl-2" type="button">
+                Ajouter une autre adresse de ramassage
+              </button>
+            </p>
+          </div>
+
+
+          <div>
+            <mat-list formArrayName="address_delivery">
+              <mat-list-item
+                *ngFor="
+                  let pickup of CustomerFormGroup.get('address_delivery')['controls'];
+                  let index = index
+                "
+              >
+                <h3 class="text-[#0C8040] font-normal pt-4">
+                  Adresses de Livraison {{ [index + 1] }}
+                </h3>
+                <div
+                  [formGroupName]="index"
+                  class="mt-2 bg-[#DBDBDB] rounded-[28px] w-[100%]"
+                >
+                  <input
+                    class="w-full rounded-[28px] text-sm border-[#DBDBDB] border-[3px] p-2"
+                    type="text"
+                    placeholder="Adresse de Livraison {{ index + 1 }}"
+                    formControlName="adress"
+              
+                  />
+                  <span class="text-danger text-xs">{{
+                    getMsgErrors("address_delivery." + index + ".adress", [
+                      "required",
+                      "minlength"
+                    ])
+                  }}</span>
+                  <div class="grid grid-cols-3 gap-4 items-center">
+                    <div class="col-span-2 text-[12px] pl-4 pt-2 pb-2">
+                      <span
+                        >Lon :
+                        {{
+                          this.CustomerFormGroup.value.address_delivery[index]
+                            .position.long
+                        }}
+                      </span>
+                      <span class="ml-2"
+                        >Lat :
+                        {{
+                          this.CustomerFormGroup.value.address_delivery[index]
+                            .position.lat
+                        }}
+                      </span>
+                    </div>
+                    <div class="flex items-center pr-2">
+                      <span
+                        class="underline font-normal text-[12px] cursor-pointer"
+                        (click)="
+                          openDialog(
+                            isNumber(
+                              this.CustomerFormGroup.value.address_delivery[index]
+                                .id
+                            ),
+                            addressType.DELIVERY,
+                            index,
+                            this.CustomerFormGroup.value.address_delivery[index]
+                              .position
+                          )
+                        "
+                      >
+                        la carte géographique
+                      </span>
+                      <span
+                        *ngIf="
+                          !this.CustomerFormGroup.value.address_delivery[index]
+                            .id &&
+                          this.CustomerFormGroup.value.address_delivery.length > 1
+                        "
+                        class="ml-3 cursor-pointer"
+                        (click)="removeAddress(addressType.DELIVERY, index)"
+                      >
+                        <mat-icon class="text-danger">delete</mat-icon>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-list>
+            <p class="text-right" (click)="addAddress(addressType.DELIVERY)">
+              <mat-icon class="text-[#0C8040] relative top-[6px] cursor-pointer"
+                >add_circle_outline</mat-icon
+              >
+              <button class="pl-2" type="button">
+                Ajouter une autre adresse de Livraison
+              </button>
+            </p>  
+          </div>
+      </div>
+    </div>
+
+    <div class="border-b-4 border-[#CEF4C9]">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Mode port
+      </p>
+    </div>
+    <div class="grid grid-cols-4 gap-4 mb-4 mt-4">
+      <div class="flex flex-col gap-2">
+          <span class="font-medium">Edition récepissé : </span>
+          <div class="flex gap-3">
+            <span *ngFor="let item of filterModePorts()" class="flex gap-3">
+              <mat-checkbox
+                class="example-margin"
+                [value]="item.id"
+                (change)="onRecepiesChange($event)"
+                aria-checked="true"
+                [ngModel]="isSelected('recipes', item.id)"
+                [ngModelOptions]="{ standalone: true }"
+                >{{ item.title }}</mat-checkbox
+              >
+            </span>
+          </div>
+       
+      </div>
+      <div class="flex flex-col gap-2">
+          <span class="font-medium">Autorisation Envoi : </span>
+
+          <div class="flex gap-3">
+            <span *ngFor="let item of filterModePorts()" class="flex gap-3">
+              <mat-checkbox
+                class="example-margin"
+                [value]="item.id"
+                (change)="onSendChange($event)"
+                aria-checked="true"
+                [ngModel]="isSelected('send', item.id)"
+                [ngModelOptions]="{ standalone: true }"
+                >{{ item.title }}</mat-checkbox
+              >
+            </span>
+          </div>
+      </div>
+      <div class="flex flex-col gap-2">
+          <mat-label class="font-medium">Autorisation Récéption : </mat-label>
+          <div class="flex gap-3">
+            <span *ngFor="let item of filterModePortsReceive()" class="flex gap-3">
+              <mat-checkbox
+                class="example-margin"
+                [value]="item.id"
+                (change)="onRecieveChange($event)"
+                aria-checked="true"
+                [ngModel]="isSelected('receive', item.id)"
+                [ngModelOptions]="{ standalone: true }"
+                >{{ item.title }}</mat-checkbox
+              >
+            </span>
+          </div>
+    </div>
+    <div class="flex-col border-l-4 border-black pl-8">
+        <section class=" mb-4">
+          <mat-checkbox
+            class=" mr-3"
+            formControlName="senderPriority"
+            [disabled]="f.receiverPriority.value"
+            aria-checked="true"
+          ></mat-checkbox>
+          <mat-label class="font-medium">Priorité expéditeur</mat-label>
+        </section>
+        <div>
+          <section>
+            <mat-checkbox
+            class="mr-3"
+            formControlName="receiverPriority"
+            [disabled]="f.senderPriority.value"
+            aria-checked="true"
+          >
+          </mat-checkbox>
+            <mat-label class="font-medium">Priorité destinataire</mat-label>
+          </section>
+        </div>
+      </div>
+  </div>
+  <div
+  *ngIf="f.receiverPriority.value"
+  class="flex-col gap-3 mt-4 "
+>
+  <mat-form-field appearance="fill">
+    <mat-label>Client</mat-label>
+    <input
+      type="text"
+      placeholder="Client"
+      formControlName="client"
+      (ngModelChange)="modelChangeFn($event)"
+      matInput
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of options"
+        ng-show="isShown"
+        (click)="fill(option, option.id)"
+        class="cl_name"
+        [ngValue]="option.id"
+      >
+        {{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <p class="pt-2 pb-6">
+    Vos destinataires sont autorisés à utiliser votre offre
+  </p>
+
+  <div
+    class="flex items-center gap-1 pt-5"
+    *ngFor="let item of f.allowedSenders.value"
+  >
+    <img
+      [src]="'../../../../assets/img/user.png'"
+      alt="Default avatar"
+      class="rounded avatar mr-2"
+    />
+    <span class="font-normal text-[18px] pl-2 text-[#0C8040]">{{
+      item.id
+    }}</span>
+    <div class="divider"></div>
+    <span class="font-normal text-[18px] pl-2">{{
+      item.name
+    }}</span>
+  </div>
+</div>
+
+    <div class="border-b-4 border-[#CEF4C9] mb-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Facturation
+      </p>
+    </div>
+    <div class="grid grid-cols-5 gap-4 mb-4 content-center ">
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>libellé analytique</mat-label>
+          <input matInput type="text"  formControlName="analytique_libelle"/>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Compte</mat-label>
+          <input matInput type="text"  formControlName="compte"/>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Compte analytique</mat-label>
+          <input matInput type="text" formControlName="compte_analytique" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Délai echéance (Jour)</mat-label>
+          <input
+            formControlName="payment_deadline"
+            value="delay"
+            matInput
+            type="number"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Délai facturation (Jour)</mat-label>
+          <input matInput formControlName="delay_invoice" type="number" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Délai retour CRBT (Espèce) (Jour)</mat-label>
+          <input matInput formControlName="refund_delay" type="number" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Délai retours fonds et documents (Jour)</mat-label>
+          <input matInput type="number"  formControlName="return_fond_and_documents_delay"/>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%] ">
+          <mat-label>Nbre Exemplaire facture</mat-label>
+          <input matInput type="number"  formControlName="facture_nb_exemplaire"/>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Edition facture </mat-label>
+          <mat-select  formControlName="type_edition_facture">
+            <mat-option value="globale">Globale</mat-option>
+            <mat-option value="with_details">Détaillée</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Agent de recouvrement</mat-label>
+          <mat-select  formControlName="recouvreur_id">
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-checkbox
+          class="example-margin"
+          aria-checked="true"
+          formControlName="envoi_facutre_electronique"
+          >Envoi facture électronique</mat-checkbox
+        >
+      </div>
+    
+    </div>
+
+      <div  class="mb-4 grid grid-cols-2 gap-4">
+        <input 
+          #ImgRIBInput
+          hidden="true"
+          (change)="selectFile($event , 'RIB')"
+          type="file"
+          accept="image/jpeg,image/gif,image/png"
+        >
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>RIB</mat-label>
+          <input  matInput type="text"  formControlName="RIB"/>
+          <div class="flex items-center gap-2 cursor-pointer " matSuffix   (click)="download('RIB')" >
+            <span>
+              Visualiser
+            </span>
+            <mat-icon  class="p-0" >image</mat-icon>
+          </div>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>Banque</mat-label>
+          <mat-select formControlName="banque">
+              <mat-option
+                *ngFor="let item of banques"
+                [value]="item"
+              >
+            {{ item }}
+          </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    
+    <div class="border-b-4 border-[#CEF4C9] mb-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Commercial
+      </p>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mb-4  mt-5">
+      <div>
+        <mat-form-field appearance="fill" class="w-[100%]">
+          <mat-label>commercial</mat-label>
+          <mat-select formControlName="commercial_id">
+            <mat-option [value]=""> Choisissez un commercial </mat-option>
+            <mat-option
+              *ngFor="let item of merchants"
+              [value]="item.id"
+            >
+              {{ item.first_name }} {{ item.last_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+    </div>
+
+
+
+
+    <div class="border-b-4 border-[#CEF4C9] mb-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Notification
+      </p>
+    </div>
+    <div class="flex flex-col gap-4 " formGroupName="email_notifcation">
+
+
+      <div class=" flex gap-4 items-center">
+        <mat-slide-toggle formControlName="mail_crbt_active"
+         class="w-1/6"
+        >
+            Notification CRBT
+        </mat-slide-toggle>
+        <div class="flex gap-4 items-center" formGroupName="crbt">
+          <div>
+            <mat-form-field appearance="fill" class="w-100%">
+              <mat-label>Adresse de notification CRBT</mat-label>
+              <input matInput type="text"
+              [attr.disabled]="!mail_crbt_active"
+              formControlName="mail_crbt"
+              />
+            </mat-form-field>
+          </div>
+          <mat-slide-toggle
+           formControlName="mail_crbt_for_exp"
+          >
+            Envoyer au expéditeur
+          </mat-slide-toggle>
+          <mat-slide-toggle
+           formControlName="mail_crbt_for_des"
+          >
+            Envoyer au destinataire
+          </mat-slide-toggle>
+
+        </div>
+
+      </div>
+
+      <div class=" flex gap-4 items-center" >
+        <mat-slide-toggle 
+        class="w-1/6"
+         formControlName="mail_suffering_active"
+        >
+            Notification Souffrance
+        </mat-slide-toggle>
+
+        <div class="flex gap-4 items-center" formGroupName="suffering">
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Adresse de notification Souffrance</mat-label>
+            <input matInput type="text" 
+            formControlName="mail_suffering"
+            />
+          </mat-form-field>
+          <mat-slide-toggle
+           formControlName="mail_suffering_for_exp"
+          >
+            Envoyer au expéditeur
+          </mat-slide-toggle>
+          <mat-slide-toggle
+           formControlName="mail_suffering_for_des"
+          >
+            Envoyer au destinataire
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div class="flex gap-4 items-center" >
+
+        <mat-slide-toggle 
+        class="w-1/6"
+         formControlName="mail_facture_active"
+        >
+            Notification Facture
+        </mat-slide-toggle>
+
+        <div class="flex gap-4 items-center" formGroupName="facture">
+
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Adresse de notification Facture</mat-label>
+            <input matInput type="text" 
+            formControlName="mail_facture"
+            />
+          </mat-form-field>
+
+          <mat-slide-toggle
+
+           formControlName="mail_facture_for_exp"
+          >
+            Envoyer au expéditeur
+          </mat-slide-toggle>
+          <mat-slide-toggle
+            formControlName="mail_facture_for_des"
+          >
+            Envoyer au destinataire
+          </mat-slide-toggle>
+
+        </div>
+
+   
+      </div>
+      <div class="flex items-center gap-4" >
+        <mat-slide-toggle 
+          class="w-1/6"
+          formControlName="mail_exploitation_active"
+        >
+            Notification Exploitation
+        </mat-slide-toggle>
+        <div class="flex gap-4 items-center" formGroupName="exploitation">
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Adresse de notification Exploitation</mat-label>
+            <input matInput type="text" 
+              formControlName="mail_exploitation"
+
+            />
+          </mat-form-field>
+
+          <mat-slide-toggle
+           formControlName="mail_exploitation_for_exp"
+          >
+            Envoyer au expéditeur
+          </mat-slide-toggle>
+          <mat-slide-toggle
+           formControlName="mail_exploitation_for_des"
+          >
+            Envoyer au destinataire
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+
+    <mat-slide-toggle formControlName="notification_sms_activated"
+        name="date_expiration_enable"
+        class=" mt-4"
+       >
+         Notification SMS
+    </mat-slide-toggle>
+    <div class="flex flex-col gap-4 mt-4" formArrayName="notifications">
+      <div
+        *ngFor="
+          let notification of CustomerFormGroup.get('notifications')['controls'];
+          let i = index
+          let last = last
+        "
+        [formGroupName]="i"
+        class="flex gap-3 items-center"
+      >
+        <div>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Telephone</mat-label>
+            <input matInput type="text" 
+             [disabled]="!f.notification_sms_activated.value"    
+             formControlName="phone"        
+             [pattern]="phonePattern" maxlength="10" 
+            />
+         </mat-form-field>
+          <div *ngIf="phone?.errors?.pattern" class="text-danger text-xs">
+            Numéro de téléphone non valide.
+          </div> 
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Process expédition</mat-label>
+            <mat-select  [disabled]="!f.notification_sms_activated.value"
+              formControlName="process"        
+            >
+              <mat-option value="P1">P1</mat-option>
+              <mat-option value="P2">P2</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+          <mat-slide-toggle
+            formControlName="send_to_exp"
+          >
+            Envoyer au expéditeur
+          </mat-slide-toggle>
+          <mat-slide-toggle
+           formControlName="send_to_dest"
+          >
+            Envoyer au destinataire
+          </mat-slide-toggle>
+        
+          <mat-icon *ngIf="last && f.notification_sms_activated.value" class="text-[#0C8040] relative top-[6px] cursor-pointer" (click)="addNotification('' , '')"
+          >
+          add_circle_outline</mat-icon>      
+
+        <mat-icon *ngIf="!last && f.notification_sms_activated.value" class="text-danger cursor-pointer" (click)="removeSmsNotification(i)"
+        >
+        delete</mat-icon>   
+
+      </div>
+
+    </div>
+
+
+    <div class="border-b-4 border-[#CEF4C9] mb-4 mt-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Interlocuteur(s)
+      </p>
+    </div>
+    <div class="flex flex-col gap-4" formArrayName="interlocutors">
+
+        <div
+          *ngFor="
+            let notification of CustomerFormGroup.get('interlocutors')['controls'];
+            let i = index
+            let last = last
+          "
+          [formGroupName]="i"
+          class="flex gap-3 items-center"
+        >
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-label>Nom</mat-label>
+                <input matInput type="text" formControlName="last_name" />
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-label>Prénom</mat-label>
+                <input matInput type="text" formControlName="first_name" />
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-label>Fonction</mat-label>
+                <input matInput type="text" formControlName="fonction" />
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-label>Téléphone</mat-label>
+                <input matInput type="text"  formControlName="phone"/>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-label>E-mail</mat-label>
+                <input matInput type="email" formControlName="email" />
+              </mat-form-field>
+            </div> 
+
+            <mat-icon *ngIf="last" class="text-[#0C8040] relative top-[6px] cursor-pointer" (click)="addInterlocutor()"
+              >add_circle_outline</mat-icon>      
+
+            <mat-icon *ngIf="!last" class="text-danger cursor-pointer" (click)="removeInterlocutor(i)"
+              >delete</mat-icon>   
+
+        </div>
+     
+    </div>
+
+
+    <div class="border-b-4 border-[#CEF4C9] mb-4 mt-4">
+      <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px] font-bold">
+        Potentiel / Minimum
+      </p>
+    </div>
+    <div class="grid grid-cols-2">
+      <div class="flex flex-col gap-2 mt-4">
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Potentiel CA (DH)</mat-label>
+            <input
+              formControlName="potentiel_ca"
+              value="Potentiel"
+              matInput
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="periode_potentiel_ca">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Potentiel colis</mat-label>
+            <input
+              formControlName="colis_potentiel"
+              matInput
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label >Période</mat-label>
+            <mat-select formControlName="periode_colis_potentiel" >
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Potentiel Poids (Kg) </mat-label>
+            <input
+              formControlName="poids_potentiel"
+              matInput
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label >Période</mat-label>
+            <mat-select  formControlName="periode_poids_potentiel">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      
+
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Potentiel Nb Expédetion</mat-label>
+            <input
+              matInput
+              formControlName="nb_exp_potentiel"
+
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label>Période</mat-label>
+            <mat-select  formControlName="periode_nb_exp_potentiel">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Potentiel Volume (m3)</mat-label>
+            <input
+              matInput
+              formControlName="volume_potentiel"
+              
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label >Période</mat-label>
+            <mat-select formControlName="periode_volume_potentiel">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 mt-2">
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Minimum CA (DH)</mat-label>
+            <input formControlName="min_ca" value="Minimum CA" matInput type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" >
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="min_ca_period">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Minimum Colis</mat-label>
+            <input formControlName="min_colis" value="Minimum Colis" matInput type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="min_colis_period">
+              <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Minimum Poids (Kg)</mat-label>
+            <input formControlName="min_poids" value="Minimum Poids" matInput type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="min_poids_period">
+               <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Minimum Nb Expédetion</mat-label>
+            <input formControlName="min_exp" value="Minimum Nb Expéd." matInput type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="min_exp_period">
+               <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+          <mat-form-field appearance="fill" >
+            <mat-label>Minimum Volume (m3)</mat-label>
+            <input formControlName="min_vol" value="Minimum Volume" matInput type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-100%">
+            <mat-label>Période</mat-label>
+            <mat-select formControlName="min_vol_period">
+               <mat-option value="Mois">Mois</mat-option>
+              <mat-option value="Trimestre">Trimestre</mat-option>
+              <mat-option value="Année">Année</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-4  items-center">
+      <div>
+        <mat-slide-toggle
+          class="example-margin"
+          class="w-[100%] "
+          formControlName="handled_by_bo"
+          >Prise en charge par le Back-office</mat-slide-toggle
+        >
+      </div>
+
+      <div class="flex gap-3 items-center ml-6">
+        <div>
+          <mat-slide-toggle
+            class="example-margin"
+            class="w-[100%]"
+            formControlName="use_prepaid_card"
+            >Carte prépayé</mat-slide-toggle
+          >
+        </div>
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>N° Carte</mat-label>
+            <input  matInput type="text" 
+             [disabled]="!f.use_prepaid_card.value"
+             formControlName="prepaid_card"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+   
+    </div>
+    <div class="flex mt-4 mb-4">
+      <div class=" flex file-images flex-col justify-center items-center mt-4" >
+        <button (click)="download('INFO_FILE')">
+          Visualiser le document
+        </button>
+        <mat-icon>cloud_download</mat-icon>
+      </div>
+    </div>
+    
+    <div class="flex justify-between p-4">
+      <button
+        class="underline w-32 mr-3 font-bold text-[18px]"
+      >
+        Annuler
+      </button>
+      <button
+        *ngIf="!isLoading"
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+        type="submit"
+      >
+          Modifier
+      </button>
+      <span *ngIf="isLoading" class="text-right">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>
+    </div>
+  </form>
+</div>  
+</div>

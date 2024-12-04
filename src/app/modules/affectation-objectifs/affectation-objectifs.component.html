@@ -1,0 +1,215 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 vehiculetabs"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">assignment</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Affectation des objectifs
+      </h2>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer pl-5" (click)="affectation()">
+        <mat-icon class="pt-[5px] text-[#0C8040]">people</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Affecter</h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex mt-3">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Objectif"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      multiTemplateDataRows
+      class="mat-elevation-z8"
+    >
+      <ng-container
+        matColumnDef="{{ column }}"
+        *ngFor="let column of columnsToDisplay"
+      >
+        <ng-container *ngIf="column !== 'Objectif'; else Objectif">
+          <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+        <ng-template #Objectif>
+          <th mat-header-cell *matHeaderCellDef>Objectif</th>
+          <th mat-header-cell *matHeaderCellDef>Objectif</th>
+          <td class="flex pt-3" mat-cell *matCellDef="let element">
+            <span>{{ element.Objectif }}</span>
+            <mat-icon
+              class="pl-2"
+              (click)="
+                expandedElement = expandedElement === element ? null : element
+              "
+              >{{
+                expandedElement === element
+                  ? "visibility_off"
+                  : "remove_red_eye"
+              }}</mat-icon
+            >
+          </td>
+        </ng-template>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [attr.colspan]="columnsToDisplay.length"
+        >
+          <div
+            *ngFor="let detail of element.detail"
+            class="example-element-detail justify-around"
+            [@detailExpand]="
+              element == expandedElement ? 'expanded' : 'collapsed'
+            "
+          >
+            <td>
+              {{ element.Objectif }}
+            </td>
+            <td>
+              {{ detail.Attendu }}
+            </td>
+            <td>
+              {{ detail.Date_expiration }}
+            </td>
+            <td class="flex pt-3">
+              <span
+                ><mat-icon class="text-[#0C804081]"
+                  >remove_red_eye</mat-icon
+                ></span
+              >
+              <span class="pl-2">{{ detail.Nbr_commerciaux }}</span>
+            </td>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: columnsToDisplay"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: ['expandedDetail']"
+        class="example-detail-row"
+      ></tr>
+    </table>
+  </ng-container> -->
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let header of headerColumuns"
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <!-- <th
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex justify-end">Actions</div>
+          </th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of objectifs; let i = index">
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngIf="item.details_objectif.length"
+          >
+            <td class="p-3 flex" (click)="onclick(i)">
+              <mat-icon class="text-[#0C8040] pr-1">gps_fixed</mat-icon>
+              {{ item.name }}
+              <mat-icon class="pl-1">
+                {{
+                  !isVisible(i) ? "remove_red_eye" : "visibility_off"
+                }}</mat-icon
+              >
+            </td>
+            <!-- <td class="p-3 flex" (click)="onclick(i)">
+              Casa
+              <mat-icon class="pl-1">
+                {{
+                  !isVisible(i) ? "remove_red_eye" : "visibility_off"
+                }}</mat-icon
+              >
+            </td> -->
+            <!-- <td class="p-3">{{ item.name }}</td>
+            <td class="p-3">{{ item.name }}</td>
+            <td class="p-3">{{ item.name }}</td>
+            <td class="p-3">{{ item.name }}</td>
+            <td class="p-3">{{ item.name }}</td> -->
+          </tr>
+          <ng-container *ngIf="isVisible(i)">
+            <tr *ngFor="let detail of item.details_objectif">
+              <td></td>
+              <td>{{ detail.zone?.city?.name }}</td>
+              <td>{{ detail.zone?.name }}</td>
+              <td
+                class="p-3"
+                [matTooltip]="joinSectors(detail.zone?.sectors)"
+                matTooltipPosition="above"
+              >
+                {{ joinSectors(detail.zone?.sectors) | truncate: [15, "..."] }}
+              </td>
+              <td class="p-3">
+                {{ detail?.objectifable?.name }}
+                {{ detail?.objectifable?.first_name }} {{ detail?.objectifable?.last_name }}
+              </td>
+              <!-- <td class="p-3" *ngIf="detail.objectifable_type == 'Agency' ">{{ detail.objectifable.name }} </td> -->
+              <td class="p-3">
+                <!-- {{ detail.date_debut | date:'MMMM' : 'fr-FR' }}  -->
+                {{ translate(detail.date_debut) }}
+              </td>
+              <td class="p-3">{{ detail.date_debut | date: 'yyyy' }}</td>
+              <td class="p-3">{{ detail.attendu }}</td>
+              <td class="p-3">{{ detail.reel }}</td>
+              <!-- <td class="p-3">Actions</td> -->
+              <td class="p-3">
+                <div class="flex items-center pl-4 justify-end">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu" class="cursor-pointer" >more_vert</mat-icon >
+                </div>
+  
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="edit(detail)">Modifier</button>
+                  <button mat-menu-item (click)="delet(detail.uuid)"> Supprimer </button>
+                </mat-menu>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container>
+</div>

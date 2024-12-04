@@ -1,0 +1,98 @@
+<div [ngClass]="
+    merchant_uuid
+      ? ''
+      : 'bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6'
+  ">
+  <div class="grid grid-cols-2" *ngIf="!merchant_uuid">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">
+        Gestion des comptes clients
+      </h1>
+    </div>
+    <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Clients', 'C')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]" (click)="openDialog()">
+          Client
+        </h2>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+      (filter)="filter($event)"></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <ng-container *ngIf="!spinner">
+    <div class="overflow-x-auto relative mt-4">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of data; let i = index">
+            <td class="p-3">C-00{{ item.id }}</td>
+            <td class="p-3">
+              <div class="flex items-center justify-between">
+                <img class="w-10 h-10" [src]="logoSrc(item)">
+                <span class="inline-block max-w-full overflow-hidden text-overflow-ellipsis whitespace-nowrap">
+                  {{ item.name }}
+                </span>
+              </div>
+            </td>
+            <td class="p-3">{{ item.type == 'individual' ? 'Particulier' : 'Entreprise' }}</td>
+            <td class="p-3 capitalize">{{ item?.customer_type?.replace('_', ' ') }}</td>
+            <td class="p-3">{{ item?.activity?.title }}</td>
+            <td class="p-3">{{ item?.adresse_siege?.adress }}</td>
+            <td class="p-3">{{ item?.adresse_siege?.sector?.zone?.name }}</td>
+            <td class="p-3">{{ item?.agence_rattachement?.name }}</td>
+            <td class="p-3">{{ item?.city?.name }}</td>
+            <td class="p-3">{{ item.phone }}</td>
+            <td class="p-3">{{ item.email }}</td>
+            <td class="p-3">{{ item.identity_number }}</td>
+            <td class="p-3">{{ item.is_active == true ? "Oui" : "Non" }}</td>
+            <td class="p-3">{{ item.is_visible == true ? "Oui" : "Non" }}</td>
+            <td class="p-3">{{ item.GMS == true ? "Oui" : "Non" }}</td>
+            <td class="p-3">{{ item.return_fund_management == 'Check' ? "Chèque" : "Virement" }}</td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button (click)="goToEditPage(item?.uuid)" mat-menu-item *ngIf="permissionService.hasPermission('Gestion commerciale', 'Clients', 'U')">
+                  <mat-icon>edit</mat-icon>
+                  Modifier
+                </button>
+
+                <button mat-menu-item (click)="goToDetailPage(item?.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Clients', 'R')">
+                  <mat-icon>info</mat-icon>
+                  Détails
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-10">
+      <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+        (onPageChange)="paginate($event)" [rowsPerPageOptions]="pageParamItems">
+      </p-paginator>
+    </div>
+  </ng-container>
+</div>

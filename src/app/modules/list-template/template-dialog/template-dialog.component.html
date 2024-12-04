@@ -1,0 +1,77 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Créer une offre sectorielle</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <form [formGroup]="templateForm">
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill" class="w-[100%] mb-4 mt-3">
+        <mat-label>Secteur d'activité</mat-label>
+        <mat-select (selectionChange)="onActivityChange($event)">
+          <mat-option *ngFor="let activity of activities" [value]="activity.id">
+            {{ activity.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="title" type="text" />
+      </mat-form-field> -->
+      <i-field
+        [type]="'text'"
+        [label]="'Titre'"
+        formControlName="title"
+      ></i-field>
+      <div class="w-full m-auto flex mt-4">
+        <input
+          class="block text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-4 w-[82%]"
+          id="multiple_files"
+          type="file"
+          multiple=""
+          formControlName="file"
+          (change)="onFileChange($event)"
+          accept=".xlsx, .xls, .csv"
+        />
+        <label
+          *ngIf="!spinner"
+          class="block leading-[4.5] text-sm font-medium text-white bg-black rounded-[28px] ml-[20px] pl-[30px] pr-[30px] shadow-[0px_3px_6px_#00000029]"
+          for="multiple_files"
+          >Parcourir</label
+        >
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="cursor-pointer underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abonndonner
+        </button>
+      </div>
+      <div class="flex justify-end">
+        <button
+          *ngIf="!spinner"
+          [ngClass]="
+            templateForm.valid
+              ? 'cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+              : 'cursor-pointer bg-gray-200 text-gray-700 border-gray-200 rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+          "
+          [disabled]="templateForm.invalid"
+          type="submit"
+          (click)="importTemplate()"
+        >
+          Ajouter
+        </button>
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

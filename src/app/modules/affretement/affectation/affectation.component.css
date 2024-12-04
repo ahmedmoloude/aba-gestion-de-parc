@@ -1,0 +1,147 @@
+.calendar-container{
+    overflow-y: scroll;
+    max-height: 600x;
+    height: 500px;
+    margin-left: -26px;
+    margin-right: -26px;
+    padding-left: 26px;
+    padding-right: 26px;
+    -ms-overflow-style: none; /* hide scrollbar on Internet Explorer */
+    scrollbar-width: none; /* hide scrollbar on Firefox */
+  }
+  
+  .calendar-container::-webkit-scrollbar {
+    display: none; /* hide scrollbar on Chrome, Safari, and Opera */
+  }
+.init-td{
+    margin-bottom: -20px;
+    visibility: hidden;
+}
+.day, .day-name {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+.day{
+    border-top: none;
+}
+.day:last-child, .day-name {
+    border-right: 1px solid #ccc;
+}
+.day-name h3{
+    background-color: teal;
+    color: white;
+}
+
+.data{
+    display: table-row;
+}
+.calendar, .header{
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.calendar .day, .header .day-name{
+    display: table-cell;
+}
+.day-name h3 {
+    margin: 0;
+    padding: 5px;
+}
+.day-name .total-in-day{
+    padding: 10px;
+    background-color: #0080801c;
+}
+/* .ignore{
+    width: 0 !important;
+    height: 140px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    opacity: 0 !important;
+}
+.demande{
+    background-color: #2bdaab;
+    text-align: left;
+    margin: 10px;
+    padding: 10px 10px 0px 10px;
+    z-index: 1;
+    position: relative;
+    width: 146px;
+    min-height: 140px;
+    box-shadow:  0 0 2px #00000061;
+    background: #F2FCF1 0% 0% no-repeat padding-box;
+    border: 1px solid #E0E0E0;
+    border-radius: 11px;
+    opacity: 1;
+} */
+.days{
+    display: table-row;
+}
+.day-name{
+    display: table-cell;
+}
+.week-switcher {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.week-switcher .week{
+    text-transform: capitalize;
+}
+.week-switcher .pi {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox {
+    display: none;
+}
+  
+.checkbox + label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+  
+.checkbox:checked + label:before {
+    content: "✔";
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    line-height: 19px;
+    background: #0c8040;
+    border-radius: 3px;
+}
+.label{
+    position: absolute;
+    background: white;
+    top: -18%;
+    left: 3%;
+    padding: 0px 10px;
+    font-size: 13px;
+    color: grey;
+}
+
+::ng-deep mat-divider {
+    height: 70%;
+    margin: auto !important;
+}
+
+.btn-assigner{
+    font-size: 10px;
+    background-color: #ccc;
+    padding: 4px;
+    border-radius: 4px;
+}
+.txt-orange{
+    color: orange;
+}
+.txt-green{
+    color: #0c8040;
+}

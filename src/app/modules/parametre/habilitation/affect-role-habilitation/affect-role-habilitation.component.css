@@ -1,0 +1,16 @@
+tr:nth-child(even) {
+  background-color: #F2FCF1;
+}
+::ng-deep .ngx-pagination .current {
+  background: #0C8040 !important;
+}
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+background-color: #0C8040 ;
+}
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background{
+background-color: #0C8040 ;
+}
+.brp{
+border-bottom: 1px solid #ccc;
+  padding: 10px;
+}

@@ -1,0 +1,212 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <ng-container *ngIf="!this.disableActions">
+        <h2 *ngIf="!this.dialogData.editMode" mat-dialog-title class="col-span-2">
+          Ajout d'une condition de
+          {{
+            this.dialogData.rubric_type === "transport"
+              ? "Transport"
+              : this.dialogData.conv_title
+          }}
+        </h2>
+        <h2 *ngIf="this.dialogData.editMode" mat-dialog-title class="col-span-2">
+          Modification d'une condition de
+          {{
+            this.dialogData.rubric_type === "transport"
+              ? "Transport"
+              : this.dialogData.conv_title
+          }}
+        </h2>
+      </ng-container>
+  
+      <!-- details mode -->
+      <h2 *ngIf="this.disableActions" mat-dialog-title class="col-span-2">
+        Détails d'une condition de
+        {{
+          this.dialogData.rubric_type === "transport"
+            ? "Transport"
+            : this.dialogData.conv_title
+        }}
+      </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div *ngIf="isLoading" class="flex items-center justify-center m-4">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <form
+      *ngIf="!isLoading"
+      [formGroup]="conditionForm"
+      (ngSubmit)="onFormSubmit()"
+    >
+      <div mat-dialog-content>
+        <!-- heritage -->
+        <div>
+          <div class="grid grid-cols-1 sm:grid-cols-2">
+            <div>
+              <label class="pb-5 pl-3 font-medium">Origine</label>
+              <select
+                class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+                formControlName="origine"
+              >
+                <option value="">TOUT</option>
+                <option
+                  *ngFor="let item of cities"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="pb-5 pl-3 font-medium">Destination</label>
+              <select
+                class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+                formControlName="destination"
+              >
+                <option value="">TOUT</option>
+                <option
+                  *ngFor="let item of cities"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- specific conditions -->
+        <div formArrayName="tranches">
+          <div class="border-b-2 border-[#0C8040]"></div>
+          <h1 class="pt-5 pb-4 text-[#0C8040] font-medium">Tranches</h1>
+          <div *ngFor="let item of tranches.controls; let idx = index">
+            <div
+              class="grid grid-cols-1 sm:grid-cols-3 items-center"
+              [formGroupName]="idx"
+            >
+              <div class="flex">
+                <div class="relative flex items-center">
+                  <p class="pr-2 font-medium">De</p>
+                  <input
+                    class="w-[77%] ml-1 py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                    type="number"
+                    formControlName="tranche_min"
+                  />
+                </div>
+                <div class="relative flex items-center">
+                  <p class="pr-2 font-medium">À</p>
+                  <input
+                    class="w-[77%] ml-1 py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                    type="number"
+                    formControlName="tranche_max"
+                  />
+                </div>
+              </div>
+              <div class="pb-3">
+                <label class="pb-5 pl-3 font-medium">Type de valeur</label>
+                <select
+                  class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+                  formControlName="type_val"
+                >
+                  <option value="">
+                    --- Sélectionner le type de valeur ---
+                  </option>
+                  <option value="PRICE">Prix fixe</option>
+                  <option value="COEF">Pourcentage</option>
+                </select>
+              </div>
+              <div class="pb-3">
+                <label class="pb-5 pl-3 font-medium">Montant</label>
+                <input
+                  class="w-[98%] py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                  type="number"
+                  formControlName="tranche_prix"
+                />
+              </div>
+              <div class="pb-3">
+                <label class="pb-5 pl-3 font-medium">Minimum par expédition</label>
+                <input
+                  class="w-[98%] py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                  type="number"
+                  formControlName="min_prix"
+                />
+              </div>
+              <div class="pb-3">
+                <label class="pb-5 pl-3 font-medium">Maximum par expédition</label>
+                <input
+                  class="w-[98%] py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                  type="number"
+                  formControlName="max_prix"
+                />
+              </div>
+              <div class="pb-3">
+                <label class="pb-5 pl-3 font-medium">Montant sup</label>
+                <input
+                  class="w-[98%] py-3 pl-3 pr-3 text-sm border-2 rounded-sm border-[#DBDBDB]"
+                  type="number"
+                  formControlName="prix_supp"
+                />
+              </div>
+  
+              <div class="flex items-center pb-3">
+                <!-- delete button -->
+                <span
+                  *ngIf="!this.disableActions"
+                  class="cursor-pointer text-[#D80404]"
+                  (click)="removeTranche(idx)"
+                >
+                  <mat-icon class="pt-5">delete</mat-icon>
+                </span>
+              </div>
+  
+            </div>
+  
+            <div class="border-b-2 border-[#0000004F] mb-3 mt-3"></div>
+          </div>
+  
+          <div
+            *ngIf="!this.disableActions"
+            class="flex pt-5 pb-5 cursor-pointer"
+            (click)="addNewTranche()"
+          >
+            <span
+              ><mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+            </span>
+            <h1 class="text-[#0C8040] pl-2">Ajouter une ligne</h1>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+          Abandonner
+          </button>
+        </div>
+        <div class="text-right" *ngIf="!this.disableActions">
+
+            {{getFormValidationErrors(this.conditionForm)}}
+          <button
+            type="submit"
+            [ngClass]="
+              !this.conditionForm.valid || this.tranches.value.length === 0
+                ? 'bg-gray-200 text-gray-700 border-gray-200 rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+                : 'bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+            "
+            [disabled]="
+              !this.conditionForm.valid || this.tranches.value.length === 0
+            "
+          >
+            {{ this.dialogData.editMode ? "Modifier" : "Enregistrer" }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  

@@ -1,0 +1,82 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">
+      Fusionner La tournée N°
+      {{ "R-" + tour?.uuid.split("-")[0].toUpperCase() }}
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <mat-form-field class="w-full p-5" appearance="fill">
+        <mat-label>Tourné parent</mat-label>
+        <mat-select [(ngModel)]="tour_id" (selectionChange)="onChangeTour()">
+          <mat-option
+            *ngFor="let item of this.dialogData.tours"
+            [value]="item.id"
+          >
+            {{
+              "R-" +
+                item?.uuid.split("-")[0].toUpperCase() +
+                " | " +
+                item.zone?.name
+            }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="flex items-center">
+        <div class="icon ml-4">
+          <mat-icon class="text-[19px] text-[#138742]">pin_drop</mat-icon>
+        </div>
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[14px]">Tournées a fusionées :</p>
+          <p class="text-[14px] text-[#000000]">{{ zonesToMerge }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <mat-form-field class="w-full p-6" appearance="fill">
+        <mat-label>Chauffeur</mat-label>
+        <mat-select [(ngModel)]="driver_id">
+          <mat-option *ngFor="let item of this.drivers" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full p-5" appearance="fill">
+        <mat-label>Vehicule</mat-label>
+        <mat-select [(ngModel)]="truck_id">
+          <mat-option *ngFor="let item of this.trucks" [value]="item.id">
+            {{ item.matricule + " | " + item.tonnage + "T" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abondonner
+        </button>
+      </div>
+      <div class="text-right" *ngIf="!isLoading">
+        <button
+          (click)="onSubmit()"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        >
+          Fusionner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

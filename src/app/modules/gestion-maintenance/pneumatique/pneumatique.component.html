@@ -1,0 +1,98 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">settings</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Pneumatique</h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer" (click)="addPneumatique()" *ngIf="permissionService.hasPermission('Gestion de parc', 'Pneumatique', 'C')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="pneu$ | async as pneumatiqueState">
+
+    <!--Start  Fliter -->
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+        (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <!--End  Fliter -->
+
+    <div *ngIf="pneumatiqueState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+
+    <div class="mt-10">
+      <ng-container *ngIf="pneumatiqueState?.dataState == 'SUCCESS'">
+        <div *ngIf="pneumatiqueState?.pneus?.length <= 0" class="flex flex-col items-center">
+          <h2>La liste des pneus est vide</h2>
+        </div>
+        <ng-container *ngIf="pneumatiqueState?.pneus?.length > 0">
+          <div class="overflow-auto">
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                  *ngFor="let item of pneumatiqueState.pneus">
+                  <td class="p-3">{{(item?.code_pneu) || '---'}}</td>
+                  <td class="p-3">{{(item?.type_pneu) || '---'}}</td>
+                  <td class="p-3">{{(item?.date_acquisition | date: 'dd/MM/yyyy') || '---'}}</td>
+                  <td class="p-3">{{(item?.km_acquisition) || '---'}}</td>
+                  <td class="p-3">{{(item?.dmc | date: 'dd/MM/yyyy') || '---'}}</td>
+                  <td class="p-3">{{(item?.last_affectation?.date_debut | date: 'dd/MM/yyyy') || '---'}}</td>
+                  <td class="p-3">{{(item?.last_affectation?.date_fin | date: 'dd/MM/yyyy') || '---'}}</td>
+                  <td class="p-3">{{(item?.usure ) || '---'}}</td>
+                  <td class="p-3">{{(item?.pression) || '---'}}</td>
+                  <td class="p-3">{{(item?.profondeur) || '---'}}</td>
+                  <td class="p-3">{{(item?.last_affectation?.km_depart) || '---'}}</td>
+                  <td class="p-3 cursor-pointer">
+                    <div class="inline-block">
+                      <button *ngIf="!item?.affected" pButton pRipple type="button" label="Affecter"
+                        class="p-button-rounded p-button-success" (click)="affectevehicule(item)"></button>
+                      <button *ngIf="item?.affected" (click)="desaffectVehicule(item?.id)" pButton pRipple type="button"
+                        label="Désaffecter" class="p-button-rounded p-button-danger"></button>
+                    </div>
+                    <mat-icon class="text-right" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="getDetailPneumatique(item?.id)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                        Détails
+                      </button>
+                      <button mat-menu-item (click)="updatePneumatique(item)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Pneumatique', 'U')">
+                        <mat-icon>edit</mat-icon>
+                        Modifier
+                      </button>
+                      <button mat-menu-item (click)="deletePneumatique(item?.id)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Pneumatique', 'D')">
+                        <mat-icon>delete</mat-icon>
+                        Supprimer
+                      </button>
+                    </mat-menu>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-10">
+            <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+              (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+            </p-paginator>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,21 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">Réference</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div class="p-4">
+        <form >
+            <div class="pl-0 mt-4 pr-7 mb-4">
+                <i-field [type]="'number'" [label]="'Réference'" ></i-field>
+            </div>    
+        <div class="flex justify-end">
+            <button  pButton pRipple type="submit" label="Enregistrer" class="p-button-rounded p-button-success"></button>
+        </div>
+        </form>
+    </div>
+  </div>
+  

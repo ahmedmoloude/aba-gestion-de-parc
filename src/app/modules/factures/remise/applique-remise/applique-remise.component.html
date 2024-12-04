@@ -1,0 +1,90 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Appliquer une remise</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="text-center mt-4 mb-4">
+      <mat-icon class="pt-1 text-5xl text-[#B2B2B2]">monetization_on</mat-icon>
+    </div>
+    <div class="grid grid-cols-2 gap-2" *ngFor="let facture of factures">
+      <div>
+        <div class="flex justify-center">
+          <mat-icon class="pt-1">assignment</mat-icon>
+          <h2 class="font-semibold pl-2 text-size">
+            N° de facture :<span class="text-[#0C8040]">{{facture?.reference}}</span>
+          </h2>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-center">
+          <mat-icon class="pt-1">person</mat-icon>
+          <h2 class="font-semibold pl-2 text-size">
+            CLient : <span class="text-[#0C8040]">{{facture?.customer?.name}}</span>
+          </h2>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="discountForm">
+      <div class="grid grid-cols-1 gap-2 pl-4 pr-4" *ngIf="discountTypes$ | async as discountState">
+        <div *ngIf="discountState.dataState != 'LOADING' && discountState.discountTypes as discountTypes">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type de remise</mat-label>
+            <mat-select matNativeControl required formControlName="discountType">
+              <mat-option *ngFor="let type of discountTypes" [value]="type.id">{{type.libelle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div >
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Nature de remise</mat-label>
+            <mat-select matNativeControl required formControlName="nature"   (selectionChange)="getDiscountAmount(factures)">
+              <mat-option  value="Fix">Valeur</mat-option>
+              <mat-option  value="Pourcentage">Taux</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>{{ discountForm.controls.nature.value == 'Pourcentage'?'% Taux de remise': 'remise'}}</mat-label>
+            <input matInput type="number" formControlName="discountRate" (change)="getDiscountAmount(factures)"/>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Remise sur</mat-label>
+            <mat-select matNativeControl required formControlName="discountOn"  (selectionChange)="getDiscountAmount(factures)">
+              <mat-option value="Facture">Facture</mat-option>
+              <mat-option value="Service">Service</mat-option>
+              <mat-option value="Transport">Transport</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <h2 class="text-center" *ngIf="discountAmount">
+        Montant de remise : <span class="text-[#0C8040]">{{discountAmount | number}}</span>
+      </h2>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close>
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button (click)="createRemise()" [disabled]="discountForm.invalid"  *ngIf="!spinner"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+            Valider
+          </button>
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

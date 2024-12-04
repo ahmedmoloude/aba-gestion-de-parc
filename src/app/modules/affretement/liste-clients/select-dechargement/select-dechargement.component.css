@@ -1,0 +1,48 @@
+.icon-eselect{
+  position: absolute;
+  right: 0;
+  top: -25px;
+  bottom: 0;
+}
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+
+.z-absolute {
+  position: absolute !important;
+  z-index: 100;
+  width: 446px;
+}
+
+.input-wrapper {
+  position: relative;
+ }
+
+
+
+label {
+  position: absolute;
+   left: 7px;
+   color: #808080;
+  top: -14px;
+  background-color: white;
+    font-size: 10px;
+   width: 120px;
+  text-align: center;
+}
+
+.select-label{
+  position: absolute;
+  left: 5px; /* Adjust the value to your desired positioning */
+  color: #808080; /* Adjust the color as needed */
+z-index: 1;
+ top: -14px;
+ background-color: white;
+   font-size: 10px;
+  width: 60px;
+ text-align: center;
+}
+.select-field{
+  position: relative;
+
+}

@@ -1,0 +1,6 @@
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
+    background-color: #0C8040;
+}
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #0C8040;
+}

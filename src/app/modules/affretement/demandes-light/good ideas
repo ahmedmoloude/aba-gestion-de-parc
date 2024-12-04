@@ -1,0 +1,73 @@
+$loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        $credentials = [$loginType => $request->login, 'password'=>$request->password];
+        if (!Auth::attempt($credentials)) {
+            return $this->jsonResponse(false, 401, 'AUTH_401', [], 'Invalid credentials');
+        }
+
+
+git push https://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@github.com/sc-plus/sdtm_api.git develop
+git pull https://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@github.com/sc-plus/sdtm_api.git develop
+
+git push https://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@github.com/sc-plus/sdtm_bo.git develop
+git pull https://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@github.com/sc-plus/sdtm_bo.git develop
+
+git push https://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@github.com/anas-senhaji/med.git develop
+git pull https://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@github.com/anas-senhaji/med.git develop
+
+ssh -i sdtm-key.pem deploy@34.135.241.250
+docker exec -it sdtm_api /bin/bash
+
+docker build -t gps_python
+docker run -p 5000:5000 gps_python
+
+git push https://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@github.com/anas-senhaji/laavelStructure.git master
+git push https://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@github.com//anas-senhaji/angularStructure.git master
+
+https://github.com/anas-senhaji/laavelStructure.git
+
+
+
+
+
+
+
+
+
+Objet : Résiliation de Contrat de ENNAJID Sofyane
+
+Bonjour,
+
+Je vous écris pour demander la résiliation du contrat de travail de ENNAJID Sofyane en raison de retards et d'absences répétés, ainsi que de retards dans la livraison de tâches cruciales.
+
+Ces problèmes ont eu un impact sur notre équipe et nos projets, et malheureusement, malgré nos efforts pour les résoudre, la situation persiste. Par conséquent, nous avons pris la décision de mettre fin au contrat de ENNAJID Sofyane conformément à ses termes contractuels.
+
+Nous sommes prêts à collaborer avec le service des ressources humaines pour faciliter une transition en douceur.
+
+Merci pour votre compréhension.
+
+Cordialement,
+SENHAJI Anas
+Tech-lead
+
+
+
+
+
+Objet : Demande d'Avertissement pour ENNAJID Sofyane
+
+Bonjour,
+
+Je vous écris pour solliciter la délivrance d'un avertissement formel à ENNAJID Sofyane, membre de mon équipe, en raison de problèmes persistants liés à son retard, son absence et le retard dans la livraison de ses tâches.
+
+Ces problèmes ont eu un impact négatif sur notre équipe et nos projets, et malheureusement, malgré nos efforts pour les résoudre, la situation persiste. En accord avec nos procédures internes, nous considérons qu'un avertissement formel est nécessaire pour sensibiliser ENNAJID Sofyane à l'importance de respecter les normes de performance et de ponctualité de notre entreprise.
+
+Le présent avertissement est enregistré dans son dossier personnel. Nous attendons de ENNAJID Sofyane qu'il prenne des mesures immédiates pour corriger ces comportements et améliorer sa performance au sein de l'entreprise. Il est important de noter que des mesures plus sévères pourraient être prises si des améliorations substantielles ne sont pas observées dans un délai raisonnable.
+
+Nous restons prêts à offrir notre soutien à ENNAJID Sofyane pour l'aider à améliorer sa situation, et nous suivrons de près ses progrès.
+
+Merci pour votre compréhension et votre soutien dans cette démarche.
+
+Cordialement,
+SENHAJI Anas
+Tech-lead
+

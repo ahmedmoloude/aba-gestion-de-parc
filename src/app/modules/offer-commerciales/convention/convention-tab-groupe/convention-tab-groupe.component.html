@@ -1,0 +1,73 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">Choisir une template</h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <nav aria-label="Breadcrumb">
+      <ol role="list" class="flex items-center space-x-1 text-sm text-gray-500">
+        <li>
+          <mat-icon>arrow_back</mat-icon>
+        </li>
+        <li>
+          <a class="block transition-colors hover:text-gray-700" href="/">
+            Liste des templates
+          </a>
+        </li>
+        <li>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </li>
+
+        <li>
+          <a class="block transition-colors text-[#0C8040]" href="#">
+            (08-2022)
+          </a>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="relative tabs-utilisateur">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">group</mat-icon>
+            Service Palettes
+          </ng-template>
+          <app-service-palette></app-service-palette>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">beenhere</mat-icon>
+            Service Colis
+          </ng-template>
+          <app-service-colis></app-service-colis>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">local_airport</mat-icon>
+            Service Colis Hors normes
+          </ng-template>
+          <app-service-hors-normes></app-service-hors-normes>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+    <div>
+      <button class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+        Retour
+      </button>
+    </div>
+    <div class="text-right">
+      <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+      >
+        Confirmer
+      </button>
+    </div>
+  </div>
+</div>

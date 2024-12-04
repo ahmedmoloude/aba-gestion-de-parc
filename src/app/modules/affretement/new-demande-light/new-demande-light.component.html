@@ -1,0 +1,354 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+  *ngIf="!loading"
+>
+  <ng-container *ngIf="!detail_taxation?.transport">
+    <div class="flex items-center justify-center mb-6">
+      <span class="font-bold text-green-600 text-xl">
+        Demande d'affretement light
+      </span>
+    </div>
+    <div [formGroup]="demandeLightFormGroup">
+      <div class="flex gap-2 mt-4 mb-4">
+        <div class="w-full">
+          <i-field
+            [type]="'date'"
+            [label]="'Date début de Réservation'"
+            formControlName="date_debut"
+            [minValue]="todayDate"
+            (changeValue)="setDateDebutReservation($event)"
+          >
+          </i-field>
+        </div>
+
+        <div class="w-full">
+          <i-field
+            [type]="'date'"
+            [label]="'Date fin de Réservation'"
+            formControlName="date_fin"
+            [minValue]="date_debut"
+          >
+          </i-field>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mb-4">
+        <div class="select-field w-full">
+          <label class="select-label">Type d'affrètement </label>
+          <mat-form-field class="w-[100%]" appearance="fill">
+            <mat-select formControlName="affretment_type_id">
+              <mat-option
+                *ngFor="let item of affretment_types"
+                [value]="item.id"
+                >{{ item.title }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <app-shared-autcomplete
+          #searchComponentExp
+          [charToGetAll]="'*'"
+          [data]="customers"
+          [keys]="['first_name', 'last_name', 'name']"
+          [lengthToStart]="1"
+          [display]="['name']"
+          [placeholer]="'Rechercher l\'expéditeur...'"
+          (dataEvent)="onExpChange($event)"
+        >
+        </app-shared-autcomplete>
+        <!-- 
+        <mat-form-field class="w-[100%]" appearance="fill">
+          <mat-label>Expéditeur</mat-label>
+          <input
+            type="text"
+            formControlName="expediteur_id"
+            placeholder="Expéditeur"
+            (ngModelChange)="modelChangeFn($event)"
+            matInput
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of customers"
+              ng-show="isShown"
+              (click)="to_fill(option.id, option.name)"
+              class="cl_name"
+              [ngValue]="option.id"
+            >
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field> -->
+      </div>
+
+      <div class="flex gap-2 mb-4">
+        <div class="select-field w-full">
+          <!-- <label class="select-label">Origine </label> -->
+          <app-shared-autcomplete
+            #searchComponentOrigin
+            [charToGetAll]="'*'"
+            [data]="cities"
+            [keys]="['code', 'name']"
+            [lengthToStart]="1"
+            [display]="['code', 'name']"
+            [placeholer]="'Rechercher l\'origine...'"
+            (dataEvent)="onOriginChange($event)"
+          >
+          </app-shared-autcomplete>
+        </div>
+        <div class="select-field w-full">
+          <!-- <label class="select-label">Destination </label> -->
+          <app-shared-autcomplete
+            #searchComponentDest
+            [charToGetAll]="'*'"
+            [data]="cities"
+            [keys]="['code', 'name']"
+            [lengthToStart]="1"
+            [display]="['code', 'name']"
+            [placeholer]="'Rechercher la destination...'"
+            (dataEvent)="onDestChange($event)"
+          >
+          </app-shared-autcomplete>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mb-4">
+        <div class="select-field w-full">
+          <label class="select-label">Type de camion</label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-select formControlName="type_camion_id">
+              <mat-option
+                *ngFor="let vehicule of truck_types"
+                [value]="vehicule.id"
+              >
+                {{ vehicule.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-field w-full">
+          <label class="select-label">Tonnage</label>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-select formControlName="tonnage_id">
+              <mat-option *ngFor="let tonnage of tonnages" [value]="tonnage.id">
+                {{ tonnage.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mb-4">
+        <app-shared-autcomplete
+          [type]="'single'"
+          [charToGetAll]="'*'"
+          [data]="getTrucks"
+          [keys]="['code_interne', 'matricule']"
+          [lengthToStart]="2"
+          [display]="['code_interne', 'matricule']"
+          [placeholer]="'Camion...'"
+          [addSeparator]="true"
+          (dataEvent)="selectTruck($event)"
+        >
+        </app-shared-autcomplete>
+
+        <app-shared-autcomplete
+          [type]="'single'"
+          [charToGetAll]="'*'"
+          [data]="drivers"
+          [keys]="['first_name', 'last_name']"
+          [lengthToStart]="2"
+          [display]="['first_name', 'last_name']"
+          [placeholer]="'Chauffeur...'"
+          [addSeparator]="true"
+          (dataEvent)="selectDriver($event)"
+        >
+        </app-shared-autcomplete>
+      </div>
+
+      <div>
+        <div class="flex justify-between mb-3">
+          <span class="font-bold text-green-600 text-lg">
+            Liste des points de déchargement
+          </span>
+
+          <button
+            class="p-2 bg-green-600 text-white font-bold"
+            (click)="addUnloadingPoint()"
+          >
+            <span> Nouveau point </span>
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-2" formArrayName="unloading_points">
+          <ng-container
+            *ngFor="
+              let point of demandeLightFormGroup.get('unloading_points')[
+                'controls'
+              ];
+              let i = index
+            "
+          >
+            <div class="flex gap-2" [formGroupName]="i">
+
+              <app-shared-autcomplete
+                [charToGetAll]="'*'"
+                [data]="customers"
+                [keys]="['first_name', 'last_name', 'name']"
+                [lengthToStart]="1"
+                [display]="['name']"
+                [placeholer]="'Rechercher la destinataire...'"
+                (dataEvent)="onDestinatireChange($event, i)"
+              >
+              </app-shared-autcomplete>
+
+              <app-shared-autcomplete
+                #searchComponentOrigin
+                [charToGetAll]="'*'"
+                [data]="cities"
+                [keys]="['code', 'name']"
+                [lengthToStart]="1"
+                [display]="['code', 'name']"
+                [placeholer]="'Ville...'"
+                (dataEvent)="onDestinatireCityChange($event, i)"
+              >
+              </app-shared-autcomplete>
+
+              <app-shared-autcomplete
+                #searchComponentOrigin
+                [charToGetAll]="'*'"
+                [data]="deliveryAdresseByDest(i)"
+                [keys]="['adress']"
+                [lengthToStart]="1"
+                [display]="['adress']"
+                [placeholer]="'Adresse...'"
+                (dataEvent)="onDestinatireAdresseChange($event, i)"
+              >
+              </app-shared-autcomplete>
+
+              <i-field
+                formControlName="dec_code"
+                [type]="'text'"
+                [label]="'Nº Decleration'"
+              >
+              </i-field>
+
+              <i-field
+                formControlName="nb_palette"
+                [type]="'number'"
+                [label]="'Nombre des palette '"
+              >
+              </i-field>
+
+              <i-field
+                formControlName="declared_value"
+                [type]="'number'"
+                [label]="'Valeur déclarée'"
+              >
+              </i-field>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end mb-3 mt-4">
+      <button
+        *ngIf="!submitting && !detail_taxation?.transport"
+        class="p-2 bg-green-600 text-white font-bold"
+        (click)="submit()"
+      >
+        <span> Valider </span>
+      </button>
+
+      <div *ngIf="submitting && !detail_taxation?.transport">
+        <mat-spinner [diameter]="30"></mat-spinner>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="detail_taxation?.transport">
+    <div class="flex items-center justify-center mb-6">
+      <span class="font-bold text-green-600 text-xl">
+        Taxation récapitulatif
+      </span>
+    </div>
+    <div
+      class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] border-[4px] border-[#0C8040] rounded-[8px] h-[115px] items-center"
+    >
+      <div class="width-content">
+        <div class="flex items-center justify-between">
+          <div class="icon ml-1">
+            <mat-icon class="text-[18px] text-[#138742]">money</mat-icon>
+          </div>
+          <div class="pl-24">
+            <p class="text-[#0C8040] text-[16px] font-normal">Total HT</p>
+            <p class="text-[14px] text-[#000000]">
+              {{ detail_taxation?.transport.total_ht }} Dhs
+            </p>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="pl-24">
+            <p class="text-[#0C8040] text-[16px] font-normal">Total TVA</p>
+            <p class="text-[14px] text-[#000000]">
+              {{ detail_taxation?.transport?.total_ttc -  detail_taxation?.transport?.total_ht }} Dhs
+            </p>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="pl-24">
+            <p class="text-[#0C8040] text-[16px] font-normal">Total TTC</p>
+            <p class="text-[14px] text-[#000000]">
+              {{ detail_taxation?.transport.total_ttc }} Dhs
+            </p>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="pl-24">
+            <i-field
+              [(ngModel)]="new_amount"
+              [type]="'number'"
+              [label]="'Nouveau montant HT'"
+            >
+            </i-field>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="felx items-center justify-center gap-2">
+
+        <div *ngIf="new_amount > old_amount">
+          <button
+            class="p-2 bg-green-600 text-white font-bold"
+            (click)="updateAmountDemandeLight()"
+          >
+            <span> Modifier </span>
+          </button>
+        </div>
+
+
+        <div>
+          <button
+            class="p-2 bg-green-600 text-white font-bold"
+
+            routerLink="/listedemandesLight"
+          >
+            <span> Confirmer </span>
+          </button>
+        </div>
+      </div>
+   
+
+    </div>
+  </ng-container>
+</div>
+
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full"
+  *ngIf="loading"
+>
+  <div class="flex items-center justify-center">
+    <mat-spinner [diameter]="60"></mat-spinner>
+  </div>
+</div>

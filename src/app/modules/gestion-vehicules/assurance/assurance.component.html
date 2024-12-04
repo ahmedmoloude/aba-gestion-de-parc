@@ -1,0 +1,337 @@
+<app-documentadmin-groupe [item]="item"></app-documentadmin-groupe>
+<!-- <div class="flex mt-4">
+  <div class="w-5/6">
+    <div class="flex flex-row mb-5">
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Matricule"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="number"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Expiration assurance"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Expiration Vignette"
+        />
+      </div>
+      <div class="basis-1/3">
+        <input
+          type="text"
+          class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Prochaine visite"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="w-1/6 flex items-start">
+    <button
+      class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3"
+    >
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filter</span>
+    </button>
+  </div>
+</div> -->
+
+<!-- <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div> -->
+
+<!-- <div *ngIf="!spinner">
+  <div *ngIf="asurances.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8]">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Assurance :
+      </p>
+    </div>
+    <div class="grid grid-cols-5 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Ste d'assurance :</p>
+        <p class="font-medium">{{ asurances["0"]?.fournisseur }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ asurances["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ asurances["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de police :</p>
+        <p class="font-medium">{{ asurances["0"]?.n_police }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant :</p>
+        <p class="font-medium">{{ asurances["0"]?.montant }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant (Jours) :</p>
+        <p class="font-medium">{{ asurances["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + asurances['0'].id + '/' }}{{ asurances['0'].file }} "
+          target="_blank"
+          >Document</a
+        >
+
+      </div>
+    </div>
+  </div>-->
+
+  <!-- <div *ngIf="vignettes.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Vignette :
+      </p>
+    </div>
+    <div class="grid grid-cols-5 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ vignettes["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ vignettes["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
+        <p class="font-medium">{{ vignettes["0"]?.tonnage?.name }} T</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant ( Jours ) :</p>
+        <p class="font-medium">{{ vignettes["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Puissance fiscale</p>
+        <p class="font-medium">{{ vignettes["0"]?.puissance_fiscale }} CV</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant (DH) :</p>
+        <p class="font-medium">{{ vignettes["0"]?.montant }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + vignettes['0'].id + '/' }}{{ vignettes['0'].file }} "
+          target="_blank"
+          >Document</a
+        >
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="visites.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Visite technique :
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Derniére visite :</p>
+        <p class="font-medium">{{ visites["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Prochaine visite technique</p>
+        <p class="font-medium">{{ visites["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Ville :</p>
+        <p class="font-medium">{{ visites["0"]?.city?.name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Prestataire :</p>
+        <p class="font-medium">{{ visites["0"]?.fournisseur }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant :</p>
+        <p class="font-medium">{{ visites["0"]?.montant }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant ( Jour )</p>
+        <p class="font-medium">{{ visites["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + visites['0'].id + '/' }}{{ visites['0'].file }} "
+          target="_blank"
+          >Document</a
+        >
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="carteGrises.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Carte grise :
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° carte grise :</p>
+        <p class="font-medium">{{ carteGrises["0"]?.n_carte_grise }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ carteGrises["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ carteGrises["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° de châssis :</p>
+        <p class="font-medium">{{ carteGrises["0"]?.n_chassis }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant (Jours) :</p>
+        <p class="font-medium">{{ carteGrises["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + carteGrises['0'].id + '/' }}{{
+            carteGrises['0'].file
+          }} "
+          target="_blank"
+          >Document</a
+        >
+
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="autorisations.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Autorisation de circulation :
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° d’autorisation :</p>
+        <p class="font-medium">{{ autorisations["0"]?.n_autorisation }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Objet :</p>
+        <p class="font-medium">{{ autorisations["0"]?.objet }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ autorisations["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ autorisations["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant (Jours) :</p>
+        <p class="font-medium">{{ autorisations["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + autorisations['0'].id + '/' }}{{
+            autorisations['0'].file
+          }} "
+          target="_blank"
+          >Document</a
+        >
+
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="tachygraphes.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Carnet Tachygraphe
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° d’ordre :</p>
+        <p class="font-medium">{{ tachygraphes["0"]?.n_ordre }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Code :</p>
+        <p class="font-medium">{{ tachygraphes["0"]?.code }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ tachygraphes["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ tachygraphes["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant (Jours) :</p>
+        <p class="font-medium">{{ tachygraphes["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + tachygraphes['0'].id + '/' }}{{
+            tachygraphes['0'].file
+          }} "
+          target="_blank"
+          >Document</a
+        >
+
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="essieus.length >= 1">
+    <div class="border-b-4 border-[#E8E8E8] mt-5">
+      <p class="bg-[#E8E8E8] text-[#000] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Taxe d'essieu
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">N° taxe :</p>
+        <p class="font-medium">{{ essieus["0"]?.n_taxe }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de début :</p>
+        <p class="font-medium">{{ essieus["0"]?.start_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date de fin :</p>
+        <p class="font-medium">{{ essieus["0"]?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Montant :</p>
+        <p class="font-medium">{{ essieus["0"]?.montant }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Rappel avant (Jours) :</p>
+        <p class="font-medium">{{ essieus["0"]?.rappel }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Document :</p>
+        <a
+          href="{{ url + essieus['0'].id + '/' }}{{ essieus['0'].file }} "
+          target="_blank"
+          >Document</a
+        >
+      </div>
+    </div>
+  </div> -->
+

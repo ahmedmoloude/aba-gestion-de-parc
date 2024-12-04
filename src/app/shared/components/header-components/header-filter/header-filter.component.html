@@ -1,0 +1,33 @@
+<div class="flex flex-row justify-center items-center header-filter">
+  <div class="flex justify-center items-center basis-1/2">
+    <mat-form-field class="items-center">
+      <!-- <mat-label>Choose a date</mat-label> -->
+      <input matInput [matDatepicker]="picker" />
+      <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+      <mat-datepicker-toggle matSuffix [for]="picker">
+        <mat-icon class="icon-down" matDatepickerToggleIcon
+          >keyboard_arrow_down</mat-icon
+        >
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <mat-divider [vertical]="true" class="ml-3 mr-3"></mat-divider>
+  <div class="flex justify-center items-center basis-1/2">
+    <mat-form-field>
+      <!-- <mat-label>Select an option</mat-label> -->
+      <mat-select disableRipple>
+        <mat-option value="1">Option 1</mat-option>
+        <mat-option value="2">Option 2</mat-option>
+        <mat-option value="3">Option 3</mat-option>
+      </mat-select>
+      <button
+        mat-icon-button
+        class="flex flex-row justify-center items-center"
+        matSuffix
+      >
+        <mat-icon class="icon-down">keyboard_arrow_down</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>

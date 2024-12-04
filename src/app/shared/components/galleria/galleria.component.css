@@ -1,0 +1,41 @@
+.img-vh{
+  width: 396px;
+  height: 237px;
+  object-fit: contain;
+}
+
+::ng-deep .pi-chevron-right:before,
+::ng-deep .pi-chevron-left:before {
+  color: black;
+}
+::ng-deep .p-galleria-item-nav {
+  top: 30% !important;
+}
+/* ::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-next-icon ,
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon{
+  font-size: 1.5rem !important;
+} */
+/* ::ng-deep .p-galleria .p-galleria-indicators {
+  padding: 0.2rem !important;
+} */
+
+::ng-deep .p-galleria .p-galleria-item-nav {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+::ng-deep .p-link:focus {
+  box-shadow: 0 0 0 0.1rem #a6d5fa;
+}
+
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-next-icon ,
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon{
+  font-size: 0.5rem !important;
+}
+::ng-deep .p-galleria .p-galleria-indicators {
+  padding: 1px !important;
+}
+::ng-deep .p-galleria .p-galleria-indicators .p-galleria-indicator button {
+  width: 0.5rem;
+  height: 0.5rem;
+}

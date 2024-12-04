@@ -1,0 +1,100 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h1 mat-dialog-title class="col-span-2">
+      Choisir une base de
+      {{
+      this.dialogData.type_rubric === "transport" ? "transport" : "service"
+      }}
+    </h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form>
+    <div mat-dialog-content>
+      <select type="text" class="p-3 w-full pr-12 border rounded-3xl mt-5 mb-5 border-[#DBDBDB]"
+        placeholder="Sélectionner une base de grille tarifaire" (change)="onSelectBaseGrid($event)"
+        [disabled]="isLoading">
+        <option value="template">Offres sectorielles</option>
+        <option value="offer">Offres commerciales</option>
+        <option value="public">Grilles publiques</option>
+      </select>
+      <!-- <div class="relative">
+        <input
+          class="w-full py-3 pl-3 pr-12 text-sm border-2 border-gray-200 rounded-3xl"
+          id="search"
+          type="text"
+          placeholder="Recherche"
+        />
+
+        <span
+          class="absolute text-gray-500 -translate-y-1/2 pointer-events-none top-1/2 right-4"
+        >
+          <mat-icon>search</mat-icon>
+        </span>
+      </div> -->
+
+      <div *ngIf="isLoading" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+      <ng-container *ngIf="!isLoading">
+        <table class="w-full text-left text-gray-500 mt-3">
+          <thead>
+            <tr>
+              <th *ngFor="let header of headerColumuns" scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor=" let item of this.selected_grids | paginate: { itemsPerPage: 5, currentPage: p } ">
+              <th class="p-3">
+                <mat-radio-group aria-label="Select an option" name="convention" [(ngModel)]="conv">
+                  <mat-radio-button [value]="item">
+                    {{
+                    type_selected_grid === "offer"
+                    ? item?.reference
+                    : item?.title
+                    }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </th>
+              <!-- <td class="p-3">--</td> -->
+              <td class="p-3">{{ item.created_at | date: "dd/MM/yyyy" }}</td>
+              <!-- <td class="p-3 flex">
+                <mat-icon>remove_red_eye</mat-icon>
+                <span class="underline pl-2 cursor-pointer">Prévisualiser</span>
+              </td> -->
+              <!-- <td class="p-3 text-right cursor-pointer">
+                <mat-icon>more_vert</mat-icon>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-10">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </ng-container>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close>
+          Abondonner
+        </button>
+      </div>
+      <div class="text-right">
+        <button (click)="onSelectConvention()" [ngClass]="
+            isLoading || !conv
+              ? 'bg-gray-200 text-gray-700 border-gray-200 rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+              : 'bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]'
+          " [disabled]="isLoading || !conv">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

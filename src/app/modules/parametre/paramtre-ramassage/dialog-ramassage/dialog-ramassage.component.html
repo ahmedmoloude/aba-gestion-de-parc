@@ -1,0 +1,96 @@
+<form class="p-5">
+    <div class="flex  gap-4 pl-3 pr-3 mt-5 ml-8">
+        <div class="w-40 pt-3">
+            <label>Type de ramassage</label>
+        </div>
+        <div class="w-96">
+            <mat-form-field appearance="fill" class="w-[100%]">
+                <mat-select>
+                  <mat-option>
+                    Domicile
+                  </mat-option>
+                  <mat-option>
+                    En Gare
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="flex  gap-4 pl-3 pr-3 mt-5 ml-8">
+        <div class="w-40 pt-3">
+            <label>Ville</label>
+        </div>
+        <div class="w-96">
+            <app-shared-autcomplete #searchComponent1 
+            [opended]="true"
+            [hasIcon]="false"
+            [type]="'single'" 
+            [contentStyle]="contentStyle" 
+            [inputStyle]="searchStyle" 
+            [charToGetAll]="'*'" 
+            [data]="cities" 
+            [keys]="['code', 'name']" 
+            [lengthToStart]="3" 
+            [display]="['code', 'name']" 
+            [placeholer]="'Rechercher la ville...'" 
+            (dataEvent)="departChange($event)">
+        </app-shared-autcomplete>
+        </div>
+    </div>
+    <div class="flex  gap-4 pl-3 pr-3 mt-5 ml-8">
+        <div class="w-40 pt-3">
+            <label>Agence / Secteur</label>
+        </div>
+        <div class="w-96">
+            <app-shared-autcomplete #searchComponent1 
+            [opended]="true"
+            [hasIcon]="false"
+            [type]="'single'" 
+            [contentStyle]="contentStyle" 
+            [inputStyle]="searchStyle" 
+            [charToGetAll]="'*'" 
+            [data]="agence" 
+            [keys]="['code', 'name']" 
+            [lengthToStart]="3" 
+            [display]="['code', 'name']" 
+            [placeholer]="'Rechercher la Agence / Secteur...'" 
+            (dataEvent)="departAgence($event)">
+        </app-shared-autcomplete>
+        </div>
+    </div>
+    <div class="flex  gap-4 pl-3 pr-3 mt-5 ml-8">
+        <div class="w-40 pt-3">
+            <label>Chauffeur</label>
+        </div>
+        <div class="w-96">
+            <app-shared-autcomplete #searchComponent1 
+            [opended]="true"
+            [hasIcon]="false"
+            [type]="'single'" 
+            [contentStyle]="contentStyle" 
+            [inputStyle]="searchStyle" 
+            [charToGetAll]="'*'" 
+            [data]="chauffeur" 
+            [keys]="['code', 'name']" 
+            [lengthToStart]="3" 
+            [display]="['code', 'name']" 
+            [placeholer]="'Rechercher Chauffeur...'" 
+            (dataEvent)="departChauffeur($event)">
+        </app-shared-autcomplete>
+        </div>
+    </div>
+    <div class="flex  gap-4 pl-3 pr-3 mt-8 ml-8">
+        <div class="w-40 pt-3">
+            <button
+            class="underline  pt-2 font-bold text-[18px]"
+            mat-dialog-close
+          >
+          Abondonner
+          </button>
+        </div>
+        <div class="flex justify-end w-96">
+            <button  pButton pRipple type="submit" label="Valider" class="p-button-rounded p-button-success"></button>
+        </div>
+    </div>
+      
+</form>

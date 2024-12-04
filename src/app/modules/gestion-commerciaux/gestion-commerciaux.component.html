@@ -1,0 +1,118 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">
+        Gestion des commerciaux
+      </h1>
+    </div>
+  </div>
+
+  <div class="grid mt-5">
+    <app-shared-filter [inputs]="inputsFiler" (filter)="filter($event)"></app-shared-filter>
+  </div>
+
+  <div class="overflow-x-auto relative mt-4">
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <div class="mt-2" *ngIf="!spinner">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px] items-center"
+        *ngFor="let item of merchants">
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">Code</p>
+              <p class="text-[12px] text-[#000000]">C-{{ item?.id }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[19px] text-[#138742]">person</mat-icon>
+            </div>
+            <div class="pl-0">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">
+                Nom et prénom
+              </p>
+              <p class="text-[12px] text-[#000000]">{{ item?.first_name }} {{ item?.last_name }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[19px] text-[#138742]">phone</mat-icon>
+            </div>
+            <div class="pl-0">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">Tél</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{ decode(item.contact).contact_1_gsm }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[19px] text-[#138742]">mail</mat-icon>
+            </div>
+            <div class="pl-0">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">Email</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{ decode(item.contact).email }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+            </div>
+            <div class="pl-0">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">
+                Zone commerciale
+              </p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]" [matTooltip]="joinZone(item.zonnes)" matTooltipPosition="above">
+                  {{ joinZone(item.zonnes) | truncate: [15, "..."] }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[19px] text-[#138742]">my_location</mat-icon>
+            </div>
+            <div class="pl-0">
+              <p class="text-[#b5b5b5] text-[10px] font-medium">
+                Nbr des objectifs affectés
+              </p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{ item?.objectif?.length }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button mat-button class="btn-details" (click)="details_objectif(item?.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Commerciaux', 'R')">
+            <mat-icon>remove_red_eye</mat-icon> Suivi des objectifs
+          </button>
+          <button mat-button class="btn-details" (click)="redirect(item?.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Commerciaux', 'R')">
+            <mat-icon>remove_red_eye</mat-icon> Détails
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

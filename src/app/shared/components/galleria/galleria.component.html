@@ -1,0 +1,19 @@
+<div *ngIf="imageList.length">
+  <p-galleria [(value)]="images" [(visible)]="displayCustom" [responsiveOptions]="responsiveOptions"
+    [containerStyle]="{ 'max-width': maxWidth }" [numVisible]="7" [circular]="true" [fullScreen]="false"
+    [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="3" [showIndicators]="true"
+    [showItemNavigatorsOnHover]="true" [showIndicatorsOnItem]="true">
+    >
+    <ng-template pTemplate="item" let-item>
+      <img [src]="item" style="width: 100%; display: block" class="img-vh" />
+    </ng-template>
+    <ng-template pTemplate="thumbnail" let-item>
+      <div class="p-grid p-nogutter p-justify-center">
+        <img [src]="item" style="display: block" />
+      </div>
+    </ng-template>
+  </p-galleria>
+</div>
+<div *ngIf="!imageList.length">
+  <img src="assets/img/camion.png" class="img-vh" />
+</div>

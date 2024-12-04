@@ -1,0 +1,43 @@
+::ng-deep mat-divider {
+    height: 70%;
+    margin: auto !important;
+}
+.btn-filter{
+    padding: 10px !important;
+}
+.width-info {
+    width: 10%
+}
+
+.width-content {
+    width: 25%
+}
+::ng-deep .mat-accordion .mat-expansion-panel:first-of-type {
+    background-color: transparent;
+    box-shadow: none;
+}
+.mb-0{
+    margin-bottom: 0px !important;
+}
+::ng-deep .mat-expansion-indicator::after{
+    border-color: #B2B2B2 !important; 
+}
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]) {
+    background: transparent;
+}
+::ng-deep .mat-expansion-panel-header{
+    padding: 0px !important;
+}
+::ng-deep .mat-expansion-panel-body {
+    padding: 0px !important;
+}
+.mx-auto{
+    margin: auto;
+}
+.detail-tourne{
+  background-color: #CEF4C9;
+  padding: 10px;
+}
+::ng-deep .mat-expansion-panel{
+    box-shadow: none !important;
+}

@@ -1,0 +1,143 @@
+<!-- <div class="calendar">
+    <div class="week-switcher">
+      <button (click)="previousWeek()">Previous week</button>
+      <span>{{ formatDate(currentWeekStart) }} - {{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</span>
+      <button (click)="nextWeek()">Next week</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Lundi</th>
+          <th>Mardi</th>
+          <th>Mercredi</th>
+          <th>Jeudi</th>
+          <th>Vendredi</th>
+          <th>Samedi</th>
+          <th>Dimanche</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ formatDate(currentWeekStart.getTime() + 0*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 1*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 2*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 3*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 4*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 5*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+  
+
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+    <h2><i class="pi pi-calendar text-xl mr-4"></i>Calendrier</h2>
+    <div class="grid grid-cols-12">
+        <div class="col-span-12">
+            <!-- col-span-12 MUST BIND AFTER  -->
+            <div class="grid grid-cols-12 mb-2">
+                <div class="col-span-6 flex">
+                    <div class="mr-4">
+                        <input [id]="1" type="checkbox" checked class="checkbox checkbox-success checkbox-md" />
+                        <label [for]="1" class="block w-full cursor-pointer font-semibold">
+                            Tout
+                        </label>
+                    </div>
+                    <div class="mr-4">
+                        <input [id]="2" type="checkbox" class="checkbox checkbox-success checkbox-md" />
+                        <label [for]="2" class="block w-full cursor-pointer font-semibold">
+                            En attente d’affectation
+                        </label>
+                    </div>
+                    <div class="mr-4">
+                        <input [id]="3" type="checkbox" class="checkbox checkbox-success checkbox-md" />
+                        <label [for]="3" class="block w-full cursor-pointer font-semibold">
+                            Validée
+                        </label>
+                    </div>
+                </div>
+                <div class="col-span-6 text-right">
+                    <div class="week-switcher">
+                        <button (click)="previousWeek()"><i class="pi pi-angle-left text-xl text-blue-500 mr-2"></i></button>
+                        <span class="week">{{ formatDate(currentWeekStart) }} - {{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</span>
+                        <button (click)="nextWeek()"><i class="pi pi-angle-right text-xl text-blue-500 ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calendar">
+                <div class="day">
+                    <h3>Lundi, {{formatToDay(0) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[0]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Mardi, {{formatToDay(1) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[1]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Mercredi, {{formatToDay(2) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[2]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Jeudi, {{formatToDay(3) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[3]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Vendredi, {{formatToDay(4) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[4]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Samedi, {{formatToDay(5) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[5]"></app-demande>
+                    </div>
+                </div>
+                <div class="day">
+                    <h3>Dimanche, {{formatToDay(6) }}</h3>
+                    <div class="total-in-day border-y">
+                        <p>12 en attente</p>
+                        <p>12 en cours</p>
+                    </div>
+                    <div>
+                        <app-demande [demande]="item" *ngFor="let item of filteredData[6]"></app-demande>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

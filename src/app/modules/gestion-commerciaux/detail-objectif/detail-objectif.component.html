@@ -1,0 +1,66 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">person</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        <span class="text-[#636363]">Liste des commerciaux ></span> Suivi des
+        objectifs "<span class="text-[#636363]" s
+          >{{ details?.first_name }} {{ details?.last_name }}</span
+        >"
+      </h2>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <!-- filter -->
+
+    <!-- filter -->
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="35"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!spinner">
+      <div class="overflow-x-auto relative mt-4">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th
+                *ngFor="let header of headerColumuns"
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+              >
+                <div class="flex items-center">
+                  {{ header }}  
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let item of details.objectif"
+            >
+              <td class="p-3">{{ item.objectif?.name }}</td>
+              <td class="p-3">{{ item.annee | date: 'yyyy'}}</td>
+              <td class="p-3">{{ item.reel01 }} / {{ item.janvier}}</td>
+              <td class="p-3">{{ item.reel02 }} / {{ item.fevrier }}</td>
+              <td class="p-3">{{ item.reel03 }} / {{ item.mars }}</td>
+              <td class="p-3">{{ item.reel04 }} / {{ item.avril }}</td>
+              <td class="p-3">{{ item.reel05 }} / {{ item.mai }}</td>
+              <td class="p-3">{{ item.reel06 }} / {{ item.juin }}</td>
+              <td class="p-3">{{ item.reel07 }} / {{ item.juillet }}</td>
+              <td class="p-3">{{ item.reel08 }} / {{ item.aout }}</td>
+              <td class="p-3">{{ item.reel09 }} / {{ item.septembre }}</td>
+              <td class="p-3">{{ item.reel10 }} / {{ item.octobre }}</td>
+              <td class="p-3">{{ item.reel11 }} / {{ item.novembre }}</td>
+              <td class="p-3">{{ item.reel12 }} / {{ item.decembre }}</td>
+              <!-- <td class="p-3">{{ item.reel08 }} / {{ item.reel }}</td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+</div>

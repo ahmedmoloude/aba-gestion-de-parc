@@ -1,0 +1,16 @@
+<div class="relative">
+    <input type="file" #fileInput (change)="onFileSelected($event)"
+      class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 leading-tight rounded-md focus:outline-none focus:bg-white focus:border-gray-500">
+    <div class="flex justify-between mt-4">
+      <button (click)="onEditImage()" *ngIf="imageSrc"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
+        Edit
+      </button>
+      <button (click)="onVisualizeImage()" *ngIf="imageSrc"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">
+        Visualize
+      </button>
+    </div>
+    <img [src]="imageSrc" *ngIf="imageSrc" class="mt-4">
+  </div>
+  

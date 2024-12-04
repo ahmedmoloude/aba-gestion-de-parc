@@ -1,0 +1,744 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">
+      Fiche de prospection commerciale
+    </h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form class="mt-7 mb-7 p-4" [formGroup]="prospectFormGroup">
+      <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="text-left">
+          <app-shared-autcomplete
+            #searchComponent1
+            [opended]="true"
+            [inputStyle]="{ width: '100%' }"
+            [contentStyle]="{ width: '100%' }"
+            [type]="'single'"
+            [charToGetAll]="'*'"
+            [data]="commercials"
+            [keys]="['first_name , last_name']"
+            [lengthToStart]="3"
+            [display]="['first_name' , 'last_name']"
+            [placeholer]="'Rechercher le commercial...'"
+            [label]="'Commercial'"
+            (dataEvent)="onUserChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div class="text-right">
+          <label for="date_prospection"><strong>Date de prospection : </strong></label>
+          <input 
+            class="date-prospection"
+            type="date"
+            formControlName="date_prospection"
+            id="date_prospection"
+          />
+        </div>
+        <div class="text-right">
+          <span>Date: </span><strong>{{ today | date: "dd/MM/yyyy" }}</strong>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 relative block-info first">
+        <h4 class="info-title">Informations clients</h4>
+        <div class="pl-5">
+          <input
+            type="radio"
+            formControlName="type_client"
+            id="radio-1"
+            value="Entreprise"
+          />
+          <label for="radio-1">Entreprise</label>
+
+          <input
+            type="radio"
+            formControlName="type_client"
+            id="radio-2"
+            value="Particulier"
+          />
+          <label for="radio-2">Particulier</label>
+        </div>
+        <div class="grid grid-cols-4 gap-4">
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'single'"
+              [charToGetAll]="'*'"
+              [data]="cities"
+              [keys]="['code', 'name']"
+              [lengthToStart]="3"
+              [display]="['code', 'name']"
+              [placeholer]="'Rechercher la ville...'"
+              [label]="'Ville *'"
+              (dataEvent)="oncityChange($event)"
+            ></app-shared-autcomplete>
+          </div>
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'single'"
+              [charToGetAll]="'*'"
+              [opended]="true"
+              [data]="agencies"
+              [keys]="['code_agency', 'name']"
+              [lengthToStart]="3"
+              [display]="['code_agency', 'name']"
+              [placeholer]="'Rechercher l\'agence...'"
+              [label]="'Agence *'"
+              (dataEvent)="onagenceChange($event)"
+            ></app-shared-autcomplete>
+          </div>
+          <div *ngIf="f.type_client.value == 'Entreprise'">
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Raison sociale...'"
+              [label]="'Raison sociale *'"
+              formControlName="name"
+            ></app-shared-autcomplete>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="Social_reason" placeholder="Raison sociale..."> -->
+          </div>
+          <div *ngIf="f.type_client.value == 'Particulier'">
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Nom du client...'"
+              [label]="'Nom du client *'"
+              formControlName="name"
+            ></app-shared-autcomplete>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="Social_reason" placeholder="Raison sociale..."> -->
+          </div>
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Nom du contact...'"
+              [label]="'Nom du contact *'"
+              formControlName="name_contact"
+            ></app-shared-autcomplete>
+            <div class="error" *ngIf="isInvalidName">Format incorrecte</div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="name" placeholder="Nom du contact..."> -->
+          </div>
+
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Adresse...'"
+              [label]="'Adresse *'"
+              formControlName="Adress_1"
+            ></app-shared-autcomplete>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="Adress_1" placeholder="Adresse..."> -->
+          </div>
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Téléphone...'"
+              [label]="'Téléphone *'"
+              [maxLength]="10"
+              formControlName="phone"
+            ></app-shared-autcomplete>
+
+            <div class="error" *ngIf="isInvalid && prospectFormGroup.get('phone').errors.invalidPhone">Format incorrecte</div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="phone" placeholder="GSM..."> -->
+          </div>
+
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'single'"
+              [opended]="true"
+              [charToGetAll]="'*'"
+              [data]="activities"
+              [keys]="['title']"
+              [lengthToStart]="3"
+              [display]="['title']"
+              placeholer="Rechercher Secteur d'activité..."
+              [label]="'Secteur d\'activité'"
+              (dataEvent)="onSecteurActivityChange($event)"
+            ></app-shared-autcomplete>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="secteur_activite" placeholder="Secteur d'activité..."> -->
+          </div>
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Adresse E-mail...'"
+              [label]="'Adresse E-mail'"
+              formControlName="email"
+            ></app-shared-autcomplete>
+            <div class="error" *ngIf="isInvalidEmail ">Format incorrecte</div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="email" placeholder="Adresse E-mail..."> -->
+          </div>
+
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'single'"
+              [opended]="true"
+              [charToGetAll]="'*'"
+              [data]="zones"
+              [keys]="['code', 'name']"
+              [lengthToStart]="3"
+              [display]="['code', 'name']"
+              [placeholer]="'Rechercher la zone...'"
+              [label]="'Zone *'"
+              (dataEvent)="onZoneChange($event)"
+            ></app-shared-autcomplete>
+          </div>
+          <div>
+            <div>
+              <app-shared-autcomplete
+                #searchComponent1
+                [type]="'single'"
+                [opended]="true"
+                [charToGetAll]="'*'"
+                [data]="sectors"
+                [keys]="['code', 'name']"
+                [lengthToStart]="3"
+                [display]="['code', 'name']"
+                [placeholer]="'Rechercher le secteur...'"
+                [label]="'Secteur *'"
+                (dataEvent)="onSectorChange($event)"
+              ></app-shared-autcomplete>
+            </div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="secteur_ramassage" placeholder="Secteur de ramassage..."> -->
+          </div>
+          <div>
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir Fax...'"
+              [label]="'Fax'"
+              [maxLength]="10"
+              formControlName="fax"
+            ></app-shared-autcomplete>
+
+            <div class="error" *ngIf="isInvalidFax && prospectFormGroup.get('fax').errors.invalidPhone">Format incorrecte</div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="fax" placeholder="Fax..."> -->
+          </div>
+
+          <div *ngIf="f.type_client.value == 'Entreprise'">
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir ICE...'"
+              [label]="'ICE'"
+              [maxLength]="14"
+              formControlName="identity_number"
+            ></app-shared-autcomplete>
+
+            <div class="error" *ngIf="isInvalidICE">Format incorrecte</div>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="identity_number" placeholder="ICE..."> -->
+          </div>
+          <div *ngIf="f.type_client.value == 'Particulier'">
+            <app-shared-autcomplete
+              #searchComponent1
+              [type]="'text'"
+              [placeholer]="'Saisir CIN...'"
+              [label]="'CIN'"
+              [maxLength]="14"
+              formControlName="identity_number"
+            ></app-shared-autcomplete>
+            <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="identity_number" placeholder="CIN..."> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 relative block-info first">
+        <h4 class="info-title">Informations sur l'activité</h4>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [uniqueKey]="'id'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="services"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Nature de transport'"
+            [label]="'Nature de transport *'"
+            (dataEvent)="onNatureTransportChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [disabled]="disabledCamion"
+            [type]="'multiple'"
+            [uniqueKey]="'id'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="tonnages"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Type de camion'"
+            [label]="'Type de camions'"
+            (dataEvent)="onCamionChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Nombre de colis Moy/J...'"
+            [label]="'Nombre de colis Moy/J'"
+            [typeInput]="'number'"
+            formControlName="nbr_colis"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="nbr_colis" placeholder="Nombre de colis Moy/J..."> -->
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="marchandise"
+            [uniqueKey]="'id'"
+            [keys]="['title']"
+            [lengthToStart]="3"
+            [display]="['title']"
+            [placeholer]="'Rechercher Type de marchandise'"
+            [label]="'Type de marchandise'"
+            (dataEvent)="onMarchandiseChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <!-- #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Nature de marchandise...'"
+            [label]="'Nature de marchandise'"
+            formControlName="nature_marchandie" -->
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [uniqueKey]="'id'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="natures_marchandises"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Nature d\'envoi...'"
+            [label]="'Nature d\'envoi'"
+            (dataEvent)="onNatureMarchandiseChange($event)"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="nature_marchandie" placeholder="Nature de marchandise..."> -->
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Poids moyen des colis...'"
+            [label]="'Poids moyen de colis (kg)'"
+            [typeInput]="'number'"
+            formControlName="poids"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="poids" placeholder="Poids moyen des colis..."> -->
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Volume moyen (Longeur X Largeur X Hauteur)...'"
+            [label]="'Volume moyen (m³)'"
+            [typeInput]="'number'"
+            formControlName="volume"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="volume" placeholder="Volume moyen (Longeur X Largeur X Hauteur)"> -->
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="destinations"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Destination...'"
+            [label]="'Destination'"
+            (dataEvent)="onDestinationChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="type_collecte"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Type de collecte'"
+            [label]="'Type de collecte'"
+            (dataEvent)="onCollecteChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="nature_livraison"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Nature de livraison'"
+            [label]="'Nature de livraison'"
+            (dataEvent)="onLivraisonChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'single'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="nature_prix"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Nature de prix'"
+            [label]="'Nature de prix'"
+            (dataEvent)="onNaturePrixChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Le prix proposé...'"
+            [label]="'Le prix proposé (dh)'"
+            [typeInput]="'number'"
+            formControlName="prix_propose"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="prix_propose" placeholder="Le prix proposé..."> -->
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'single'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="type_contrat"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Type de contrat'"
+            [label]="'Type de contrat'"
+            (dataEvent)="onContratChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Transport actuel...'"
+            [label]="'Transport actuel'"
+            formControlName="transport_actuel"
+          ></app-shared-autcomplete>
+          <!-- <input type="text" class="block w-full p-4 pl-3 border-[#DBDBDB]" formControlName="transport_actuel" placeholder="Transport actuel..."> -->
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="retour_fond"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Type retour de fond'"
+            [label]="'Type retour de fond'"
+            (dataEvent)="onRetourFondChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="retour_document"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Type retour document'"
+            [label]="'Type retour document'"
+            (dataEvent)="onRetourDocumentChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="port_exp"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Port Expédition...'"
+            [label]="'Port Expédition'"
+            (dataEvent)="onPortExpChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'multiple'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="port_dest"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Rechercher Port Arrivage...'"
+            [label]="'Port Arrivage'"
+            (dataEvent)="onPortDestChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Potentiel Colisage...'"
+            [label]="'Potentiel Colisage'"
+            [typeInput]="'number'"
+            formControlName="p_colisage"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            [type]="'single'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="periodes"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Selectionner une période colisage...'"
+            [label]="'Période colisage'"
+            (dataEvent)="onPerideColisageChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            #searchComponent1
+            [type]="'text'"
+            [placeholer]="'Saisir Potentiel CA (dh)...'"
+            [label]="'Potentiel CA (dh)'"
+            [typeInput]="'number'"
+            formControlName="p_ca"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            [type]="'single'"
+            [charToGetAll]="'*'"
+            [opended]="true"
+            [data]="periodes"
+            [uniqueKey]="'id'"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="'Selectionner une période CA...'"
+            [label]="'Période CA'"
+            (dataEvent)="onPerideCaChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 block-info">
+        <h4 class="info-title">Commentaire</h4>
+        <textarea
+          placeholder="Ecrivez votre remarque..."
+          formControlName="remarques"
+          name=""
+          id=""
+          cols="30"
+          rows="4"
+          maxlength="281"
+          class="remarque"
+          (input)="setMaxSize($event)"
+        >
+        </textarea>
+        <div class="text-right" style="margin-top: -4%; margin-right: 1%;">{{maxSize}}/281</div>
+      </div>
+      <!-- <mat-radio-group
+      appSaveOnFocusOut
+      class="flex items-center justify-center mb-8"
+      formControlName="type"
+    >
+      <p>Type client:</p>
+      <mat-radio-button class="ml-2 mr-3" value="entity"
+        >Entreprise</mat-radio-button
+      >
+      <mat-radio-button value="individual">Particulier</mat-radio-button>
+    </mat-radio-group>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Nom</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("name", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Téléphone</mat-label>
+            <input matInput type="number" formControlName="phone" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("phone", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("email", ["email"])
+          }}</span>
+        </div>
+        <div  *ngIf="f.type.value  == 'entity'">
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Raison Sociale</mat-label>
+            <input matInput type="text" formControlName="Social_reason" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("Social_reason", ["required"])
+          }}</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Adresse 1</mat-label>
+            <input matInput type="text" formControlName="Adress_1" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("Adress_1", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Adresse 2</mat-label>
+            <input matInput type="text" formControlName="Adress_2" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("Adress_2", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>
+              {{f.type.value  == 'entity' ? "I.C.E" : "CIN" }}</mat-label>
+            <input formControlName="identity_number" matInput type="text" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("identity_number", ["required", "minlength"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Sect. Activité</mat-label>
+            <mat-select formControlName="activity_id">
+              <mat-option [value]=""> Choisissez une activité </mat-option>
+              <mat-option *ngFor="let item of activities" [value]="item.id">
+                {{ item.title }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Ville</mat-label>
+            <mat-select formControlName="city_id">
+              <mat-option [value]=""> Choisissez une ville </mat-option>
+              <mat-option *ngFor="let item of cities" [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("city_id", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Potentiel (CA Estimatif)</mat-label>
+            <input matInput type="number" formControlName="potentiel" />
+          </mat-form-field>
+          <span class="text-danger text-xs">{{
+            getMsgErrors("potentiel", ["required"])
+          }}</span>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Potentiel (Colisage)</mat-label>
+            <input matInput type="number" />
+          </mat-form-field>
+        </div>
+      </div> -->
+    </form>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+    <div>
+      <button
+        class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+        mat-dialog-close
+      >
+        Abandonner
+      </button>
+    </div>
+    <div *ngIf="!createProspectLoading" class="text-right">
+      <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+        (click)="submit()"
+      >
+        {{ dialogData.editMode ? "Modifier" : "Enregistrer" }}
+      </button>
+    </div>
+    <span *ngIf="createProspectLoading" class="text-right">
+      <mat-spinner [diameter]="40"></mat-spinner>
+    </span>
+  </div>
+</div>

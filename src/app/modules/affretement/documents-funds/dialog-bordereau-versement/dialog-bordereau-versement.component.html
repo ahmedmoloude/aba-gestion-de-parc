@@ -1,0 +1,60 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Bordereau de versement</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content class="dialog-carte">
+        <div class="relative tabs-utilisateur">
+              <div class="mt-2">
+                <div class="text-center">
+                    <mat-icon class="text-[#E8E8E8] icon-person">money</mat-icon>
+                </div>
+                <div class="grid grid-cols-3">
+                    <div>
+                        <p class="text-[#898989] font-normal text-[12px]">Espèce</p>
+                        <p class="font-semibold">10000 DHs</p>
+                    </div>
+                    <div>
+                        <p class="text-[#898989] font-normal text-[12px]">N° d’expédition</p>
+                        <p class="font-semibold">976762378</p>
+                    </div>
+                </div>
+                <div class="file-images flex justify-center items-center cursor-pointer mt-7">
+                    <input #imgInput hidden="true" type="file" onclick="this.value=null" (change)="onSelectImage($event)"
+                      accept=".jpeg,.png,.svg" />
+                    <div class="text-center" (click)="imgInput.click()">
+                      <mat-icon>add_circle</mat-icon>
+                      <p class="text-xs">Glisser ou Télecharger l’accusé de réception</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3">
+                    <div *ngFor="let image of images; let i = index">
+                        <button class="btn-remove relative" (click)="removeImage(i)">
+                          <mat-icon class="absolute btn-cancel">cancel</mat-icon>
+                        </button>
+                        <div *ngIf="display_img">
+                          <img [src]="image.file" class="w-48 mb-3 rounded-xl image-reception" />
+                        </div>
+                        <!-- <p class="text-center">{{ image.name }}</p> -->
+                    </div>
+                </div>
+              </div>
+          </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+      <div>
+        <button mat-dialog-close class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+            <button type="submit"
+              class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+              Valider
+            </button>
+          </div>
+    </div>
+  </div>
+  

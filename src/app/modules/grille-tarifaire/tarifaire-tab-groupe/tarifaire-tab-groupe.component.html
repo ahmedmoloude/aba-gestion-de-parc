@@ -1,0 +1,101 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="absolute right-10 z-50">
+    <div class="grid grid-flow-row-dense grid-cols-3 grid-rows-3" *ngIf="selectedTabIndex < nature_products.length">
+      <div>
+        <button class="text-[#0C8040]" [matMenuTriggerFor]="menu" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre Standard', 'C')">
+          <span class="relative top-[5px]"><mat-icon>cloud_upload</mat-icon></span>
+          Importer
+        </button>
+      </div>
+      <div class="col-span-2 min-w-[300px] bg-white">
+        <app-select-version [data]="{
+            rubric: 'transport',
+            nature: nature_products[selectedTabIndex]
+          }"></app-select-version>
+      </div>
+    </div>
+
+    <!-- hors normes -->
+
+    <div class="grid grid-flow-row-dense grid-cols-3 grid-rows-3" *ngIf="selectedTabIndex === nature_products.length">
+      <div>
+        <button class="text-[#0C8040]" (click)="openHorsnorms(id)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre Standard', 'C')">
+          <span class="relative top-[5px]"><mat-icon>add_circle</mat-icon></span>
+          Ajouter
+        </button>
+      </div>
+      <div class="col-span-2 min-w-[300px] bg-white">
+        <app-select-version [data]="{ rubric: 'transport', nature: 'Hors Norme' }"></app-select-version>
+      </div>
+    </div>
+
+    <!-- services  -->
+    <div class="grid grid-flow-row-dense grid-cols-3 grid-rows-3"
+      *ngIf="selectedTabIndex === nature_products.length + 1">
+      <div>
+        <button class="text-[#0C8040]" [matMenuTriggerFor]="menu">
+          <span class="relative top-[5px]"><mat-icon>cloud_upload</mat-icon></span>
+          Importer
+        </button>
+      </div>
+      <div class="col-span-2 min-w-[300px] bg-white">
+        <app-select-version [data]="{
+            rubric: 'services',
+            nature: nature_products[selectedTabIndex]
+          }"></app-select-version>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab *ngFor="let item of nature_products; let idx = index">
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">{{
+            gridsByNature[item].icon
+            }}</mat-icon>
+          {{ gridsByNature[item].label }}
+        </ng-template>
+        <app-grille-palettes [position]="idx" [grids]="gridsByNature[item].data"></app-grille-palettes>
+      </mat-tab>
+
+      <!-- hors normes -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">local_airport</mat-icon>
+          Hors normes
+        </ng-template>
+        <app-grille-horsnorms [grill_horsnorms]="grid_hornorme"></app-grille-horsnorms>
+      </mat-tab>
+
+      <!-- services  -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">folder_open</mat-icon>
+          Services
+        </ng-template>
+        <app-grille-service [grids]="gridsServices"></app-grille-service>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+<mat-menu #menu="matMenu" >
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <label class="block mb-2 font-medium text[#0C8040" for="excel_file">Importer un fichier</label>
+    <input
+      class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-4"
+      id="excel_file" type="file"
+      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+      (change)="uploadFile($event)" />
+    <!-- add check boxe for update mode -->
+    <div class="grid grid-cols-2 mt-5">
+      <div><button class="underline">Guide</button></div>
+      <div class="text-right">
+        <button *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre Standard', 'C')" (click)="onSubmitForm()" mat-button class="bg-btn-green text-[18px] p-3">
+          <span class="text-white ">
+            Importer
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-menu>

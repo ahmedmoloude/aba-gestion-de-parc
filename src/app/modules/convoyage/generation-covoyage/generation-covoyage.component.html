@@ -1,0 +1,581 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="flex col-start-1 col-end-3 mb-2">
+    <mat-icon>swap_calls</mat-icon>
+
+    <h2 class="text-[#0C8040] font-semibold pl-2">Géneration d’un Convoyage</h2>
+    <h2 class="text-[#B2B2B2] font-medium pl-4">
+      N° de Covoyage :
+      <span class="text-[#000] font-medium pl-3">{{
+        covoyage ? "C-" + covoyage?.uuid.split("-")[0].toUpperCase() : ""
+      }}</span>
+    </h2>
+  </div>
+  <div class="flex flex-row mb-4 items-center">
+    <div>
+      <div class="p-2">Date de départ</div>
+      <input
+        type="datetime-local"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Date"
+        [value]="covoyage?.start_date"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <div class="p-2">Ville de départ</div>
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        [value]="covoyage?.city_from?.name"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <div class="p-2">Ville de destination</div>
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        [value]="covoyage?.city_dest?.name"
+        disabled
+      />
+    </div>
+
+    <div class="basis-1/6">
+      <div class="p-2">Villes transits</div>
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        [value]="getTransitCities()"
+        disabled
+      />
+    </div>
+
+    <div class="basis-1/6">
+      <div class="p-2">Camion</div>
+      <select
+        class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Véhicule"
+        [(ngModel)]="truck_id"
+      >
+        <option value="">--- Sélectionner un camion ---</option>
+        <option *ngFor="let item of trucks" [value]="item.id">
+          {{ item.matricule + " | " + item.tonnage + " T" }}
+        </option>
+      </select>
+    </div>
+
+    <div class="basis-1/6">
+      <div class="p-2">Chauffeur</div>
+      <select
+        class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Chauffeur"
+        [(ngModel)]="driver_id"
+      >
+        <option value="">--- Sélectionner un chauffeur ---</option>
+        <option *ngFor="let item of drivers" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="basis-1/3 border-tournee">
+      <div class="grid grid-cols-2 gap-2 ml-10">
+        <div>
+          <p class="text-[#636363] text-[11px]">Poids :</p>
+          <p class="pb-4 text-[#0C8040] text-[14px] font-medium">
+            {{ covoyage?.total_weight / 1000 }} T /
+            {{ covoyage?.truck?.tonnage }} T
+          </p>
+          <p class="text-[#636363] text-[12px]">Nombre de colis :</p>
+          <p class="text-[#0C8040] text-[14px] font-medium">
+            {{ covoyage?.total_colis }}
+          </p>
+        </div>
+        <div class="relative">
+          <p class="text-[#636363] text-[11px]">Taux de remplissage :</p>
+          <div class="flex justify-between mb-5">
+            <!-- <div class="text-[#0C8040] text-[14px] font-medium">22,3 m3</div> -->
+            <div
+              [ngClass]="
+                truckIsFull
+                  ? 'text-red-500 font-medium'
+                  : 'text-[#E7B25B] font-medium'
+              "
+            >
+              {{ percentWeightFilled || "--" }} %
+            </div>
+          </div>
+          <div>
+            <div
+              [ngClass]="
+                truckIsFull
+                  ? 'porcentage absolute bg-red-400 w-[50px] h-[44px] left-[39px] top-[62px]'
+                  : 'porcentage absolute bg-[#E3AC4F] w-[50px] h-[44px] left-[39px] top-[62px]'
+              "
+              [ngStyle]="{ width: truckBoxSize + 'px' }"
+            ></div>
+            <img src="../../../../assets/img/camion.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- left side -->
+    <div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="flex col-start-1 col-end-3 mb-2">
+            <h2 class="font-semibold pl-2 text-[16px]">Expéditions au Hub :</h2>
+          </div>
+        </div>
+        <div
+          class="flex col-end-7 col-span-2 justify-end cursor-pointer text-[14px]"
+        >
+          <mat-icon class="text-[#959595]">filter_list</mat-icon>
+        </div>
+      </div>
+
+      <div
+        class="expedition-list"
+        cdkDropList
+        #leftSideList="cdkDropList"
+        [cdkDropListData]="leftSideItems"
+        [cdkDropListConnectedTo]="[rightSideList]"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="canDrop"
+      >
+        <ng-container *ngFor="let city of leftSideCities; let idx = index">
+          <!-- *ngIf="getCityDestExpeditions(leftSideItems, agency.city_id).length" -->
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="flex items-center">
+                  <mat-icon class="text-[#0C8040]">pin_drop</mat-icon>
+
+                  <h2 class="font-semibold pl-2 mb-0">
+                    Destination :
+                    <span class="text-[#0C8040]">
+                      {{
+                        city.name +
+                          " ( " +
+                          getCityDestExpeditions(leftSideItems, city.id)
+                            .length +
+                          " )"
+                      }}
+                    </span>
+                  </h2>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div
+                class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[75px] cursor-pointer"
+                *ngFor="
+                  let item of getCityDestExpeditions(leftSideItems, city.id)
+                "
+                cdkDrag
+              >
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{
+                          item?.expedition?.customer?.name ||
+                            item?.expedition?.customer?.first_name
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                      <p
+                        *ngIf="
+                          item?.expedition?.address_delivery?.sector?.zone
+                            .city_id === city.id
+                        "
+                        class="text-[12px] text-[#000000]"
+                      >
+                        {{ "Covoyage" }}
+                      </p>
+
+                      <p
+                        *ngIf="
+                          item?.expedition?.address_delivery?.sector?.zone
+                            .city_id !== city.id
+                        "
+                        class="text-[12px] text-[#000000]"
+                      >
+                        {{ "Transit" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Poids</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ getExpeditionKpis(item?.expedition).weight }} Kg
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Catégorie</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ getExpeditionKpis(item?.expedition).type }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Nbr.colis</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ getExpeditionKpis(item?.expedition).colis }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">
+                        Agence Destination
+                      </p>
+                      <p class="text-[12px] text-[#000000]">---</p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                <!-- <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[10px]">Ville T</p>
+                      <p class="text-[12px] text-[#000000]">El Jadida</p>
+                    </div>
+                  </div>
+                </div> -->
+
+                <ng-container *ngIf="!isLoadingCovoyage">
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="flex items-center pl-4 justify-end">
+                    <mat-icon
+                      class="cursor-pointer ml-4 text-[19px] text-[#138742]"
+                      >control_camera</mat-icon
+                    >
+                  </div>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+
+        <!-- <div *ngIf="!leftSectors.length">Pas d'expéditions trouvés !</div> -->
+      </div>
+
+      <!-- <div class="expedition-list">
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="flex items-center">
+                <mat-icon class="text-[#0C8040]">pin_drop</mat-icon>
+
+                <h2 class="font-semibold pl-2 mb-0">
+                  Destination :
+                  <span class="text-[#0C8040]">Agadir</span>
+                </h2>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div
+              cdkDropList
+              #todoList="cdkDropList"
+              [cdkDropListData]="todo"
+              [cdkDropListConnectedTo]="[doneList]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <ng-container *ngIf="todo.length !== 0">
+                <div
+                  class="flex flex-row justify-between bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[75px] cursor-pointer"
+                  *ngFor="let item of todo"
+                  cdkDrag
+                >
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                        <p class="text-[12px] text-[#000000]">Ali</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                        <p class="text-[12px] text-[#000000]">Fragile</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Poids</p>
+                        <p class="text-[12px] text-[#000000]">10Kg</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Catégorie</p>
+                        <p class="text-[12px] text-[#000000]">Plastique</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Nbr.colis</p>
+                        <p class="text-[12px] text-[#000000]">3</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Agence D</p>
+                        <p class="text-[12px] text-[#000000]">Agadir</p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-1">
+                        <p class="text-[#b5b5b5] text-[10px]">Ville T</p>
+                        <p class="text-[12px] text-[#000000]">El Jadida</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center pl-4 justify-end">
+                    <mat-icon
+                      class="cursor-pointer ml-4 text-[19px] text-[#138742]"
+                      >control_camera</mat-icon
+                    >
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="todo.length == 0">
+                <div class="text-center text-[#0C8040]">La liste est vide</div>
+              </ng-container>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div> -->
+      <!-- <div class="text-right mt-5">
+        <button
+          class="bg-[#fff] text-black rounded-[28px] border border-[#CEF4C9] shadow-[0px_3px_6px_#00000029] p-4 font-semibold pl-6 pr-6"
+        >
+          Affecter l’ensemble
+        </button>
+      </div> -->
+    </div>
+
+    <!-- right side -->
+    <div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="flex col-start-1 col-end-3 mb-2">
+            <h2 class="font-semibold pl-2 text-[16px]">
+              Expéditions planifiées :
+            </h2>
+          </div>
+        </div>
+        <div
+          class="flex col-end-7 col-span-2 justify-end cursor-pointer text-[14px]"
+        >
+          <mat-icon class="text-[#959595]">filter_list</mat-icon>
+        </div>
+      </div>
+      <div class="tourne-list">
+        <div
+          class="expedition-list"
+          cdkDropList
+          #rightSideList="cdkDropList"
+          [cdkDropListData]="rightSideItems"
+          [cdkDropListConnectedTo]="[leftSideList]"
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListEnterPredicate]="canDrop"
+        >
+          <ng-container *ngIf="rightSideItems.length !== 0">
+            <div
+              class="flex flex-row justify-between bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[75px] cursor-pointer"
+              *ngFor="let item of rightSideItems"
+              cdkDrag
+            >
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{
+                        item?.expedition?.customer?.name ||
+                          item?.expedition?.customer?.first_name
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                    <p
+                      *ngIf="
+                        item?.expedition?.address_delivery?.sector?.zone
+                          .city_id ===
+                        item?.covoyage_item?.city_destination.city_id
+                      "
+                      class="text-[12px] text-[#000000]"
+                    >
+                      {{ "Covoyage" }}
+                    </p>
+                    <p
+                      *ngIf="
+                        item?.covoyage_item &&
+                        item?.expedition?.address_delivery?.sector?.zone
+                          .city_id !== item?.covoyage_item?.city_dest_id
+                      "
+                      class="text-[12px] text-[#000000]"
+                    >
+                      {{ "Transit" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                    <p class="text-[12px] text-[#000000]">Fragile</p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider> -->
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Poids</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{ getExpeditionKpis(item?.expedition).weight }} Kg
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Catégorie</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{ getExpeditionKpis(item?.expedition).type }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Nbr.colis</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{ getExpeditionKpis(item?.expedition).colis }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Destination</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{
+                        item?.covoyage_item?.agency_destination?.name ||
+                          item?.covoyage_item?.city_destination?.name
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+              <div class="block width-content mt-3">
+                <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[10px]">Ville D</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{ item?.covoyage_item?.city_destination?.name }}
+                    </p>
+                  </div>
+                </div>
+              </div> -->
+
+              <ng-container *ngIf="!isLoadingCovoyage">
+                <div class="flex items-center pl-4 justify-end">
+                  <mat-icon
+                    class="cursor-pointer ml-4 text-[19px] text-[#138742]"
+                    >control_camera</mat-icon
+                  >
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="rightSideItems.length == 0">
+            <div
+              class="flex items-center justify-center text-[#B2B2B2] h-24 border-dashed border-2 border-[#B2B2B2]"
+            >
+              Glisser les expéditions ici
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="text-right mt-5">
+        <button
+          *ngIf="!isLoading"
+          (click)="planifyCovoyage()"
+          class="bg-[#138742] text-white rounded-[28px] border border-[#138742] shadow-[0px_3px_6px_#00000029] p-4 font-semibold pl-6 pr-6"
+        >
+          {{
+            covoyage?.status === "INITIALIZED"
+              ? "Planifier"
+              : "Modifier la planification"
+          }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

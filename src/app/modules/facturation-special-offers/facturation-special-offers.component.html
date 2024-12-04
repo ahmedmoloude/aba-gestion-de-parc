@@ -1,0 +1,115 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <span class="mb-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Liste des pré-factures - Affrètement
+      </h2>
+
+      <div
+        class="flex col-end-7 col-span-2 justify-end items-center cursor-pointer p-2 bg-green-600" 
+        *ngIf="!loading"
+
+
+        (click)="simulateCRON()"
+      >
+        <span class="text-white font-normal ">Simuler la pré-facturation par mois</span>
+      </div>
+    </div>
+  </span>
+
+  <div *ngIf="!loading">
+
+
+    <div>
+      <table class="table-auto w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of offers"
+          >
+
+
+
+          <td class="p-3">
+            {{ item?.offer?.customer?.first_name || item?.customer?.name }}
+          </td>
+
+        
+
+
+          <td class="p-3">
+            {{ item?.offer.type_offer.title }}
+          </td>
+          <td class="p-3">
+            {{getFrenchMonthName(item.created_at)}}
+          </td> 
+
+
+          <td class="p-3">
+            {{item?.is_calculated ? "Oui" : "Non"}}
+          </td> 
+
+
+
+          <td class="p-3">
+            {{item?.montant_ht || '--'}}
+          </td> 
+
+          <td class="p-3">
+            {{item?.montant_tva || '--'}}
+          </td> 
+
+          <td class="p-3">
+            {{item?.montant_ttc || '--'}}
+          </td> 
+
+
+          <td class="p-3 text-right cursor-pointer">
+
+            <div class="ml-3 cursor-pointer" *ngIf="!item?.is_calculated">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon class="cursor-pointer text-[22px] text-[#909090]">more_vert</mat-icon>
+              </button>
+            </div>
+            <mat-menu #menu="matMenu">
+
+              <ng-container >
+
+                <button mat-menu-item   (click)="redirectToTaxation(item.uuid)">
+                  <mat-icon>money</mat-icon>
+                  <span >Taxer</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div>
+
+  <div *ngIf="loading" class="flex items-center justify-center w-full h-full">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+</div>

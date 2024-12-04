@@ -1,0 +1,141 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+    <h2 mat-dialog-title class="col-span-2">{{ form_btn }} un gps</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="createGps">
+    <div mat-dialog-content>
+      <p class="text-center">
+        <mat-icon class="text-[#636363] text-[70px] icon-gps">pin_drop</mat-icon>
+      </p>
+      <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-label>IMEI GPS</mat-label>
+        <input matInput type="text" formControlName="imei_gps" autocomplete="off"/>
+      </mat-form-field> -->
+
+      <div class="w-[100%] pl-7 pr-7 mb-4">
+        <i-field [type]="'text'" [label]="'IMEI GPS'" formControlName="imei_gps" ></i-field>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 mb-4">
+            <mat-label>Date d'acquisition</mat-label>
+            <input matInput type="date" formControlName="date_acquisition_gps" autocomplete="off" (change)="setDateDebut($event)" />
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'date'" [label]="'Date d\'acquisition'" formControlName="date_acquisition_gps" (changeValue)="setDateDebut($event)" ></i-field>
+        </div> -->
+
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-label>Prestataire</mat-label>
+            <mat-select placeholder="Prestataire" formControlName="prestataire_id">
+              <mat-option *ngFor="let item of prestataires" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+            <!-- <input matInput type="text" formControlName="prestataire" autocomplete="off"/> -->
+          </mat-form-field>
+        </div>
+
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'number'" [label]="'Montant (DH)'" formControlName="montant" ></i-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-select placeholder="Sonde" formControlName="sonde">
+              <mat-option value="1">Avec Sonde</mat-option>
+              <mat-option value="0">Sans Sonde</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-select placeholder="Statut" formControlName="status">
+              <mat-option value="EN_SERVICE">En service</mat-option>
+              <mat-option value="HORS_SERVICE">Hors service</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="w-[100%] pr-7 mb-4">
+          <i-field [type]="'date'" [label]="'Date de mise en service'" formControlName="date_mise_en_service" ></i-field>
+        </div> -->
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-label>Date de mise en service</mat-label>
+            <input
+              matInput
+              type="date"
+              formControlName="date_mise_en_service"
+              [min]="start_time"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'number'" [label]="'Numéro Téléphone'" formControlName="phone" ></i-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-select placeholder="Opérateur" formControlName="operateur">
+              <mat-option value="INWI">INWI</mat-option>
+              <mat-option value="Maroc Télécom">Maroc Télécom</mat-option>
+              <mat-option value="Orange">Orange</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pr-7 mb-4">
+            <mat-label>Montant (DH)</mat-label>
+            <input matInput type="number" formControlName="montant" autocomplete="off"/>
+          </mat-form-field>
+        </div> -->
+
+      </div>
+      <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-label>Observation</mat-label>
+        <textarea
+          matInput
+          placeholder="Observation"
+          rows="3"
+          cols="50" formControlName="observation" autocomplete="off"
+        ></textarea>
+      </mat-form-field> -->
+      <div class="w-[100%] pl-7 pr-7 mb-4">
+        <i-field [type]="'ttextareaext'" [label]="'Observation'" formControlName="observation" ></i-field>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close >
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button [disabled]="createGps.invalid" *ngIf="!spinnerAdd"
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        (click)="addGps()">{{ form_btn }}
+      </button> -->
+      <button
+            [disabled]="createGps.invalid" *ngIf="!spinnerAdd"
+            (click)="addGps()"
+            pButton pRipple
+            type="submit"
+            label="Ajouter"
+            class="p-button-rounded p-button-success">
+          </button>
+      <span *ngIf="spinnerAdd">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </span>
+      </div>
+    </div>
+  </form>
+</div>

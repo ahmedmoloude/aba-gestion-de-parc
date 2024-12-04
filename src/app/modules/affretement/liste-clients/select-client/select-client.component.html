@@ -1,0 +1,233 @@
+<!-- <div *ngIf="isSpinner" class="flex justify-center">
+  <mat-spinner [diameter]="20"></mat-spinner>
+</div> -->
+
+<div #clicDiv>
+  <div class="div-wrapper border rounded-sm p-1 mtop bg-white">
+    <div class="inline-block align-bottom leading-[1.7]">
+      <label>Raison Social</label>
+      <div class="flex">
+        <div
+          *ngIf="
+            customerAfterChecked && customerChange.logo_path;
+            else elseBlock
+          "
+        >
+          <img
+            src="{{ url + customerChange.id + '/' }}{{
+              customerChange.logo_path
+            }}"
+            alt="Default avatar"
+            class="rounded mr-2 w-7 h-7"
+          />
+        </div>
+
+        <ng-template #elseBlock>
+          <img
+            alt="Default avatar"
+            class="rounded mr-2 w-7 h-7"
+            src="{{ defaultImage }}"
+          />
+        </ng-template>
+
+        <span class="font-normal text-[14px] pl-2">{{
+          customerAfterChecked
+            ? customerChange.name
+            : "Sélectionner un destinataire"
+        }}</span>
+      </div>
+    </div>
+    <div *ngIf="toggleClientList; else clientAdd">
+      <div class="relative cursor-pointer" (click)="toogleisOpen()">
+        <!-- <span *ngIf="!checkInfoLength()" class="text-xs text-[#b4b2b2]"
+        >Sélectionner un destinataire</span
+      > -->
+        <span class="float-right cursor-pointer"
+          ><mat-icon
+            [ngClass]="toggleClientList ? 'icon-eselect' : 'icomn-eselect'"
+            >expand_more</mat-icon
+          ></span
+        >
+        <div
+          *ngIf="isOpend"
+          class="absolute right-9 cursor-pointer"
+          style="top: -30px"
+          (click)="toggleClientList = false"
+        >
+          <mat-icon
+            class="relative top-[5px] text-[#0C8040] text-[18px] text-right"
+            >add_circle</mat-icon
+          >
+          Ajouter
+        </div>
+      </div>
+      <div [ngClass]="isOpend ? 'show' : 'hidden'">
+        <div class="relative mt-5">
+          <input
+            type="text"
+            class="w-full p-2 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Recherche… ex Marjan"
+            [(ngModel)]="searchCustomer"
+            (keyup)="filteredCustomers()"
+          />
+          <!-- <i-field
+          [type]="'text'"
+          [lable]="'Destinataire'"
+          [(ngModel)]="searchCustomer"
+           (keyup)="filteredCustomers()"
+        >
+        </i-field> -->
+
+          <span class="absolute inset-y-0 inline-flex items-center right-4">
+            <mat-icon>search</mat-icon>
+          </span>
+        </div>
+        <div class="mt-5 overflow-auto">
+          <div *ngFor="let customer of filtredCustomers">
+            <div
+              class="flex items-center w-full cursor-pointer pl-4"
+              (click)="onCustomerChange(customer)"
+            >
+              <img
+                *ngIf="customer.logo_path !== null"
+                src="{{ url + customer.id + '/' }}{{ customer.logo_path }}"
+                alt="Default avatar"
+                class="rounded avatar mr-2"
+              />
+
+              <img
+                *ngIf="customer.logo_path === null"
+                alt="Default avatar"
+                class="rounded avatar mr-2"
+                src="../../../../assets/img/user.png"
+              />
+
+              <span class="font-normal text-[13px] text-[#0C8040]">{{
+                customer.code
+              }}</span>
+              <div class="border-r-1 border-[#ccc]"></div>
+              <span class="font-normal text-[13px] pl-2">{{
+                customer.name
+              }}</span>
+
+              <span
+                *ngIf="customer.customer_type === 'en_compte'"
+                class="font-normal text-[13px] pl-8"
+                >En Compte</span
+              >
+              <span
+                *ngIf="customer.customer_type !== 'en_compte'"
+                class="font-normal text-[13px] pl-8"
+                >En Due</span
+              >
+              !
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #clientAdd>
+      <p
+        class="text-[#0C8040] cursor-pointer"
+        (click)="toggleClientList = true"
+      >
+        <mat-icon class="relative top-[5px]">keyboard_arrow_left</mat-icon>
+        Retourner vers la liste des client
+      </p>
+
+      <form
+        class="mt-3"
+        [formGroup]="addCustomerForm"
+        (ngSubmit)="onSubmitNewDestinataire()"
+      >
+        <!-- <div class="pl-3 pr-3 mb-4">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button #entity value="entity"
+              >Entreprise</mat-radio-button
+            >
+            <mat-radio-button #individual value="individual" class="ml-4"
+              >Particulier</mat-radio-button
+            >
+          </mat-radio-group>
+        </div> -->
+
+        <div class="pl-3 pr-3 mb-4" *ngIf="selectedType == 'entity'">
+          <i-field
+            [type]="'text'"
+            [label]="'Raison sociale'"
+            formControlName="name"
+          ></i-field>
+        </div>
+
+        <div class="pl-3 pr-3 mb-4">
+          <i-field
+            *ngIf="selectedType == 'individual'"
+            [type]="'text'"
+            [label]="'Nom'"
+            formControlName="last_name"
+          ></i-field>
+        </div>
+        <div class="pl-3 pr-3 mb-4">
+          <i-field
+            *ngIf="selectedType == 'individual'"
+            [type]="'text'"
+            [label]="'Prénom'"
+            formControlName="first_name"
+          ></i-field>
+        </div>
+        <div class="pl-3 pr-3 mb-4">
+          <i-field
+            *ngIf="selectedType == 'entity'"
+            [type]="'text'"
+            [label]="'ICE'"
+            [maxlength]="14"
+            formControlName="identity_number"
+          ></i-field>
+          <i-field
+            *ngIf="selectedType == 'individual'"
+            [type]="'text'"
+            [label]="'CIN'"
+            [maxlength]="10"
+            formControlName="identity_number"
+          ></i-field>
+        </div>
+        <div class="pl-3 pr-3 mb-4">
+          <i-field
+            [type]="'email'"
+            [label]="'E-mail'"
+            formControlName="email"
+          ></i-field>
+        </div>
+
+        <div class="pl-3 pr-3 mb-4">
+          <i-field
+            [type]="'phone'"
+            [label]="'Téléphone'"
+            [type]="'number'"
+            [maxlength]="10"
+            formControlName="phone"
+          ></i-field>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 md- mb-5 p-4">
+          <div class="leading-[5]">
+            <button
+              class="underline font-medium"
+              (click)="toggleClientList = true; addCustomerFormReset()"
+            >
+              Annuler
+            </button>
+          </div>
+          <div class="text-right">
+            <!-- [disabled]="!addCustomerForm.valid" -->
+            <button
+              type="submit"
+              class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            >
+              Ajouter
+            </button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  </div>
+</div>

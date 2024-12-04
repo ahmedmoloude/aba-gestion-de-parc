@@ -1,0 +1,12 @@
+.mat-icon{
+    font-size: 18px !important;
+}
+.tranches {
+    overflow-y: scroll;
+    max-height: 150px;
+    min-height: 150px;
+}
+table th, table td{
+    border: 1px solid #ccc;
+    padding: 5px;
+}

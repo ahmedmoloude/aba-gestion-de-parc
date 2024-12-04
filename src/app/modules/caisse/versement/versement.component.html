@@ -1,0 +1,29 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 tabs-caisse">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">money</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+            Versement
+        </h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div
+        class="flex justify-end cursor-pointer">
+        <i-field [type]="'number'" [label]="'Scanner la déclaration'" ></i-field>
+        <button  pButton pRipple type="button" label="Valider" class="ml-3 p-button-rounded p-button-success h-9 w-1/2"></button>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group [selectedIndex]="selected.value"
+  (selectedIndexChange)="selected.setValue($event); getIndex()">
+    <mat-tab label="Chèque">
+     <app-cheque></app-cheque>
+    </mat-tab>
+    <mat-tab label="Virement">
+        <app-virement></app-virement>
+    </mat-tab>
+  </mat-tab-group>
+</div>

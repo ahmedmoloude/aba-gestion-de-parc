@@ -1,0 +1,172 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Affectation demande N° {{ demande.reference }}</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+
+    <div *ngIf="spinner_vehicule || spinner_driver" class="flex items-center justify-center mt-6 mb-6">
+        <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <div mat-dialog-content *ngIf="!spinner_vehicule && !spinner_driver">
+        <form [formGroup]="affecterDemande" (ngSubmit)="onSubmit()">
+            <div formArrayName="affectations">
+                <div *ngFor="let affectation of affectations.controls; let i = index" [formGroupName]="i">
+                    <div class="grid grid-cols-3 gap-4 mt-2 mb-2 p-4">
+
+                        <div class="affectation-line">
+                            <mat-icon mat-button [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf = "mission_vehicule[i]">info</mat-icon>
+                            <mat-menu #menu="matMenu">
+                                <div>
+                                    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+                                        <div>
+                                            <p class="text-[#0C8040]">Code interne</p>
+                                            <p>{{ vehicules_missions[i]?.code_interne }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Immatriculation</p>
+                                            <p>{{ vehicules_missions[i]?.matricule }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Dérniére mission</p>
+                                            <p>{{ vehicules_missions[i]?.feuille_route?.last_mission?.reference }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Date début</p>
+                                            <p>{{ vehicules_missions[i]?.feuille_route?.last_mission?.missionable?.date_debut | date : "dd/MM/yyyy" }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Date fin</p>
+                                            <p>{{ vehicules_missions[i]?.feuille_route?.last_mission?.missionable?.date_fin | date : "dd/MM/yyyy" }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Km parcouru</p>
+                                            <p>{{ vehicules_missions[i]?.feuille_route?.km_fin ? vehicules_missions[i]?.feuille_route?.km_fin -  vehicules_missions[i]?.feuille_route?.km_depart : "--" }}</p>
+                                            <!-- <p>{{ vehicules_missions[i]?.feuille_route?.km_fin -  vehicules_missions[i]?.feuille_route?.km_depart }} Km</p>
+                                            <p>{{ vehicules_missions[i]?.feuille_route?.km_fin }} ?  {{ vehicules_missions[i]?.feuille_route?.km_fin -  vehicules_missions[i]?.feuille_route?.km_depart }} Km : --</p> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-menu>
+                            <app-shared-autcomplete
+                            #searchComponent1
+                            [opended]="true"
+                            [type]="'single'"
+                            [contentStyle]="contentStyle"
+                            [inputStyle]="searchStyle"
+                            [charToGetAll]="'*'"
+                            [data]="trucks[i]"
+                            [keys]="['code_interne', 'matricule']"
+                            [lengthToStart]="3"
+                            [display]="['code_interne', 'matricule']"
+                            [placeholer]="'Rechercher le camion...'"
+                            [hasIcon]="false"
+                            (dataEvent)="filterTruck($event, i)"
+                            [addSeparator]="true"
+                            >
+                            </app-shared-autcomplete>
+                        </div>
+
+                        <div class="affectation-line">
+                            <mat-icon mat-button [matMenuTriggerFor]="menuDriver" class="cursor-pointer" *ngIf = "mission_driver[i]">info</mat-icon>
+                            <mat-menu #menuDriver="matMenu">
+                                <div>
+                                    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+                                        <div>
+                                            <p class="text-[#0C8040]">Nom</p>
+                                            <p>{{ drivers_missions[i]?.first_name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Prénom</p>
+                                            <p>{{ drivers_missions[i]?.last_name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Dérniére mission</p>
+                                            <p>{{ drivers_missions[i]?.feuille_route?.last_mission?.reference }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Date début</p>
+                                            <p>{{ drivers_missions[i]?.feuille_route?.last_mission?.missionable?.date_debut }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Date fin</p>
+                                            <p>{{ drivers_missions[i]?.feuille_route?.last_mission?.missionable?.date_fin }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[#0C8040]">Km parcouru</p>
+                                            <p>{{ drivers_missions[i]?.feuille_route?.km_fin ? drivers_missions[i]?.feuille_route?.km_fin -  drivers_missions[i]?.feuille_route?.km_depart : "--" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-menu>
+                            <app-shared-autcomplete
+                            #searchComponent1
+                            [opended]="true"
+                            [type]="'single'"
+                            [contentStyle]="contentStyle"
+                            [inputStyle]="searchStyle"
+                            [charToGetAll]="'*'"
+                            [data]="drivers[i]"
+                            [keys]="['code', 'first_name', 'last_name']"
+                            [lengthToStart]="3"
+                            [display]="['code', 'first_name', 'last_name']"
+                            [placeholer]="'Rechercher le conducteur...'"
+                            [hasIcon]="false"
+                            (dataEvent)="filterDriver($event, i)"
+                            >
+                            </app-shared-autcomplete>
+                        </div>
+
+                        <div class="flex items-center">
+                            <app-shared-autcomplete
+                            #searchComponent1
+                            [opended]="true"
+                            [type]="'single'"
+                            [contentStyle]="contentStyle"
+                            [inputStyle]="searchStyle"
+                            [charToGetAll]="'*'"
+                            [data]="accompagnateurs[i]"
+                            [keys]="['code', 'first_name', 'last_name']"
+                            [lengthToStart]="3"
+                            [display]="['code', 'first_name', 'last_name']"
+                            [placeholer]="'Rechercher accompagnateur...'"
+                            [hasIcon]="false"
+                            (dataEvent)="filterAccompagnateur($event, i)"
+                            >
+                            </app-shared-autcomplete>
+
+                            <mat-icon class="text-red-600 cursor-pointer" (click)="removeAffectation(i)">delete</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="flex ml-5">
+                <div class="flex cursor-pointer">
+                    <mat-icon class="pt-[5px]">add_circle</mat-icon>
+                    <h2 (click)="addAffectation()" class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+                </div>
+            </div> -->
+
+            <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+                <div>
+                    <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close >
+                        Annuler
+                    </button>
+                </div>
+                <div class="text-right">
+                    <button class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+                        type="submit"  *ngIf="!spinner" (click)="affecter()"
+                        > Enregistrer
+                    </button>
+
+                    <span *ngIf="spinner">
+                        <mat-spinner [diameter]="40"></mat-spinner>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 vehiculetabs"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">check_circle_outline</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Gestion des disponibilités
+      </h2>
+    </div>
+  </div>
+  <div class="absolute right-10 z-50">
+    <div *ngIf="selectedTabIndex === 0">
+      <div class="flex cursor-pointer" (click)="exportVahiculeExcel()">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+      </div>
+    </div>
+    <div *ngIf="selectedTabIndex === 1">
+      <div class="flex cursor-pointer" (click)="exportConducteurExcel()">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2" >Exporter</h2>
+      </div>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">local_shipping</mat-icon>
+          Disponibilité des véhicules</ng-template
+        >
+        <app-disponibilite-vehicule></app-disponibilite-vehicule>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">person</mat-icon>Disponibilité des
+          conducteurs
+        </ng-template>
+        <app-disponibilite-conducteur></app-disponibilite-conducteur>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

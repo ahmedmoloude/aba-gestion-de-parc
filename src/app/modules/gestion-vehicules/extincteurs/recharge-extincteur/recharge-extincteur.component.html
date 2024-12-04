@@ -1,0 +1,102 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+      <h2 mat-dialog-title class="col-span-2">Recharger un extincteur</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+
+    <div mat-dialog-content>
+      <form [formGroup]="createExtincteur">
+        <div class="grid grid-cols-4 gap-3 pl-4 pr-4 mt-5">
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Code</mat-label>
+              <input matInput type="text" formControlName="matricule" autocomplete="off"/>
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'Code'" formControlName="matricule" ></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° d'extincteur</mat-label>
+              <input matInput type="text" formControlName="n_extincteur"  autocomplete="off"/>
+            </mat-form-field> -->
+            <i-field [type]="'text'" [label]="'N° d\'extincteur'" formControlName="n_extincteur"></i-field>
+          </div>
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date d'achat</mat-label>
+              <input matInput type="date" formControlName="date_achat"  autocomplete="off"/>
+            </mat-form-field> -->
+            <i-field [type]="'date'" [label]="'Date d\'achat'" formControlName="date_achat" (changeValue)="setDateAchat($event)"></i-field>
+          </div>
+
+          <div>
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin validité</mat-label>
+              <input matInput type="date" formControlName="date_fin_validite"  autocomplete="off"/>
+            </mat-form-field> -->
+            <i-field [type]="'date'" [label]="'Date de fin validité'"  formControlName="date_fin_validite" [minValue]="date_achat"></i-field>
+          </div>
+
+          <div >
+            <i-field [type]="'date'" [label]="'Date de recharge'" formControlName="date_recharge"></i-field>
+          </div>
+          <div >
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Prestataire de recharge</mat-label>
+              <mat-select formControlName="prestataire_recharge_id">
+                <mat-option *ngFor="let prestataire of prestataires_recharges" [value]="prestataire.id">
+                  {{ prestataire.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <app-shared-autcomplete
+              #searchComponent1
+              [opended]="true"
+              [type]="'single'"
+              [contentStyle]="contentStyle"
+              [inputStyle]="searchStyle"
+              [charToGetAll]="'*'"
+              [data]="prestataires_recharges"
+              [keys]="['name']"
+              [lengthToStart]="3"
+              [display]="['name']"
+              [label]="'prestataire de recharge'"
+              [placeholer]="'prestataire de recharge'"
+              [hasIcon]="false"
+              [required]="createExtincteur.controls['prestataire_recharge_id'].hasError('required')"
+              (dataEvent)="filterPrestataireRecharge($event)"
+            >
+            </app-shared-autcomplete>
+          </div>
+          <div >
+            <i-field [type]="'number'" [label]="'Montant de recharge'" formControlName="montant_recharge"></i-field>
+          </div>
+          <div >
+            <i-field [type]="'text'" [label]="'Motif'" formControlName="motif"></i-field>
+          </div>
+          <div >
+            <i-field [type]="'text'" [label]="'Description'" formControlName="description"></i-field>
+          </div>
+        </div>
+      </form>
+
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 p-4 mr-3 font-bold text-[18px]"  mat-dialog-close>
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          [disabled]="createExtincteur.invalid" *ngIf="!spinnerAdd"
+          (click)="rechargerExtincteur()">Recharger</button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>

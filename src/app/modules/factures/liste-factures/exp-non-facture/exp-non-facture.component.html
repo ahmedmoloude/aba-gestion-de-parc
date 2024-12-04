@@ -1,0 +1,132 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3 cursor-pointer">
+        <mat-icon class="pt-1 text-[#636363]">keyboard_arrow_left</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2">
+            Retour
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex mt-3 justify-center">
+    <div class="border rounded-xl p-[10px] border-red-600">
+      <button class="text-[20px]  max-w-[300px] w-[300px]">
+        <mat-icon class="mr-3 text-red-600">warning</mat-icon>
+        <span class="text-red-600">50 expéditions non facturées</span>
+      </button>
+    </div>
+  </div>
+  <div class="mt-5">
+    <div
+      class="bg-white mb-5  rounded-[18px]"
+      *ngFor="
+        let item of [0, 1, 2, 3, 4, 5] | paginate: { itemsPerPage: 5, currentPage: p };
+        let i = index
+      ">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 items-center">
+        <div class="width-block">
+            <div class="flex">
+                <p class="text-[14px] text-[#000000]">Client : 3238632 - Marine Maroc</p>
+                <div class="cursor-pointer" (click)="onclick(i)">
+                    <mat-icon class="pl-1">
+                        {{ !isVisible(i) ? "visibility" : "visibility_off" }}
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">Nbre d’exp : 1</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">Colis : 1</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">HT : 120 DH</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">TVA 14% : 321 Dhs</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">TVA 20% : 321 Dhs</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[14px] text-[#000000]">TTC : 921,21 Dhs</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="isVisible(i)">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th
+                *ngFor="let header of headerColumuns"
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+              <!-- <th
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+              >
+                <div class="flex justify-end">Actions</div>
+              </th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let item of [0, 1, 2, 3]">
+              <td class="p-3">05/02/2022</td>
+              <td class="p-3">9832667</td>
+              <td class="p-3">PPE</td>
+              <td class="p-3">Marine Maroc</td>
+              <td class="p-3">Laayoune</td>
+              <td class="p-3">1</td>
+              <td class="p-3">188,48</td>
+              <td class="p-3">32</td>
+              <td class="p-3">208,48</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+    </div>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+
+::ng-deep .pi-chevron-right:before,
+::ng-deep .pi-chevron-left:before {
+  color: black;
+}
+::ng-deep .p-galleria-item-nav {
+  top: 30% !important;
+}
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-next-icon ,
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon{
+  font-size: 0.5rem !important;
+}
+::ng-deep .p-galleria .p-galleria-indicators {
+  padding: 1px !important;
+}
+::ng-deep .p-galleria .p-galleria-indicators .p-galleria-indicator button {
+  width: 0.5rem;
+  height: 0.5rem;
+}

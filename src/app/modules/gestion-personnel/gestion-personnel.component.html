@@ -1,0 +1,274 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">supervised_user_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Gestion des personnels</h2>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <div style="opacity: 0;" class="flex cursor-pointer" [matMenuTriggerFor]="menu">
+        <mat-icon class="pt-[5px]"> cloud_download</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+      </div>
+      <div class="flex cursor-pointer" (click)="exportExcel()">
+        <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+      </div>
+      <div class="flex cursor-pointer" (click)="AjoutPers()" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion du personnel', 'C')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="flex mt-4">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Nom"
+            [(ngModel)] ="filtres.first_name"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Prénom"
+            [(ngModel)] ="filtres.last_name"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-start">
+      <button
+      (click)="getPersonnel()"
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div> -->
+  <div class="grid mt-2">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+  <div class="mt-4" *ngIf="!isLoading">
+    <div
+      class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[55px] items-center"
+      *ngFor="let personel of PersonnelsArray"
+      [ngStyle]="{'background-color': (personel?.availablity?.length!=0) ? '#ffb8c287' : 'white'}">
+      <div class="width-content ">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">person</mat-icon>
+          </div>
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Nom :</p>
+            <p class="text-[12px] text-[#000000]">{{ personel?.last_name || '---' }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">person</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Prénom :</p>
+            <p class="text-[12px] text-[#000000]">{{ personel?.first_name || '---' }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Code :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{ personel?.code || '---' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Direction :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{personel?.direction || '---' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Département :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{personel?.departement || '---'}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Service :</p>
+            <div class="flex">
+              <p *ngIf="!personel?.service?.length" class="text-[12px] text-[#000000]"> --- </p>
+              <div class="flex items-center pl-4 justify-center " *ngIf="personel.service?.length">
+                <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menuService">more_vert</mat-icon>
+                <mat-menu #menuService="matMenu">
+                  <button mat-menu-item  *ngFor="let service of personel.service"> {{service?.name || '---'}} </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Parc :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{ personel?.parc || '---'}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">next_week</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Fonction :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{translateToFrench(personel?.function) || '---' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Type contrat :</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{personel?.contract_type?.toUpperCase() || personel?.contract_type || '---' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center pl-4 justify-end">
+        <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="detailsPers(personel?.uuid)"><mat-icon>remove_red_eye</mat-icon>
+            Rapport</button>
+          <button  *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion du personnel', 'U')" mat-menu-item (click)="editPersonnel(personel?.uuid)"><mat-icon>create</mat-icon> Modifier </button>
+          <button  *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion du personnel', 'D')" mat-menu-item (click)="deletePersonnel(personel?.uuid)"><mat-icon>delete_forever</mat-icon> Supprimer </button>
+          <button  *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion du personnel', 'U')" mat-menu-item (click)="openDialog(personel)"><mat-icon>open_in_new</mat-icon> indisponibilité
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+    <div class="mt-10">
+      <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading">
+  <div class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</div>
+<!-- <div *ngIf="isLoading" class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">supervised_user_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Gestion du personnel</h2>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <div style="opacity: 0;" class="flex cursor-pointer" [matMenuTriggerFor]="menu">
+        <mat-icon class="pt-[5px]"> cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Importer</h2>
+      </div>
+      <div class="flex cursor-pointer" (click)="export()">
+        <mat-icon class="pt-[5px]">cloud_upload</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+      </div>
+      <div class="flex cursor-pointer" (click)="AjoutPers()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex mt-4" *ngIf="isLoading">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input type="text" class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]" placeholder="Nom"
+            [(ngModel)]="filtres.first_name" />
+        </div>
+        <div class="basis-1/3">
+          <input type="text" class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]" placeholder="Prénom"
+            [(ngModel)]="filtres.last_name" />
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-start">
+      <button (click)="getPersonnel()"
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3">
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div>
+  <div>
+    <div class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+  </div>
+</div> -->
+<mat-menu #menu="matMenu"></mat-menu>
+<button [matMenuTriggerFor]="menu"></button>`

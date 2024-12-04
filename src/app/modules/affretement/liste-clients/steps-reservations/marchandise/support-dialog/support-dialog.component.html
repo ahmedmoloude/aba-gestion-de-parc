@@ -1,0 +1,58 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Liste des N° de support</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="mb-4">
+      <svg class="mx-auto" xmlns="http://www.w3.org/2000/svg" width="158.383" height="138.478" viewBox="0 0 153.383 138.478">
+        <path id="icons8-pallet" d="M22.151,7a3.127,3.127,0,0,0-3.066,2.373L.692,82.947H38.369L47.566,7ZM53.994,7,44.7,82.947H75.947V7ZM82.276,7V82.947h31.249L103.933,7Zm28.085,0,9.493,75.947h37.677L139.138,9.373A3.138,3.138,0,0,0,136.072,7ZM0,89.276v28.48a3.163,3.163,0,0,0,3.164,3.164H22.151a3.228,3.228,0,0,0,1.187-.3,2.964,2.964,0,0,0,.791-.4.745.745,0,0,0,.1-.1,3.852,3.852,0,0,0,.4-.494c.049-.074.148-.124.2-.2a3.436,3.436,0,0,0,.2-.494,3,3,0,0,0,.3-1.187L27.887,105.1h102.45l2.571,12.658a3.131,3.131,0,0,0,.1.593c.025.148.148.26.2.4a2.78,2.78,0,0,0,.1.3,2.956,2.956,0,0,0,.3.593,3.852,3.852,0,0,0,.4.494,2.989,2.989,0,0,0,.89.494,3.228,3.228,0,0,0,1.187.3h18.987a3.155,3.155,0,0,0,3.164-3.164V89.276Z" transform="translate(0 -7)" fill="#e8e8e8"/>
+      </svg>
+    </div>
+    <form class="mt-3 ml-4 mr-4" [formGroup]="referenceForm">
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <ng-container *ngFor="let ref of array; let i = index">
+          <div class="mb-4">
+            <i-field
+              [type]="'text'"
+              [label]="'Référence' + (i + 1)"
+              [formControlName]="'reference_' + i"
+              (input)="checkForDuplicatesValue($event.target.value, i)"
+            >
+            </i-field>
+            <div *ngIf="isDuplicate(i)" class="text-red-500">
+              cette référence est dupliquée !
+            </div>
+            <!-- <div *ngIf="isDuplicate(i)" class="text-red-500">
+              {{ getDuplicateFields(i).join(", ") }} already has this value
+            </div> -->
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button
+            type="submit"
+            [disabled]="!referenceForm.valid"
+            (click)="onSubmitReferences()"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          >
+            Ajouter
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

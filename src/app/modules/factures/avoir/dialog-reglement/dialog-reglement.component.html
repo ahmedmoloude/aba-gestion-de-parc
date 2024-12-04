@@ -1,0 +1,33 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Workflow de validation de la remise</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="flex items-center gap-1 flex-wrap m-4">
+      <div class="custom-table">
+        <div class="table-header">
+          <div class="header-item">Rôle</div>
+          <div class="header-item">Utilisateur</div>
+          <div class="header-item">Niveau</div>
+          <div class="header-item">Statut</div>
+        </div>
+        <div class="table-row-w" *ngFor="let validation of validations; let i = index">
+          <div class="row-item">{{ validation.role_name || '--' }}</div>
+          <div class="row-item">{{ validation.user_name || '--' }}</div>
+          <div class="row-item">{{ validation.niveau }}</div>
+          <div class="row-item" *ngIf="validation.status == 'PENDING'"><mat-icon [matTooltip]="'En attente'"
+            matTooltipPosition="above">hourglass_empty</mat-icon></div>
+          <div class="row-item" *ngIf="validation.status == 'DONE'"><mat-icon style="color: #098140" [matTooltip]="'Validée'"
+            matTooltipPosition="above">check_circle</mat-icon></div>
+          <div class="row-item" *ngIf="validation.status == 'REJECTED'"><mat-icon style="color: red" [matTooltip]="'Refusée'"
+            matTooltipPosition="above">cancel</mat-icon></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

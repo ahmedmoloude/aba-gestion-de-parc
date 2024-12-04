@@ -1,0 +1,7 @@
+::ng-deep .red-color path {
+  fill: red !important;
+}
+
+.material-icons.color_green {
+  color: #00FF00;
+}/*# sourceMappingURL=home.component.css.map */

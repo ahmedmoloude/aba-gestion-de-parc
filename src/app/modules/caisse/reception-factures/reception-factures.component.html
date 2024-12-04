@@ -1,0 +1,106 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">money</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Réception BL et factures
+        </h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex justify-end cursor-pointer">
+        <i-field [type]="'number'" [label]="'Scanner la déclaration'"></i-field>
+        <button pButton pRipple type="button" label="Valider"
+          class="ml-3 p-button-rounded p-button-success h-9 w-1/2"></button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="document$ | async as DocumentState">
+
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <div *ngIf="DocumentState?.documentsState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="DocumentState?.documentsState == 'SUCCESS'">
+      <div *ngIf="DocumentState?.documents?.length <= 0" class="flex flex-col items-center">
+        <h2>La liste des BL et des factures est vide</h2>
+      </div>
+      <ng-container *ngIf="DocumentState?.documents?.length > 0">
+        <div class="overflow-auto">
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead>
+              <tr>
+                <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    N° Exp
+                  </mat-checkbox>
+                </th>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let document of DocumentState?.documents  | paginate: { itemsPerPage: 5, currentPage: p };">
+                <td class="p-3">
+                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(document) : null"
+                    [checked]="selection.isSelected(document)" [aria-label]="checkboxLabel(document)">
+                    {{(document?.n_expedition) || '---'}}
+                  </mat-checkbox>
+                </td>
+                <td class="p-3">{{(document?.n_declaration) || '---'}}</td>
+                <td class="p-3">{{(document?.data_emission | date: 'dd/MM/yyyy') || '---'}}</td>
+                <td class="p-3">{{(document?.expediteur) || '---'}}</td>
+                <td class="p-3">{{(document?.destinataire) || '---'}}</td>
+                <td class="p-3">{{(document?.destination) || '---'}}</td>
+                <td class="p-3">{{(document?.type) || '---'}}</td>
+                <td class="p-3">{{(document?.document_reference) || '---'}}</td>
+
+                <td class="flex justify-around p-3">
+                  {{(document?.livree? 'Livrée' : 'Non Livrée') || '---'}}
+                  <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu1">more_vert</mat-icon>
+                </td>
+                <mat-menu #menu1="matMenu" class="pl-6 pr-6 pt-3 pb-3">
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[19px] text-[#b5b5b5]">check_circle</mat-icon>
+                    </div>
+                    <div class="pl-0">
+                      <p class="text-[#b5b5b5] text-[12px] font-medium cursor-pointer"
+                      *ngIf="permissionService.hasPermission('Caisse', 'Réception BL et factures', 'U')"
+                        (click)="confirmDocumentsReception(document)">Valider</p>
+                    </div>
+                  </div>
+                </mat-menu>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-16 mb-5" *ngIf="selection.hasValue()">
+          <div>
+          </div>
+          <div class="text-right">
+            <button (click)="confirmDocumentsReception()" *ngIf="permissionService.hasPermission('Caisse', 'Réception BL et factures', 'U')"
+              class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] p-4 ml-9font-bold text-[18px]"
+              type="submit">
+              Valider
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

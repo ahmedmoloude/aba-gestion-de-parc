@@ -1,0 +1,48 @@
+.text-size{
+    font-size: 13px;
+      }
+      .mb-0{
+        margin-bottom: 0px !important;
+      }
+      .chevron{
+        position: absolute;
+        right: 120px;
+      }
+      
+      .make-scrollable {
+        height: 600px; 
+        overflow-x: scroll;
+    }
+    .w-width{
+     width: fit-content;
+     margin-top: 50px;
+     margin-left: auto;
+     margin-right: auto;
+    }
+    .border-dashed{
+      border-bottom: 2px solid;
+      border-color: #0C8040;
+    }
+.iconplace{
+    bottom: -0.7rem;
+    left: -11px;
+}
+.iconsteps{
+    font-size: 13px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.example-margin {
+    margin: 0 10px;
+  }
+  ::ng-deep  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    opacity: 0 !important;
+    background-color:  #0C8040!important;  }
+  
+    ::ng-deep  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color:  #0C8040!important;   }
+  
+    ::ng-deep   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color:  #0C8040!important;   }

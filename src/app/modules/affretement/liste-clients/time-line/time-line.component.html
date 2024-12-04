@@ -1,0 +1,113 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">
+        {{
+          dialogData.display_timeline ? "Workflow de validation du forfait" : "Versions des remise"
+        }}
+      </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <div class="overflow-x-auto relative px-3 mt-6">
+    <!-- timeline -->
+        <div
+          *ngIf="
+            dialogData.display_timeline 
+          "
+          class="flex items-center gap-1 flex-wrap"
+        >
+          <ng-container
+            *ngFor="
+              let item of dialogData.demande.discounts[0].timeline;
+              let idx = index
+            "
+          >
+            <div
+              class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px] border-[#E8E8E8] border-[2px] p-3 mb-2"
+            >
+              <!-- Validation refused -->
+              <ng-container *ngIf="item.is_rejected">
+                <div *ngIf="item.workflow_step === -1" class="text-red-400">
+                  <span
+                    >Rejeté {{ item.count_validation_steps }} /
+                    {{ item.count_validation_steps }}</span
+                  >
+                </div>
+                <div *ngIf="item.workflow_step !== -1" class="text-red-400">
+                  <span
+                    >Rejeté {{ item.workflow_step + 1 }}/
+                    {{ item.count_validation_steps }}</span
+                  >
+                </div>
+              </ng-container>
+  
+              <!-- Validation done -->
+              <ng-container *ngIf="!item.is_rejected">
+                <div *ngIf="item.workflow_step === -1">
+                  <span
+                    *ngIf="item.status === 'DRAFT'"
+                    class="text-white bg-orange-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px]"
+                    >Brouillon</span
+                  >
+                  <span
+                    *ngIf="item.status === 'CREATED'"
+                    class="text-white bg-[#728FCE] pl-3 pr-3 pt-1 pb-1 rounded-[20px]"
+                    >Confirmé</span
+                  >
+                  <span
+                    *ngIf="item.status === 'ACCEPTED'"
+                    class="text-white bg-green-500 pl-3 pr-3 pt-1 pb-1 rounded-[20px]"
+                    >Accepté</span
+                  >
+                  <span
+                    *ngIf="item.status === 'REJECTED'"
+                    class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px]"
+                  >
+                    Non Accepté</span
+                  >
+                </div>
+                <div *ngIf="item.workflow_step !== -1" class="text-[#0C8040]">
+                  <span
+                    >Validé {{ item.workflow_step + 1 }}/
+                    {{ item.count_validation_steps }}</span
+                  >
+                </div>
+              </ng-container>
+  
+              <div class="pt-2 font-semibold">
+                {{ item.author?.name || item.author?.first_name }}
+              </div>
+  
+              <div *ngIf="item.motif" class="pt-2">
+                {{ item.motif }}
+              </div>
+  
+              <div class="pt-2">
+                {{ item.created_at | date: "dd/MM/yyyy : h:mm:ss" }}
+              </div>
+            </div>
+            <span
+              *ngIf="idx < dialogData.demande.discounts[0].timeline.length - 1"
+            >
+              <mat-icon>arrow_right_alt</mat-icon>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="mt-2 mb-2 p-4">
+        <div class="text-right">
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

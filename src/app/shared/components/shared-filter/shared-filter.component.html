@@ -1,0 +1,51 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="flex flex-columns justify-between">
+    <div class="inputs">
+      <div class="flex gap-3 justify-between">
+          <div class="grid gap-3" [ngClass]="'grid-cols-'+colsCount">
+            <div *ngFor="let input of inputs">
+              <ng-container *ngIf="input.type === 'select'">
+                  <!-- {{input.keys}} -->
+
+                  <ng-container *ngIf="input.apiUrl">
+                    <app-shared-autcomplete *ngIf="input.keys?.length" #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="input.keys" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="input.keys" [apiUrl]="input.apiUrl"></app-shared-autcomplete>
+                    <app-shared-autcomplete *ngIf="!input.keys?.length" #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="['text']" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="[input.keys]" [apiUrl]="input.apiUrl"></app-shared-autcomplete>
+                  </ng-container>
+                  <ng-container  *ngIf="!input.apiUrl">
+                    <app-shared-autcomplete *ngIf="input.keys?.length" #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="input.keys" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="input.keys" [data]="input.options"></app-shared-autcomplete>
+                    <app-shared-autcomplete *ngIf="!input.keys?.length" #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="['text']" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="['text']" [data]="input.options"></app-shared-autcomplete>
+                  </ng-container>
+              </ng-container>
+              <ng-container *ngIf="input.type !== 'select'">
+                <i-field #inputElement1 [name]="input.name" [type]="input.type" [label]="input.placeholder" [inputStyle]="style" [inputDefaultValue]="input?.defaultValue"></i-field>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-3 justify-between mt-4">
+          <div class="grid grid-cols-6 gap-3" *ngIf="extraInputs.length && showExtraInputs">
+            <div *ngFor="let input of extraInputs">
+              <ng-container *ngIf="input.type === 'select'">
+                <ng-container *ngIf="input.apiUrl">
+                  <app-shared-autcomplete #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="['text']" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="['text']" [apiUrl]="input.apiUrl"></app-shared-autcomplete>
+                </ng-container>
+                <ng-container  *ngIf="!input.apiUrl">
+                  <app-shared-autcomplete #selectElement1 [lengthToStart]="3" [hasIcon]="false" [type]="'single'" [keys]="['text']" [inputStyle]="style" [uniqueKey]="input.name" [placeholer]="input.placeholder" [opended]="true" [display]="['text']" [data]="input.options"></app-shared-autcomplete>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="input.type !== 'select'">
+                <i-field #inputElement1 [name]="input.name" [type]="input.type" [label]="input.placeholder" [inputStyle]="style"  [inputDefaultValue]="input?.defaultValue"></i-field>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btns">
+        <div class="flex flex-row ml-2">
+          <mat-icon class="cursor-pointer mr-4 extra-search" matTooltip="Plus de filtre" matTooltipPosition="above" *ngIf="extraInputs.length" (click)="toggleExtraInputs()">playlist_add</mat-icon>
+          <mat-icon class="cursor-pointer mr-4 extra-search" matTooltip="Réinitialiser" matTooltipPosition="above" (click)="refreshFilter()">refresh</mat-icon>
+          <button type="submit" class="filter-btn"><mat-icon class="cursor-pointer mr-2">filter_list</mat-icon> <span>Filtrer</span></button>
+        </div>
+      </div>
+  </div>
+</form>

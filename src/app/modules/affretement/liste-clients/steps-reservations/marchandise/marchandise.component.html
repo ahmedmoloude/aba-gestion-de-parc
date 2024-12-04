@@ -1,0 +1,1190 @@
+<form
+  [formGroup]="marchandiseReservationForm"
+  (ngSubmit)="onSubmitMarchandise()"
+>
+    <div
+        class="sticky-form-container"
+      >
+        <div class="bg-[#0C8040] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 rounded-[18px]">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true">
+              <div class="flex mt-5">
+                <div class="w-1/4">
+                  <div class="summary-field">
+                    <p><strong>Nbr palettes:</strong> {{  nbrPalettesG  }}</p>
+                  </div>
+                </div>
+                <div class="w-1/4 ml-5">
+                  <div class="summary-field">
+                    <p><strong>Poids :</strong> {{ poidsGlobal}} kg</p>
+                  </div>
+                </div>
+                <div class="w-1/4 ml-5">
+                  <div class="summary-field">
+                    <p><strong>Volume :</strong> {{ volumeG }} m³</p>
+                  </div>
+                </div>
+                <div class="w-1/4 ml-5">
+                  <div class="summary-field">
+                    <p><strong>Valeur déclarée :</strong> {{ valeurDeclareG }} Dhs</p>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>    
+  </div>
+
+  <form [formGroup]="chargementForm">
+    <div
+      class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5"
+    >
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="border-b-2 border-[#0C8040] mt-5">
+                <p
+                  class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]"
+                >
+                  Point de chargement
+                </p>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container formArrayName="chargements">
+            <div
+              *ngFor="
+                let chargementFormArray of chargements.controls;
+                let i = index
+              "
+            >
+              <div [formGroup]="chargementFormArray">
+                <div class="flex mt-5">
+                  <div class="flex items-center">
+                    <span
+                      class="bg-[#ccc] w-8 h-8 rounded-full text-center text-base text-white leading-8 font-semibold"
+                      >{{ i + 1 }}</span
+                    >
+                  </div>
+
+                  <div class="w-1/4 ml-4">
+                    <i-field
+                      [type]="'datetime-local'"
+                      [label]="'Date / heure d’enlèvement'"
+                      formControlName="date"
+                      [minValue]="minDate"
+                      [maxValue]="maxDate"
+                      [ngModelOptions]="{ timezone: 'UTC' }"
+                    ></i-field>
+                  </div>
+
+                  <div class="ml-4">
+                    <i-field
+                      [type]="'text'"
+                      [label]="'pays'"
+                      formControlName="country"
+                      [disabled]="true"
+                    ></i-field>
+                  </div>
+                  <div class="ml-4">
+                    <i-field
+                      [type]="'text'"
+                      [label]="'ville d’enlèvement'"
+                      formControlName="ville"
+                      [disabled]="true"
+                    ></i-field>
+                  </div>
+                  <div class="w-2/4 ml-4">
+                    <app-select-chargement
+                      (addressEvent)="onAddressChange($event, i)"
+                    ></app-select-chargement>
+                  </div>
+
+                  <div
+                    class="flex ml-5 items-center cursor-pointer"
+                    (click)="detailsmarchandise(i)"
+                  >
+                    <mat-icon
+                      class="text-[#0C8040] text-[20px]"
+                      matTooltip="Détail de marchandise"
+                      >add_circle</mat-icon
+                    >
+                    <!-- <h3 class="text-[#0C8040] mb-0">Détail de marchandise</h3> -->
+                  </div>
+                  <div class="flex items-center cursor-pointer m-2">
+                    <mat-icon
+                      class="text-red-500"
+                      *ngIf="i > 0"
+                      (click)="deleteChargement(i)"
+                      >delete_forever</mat-icon
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="flex mt-4 cursor-pointer" (click)="addchargement()">
+            <mat-icon class="pt-1 text-[#0C8040] text-[20px]"
+              >add_circle</mat-icon
+            >
+            <h3 class="text-[#0C8040]">Ajouter un lieu de chargement</h3>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </form>
+
+  <form [formGroup]="destinatairesGroup">
+    <div formArrayName="destinatairesFormArray">
+      <div
+        *ngFor="
+          let destinataireForm of destinatairesFormArray.controls;
+          let i = index
+        "
+      >
+        <div>
+          <div [formGroup]="destinataireForm">
+            <div
+              class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5"
+            >
+              <mat-accordion>
+                <mat-expansion-panel [expanded]="isPanelExpanded[i]"  >
+                  <mat-expansion-panel-header (click)="isPanelExpanded[i] = !isPanelExpanded[i]">
+                    <mat-panel-title>
+                      <div class="border-b-2 border-[#0C8040] mt-5">
+                        <div class="flex gap-4 bg-[#0C8040] text-[#fff] py-2 px-6 rounded-[12px_12px_0px_0px] ">
+                          <p>
+                            Destinataire {{ i + 1 }}
+                          </p>
+
+                          <div class="flex items-center" *ngIf="!isPanelExpanded[i]">
+                            <h3
+                              class="text-[#fff] mb-0"
+                              *ngIf="myDestinataires[i]['type'] == 'individual'"
+                            >
+                              ({{ myDestinataires[i]["first_name"] }}
+                              {{ myDestinataires[i]["last_name"] }})
+                            </h3>
+                            <h3
+                              class="text-[#fff] mb-0"
+                              *ngIf="myDestinataires[i]['type'] == 'entity'"
+                            >
+                              ({{ myDestinataires[i]["name"] }})
+                            </h3>
+                          </div>
+      
+                        </div>
+                      </div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class=" flex justify-between items-center">
+                    <div class="flex items-center mt-5">
+                      <mat-icon class="text-[#ccc] text-[20px]">person</mat-icon>
+                      <h3
+                        class="text-[#3655FF] mb-0"
+                        *ngIf="myDestinataires[i]['type'] == 'individual'"
+                      >
+                        {{ myDestinataires[i]["first_name"] }}
+                        {{ myDestinataires[i]["last_name"] }}
+                      </h3>
+  
+                      <h3
+                        class="text-[#3655FF] mb-0"
+                        *ngIf="myDestinataires[i]['type'] == 'entity'"
+                      >
+                        {{ myDestinataires[i]["name"] }}
+                      </h3>
+                    </div>
+                    </div>
+                  
+                 
+
+                  <div class="mt-2">
+                    <div formArrayName="pointsGeoArray">
+                      <div
+                        *ngFor="
+                          let pointGeo of destinatairesFormArrayPointsGeoArray(
+                            i
+                          ).controls;
+                          let j = index
+                        "
+                      >
+                        <div>
+                          <h3 class="text-[#0C8040] pl-6 font-bold">
+                            Point de déchargement {{ j + 1 }}
+                          </h3>
+
+                          <div [formGroup]="pointGeo">
+                            <div class="flex mt-5">
+                              <div class="w-1/4">
+                                <i-field
+                                  [type]="'datetime-local'"
+                                  [label]="'Date / heure de livraison'"
+                                  formControlName="date"
+                                  [minValue]="minDate"
+                                  [maxValue]="maxDate"
+                                  [ngModelOptions]="{ timezone: 'UTC' }"
+                                ></i-field>
+                              </div>
+                              <div class="ml-4">
+                                <i-field
+                                  [type]="'text'"
+                                  [label]="'Code de déclaration'"
+                                  formControlName="dec_code"
+                                ></i-field>
+                              </div>
+                              <div class="ml-4">
+                                <i-field
+                                  [type]="'text'"
+                                  [label]="'pays'"
+                                  formControlName="country"
+                                  [disabled]="true"
+                                ></i-field>
+                              </div>
+                              <div class="ml-4">
+                                <i-field
+                                  [type]="'text'"
+                                  [label]="'ville d’arrivée'"
+                                  formControlName="ville"
+                                  [disabled]="true"
+                                ></i-field>
+                              </div>
+
+                              <div class="w-2/4 ml-4">
+                                <app-select-dechargement
+                                  (addressdechargeEvent)="
+                                    onAddressdechargeChange($event, i, j)
+                                  "
+                                  [customer_id]="myDestinataires[i]['id']"
+                                ></app-select-dechargement>
+                              </div>
+                              
+                              <!-- <div class="w-1/2 ml-4">
+                            <i-field
+                              [type]="'text'"
+                              [label]="'ville d’enlèvement'"
+                              formControlName="city_id"
+                            ></i-field>
+                          </div> -->
+
+                              <!-- <div
+                              class="flex w-1/6 ml-5 items-center cursor-pointer"
+                              (click)="selectPointgeo(i)"
+                            >
+                              <mat-icon class="text-[20px]">add_circle</mat-icon>
+                              <h3 class="mb-0">
+                                <u> <strong>Point Géographique</strong></u>
+                              </h3>
+                            </div> -->
+
+                              <div class="mt-2 cursor-pointer">
+                                <mat-icon
+                                  class="text-red-500"
+                                  (click)="deleteDechargement(i, j)"
+                                  *ngIf="j > 0"
+                                  >delete_forever</mat-icon
+                                >
+                              </div>
+                            </div>
+
+                            <div class="flex items-center mt-5">
+                              <mat-icon class="text-[#0C8040] text-[15px] pt-1"
+                                >featured_play_list</mat-icon
+                              >
+                              <h3 class="text-[#0C8040] mb-0 font-bold">
+                                Palettes
+                              </h3>
+                            </div>
+
+                            <mat-radio-group
+                              class="mt-4"
+                              formControlName="type_palettes"
+                            >
+                              <!-- (change)="onPaletteChange($event, i, j)" -->
+                              <mat-radio-button value="expediteur"
+                                >Palettes expéditeur</mat-radio-button
+                              >
+                              <!-- <mat-radio-button value="sdtm" class="ml-3"
+                                >Palettes SDTM</mat-radio-button
+                              > -->
+                            </mat-radio-group>
+
+                            <section class="example-section">
+                              <mat-checkbox
+                                #checkboxGerbage
+                                class="example-margin"
+                                formControlName="gerbage"
+                                (change)="
+                                  onGerbageChange(checkboxGerbage.checked, i, j)
+                                "
+                                >Gerbage</mat-checkbox
+                              >
+                            </section>
+
+                            <div class="grid grid-cols-2 gap-4 mt-5">
+                              <div class="border border-[#ccc]">
+                                <div
+                                  class="flex items-center p-[10px] border-b border-[#ccc]"
+                                >
+                                  <mat-icon
+                                    class="text-[#8E8E8E] text-[15px] pt-1"
+                                    >local_shipping</mat-icon
+                                  >
+                                  <h3 class="text-[#000000] mb-0">Envoi</h3>
+                                </div>
+                                <div class="p-[10px]">
+                                  <ng-container formArrayName="envoisFormArray">
+                                    <div
+                                      *ngFor="
+                                        let envoi of destinatairesFormArrayEnvoisArray(
+                                          i,
+                                          j
+                                        ).controls;
+                                        let k = index
+                                      "
+                                    >
+                                      <ng-container
+                                        *ngIf="
+                                          envoi.controls.message;
+                                          else elseBlock
+                                        "
+                                      >
+                                        <div [formGroup]="envoi">
+                                          <!-- Display the message -->
+                                          <div class="text-center">
+                                            {{ envoi.controls.message.value }}
+                                          </div>
+                                        </div>
+                                      </ng-container>
+                                      <ng-template #elseBlock>
+                                        <div [formGroup]="envoi">
+                                          <div
+                                            class="grid grid-cols-3 gap-4 mt-4"
+                                            *ngIf="
+                                              envoi.value.type_palette.length >
+                                              0
+                                            "
+                                          >
+                                            <div class="select-field">
+                                              <strong>{{
+                                                envoi.value.type_palette
+                                              }}</strong>
+                                              <span style="color: gray">{{
+                                                envoi.value.dimension_palette
+                                              }}</span>
+                                            </div>
+
+                                            <div>
+                                              <i-field
+                                                [type]="'number'"
+                                                [label]="'Nbr de palettes'"
+                                                formControlName="nbr_palette"
+                                                (change)="
+                                                  handleInputChange(
+                                                    $event,
+                                                    i,
+                                                    j,
+                                                    k
+                                                  )
+                                                "
+                                              ></i-field>
+
+                                              <div
+                                                class="flex justify-end cursor-pointer"
+                                                (click)="
+                                                  openEnvoiDialogsupport(
+                                                    i,
+                                                    j,
+                                                    k
+                                                  )
+                                                "
+                                              >
+                                                <mat-icon
+                                                  class="text-[#8E8E8E] text-[15px] pt-1 w-auto"
+                                                  >add_circle</mat-icon
+                                                >
+                                                <h3
+                                                  class="text-[#7C7C7C] mb-0 text-xs pt-1"
+                                                >
+                                                  Ajouter les N° de support
+                                                </h3>
+                                              </div>
+                                            </div>
+                                            <div>
+                                              <div class="flex mt-2">
+                                                <div
+                                                  class="flex cursor-pointer"
+                                                  (click)="
+                                                    Visualiserenvoi(i, j, k)
+                                                  "
+                                                >
+                                                  <mat-icon
+                                                    class="text-[#8E8E8E] text-[21px] pt-1"
+                                                    >search</mat-icon
+                                                  >
+                                                  <h3
+                                                    class="text-[#0C8040] mb-0"
+                                                  >
+                                                    Visualiser
+                                                  </h3>
+                                                </div>
+                                                <!-- *ngIf="
+                                                destinatairesFormArrayEnvoisArray(
+                                                  i,
+                                                  j
+                                                ).controls.length > 0
+                                              " -->
+                                                <div
+                                                  class="ml-4 cursor-pointer"
+                                                  (click)="
+                                                    deleteEnvoi(
+                                                      i,
+                                                      j,
+                                                      k,
+                                                      envoi.value
+                                                    )
+                                                  "
+                                                >
+                                                  <mat-icon class="text-red-500"
+                                                    >delete_forever</mat-icon
+                                                  >
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </ng-template>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                                <div
+                                  class="flex pl-[10px] cursor-pointer"
+                                  [matMenuTriggerFor]="menu"
+                                >
+                                  <mat-icon
+                                    class="pt-1 text-[#0C8040] text-[20px]"
+                                    >add_circle</mat-icon
+                                  >
+                                  <h3 class="text-[#0C8040]">
+                                    Ajouter une palette
+                                  </h3>
+                                  <!-- {{ totalPalettesEnvoi }} -->
+                                </div>
+                                <mat-menu #menu="matMenu">
+                                  <button
+                                    *ngFor="let palette of palettes"
+                                    (click)="addEnvoi(i, j, palette)"
+                                    mat-menu-item
+                                  >
+                                    {{ palette.title }} - {{ palette.dimension }}
+                                  </button>
+                                </mat-menu>
+                              </div>
+                              <div class="border border-[#ccc]">
+                                <div
+                                  class="flex items-center p-[10px] border-b border-[#ccc]"
+                                >
+                                  <mat-icon
+                                    class="text-[#8E8E8E] text-[15px] pt-1"
+                                    >replay</mat-icon
+                                  >
+                                  <h3 class="text-[#000000] mb-0">Retour</h3>
+                                </div>
+                                <div class="p-[10px]">
+                                  <ng-container
+                                    formArrayName="retoursFormArray"
+                                  >
+                                    <div
+                                      *ngFor="
+                                        let retour of destinatairesFormArrayRetoursArray(
+                                          i,
+                                          j
+                                        ).controls;
+                                        let k = index
+                                      "
+                                    >
+                                      <div [formGroup]="retour">
+                                        <div
+                                          class="grid grid-cols-2 gap-4 mt-4"
+                                        >
+                                          <div>
+                                            <div class="flex gap-2">
+                                              <strong>
+                                                {{
+                                                  retour.value.type_palette
+                                                }}</strong
+                                              >
+                                              <span style="color: gray">{{
+                                                retour.value.dimension_palette
+                                              }}</span>
+                                            </div>
+                                            <div
+                                              class="flex justify-end cursor-pointer"
+                                              (click)="
+                                                openRetourDialogsupport(
+                                                  i,
+                                                  j,
+                                                  k,
+                                                  retour.value.type_palette
+                                                )
+                                              "
+                                            >
+                                              <mat-icon
+                                                class="text-[#8E8E8E] text-[18px] pt-1 w-auto"
+                                                >list</mat-icon
+                                              >
+                                              <h3
+                                                class="text-[#7C7C7C] mb-0 text-xs pt-1"
+                                              >
+                                                Sélectionner les N° de support
+                                              </h3>
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="flex mt-2">
+                                              <div
+                                                class="flex cursor-pointer"
+                                                (click)="
+                                                  Visualiserretour(i, j, k)
+                                                "
+                                              >
+                                                <mat-icon
+                                                  class="text-[#8E8E8E] text-[21px] pt-1"
+                                                  >search</mat-icon
+                                                >
+                                                <h3 class="text-[#0C8040] mb-0">
+                                                  Visualiser
+                                                </h3>
+                                              </div>
+                                              <!-- *ngIf="k > 0" -->
+                                              <div
+                                                class="ml-4 cursor-pointer"
+                                                (click)="deleteRetour(i, j, k)"
+                                              >
+                                                <mat-icon class="text-red-500"
+                                                  >delete_forever</mat-icon
+                                                >
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                                <div
+                                  class="flex pl-[10px] cursor-pointer"
+                                  [matMenuTriggerFor]="menuretour"
+                                >
+                                  <mat-icon
+                                    class="pt-1 text-[#0C8040] text-[20px]"
+                                    >add_circle</mat-icon
+                                  >
+                                  <h3 class="text-[#0C8040]">
+                                    Ajouter une palette
+                                  </h3>
+                                </div>
+
+                                <mat-menu #menuretour="matMenu">
+                                  <button
+                                    *ngFor="let palette of palettes"
+                                    (click)="addRetour(i, j, palette)"
+                                    mat-menu-item
+                                  >
+                                    {{ palette.title }} - {{ palette.dimension }}
+                                  </button>
+                                </mat-menu>
+                              </div>
+                            </div>
+
+                            <section class="example-section">
+                              <div>
+                                <mat-checkbox
+                                  #checkbox1
+                                  class="example-margin"
+                                  formControlName="retour_fonds"
+                                  (change)="
+                                    onRetourFondsChange(checkbox1.checked, i, j)
+                                  "
+                                  >Retour de fonds</mat-checkbox
+                                >
+                              </div>
+                              <div>
+                                <mat-checkbox
+                                  #checkbox2
+                                  class="example-margin"
+                                  formControlName="retour_documents"
+                                  (change)="
+                                    onRetourDocumentsChange(
+                                      checkbox2.checked,
+                                      i,
+                                      j
+                                    )
+                                  "
+                                  >Retour de documents</mat-checkbox
+                                >
+                              </div>
+                            </section>
+                            <div class="grid grid-cols-3 gap-4">
+                              <!-- test======>{{ checkedStates[i].retour_fonds }}
+                            {{ destinataireForm.controls.retour_fonds.value }} -->
+
+                              <!-- <ng-container *ngIf="checkedStates[i].retour_fonds"> -->
+                              <ng-container
+                                *ngIf="pointGeo.controls.retour_fonds.value"
+                              >
+                                <div>
+                                  <div class="flex items-center mt-5">
+                                    <mat-icon
+                                      class="text-[#0C8040] text-[15px] pt-1"
+                                      >money</mat-icon
+                                    >
+                                    <h3 class="text-[#0C8040] mb-0">
+                                      Retour de fonds
+                                    </h3>
+                                  </div>
+                                  <ng-container
+                                    formArrayName="retourFondsFormArray"
+                                  >
+                                    <div
+                                      *ngFor="
+                                        let retourFond of destinatairesFormArrayretourFondsFormArray(
+                                          i,
+                                          j
+                                        ).controls;
+                                        let k = index
+                                      "
+                                    >
+                                      <div [formGroup]="retourFond">
+                                        <div class="grid grid-cols-2 mt-4">
+                                          <div>
+                                            <div class="select-field">
+                                              <label class="select-label"
+                                                >Nature de fond</label
+                                              >
+                                              <mat-form-field
+                                                appearance="fill"
+                                                class="w-full"
+                                              >
+                                                <!-- <mat-label
+                                      >----- Sélectionner un type -----</mat-label
+                                    > -->
+                                                <mat-select
+                                                  formControlName="type_retour_fond"
+                                                >
+                                                  <mat-option
+                                                    *ngFor="
+                                                      let typef of [
+                                                        {
+                                                          type: 'CHECK',
+                                                          value: 'chèque'
+                                                        },
+                                                        {
+                                                          type: 'TRAIT',
+                                                          value: 'traite'
+                                                        },
+                                                        {
+                                                          type: 'CachOnDelivery',
+                                                          value: 'espèce'
+                                                        }
+                                                      ]
+                                                    "
+                                                    [value]="typef['type']"
+                                                  >
+                                                    {{ typef["value"] }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                          </div>
+                                          <div class="ml-5">
+                                            <i-field
+                                              [type]="'number'"
+                                              [label]="'Montant du fond (Dhs)'"
+                                              formControlName="montant_fond"
+                                            ></i-field>
+                                          </div>
+                                          <div
+                                            class="mt-2 cursor-pointer"
+                                            *ngIf="k > 0"
+                                            (click)="deleteRetourFond(i, j, k)"
+                                          >
+                                            <mat-icon class="text-red-500"
+                                              >delete_forever</mat-icon
+                                            >
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                  <div
+                                    class="flex cursor-pointer mt-4"
+                                    (click)="addRetourFond(i, j)"
+                                  >
+                                    <mat-icon
+                                      class="pt-1 text-[#0C8040] text-[20px]"
+                                      >add_circle</mat-icon
+                                    >
+                                    <h3 class="text-[#0C8040]">
+                                      Ajouter un retour de fonds
+                                    </h3>
+                                  </div>
+                                </div>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="pointGeo.controls.retour_documents.value"
+                              >
+                                <div class="col-span-2 ml-11">
+                                  <div class="flex items-center mt-5">
+                                    <mat-icon
+                                      class="text-[#0C8040] text-[15px] pt-1"
+                                      >insert_drive_file</mat-icon
+                                    >
+                                    <h3 class="text-[#0C8040] mb-0">
+                                      Retour de documents
+                                    </h3>
+                                  </div>
+
+                                  <ng-container>
+                                    <div class="flex mt-3">
+                                      <div class="flex items-center width-info">
+
+                                        <div
+                                          class="w-full rounded-[28px] text-sm p-2"
+                                        >
+                                          <div class="select-field">
+                                            <label class="select-label"
+                                              >Type Document</label
+                                            >
+                                            <mat-form-field
+                                              appearance="fill"
+                                              class="w-full"
+                                            >
+                                              <mat-select
+                                                formControlName="type_factures"
+                                                disabled="true"
+                                              >
+                                                <mat-option
+                                                  *ngFor="
+                                                    let type_document of type_documents
+                                                  "
+                                                  [value]="type_document"
+                                                >
+                                                  {{ type_document }}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+
+                                        <span
+                                          class="inline-flex items-center w-8 h-8 p-3 mr-2 text-sm rounded-full text-white bg-[#0C8040]"
+                                        >
+                                          {{
+                                            getReferences("Facture", i, j)
+                                              .length
+                                          }}
+                                        </span>
+                                      </div>
+                                      <div class="flex items-center w-[85%]">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                          appearance="fill"
+                                        >
+                                          <mat-label
+                                            >Ajouter une référence...</mat-label
+                                          >
+                                          <mat-chip-list
+                                            #chipList
+                                            formControlName="facture_references"
+                                          >
+                                            <mat-chip
+                                              *ngFor="
+                                                let reffact of getReferences(
+                                                  'Facture',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                              (removed)="
+                                                deleteRetourDocument(
+                                                  reffact,
+                                                  'Facture',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                            >
+                                              {{ reffact }}
+                                              <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                              </button>
+                                            </mat-chip>
+                                            <input
+                                              placeholder="New document..."
+                                              [matChipInputFor]="chipList"
+                                              [matChipInputSeparatorKeyCodes]="
+                                                separatorKeysCodes
+                                              "
+                                              (matChipInputTokenEnd)="
+                                                addRetourDocument(
+                                                  $event,
+                                                  'Facture',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                              [matChipInputAddOnBlur]="true"
+                                              maxlength="max_fa"
+                                            />
+                                          </mat-chip-list>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                    <div class="flex mt-3">
+                                      <div class="flex items-center width-info">
+                                        <!-- <span
+                                        class="w-full rounded-[28px] text-sm p-2"
+                                      >
+                                        BL
+                                      </span> -->
+                                        <div
+                                          class="w-full rounded-[28px] text-sm p-2"
+                                        >
+                                          <div class="select-field">
+                                            <label class="select-label"
+                                              >Type Document</label
+                                            >
+                                            <mat-form-field
+                                              appearance="fill"
+                                              class="w-full"
+                                            >
+                                              <mat-select
+                                                formControlName="type_bls"
+                                                disabled='true'
+                                              >
+                                                <mat-option
+                                                  *ngFor="
+                                                    let type_document of type_documents
+                                                  "
+                                                  [value]="type_document"
+                                                >
+                                                  {{ type_document }}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                        <span
+                                          class="inline-flex items-center w-8 h-8 p-3 mr-2 text-sm rounded-full text-white bg-[#0C8040]"
+                                        >
+                                          {{ getReferences("BL", i, j).length }}
+                                        </span>
+                                      </div>
+                                      <div class="flex items-center w-[85%]">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                          appearance="fill"
+                                        >
+                                          <mat-label
+                                            >Ajouter une référence...</mat-label
+                                          >
+                                          <mat-chip-list
+                                            #chipBL
+                                            aria-label="document selection"
+                                            formControlName="bl_references"
+                                          >
+                                            <mat-chip
+                                              *ngFor="
+                                                let refbl of getReferences(
+                                                  'BL',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                              (removed)="
+                                                deleteRetourDocument(
+                                                  refbl,
+                                                  'BL',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                            >
+                                              {{ refbl }}
+                                              <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                              </button>
+                                            </mat-chip>
+                                            <input
+                                              placeholder="New document..."
+                                              [matChipInputFor]="chipBL"
+                                              [matChipInputSeparatorKeyCodes]="
+                                                separatorKeysCodes
+                                              "
+                                              (matChipInputTokenEnd)="
+                                                addRetourDocument(
+                                                  $event,
+                                                  'BL',
+                                                  i,
+                                                  j
+                                                )
+                                              "
+                                              [matChipInputAddOnBlur]="true"
+                                              maxlength="max_bl"
+                                            />
+                                          </mat-chip-list>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex w-1/4 ml-5 items-center cursor-pointer"
+                    (click)="addDechargement(i)"
+                  >
+                    <mat-icon class="text-[#0C8040] text-[20px]"
+                      >add_circle</mat-icon
+                    >
+                    <h3 class="text-[#0C8040] mb-0 font-bold">
+                      <u>Ajouter un point déchargement</u>
+                    </h3>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="portForm">
+    <div
+      class="mt-4 bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5"
+    >
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="border-b-2 border-[#0C8040] mt-5">
+                <p
+                  class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]"
+                >
+                  Mode port
+                </p>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <section class="example-section">
+            <mat-radio-group class="mt-4" formControlName="port_id">
+              <ng-container *ngFor="let port of ports">
+                <mat-radio-button [value]="port.id" class="ml-3">
+                  {{ port.title }}
+                </mat-radio-button>
+              </ng-container>
+            </mat-radio-group>
+          </section>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </form>
+
+  <form [formGroup]="vsForm">
+    <div
+      class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5"
+    >
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="border-b-2 border-[#0C8040] mt-5">
+                <p
+                  class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]"
+                >
+                  Véhicule et services annexes
+                </p>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="mt-5">
+            <h3 class="text-[#0C8040]">Véhicule :</h3>
+          </div>
+          <!--  <div *ngIf="vehiculeSpinner" class="flex justify-center">
+          <mat-spinner [diameter]="20"></mat-spinner>
+        </div>
+        <ng-container formArrayName="vehicules" *ngIf="!vehiculeSpinner"> -->
+          <ng-container formArrayName="vehicules">
+            <div
+              *ngFor="
+                let vehiculesFormArray of vehicules.controls;
+                let i = index
+              "
+            >
+              <div [formGroup]="vehiculesFormArray">
+                
+                <div class="grid grid-cols-5 mt-4">
+                  <div>
+                    <div class="select-field">
+                      <label class="select-label">Type de camion</label>
+                      <mat-form-field appearance="fill" class="w-full">
+                        <mat-select formControlName="type_camion">
+                          <mat-option
+                            *ngFor="let vehicule of vehiculesReservation"
+                            [value]="vehicule.name"
+                            (click)="onVehiculeChange(vehicule, i)"
+                          >
+                            {{ vehicule.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="select-field pl-5">
+                    <label class="select-label">Tonnage</label>
+                    <mat-form-field appearance="fill" class="w-full">
+                      <mat-select formControlName="tonnage">
+                        <mat-option
+                          *ngFor="
+                            let tonnage of tonnageByVehicule(vehiculesFormArray.value.type_camion) as Array
+                          "
+                          [value]="tonnage.id"
+                        >
+                          {{ tonnage.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <div class="pl-5">
+                  <i-field
+                    formControlName="tonnage"
+                    [type]="'text'"
+                    [label]="'Tonnage'"
+                  >
+                  </i-field>
+                </div> -->
+                  <!-- <div class="pl-5">
+                  <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Tonnage</mat-label>
+                    <mat-select formControlName="tonnage">
+                      <mat-option> </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div> -->
+                  <div class="pl-5">
+                    <i-field
+                      [disabled]="true"
+                      formControlName="poids_vehicule"
+                      [type]="'text'"
+                      [label]="'Charge utile(T)'"
+                    ></i-field>
+                  </div>
+                  <div class="flex items-center cursor-pointer">
+                    <mat-icon
+                      class="text-red-500"
+                      *ngIf="i > 0"
+                      (click)="deleteVehicule(i)"
+                      >delete_forever</mat-icon
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="flex mt-5 cursor-pointer" (click)="addVehicule()" *ngIf="vehicules.controls.length === 0">
+            <mat-icon class="pt-1 text-[#0C8040] text-[20px]"
+              >add_circle</mat-icon
+            >
+            <h3 class="text-[#0C8040]">Ajouter un vehicule</h3>
+          </div>
+
+          <div class="mt-5">
+            <h3 class="text-[#0C8040]">Services :</h3>
+          </div>
+
+          <ng-container formArrayName="services">
+            <div
+              *ngFor="let servicesFormArray of services.controls; let i = index"
+            >
+              <div [formGroup]="servicesFormArray">
+                <div class="flex mt-4">
+                  <div class="w-1/5">
+                    <div class="select-field">
+                      <label class="select-label">Type de service</label>
+                      <mat-form-field appearance="fill" class="w-full">
+                        <!-- <mat-label>----- Sélectionner un type -----</mat-label> -->
+                        <mat-select formControlName="name">
+                          <mat-option
+                            *ngFor="let serviceRes of servicesReservation"
+                            [value]="serviceRes.title_affichage"
+                            (click)="onServiceChange(serviceRes, i)"
+                          >
+                            {{ serviceRes.title_affichage }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="w-1/12 ml-5">
+                    <i-field
+                      [type]="'number'"
+                      [label]="'Nbr'"
+                      formControlName="nbr"
+                    ></i-field>
+                  </div>
+                  <div class="flex items-center cursor-pointer">
+                    <mat-icon
+                      class="text-red-500"
+                      *ngIf="i > 0"
+                      (click)="deleteService(i)"
+                      >delete_forever</mat-icon
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="flex mt-5 cursor-pointer" (click)="addService()">
+            <mat-icon class="pt-1 text-[#0C8040] text-[20px]"
+              >add_circle</mat-icon
+            >
+            <h3 class="text-[#0C8040]">Ajouter un service</h3>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </form>
+
+  <div class="grid grid-cols-2 gap-4 mt-1 mb-4 p-4">
+    <div class="col-start-1 col-end-3">
+      <button
+        type="button"
+        (click)="goBack($event)"
+        *ngIf="step > 1"
+        class="w-48 underline pl-1 pt-3 text-left"
+      >
+        Retour
+      </button>
+    </div>
+    <div class="col-end-7 col-span-2">
+      <button
+        type="submit"
+        class="bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44"
+      >
+        <span class="pl-2">Suivant</span>
+      </button>
+    </div>
+  </div>
+</form>

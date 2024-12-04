@@ -1,0 +1,207 @@
+<form
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+  [formGroup]="createRamassage"
+>
+  <div class="grid grid-cols-1">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Demande de ramassage</h2>
+      </div>
+    </div>
+  </div>
+  <div class="list-ramassage p-9">
+    <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-4 mb-4" >
+      <div>
+        <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Client</mat-label>
+          <!--<select matNativeControl required>
+            <option *ngFor="let client of clients" value="{{ client.id }}">{{ client.first_name }}</option>
+          </select>-->
+          <mat-select
+            matNativeControl
+            required
+            (selectionChange)="clientChange($event)"
+            formControlName="id_customer"
+          >
+            <mat-option *ngFor="let client of clients" value="{{ client.id }}">
+              {{ client.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field
+          class="w-11/12"
+          appearance="fill"
+          *ngIf="adresseSpinner"
+        >
+          <mat-label>Adresse de ramassage</mat-label>
+          <mat-select
+            matNativeControl
+            required
+            formControlName="id_adresse_expedition"
+          >
+            <mat-option
+              *ngFor="let adresse of addresses"
+              value="{{ adresse.id }}"
+            >
+              {{ adresse.adress }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Destination</mat-label>
+          <mat-select
+            matNativeControl
+            required
+            formControlName="destination_city_id"
+          >
+            <mat-option *ngFor="let city of cities" value="{{ city.id }}">
+              {{ city.name }}
+            </mat-option>
+          </mat-select>
+          <!--<select class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]" required formControlName="destination_city_id">
+            <option value="">---Sélectionner une ville ---</option>
+            <option *ngFor="let item of cities" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>-->
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Catégorie de colis</mat-label>
+          <mat-select matNativeControl required formControlName="type">
+            <mat-option value="Colis">Colis</mat-option>
+            <mat-option value="Palette">Palette</mat-option>
+            <mat-option value="Hors norme">Hors norme</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-4">
+      <div class="w-11/12">
+        <!-- <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Nombre de colis</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Nombre de colis"
+            formControlName="number"
+          />
+        </mat-form-field> -->
+        <i-field [type]="'number'" [label]="'Nombre de colis'" formControlName="number" ></i-field>
+      </div>
+      <div class="w-11/12">
+        <!-- <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Poids</mat-label>
+          <input
+            type="number"
+            matInput
+            placeholder="Poids"
+            formControlName="weight"
+          />
+        </mat-form-field> -->
+        <i-field [type]="'number'" [label]="'Poids'" formControlName="weight" ></i-field>
+      </div>
+      <div class="w-11/12">
+        <!-- <mat-form-field class="w-11/12" appearance="fill">
+          <mat-label>Volume</mat-label>
+          <input
+            type="number"
+            matInput
+            placeholder="Volume"
+            formControlName="volume"
+          />
+        </mat-form-field> -->
+        <i-field [type]="'number'" [label]="'Volume'" formControlName="volume" ></i-field>
+      </div>
+      <!--<div>
+        <section class="colis-section leading-[4]">
+          <mat-checkbox class="colis-margin">Colis de valeur</mat-checkbox>
+          <mat-checkbox class="colis-margin">Colis Fragile</mat-checkbox>
+        </section>
+      </div>-->
+    </div>
+  </div>
+  <!--<div class="grid grid-cols-1 mt-8">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>photo</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Photo marchandises</h2>
+      </div>
+    </div>
+  </div>-->
+  <div class="flex flex-nowrap mb-10">
+    <!--<div>
+      <img
+        src="../../../../assets/img/Kawasaki.jpg"
+        class="w-48 mb-3 rounded-xl"
+      />
+      <p class="text-center">GD32.PNG</p>
+    </div>
+    <div class="file-images flex">
+      <input
+        #imgInput
+        hidden="true"
+        type="file"
+        onclick="this.value=null"
+        (change)="imgInputChange($event)"
+        accept=".jpg"
+      />
+      <button mat-flat-button (click)="imgInput.click()">
+        <mat-icon>add_circle</mat-icon>
+        <p>Ajouter une image</p>
+      </button>
+    </div>-->
+    <div class="ml-8 mt-8 w-[540px]">
+      <!-- <mat-form-field class="w-[540px]" appearance="fill">
+        <mat-label>Commentaire</mat-label>
+        <textarea
+          matInput
+          placeholder="Merci de laisser un commentaire"
+          class="h-[90px]"
+          formControlName="comment"
+        ></textarea>
+      </mat-form-field> -->
+      <i-field [type]="'textarea'" [label]="'Commentaire'" formControlName="comment" ></i-field>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-16 mb-5">
+    <div>
+      <button
+        class="underline w-32 text-left mr-3 font-bold text-[18px]"
+        mat-dialog-close
+      >
+        Annuler
+      </button>
+    </div>
+    <div class="text-right" *ngIf="permissionService.hasPermission('Tournée', 'Demande de ramassage', 'C')">
+      <div
+        *ngIf="spinnerAdd"
+        class="flex items-center justify-center mt-6 mb-6"
+      >
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+      <!-- <button
+        *ngIf="!spinnerAdd"
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+        type="submit"
+        [disabled]="createRamassage.invalid"
+        (click)="addRamassage()"
+      >
+        Enregistrer
+      </button> -->
+      <button *ngIf="!spinnerAdd" [disabled]="createRamassage.invalid" (click)="addRamassage()" pButton pRipple type="submit" label="Enregistrer" class="p-button-rounded p-button-success"></button>
+    </div>
+  </div>
+</form>

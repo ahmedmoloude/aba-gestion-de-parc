@@ -1,0 +1,1126 @@
+<div *ngIf="isSpinner" class="flex items-center justify-center mt-6">
+  <mat-spinner [diameter]="80"></mat-spinner>
+</div>
+
+<div *ngIf="!isSpinner">
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+        Données d'expéditeur
+      </p>
+    </div>
+    <table class="w-full text-left text-gray-500 mt-5">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          >
+          <td class="p-3">
+            {{ details?.client?.type === "entity" ? "Entreprise" : "Particulier" }}
+          </td>
+          <td class="p-3">{{ details?.client?.identity_number }}</td>
+          <td class="p-3">{{ details?.client?.first_name }}</td>
+          <td class="p-3">{{ details?.client?.last_name }}</td>
+          <td class="p-3">{{ details?.client?.email }}</td>
+          <td class="p-3">{{ details?.client?.phone }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+        Données de destinataires
+      </p>
+    </div>
+    <table class="w-full text-left text-gray-500 mt-5">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let destinataire of details?.demande_destinataires">
+          <td class="p-3">
+            {{ destinataire?.type === "entity" ? "Entreprise" : "Particulier" }}
+          </td>
+          <td class="p-3">{{ destinataire?.identity_number }}</td>
+          <td class="p-3">{{ destinataire?.first_name }}</td>
+          <td class="p-3">{{ destinataire?.last_name }}</td>
+          <td class="p-3">{{ destinataire?.email }}</td>
+          <td class="p-3">{{ destinataire?.phone }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <div class="border-b-2 border-[#0C8040] mt-5">
+          <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+            Marchandises
+          </p>
+        </div>
+        <div class="overflow-x-auto table-border mt-4">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerMarchndise" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                <td class="p-3">
+                  {{ details?.marchandise_globale?.nbr_palette }}
+                </td>
+                <td class="p-3">
+                  {{ details?.marchandise_globale?.poids }}
+                </td>
+                <td class="p-3">
+                  {{ details?.marchandise_globale?.volume }}
+                </td>
+                <td class="p-3">
+                  {{ details?.marchandise_globale?.valeur_declare }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        
+
+        
+        <div class="border-b-2 border-[#0C8040] mt-5">
+          <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+            Point de chargement
+          </p>
+        </div>
+        <div class="overflow-x-auto table-border mt-4">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerChargement" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+                <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex">Détail marchandise </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+                  let points_Chargement of details.points_chargements;
+                  let i = index
+                ">
+                <td class="p-3">
+                  {{ points_Chargement.date  }}
+                </td>
+                <td class="p-3">
+                  {{ points_Chargement?.adresse?.sector?.zone?.city?.name }}
+                </td>
+                <td class="p-3">{{ points_Chargement?.adresse?.adress }}</td>
+                <td class="p-3">
+                  <div class="flex cursor-pointer" (click)="detailsmarchandise(points_Chargement.details)">
+                    <mat-icon class="pt-1 text-[#0C8040] text-[20px]">remove_red_eye</mat-icon>
+                    <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div *ngFor="let destinataire of details?.demande_destinataires; let i = index">
+      <div [ngClass]="
+          details?.demande_destinataires[i + 1]
+            ? 'grid grid-cols-2 gap-7'
+            : 'grid grid-cols-1 gap-7'
+        " *ngIf="i % 2 === 0">
+        <div>
+          <div class="border-b-2 border-[#0C8040] mt-5">
+            <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+              Destinataire {{ i + 1 }}
+            </p>
+          </div>
+          <div class="flex items-center mt-5">
+            <mat-icon class="text-[#ccc] text-[20px]">person</mat-icon>
+            <h3 class="text-[#3655FF] mb-0">
+              {{ details?.demande_destinataires[i]["first_name"] }}
+              {{ details?.demande_destinataires[i]["last_name"] }}
+            </h3>
+          </div>
+
+          <div *ngFor="
+              let point_dechargement of details?.demande_destinataires[i]
+                ?.points_dechargement;
+              let j = index
+            ">
+            <br />
+            <hr />
+            <br />
+            <div>
+              <h3 class="text-[#0C8040] pl-6">
+                Point de déchargement {{ j + 1 }}
+              </h3>
+            </div>
+            <div class="overflow-x-auto table-border mt-4">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerDestinataire" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      {{
+                      point_dechargement?.date
+                      }}
+                    </td>
+
+                    <td class="p-3">
+                      {{
+                      point_dechargement?.real_date
+                      }}
+                    </td>
+                    <td class="p-3">
+                      {{ point_dechargement.adresse?.sector?.zone?.city?.name }}
+                    </td>
+                    <td class="p-3">
+                      {{
+                      point_dechargement?.dec_code
+                      }}
+                    </td>
+                    <td class="p-3">
+                      {{ point_dechargement.adresse?.adress }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="
+                          localisation(
+                            point_dechargement.adresse?.position
+                              ?.coordinates[0],
+                            point_dechargement.adresse?.position?.coordinates[1]
+                          )
+                        ">
+                        <mat-icon class="pt-1 text-[#0C8040] text-[20px]">location_searching</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Voir sur la carte</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-5">
+              <h3 class="text-[#0C8040]">Palettes</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <mat-icon class="text-[#0C8040] text-[20px] pt-1">check_circle</mat-icon>
+                {{
+                point_dechargement.type_palette === "expediteur"
+                ? "Palettes expéditeur"
+                : "Palettes SDTM"
+                }}
+              </div>
+
+              <div>
+                <p class="text-[#0C8040] font-medium">Gerbage</p>
+                <p>
+                  <strong>{{
+                    point_dechargement.gerbage === true ? "OUI" : "NON"
+                    }}</strong>
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center mt-5">
+              <mat-icon class="text-[#ccc] text-[20px]">local_shipping</mat-icon>
+              <h3 class="text-black mb-0">Envoie</h3>
+            </div>
+            <div class="overflow-x-auto table-border mt-4">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerEnvoie" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-end">Références des palettes</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let envoi of point_dechargement.item_envois">
+                    <td class="p-3">
+                      <strong>{{ envoi?.type_palette }}</strong>{{ envoi?.dimension_palette }}
+                    </td>
+                    <td class="p-3">{{ envoi.nbr_palette }}</td>
+                    <td class="p-3">Oui</td>
+                    <td class="p-3">{{ envoi.references_envois?.length }}</td>
+                    <td class="p-3">
+                      {{getPaletteswithSupNumbers(envoi?.references_envois) + " / " + getPaletteswithNoSupNumbers(envoi?.references_envois) }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="
+                          visualiserEnvoiSupports(envoi.references_envois)
+                        ">
+                        <mat-icon class="text-[#8E8E8E] text-[21px] pt-1">search</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex items-center mt-5"  *ngIf="point_dechargement?.item_retours?.length > 0">
+              <mat-icon class="text-[#ccc] text-[20px]">replay</mat-icon>
+              <h3 class="text-black mb-0">Retour</h3>
+            </div>
+            <div class="overflow-x-auto relative mt-5" *ngIf="point_dechargement?.item_retours?.length > 0">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerRetour" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div>Références des palettes</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+                      let retour of point_dechargement.item_retours;
+                      let k = index
+                    ">
+                    <td class="p-3">
+                      <strong>{{ retour.type_palette }}</strong>{{ retour?.dimension_palette }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="visualiserRetourSupports(retour.references_retours)">
+                        <mat-icon class="text-[#8E8E8E] text-[21px] pt-1">search</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <div class="flex items-center mt-5">
+                  <mat-icon class="text-[#0C8040] text-[20px]">local_movies</mat-icon>
+                  <h3 class="text-[#0C8040]">Retour de fonds :</h3>
+                </div>
+
+                <div class="overflow-x-auto table-border mt-4">
+                  <table class="w-full text-left text-gray-500">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Type</div>
+                        </th>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">
+                            Montant du fonds (Dhs)
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+                          let retourFond of point_dechargement.retour_fonds
+                        ">
+                        <td class="p-3">{{ returnFonds[retourFond.type] }}</td>
+                        <td class="p-3">{{ retourFond.montant }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center mt-5">
+                  <mat-icon class="text-[#0C8040] text-[20px]">insert_drive_file</mat-icon>
+                  <h3 class="text-[#0C8040]">Retour de documents</h3>
+                </div>
+
+                <div class="overflow-x-auto table-border mt-4">
+                  <table class="w-full text-left text-gray-500">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Type Document</div>
+                        </th>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Références</div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                          let retourDoc of point_dechargement.retour_documents
+                        " class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                        <!-- {{ retourDoc?.references_documents?.length }} -->
+                        <td class="p-3">{{ retourDoc?.type }}</td>
+                        <td class="p-3">
+                          <span class="reference" *ngFor="
+                              let reference of retourDoc?.references_documents
+                            ">{{ reference }}</span>
+                        </td>
+                        <!-- <td class="p-3">
+                          <div
+                            class="flex cursor-pointer"
+                            (click)="
+                              visualiserDocuments(retourDoc?.facture_references)
+                            "
+                          >
+                            <mat-icon class="text-[#8E8E8E] text-[21px] pt-1"
+                              >search</mat-icon
+                            >
+                            <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                          </div>
+                        </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="details?.demande_destinataires[i + 1]">
+          <div class="border-b-2 border-[#0C8040] mt-5">
+            <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+              Destinataire {{ i + 2 }}
+            </p>
+          </div>
+          <div class="flex items-center mt-5">
+            <mat-icon class="text-[#ccc] text-s[20px]">person</mat-icon>
+            <h3 class="text-[#3655FF] mb-0" *ngIf="details?.demande_destinataires[i + 1]['first_name']">
+              {{ details?.demande_destinataires[i + 1]["first_name"] }}
+              {{ details?.demande_destinataires[i + 1]["last_name"] }}
+            </h3>
+            <h3 class="text-[#3655FF] mb-0" *ngIf="!details?.demande_destinataires[i + 1]['first_name']">
+              {{ details?.demande_destinataires[i + 1]["name"] }}
+            </h3>
+          </div>
+
+          <div *ngFor="
+              let point_dechargement of details?.demande_destinataires[i + 1]
+                .points_dechargement;
+              let j = index
+            ">
+            <br />
+            <hr />
+            <br />
+            <div>
+              <h3 class="text-[#0C8040] pl-6">
+                Point de déchargement {{ j + 1 }}
+              </h3>
+            </div>
+            <div class="overflow-x-auto table-border mt-4">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerDestinataire" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      {{
+                      point_dechargement?.date
+                      }}
+                    </td>
+                    <td class="p-3">
+                      {{
+                      point_dechargement?.real_date
+                      }}
+                    </td>
+                    <td class="p-3">{{ point_dechargement.ville }}</td>
+                    <td class="p-3">
+                      {{ point_dechargement.adress_decharge }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="localisation(pointsGeo.lat, pointsGeo.lng)">
+                        <mat-icon class="pt-1 text-[#0C8040] text-[20px]">location_searching</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Voir sur la carte</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-5">
+              <h3 class="text-[#0C8040]">Palettes</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <mat-icon class="text-[#0C8040] text-[20px] pt-1">check_circle</mat-icon>
+                {{
+                point_dechargement.type_palettes === "expediteur"
+                ? "Palettes expéditeur"
+                : "Palettes SDTM"
+                }}
+              </div>
+
+              <div>
+                <p class="text-[#0C8040] font-medium">Gerbage</p>
+                <p>
+                  <strong>{{
+                    point_dechargement.gerbage === true ? "OUI" : "NON"
+                    }}</strong>
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center mt-5">
+              <mat-icon class="text-[#ccc] text-[20px]">local_shipping</mat-icon>
+              <h3 class="text-black mb-0">Envoie</h3>
+            </div>
+            <div class="overflow-x-auto table-border mt-4">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerEnvoie" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-end">Références des palettes</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let envoi of point_dechargement.item_envois">
+                    <td class="p-3">
+                      <strong>{{ envoi.type_palette }}</strong>{{ envoi?.dimension_palette }}
+                    </td>
+                    <td class="p-3">{{ envoi.nbr_palette }}</td>
+                    <td class="p-3">Oui</td>
+                    <td class="p-3">{{ envoi.references_envois?.length }}</td>
+                    <td class="p-3">
+                      {{getPaletteswithSupNumbers(envoi?.references_envois) + " / " + getPaletteswithNoSupNumbers(envoi?.references_envois) }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="
+                          visualiserEnvoiSupports(envoi.references_envois)
+                        ">
+                        <mat-icon class="text-[#8E8E8E] text-[21px] pt-1">search</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex items-center mt-5" *ngIf="point_dechargement?.item_retours?.length > 0">
+              <mat-icon class="text-[#ccc] text-[20px]">replay</mat-icon>
+              <h3 class="text-black mb-0">Retour</h3>
+            </div>
+            <div class="overflow-x-auto relative mt-5" *ngIf="point_dechargement?.item_retours?.length > 0">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerRetour" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div>Références des palettes</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+                      let retour of point_dechargement.item_retours;
+                      let k = index
+                    ">
+                    <td class="p-3">
+                      <strong>{{ retour.type_palette }}</strong>{{ retour?.dimension_palette }}
+                    </td>
+                    <td class="p-3">
+                      <div class="flex cursor-pointer" (click)="
+                          visualiserRetourSupports(retour.references_retours)
+                        ">
+                        <mat-icon class="text-[#8E8E8E] text-[21px] pt-1">search</mat-icon>
+                        <h3 class="text-[#0C8040] mb-0">Visualiser</h3>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <div class="flex items-center mt-5">
+                  <mat-icon class="text-[#0C8040] text-[20px]">local_movies</mat-icon>
+                  <h3 class="text-[#0C8040]">Retour de fonds :</h3>
+                </div>
+
+                <div class="overflow-x-auto table-border mt-4">
+                  <table class="w-full text-left text-gray-500">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Type</div>
+                        </th>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">
+                            Montant du fonds (Dhs)
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+                          let retourFond of point_dechargement.retour_fonds
+                        ">
+                        <td class="p-3">{{ retourFond?.type }}</td>
+                        <td class="p-3">{{ retourFond?.montant }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center mt-5">
+                  <mat-icon class="text-[#0C8040] text-[20px]">insert_drive_file</mat-icon>
+                  <h3 class="text-[#0C8040]">Retour de documents :</h3>
+                </div>
+
+                <div class="overflow-x-auto table-border mt-4">
+                  <table class="w-full text-left text-gray-500">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Type Document</div>
+                        </th>
+                        <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">Réference</div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                          let retourDoc of point_dechargement.retour_documents
+                        " class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                        <td class="p-3">
+                          {{ retourDoc?.type }}
+                          {{ retourDoc?.references_documents?.length }}
+                        </td>
+                        <td class="p-3">
+                          <p class="reference" *ngFor="
+                              let reference of retourDoc?.references_documents
+                            ">
+                            {{ reference }}
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+        Mode port
+      </p>
+    </div>
+    <div class="flex justify-start gap-6 mt-5">
+      <section class="example-section">
+        <mat-radio-group class="mt-4">
+          <mat-radio-button *ngIf="details?.marchandise_globale?.port?.title === 'PP'">PP (port payé)</mat-radio-button>
+          <mat-radio-button *ngIf="details?.marchandise_globale?.port?.title === 'PPE'" class="ml-3">PPE (port payé en
+            compte)</mat-radio-button>
+          <mat-radio-button *ngIf="details?.marchandise_globale?.port?.title === 'PD'" class="ml-3">PD (port
+            dû)</mat-radio-button>
+          <mat-radio-button *ngIf="details?.marchandise_globale?.port?.title === 'PDE'" class="ml-3">PDE (port dû en
+            compte)</mat-radio-button>
+        </mat-radio-group>
+      </section>
+    </div>
+  </div>
+
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+        Véhicule et services annexes
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <div class="mt-5">
+          <h3 class="text-[#0C8040]">Véhicule :</h3>
+        </div>
+        <div class="overflow-x-auto table-border mt-4">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerVehicule" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let vehicule of details?.vehicules">
+                <td class="p-3">{{ vehicule.truck_type.name }}</td>
+                <td class="p-3">{{ vehicule.tonnage.name }}</td>
+                <td class="p-3">{{ vehicule.taille_reservoir }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="mt-5">
+          <h3 class="text-[#0C8040]">Services :</h3>
+        </div>
+        <div class="overflow-x-auto table-border mt-4">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerServices" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let service of details?.services">
+                <td class="p-3">{{ service.title_affichage }}</td>
+                <td class="p-3">{{ service.pivot?.nbr }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mapping-container" *ngIf="isTaxation && !showTaxation" [formGroup]="mappingFormGroup">
+
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff]  w-60 p-2 rounded-[12px_12px_0px_0px]">
+        Configuration du trajet
+      </p>
+    </div>
+
+    <ng-container formArrayName="trucks">
+
+
+      <div *ngFor="let truck of mappingFormGroup.get('trucks')['controls']" class="truck">
+        <div [formGroup]="truck">
+          <span class="truck-name mb-3 mt-3">
+            Veuillez sélectionner les points de déchargement par ordre de trajet:
+          </span>
+
+          <div class=" flex items-center gap-2 justify-between w-full">
+
+            <div class=" flex gap-3 items-center">
+              <i class="pi pi-truck" style="color: black; width: 20px; height: 20px;"></i>
+              <div class="truck-name">
+                {{ truck.value.truck_name }}
+              </div>
+            </div>
+
+            <div class=" flex gap-5">
+              <mat-slide-toggle class="example-margin" formControlName="has_retour" aria-checked="true">
+                <span>Retour</span>
+              </mat-slide-toggle>
+              <div class="flex items-center">
+                <div>
+                  <i-field [type]="'number'" [label]="'Jours d\'immobilisation'" formControlName="immob_days"></i-field>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div>
+                  <i-field [type]="'number'" [label]="'Kilométrage'" formControlName="sum_km"></i-field>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="points-section">
+            <div>
+              <i class="pi pi-map-marker" style="color: black; width: 20px; height: 20px;"></i>
+              <span class="section-title ">Points de chargements</span>
+            </div>
+            <div formArrayName="points_chargements" class="points-container">
+              <div
+                *ngFor="let point_chargement of truck.get('points_chargements')['controls']; let point_chargement_index = index"
+                class="point-chargement">
+                <div class="point-chargement-content" [formGroup]="point_chargement">
+                  <mat-checkbox class="example-margin" formControlName="value"></mat-checkbox>
+                  <span>{{ point_chargement.value.title }}</span>
+                  <span class="font-bold">
+                    (
+                    {{ point_chargement.value.city }}
+                    )
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="points-section">
+            <div>
+              <i class="pi pi-map-marker" style="color: black; width: 20px; height: 20px;"></i>
+              <span class="section-title ">Points de déchargements</span>
+            </div>
+            <div formArrayName="points_dechargements" class="points-container">
+              <div
+                *ngFor="let point_dechargement of truck.get('points_dechargements')['controls']; let point_dechargement_index = index"
+                class="point-dechargement">
+                <div class="point-dechargement-content" [formGroup]="point_dechargement">
+                  <mat-checkbox class="example-margin" formControlName="value"></mat-checkbox>
+
+                  <span>{{ point_dechargement.value.title }}</span>
+                  <span class="font-bold">
+                    (
+                    {{ point_dechargement.value.city }}
+                    )
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="points-section">
+
+            <div class="flex gap-2 items-center">
+              <i class="pi pi-map" style="color: black; width: 20px; height: 20px;"></i>
+              <span class="section-title">Trajet</span>
+            </div>
+
+            <div formArrayName="nodes" class="points-container">
+              <div *ngFor="let node of truck.get('nodes')['controls']; let node_index = index"
+                class="flex gap-2 items-center">
+                <div class="node-content" [formGroup]="node">
+                  <i class="pi pi-home" style="color: black; width: 20px; height: 20px;"></i>
+                  <span class="node-link">
+                    {{ node.value.title }}
+                  </span>
+                  <span class="font-bold">
+
+                    (
+                    {{ node.value.city }}
+                    )
+
+                  </span>
+                </div>
+                <span *ngIf="node_index < truck.get('nodes').value.length - 1" class="arrow-icon">
+                  <mat-icon>arrow_right_alt</mat-icon>
+                </span>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="flex justify-end">
+      <div class="submit-button">
+        <button (click)="validate()" class="confirm-btn">Valider le trajet</button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="isTaxation && showTaxation"
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-56 p-2 rounded-[12px_12px_0px_0px]">
+        Demande
+      </p>
+    </div>
+    <div class="flex mt-5 justify-between  items-center ">
+      <h2 class="text-[#0C8040]">Total :</h2>
+
+
+      <div class="flex gap-4">
+        <button (click)="openDiscountPopUp(true)" class="confirm-btn">Appliquer un forfait</button>
+        <button (click)="openDiscountPopUp(false)" class="confirm-btn">Appliquer une remise</button>
+      </div>
+    </div>
+    <div
+      class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] border-[4px] border-[#0C8040] rounded-[8px] h-[115px] items-center">
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[18px] text-[#138742]">local_shipping</mat-icon>
+          </div>
+          <div class="pl-1">
+            <p class="text-[#0C8040] text-[16px] font-normal">
+              Total Transport HT
+            </p>
+            <p class="text-[14px] text-[#000000]">
+              {{ calcul_details?.transport.total_ht }} Dhs
+            </p>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="pl-1">
+            <p class="text-[#0C8040] text-[16px] font-normal">
+              Total Transport TTC
+            </p>
+            <p class="text-[14px] text-[#000000]">
+              {{ calcul_details?.transport.total_ttc }} Dhs
+            </p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content ml-2 mr-2">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[18px] text-[#138742]">money</mat-icon>
+          </div>
+          <div class="pl-1">
+            <p class="text-[#138742] text-[18px] font-normal">Total service HT</p>
+            <p class="text-[14px] text-[#000000]">{{add([total_service_ht ,total_service_global_ht])}} Dhs</p>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="pl-1">
+            <p class="text-[#138742] text-[18px] font-normal">Total service TTC</p>
+            <p class="text-[14px] text-[#000000]">{{add([total_service,total_service_global]) }} Dhs</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content ml-2 mr-2">
+        <div class="flex items-center justify-between mr-12">
+
+          <div class="flex items-center gap-4">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">money</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#138742] text-[18px] font-normal">MT HT</p>
+              <p class="text-[14px] text-[#000000]">
+                {{ add([calcul_details?.transport.total_ht , total_service_ht  , total_service_global_ht]) }} Dhs
+              </p>
+            </div>
+          </div>
+          <div class="pl-14">
+            <p class="text-[#138742] text-[18px] font-normal">MT TTC</p>
+            <p class="text-[14px] text-[#000000]">
+              {{ add([calcul_details?.transport.total_ttc,total_service ,total_service_global]) }} Dhs
+            </p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content ml-2 mr-2">
+        <div class="flex cursor-pointer" (click)="detailsOpen()">
+          <mat-icon class="pt-1 text-[#0C8040] text-[20px]">search</mat-icon>
+          <h3 class="text-[#0C8040] mb-0">Détails</h3>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="detailsToogle" class="justify-between mb-5 items-center">
+      <div class="overflow-x-auto table-border mt-4">
+
+        <table class="w-full text-left text-gray-500 mt-4">
+          <thead>
+            <tr>
+              <th *ngFor="let header of ['Transport', 'MT HT', 'Taux TVA %' , 'MT TVA', ' MT TTC']" scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+              <td class="p-3 w-1/5">Transport</td>
+              <td class="p-3 w-1/5">{{ calcul_details.transport.transport_alle_ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{ multiply(calcul_details.transport.transport_alle_tva , 100)}}%</td>
+              <td class="p-3 w-1/5">{{calcul_details.transport.transport_alle_ttc -  calcul_details.transport.transport_alle_ht}}</td>
+              <td class="p-3 w-1/5">{{ calcul_details.transport.transport_alle_ttc }} Dhs</td>
+            </tr>
+
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngIf="calcul_details.transport.transport_retour_ht">
+              <td class="p-3 w-1/5">Transport Retour</td>
+              <td class="p-3 w-1/5">{{ calcul_details.transport.transport_retour_ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{ multiply(calcul_details.transport.transport_alle_tva , 100)}}</td>
+              <td class="p-3 w-1/5">{{calcul_details.transport.transport_retour_ttc -  calcul_details.transport.transport_retour_ht}}</td>
+              <td class="p-3 w-1/5">{{ calcul_details.transport.transport_retour_ttc }} Dhs</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="w-full text-left text-gray-500 mt-4">
+
+          <thead class="mt-4">
+            <tr>
+              <th *ngFor="let header of ['Service global', 'MT HT', 'Taux TVA %' , 'MT TVA', 'MT TTC']" scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let service of calcul_details?.services_global | keyvalue">
+              <td class="p-3 w-1/5">{{ rubricsObject[service.key] }}</td>
+              <td class="p-3 w-1/5">{{service.value.ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{multiply(service.value.tva  , 100)}}</td>
+              <td class="p-3 w-1/5">{{service.value.ttc - service.value.ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{service.value.ttc}} Dhs</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="w-full text-left text-gray-500 mt-4">
+          <thead>
+            <tr>
+              <th *ngFor="let header of ['Service par camion','MT HT', 'Taux TVA %' , 'MT TVA', 'MT TTC']" scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let service of calcul_details?.services | keyvalue">
+              <td class="p-3 w-1/5">{{ rubricsObject[service.key]}}</td>
+              <td class="p-3 w-1/5">{{service.value.ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{multiply(service.value.tva  , 100)}}</td>
+              <td class="p-3 w-1/5">{{service.value.ttc - service.value.ht}} Dhs</td>
+              <td class="p-3 w-1/5">{{service.value.ttc}} Dhs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="flex mt-7 cursor-pointer gap-4 justify-between" *ngIf="isTaxation">
+      <div class=" flex gap-2 items-center">
+        <h2 >Base de calcul utilisé  :</h2>
+        <h2 class="text-[#0C8040] font-bold">{{calcul_details?.use_km ? 'par kilomètrage' : 'par distance'}}</h2>
+      </div>
+      <div>
+        <button type="button" (click)="redirect()"
+          class="bg-[#0C8040] mt-5 text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44">
+          <span class="pl-2">Valider</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-1 mb-4 p-4">
+    <div class="col-start-1 col-end-3">
+      <button type="button" [routerLink]="['/listeclients']" class="w-48 underline pl-1 pt-3 text-left">
+        Retour
+      </button>
+    </div>
+    <div class="col-end-7 col-span-2" *ngIf="decision">
+      <button *ngIf="!spinner" (click)="refuser(details)" pButton pRipple type="submit" label="Refuser"
+        class="p-button-rounded p-button-danger">
+      </button>
+      <button *ngIf="!spinner" (click)="prendreEnCharge(details.uuid)" pButton pRipple type="submit"
+        label="Prendre en charge" class="p-button-rounded p-button-success ml-2">
+      </button>
+
+      <div *ngIf="spinner" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+    </div>
+  </div>
+
+  
+</div>

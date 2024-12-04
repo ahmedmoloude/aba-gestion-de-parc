@@ -1,0 +1,80 @@
+.notification {
+  color: #2b7259;
+  opacity: 1;
+  width: 24px;
+  height: 25px;
+}
+
+.warn-badge {
+  letter-spacing: 0px;
+  color: #ffffff;
+  background: transparent linear-gradient(180deg, #882a1b 0%, #ff2109 100%) 0% 0% no-repeat padding-box;
+  border: 2px solid #ffffff;
+  opacity: 1;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 14px;
+  display: inline-block;
+  vertical-align: middle !important;
+  right: -9px;
+  top: 9px;
+}
+
+.drop-down-icon {
+  color: #878787;
+  opacity: 1;
+}
+
+.user-name {
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+}
+
+.user-role {
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: #878787;
+  opacity: 1;
+}
+
+::ng-deep .mat-menu-panel.myMenu {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1607843137);
+  border: 1px solid #138742;
+  border-radius: 8px;
+  opacity: 1;
+  position: absolute;
+  top: 22px !important;
+  right: 65px;
+  z-index: 900 !important;
+}
+
+.menu-container {
+  position: relative;
+}
+
+/* .arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #138742;
+  position: absolute !important;
+  top: -24px;
+  right: 68px;
+  z-index: 99999 !important;
+} */
+
+::ng-deep mat-dividerr {
+  width: 50% !important;
+}
+
+::ng-deep .icon-header {
+  width: 27px !important;
+}/*# sourceMappingURL=layout-header.component.css.map */

@@ -1,0 +1,205 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex">
+      <mat-icon>swap_calls</mat-icon>
+
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Type ( {{ type }} )
+      </h2>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer" *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'C')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="manageSinistre('add')">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" *ngIf="false">
+    <app-shared-filter [inputs]="getInputsFiler(type)" [extraInputs]="getExtraInputsFilter(type)"
+      (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="mt-10" *ngIf="!spinner">
+    <ng-container *ngIf="type == 'ACCIDENT' || type == 'INFRACTION'">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px]"
+        *ngFor=" let item of trucks | paginate: { itemsPerPage: 6, currentPage: p } ">
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date d'accident :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.date_sinistre }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Adresse :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.adresse }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Vehicule :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.matricule }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Conducteur :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.driver?.first_name }} j</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content" *ngIf="type == 'ACCIDENT'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Assureur :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.assureur }} </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex width-content" *ngIf="type == 'INFRACTION'">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Montant d'infraction :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.montant }} DH</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3 pr-5">
+              <p class="text-[#b5b5b5] text-[10px]">Ville :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.city?.name }} </p>
+            </div>
+            <div style="align-self: center;">
+              <mat-icon [matTooltip]="'Voir plus'" class="cursor-pointer" (click)="Voirplus(type, item.truck?.id)">
+                remove_red_eye
+              </mat-icon>
+            </div>
+          </div>
+        </div>
+        <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider> -->
+
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="type == 'Intervention'">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px]"
+        *ngFor=" let item of trucks | paginate: { itemsPerPage: 6, currentPage: p } ">
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° de demande :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.n_demande }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Statut :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.status }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Vehicule :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.truck?.matricule }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Conducteur :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.driver?.first_name }} j</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Demandeur :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.demandeur?.name }} </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="flex width-content">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">alarm</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date demande :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.date_demande }} </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>

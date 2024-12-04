@@ -1,0 +1,65 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 relative">
+  <form [formGroup]="filter" class="mb-4">
+    <div>
+      <p class="text-red-400 font-medium text-xs">NB: Lors de la suppression d'un polygone, cela entraînera également la
+        suppression des polygones inclus à l'intérieur.</p>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-2">
+      <div class="flex items-center">
+        <app-shared-autcomplete #searchComponent1 [type]="'single'" [contentStyle]="style" [charToGetAll]="'*'"
+          [data]="cities" [keys]="['code', 'name']" [lengthToStart]="3" [display]="['code', 'name', 'id']"
+          [placeholer]="'Rechercher la ville...'" (dataEvent)="onCityChange($event)"></app-shared-autcomplete>
+
+        <button *ngIf="permissionService.hasPermission('Configuration', 'Geofencing', 'C')" (click)="openDialogAddEntity('CITY')"
+          mat-mini-fab matTooltip="Ajouter une nouvelle ville" matTooltipPosition="above" color="primary"
+          class="btn-add">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="flex items-center">
+        <app-shared-autcomplete #searchComponent2 [type]="'single'" [disabled]="zoneDisabled" [contentStyle]="style"
+          [charToGetAll]="'*'" [data]="zones" [keys]="['code', 'name']" [lengthToStart]="3" [display]="['code', 'name']"
+          [placeholer]="'Rechercher la zone...'" (dataEvent)="onZoneChange($event)"></app-shared-autcomplete>
+
+        <button [disabled]="addZoneDisabled" *ngIf="permissionService.hasPermission('Configuration', 'Geofencing', 'C')"
+          (click)="openDialogAddEntity('ZONE')" mat-mini-fab matTooltip="Ajouter une nouvelle zone"
+          matTooltipPosition="above" color="primary" class="btn-add">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="flex items-center">
+        <app-shared-autcomplete #searchComponent3 [type]="'single'" [disabled]="sectorDisabled" [contentStyle]="style"
+          [charToGetAll]="'*'" [data]="sectors" [keys]="['code', 'name']" [lengthToStart]="3"
+          [display]="['code', 'name']" [placeholer]="'Rechercher le secteur...'"
+          (dataEvent)="onSectorChange($event)"></app-shared-autcomplete>
+
+        <button [disabled]="addSectorDisabled" *ngIf="permissionService.hasPermission('Configuration', 'Geofencing', 'C')"
+          (click)="openDialogAddEntity('SECTOR')" mat-mini-fab matTooltip="Ajouter un nouveau secteur"
+          matTooltipPosition="above" color="primary" class="btn-add">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div [ngClass]="{'disable-map': disableMap}" leaflet style="height: 500px" leafletDraw
+    (leafletMapReady)="onMapReady($event)" [(leafletOptions)]="options" [leafletDrawOptions]="drawOptions"
+    (leafletDrawCreated)="onDrawCreated($event)" (leafletDrawEdited)="onDrawEdited($event)"
+    (leafletDrawEditStart)="onDrawEditStart($event)" (leafletDrawDeleted)="onDrawDeleted($event)"
+    (leafletDrawDeleteStart)="onDrawDeleteStart($event)">
+    <div [leafletLayer]="drawnItems"></div>
+  </div>
+
+
+  <ng-container *ngIf="permissionService.hasPermission('Configuration', 'Geofencing', 'C')">
+    <button *ngIf="showSaveBtn" (click)="saveGeo()" mat-fab matTooltip="Enregistrer les changements"
+      matTooltipPosition="above" color="primary" class="btn-save-geo">
+      <mat-icon>save</mat-icon>
+    </button>
+  </ng-container>
+  <div class="box-indicator grid grid-cols-1 gap-2 absolute">
+    <div class="indicator" style="background-color: #FFA500;" matTooltip="Ville" matTooltipPosition="right"></div>
+    <div class="indicator" style="background-color: #3388ff;" matTooltip="Zone" matTooltipPosition="right"></div>
+    <div class="indicator" style="background-color: #000000;" matTooltip="Secteur" matTooltipPosition="right"></div>
+  </div>
+
+</div>

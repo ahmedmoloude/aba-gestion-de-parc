@@ -1,0 +1,20 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+
+::ng-deep  .mat-dialog-content{
+    padding: 10px;
+}
+
+
+.dialog {
+    padding: 30px ;
+}
+
+.custom-slider .ant-slider-rail {
+    background-color: green; /* Change the slider track color to green */
+  }

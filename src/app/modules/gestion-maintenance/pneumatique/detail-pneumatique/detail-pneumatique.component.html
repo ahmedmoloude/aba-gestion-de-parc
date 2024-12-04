@@ -1,0 +1,188 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Détails</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <ng-container *ngIf="pneu$ | async as pneumatiqueState">
+    <div *ngIf="pneumatiqueState?.getPneuState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="pneumatiqueState?.getPneuState == 'SUCCESS'">
+      <div mat-dialog-content class="historique overflow-auto" *ngIf="pneumatiqueState?.pneu as pneu">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p>Code pneu :<span class="text-[#0C8040]">{{(pneu?.code_pneu) || '---'}}</span></p>
+          </div>
+          <div class="flex justify-end">
+            <div class="flex cursor-pointer" (click)="affectevehicule(pneu)">
+              <mat-icon class="pt-[5px] text-[#0C8040]">local_shipping</mat-icon>
+              <h2 class=" font-semibold pl-2">Affecter</h2>
+            </div>
+            <div class="flex cursor-pointer ml-5">
+              <mat-icon class="pt-[5px] text-[#0C8040]">cloud_download</mat-icon>
+              <h2 class=" font-semibold pl-2">Exporter</h2>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-rows-2 grid-flow-col gap-4">
+          <div class="row-span-2">
+            <div class="w-72 h-40 bg-white shadow-[0px_3px_10px_#00000029] rounded-2xl mb-20 relative">
+              <div class="grid grid-cols-2 gap-4 p-3">
+                <div>
+                  <p class="text-[#0C8040]">Type pneu</p>
+                  <p>
+                    <td class="p-3">{{(pneu?.type_pneu) || '---'}}</td>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Indice de vitesse</p>
+                  <p>
+                    <td class="p-3">{{(pneu?.indice_vitesse) || '---'}}</td>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Indice de charge</p>
+                  <p>
+                    <td class="p-3">{{(pneu?.indice_charge) || '---'}}</td>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">État</p>
+                  <p>{{(pneu?.etat) || '---'}}</p>
+                </div>
+              </div>
+              <div class="rotate1"></div>
+            </div>
+            <div class="w-72 h-44 bg-white shadow-[0px_3px_10px_#00000029] rounded-2xl relative">
+              <div class="grid grid-cols-2 gap-4 p-3">
+                <div>
+                  <p class="text-[#0C8040]">Durée de vie</p>
+                  <p>{{(pneu?.duree_vie) || '---'}} Kms</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Date d’acquisition</p>
+                  <p>{{(pneu?.date_acquisition | date: 'dd/MM/yyyy') || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Km d’acquisition</p>
+                  <p>{{(pneu?.km_acquisition) || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">DMC</p>
+                  <p>{{(pneu?.dmc | date: 'dd/MM/yyyy') || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Position</p>
+                  <p>{{(pneu?.position) || '---'}}</p>
+                </div>
+              </div>
+              <div class="rotate2"></div>
+            </div>
+          </div>
+          <div class="row-end-3 row-span-2">
+            <img src="../../../../../assets/img/pngwing.png">
+          </div>
+          <div class="row-start-1 row-end-4">
+            <div class="w-72 h-40 bg-white shadow-[0px_3px_10px_#00000029] rounded-2xl mb-20 relative">
+              <div class="grid grid-cols-2 gap-4 p-3">
+                <div>
+                  <p class="text-[#0C8040]">Fournisseur</p>
+                  <p>{{(pneu?.fournisseur) || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Modèle</p>
+                  <p>{{(pneu?.modele) || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Marque</p>
+                  <p>{{(pneu?.marque) || '---'}}</p>
+                </div>
+              </div>
+              <div class="rotate3"></div>
+            </div>
+            <div class="w-72 h-40 bg-white shadow-[0px_3px_10px_#00000029] rounded-2xl relative">
+              <div class="grid grid-cols-2 gap-4 p-3">
+                <div>
+                  <p class="text-[#0C8040]">MT HT</p>
+                  <p>{{(pneu?.montant_ht) || '---'}} Kms</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">TVA</p>
+                  <p>{{(pneu?.tva) || '---'}}</p>
+                </div>
+                <div>
+                  <p class="text-[#0C8040]">Montant TTC</p>
+                  <p>{{(pneu?.montant_ttc) || '---'}}</p>
+                </div>
+              </div>
+              <div class="rotate4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-7 gap-4 p-3" *ngIf="(pneu?.last_affectation)">
+          <div>
+            <p class="text-[#0C8040]">Date début d’affectation</p>
+            <p>{{(pneu?.last_affectation?.date_debut | date: 'dd/MM/yyyy') || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">% d’usure</p>
+            <p>{{(pneu?.last_affectation?.usure) || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">Pression</p>
+            <p>{{(pneu?.last_affectation?.pression) || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">Profondeur</p>
+            <p>{{(pneu?.last_affectation?.profondeur) || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">Km parcouru</p>
+            <p>{{(pneu?.last_affectation?.km_depart) || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">Immatriculation</p>
+            <p>{{(pneu?.last_affectation?.truck?.matricule) || '---'}}</p>
+          </div>
+          <div>
+            <p class="text-[#0C8040]">Code véhicule</p>
+            <p>{{(pneu?.last_affectation?.truck?.code_interne) || '---'}}</p>
+          </div>
+        </div>
+        <ng-container *ngIf="pneu?.affectations?.length>0">
+          <h2 class="mt-5">Historique d’affectation</h2>
+          <div class="mt-2 overflow-auto">
+            <ng-container>
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let item of pneu?.affectations">
+                    <td class="p-3">{{(item?.truck?.matricule) || '---'}}</td>
+                    <td class="p-3">{{(item?.truck?.matricule) || '---'}}</td>
+                    <td class="p-3">{{(item?.truck?.code_interne) || '---'}}</td>
+                    <td class="p-3">{{(item?.position) || '---'}}</td>
+                    <td class="p-3">{{(item?.date_debut | date: 'dd/MM/yyyy') || '---'}}</td>
+                    <td class="p-3">{{(item?.date_fin | date: 'dd/MM/yyyy') || '---'}}</td>
+                    <td class="p-3">{{(item?.km_depart) || '---'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

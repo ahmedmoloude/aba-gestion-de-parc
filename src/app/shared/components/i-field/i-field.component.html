@@ -1,0 +1,27 @@
+<div class="w-full" #myComponent>
+    <div class="relative" (click)="onClick()">
+        <span [ngClass]="{'show-label': showLabel}" class="label">{{label}} <i *ngIf="control?.hasError('required')" class="text-danger"> *</i></span>
+        <input *ngIf="type != 'textarea'"
+          [maxlength]="maxlength"
+          [ngClass]="{'cursor-not-allowed': disabled || control?.disabled}"
+          [min]="minValue" [max]="maxValue"
+          [placeholder]="placeholder" [accept]="acceptType"
+          (input)="inputText" [disabled]="disabled || control?.disabled"
+          [ngStyle]="inputStyle" class="input block w-full p-2 border-[#DBDBDB]"
+          (change)="onValueChange()"
+          [(ngModel)]="value"
+          (ngModelChange)="onChange($event)"
+          [type]="type" />
+
+        <textarea *ngIf="type == 'textarea'" [rows]="rows" [cols]="cols" [ngClass]="{'cursor-not-allowed': disabled}" [min]="minValue" [max]="maxValue" [placeholder]="placeholder" [disabled]="disabled || control?.disabled" [ngStyle]="inputStyle" class="input block w-full p-2 border-[#DBDBDB]" (change)="onValueChange()" [(ngModel)]="value" (ngModelChange)="onChange($event)"></textarea>
+    </div>
+    <div *ngIf="isInvalid" class="invalid">
+        <div *ngIf="control.errors.required">Champs obligatoire</div>
+        <div *ngIf="!control.errors.required">
+          <div *ngIf="control.errors.email || control.errors.invalidPhone || control.errors.pattern">Format incorrecte</div>
+          <div *ngIf="control.errors.min">Le champs doit être supérieur ou egale à {{control.errors.min.min}}</div>
+          <div *ngIf="control.errors.max">Le champs doit être inferieur ou egale à {{control.errors.max.max}}</div>
+          <div *ngIf="!(control.errors.invalidPhone||control.errors.pattern||control.errors.email||control.errors.max||control.errors.min)">Champs invalide</div>
+        </div>
+    </div>
+</div>

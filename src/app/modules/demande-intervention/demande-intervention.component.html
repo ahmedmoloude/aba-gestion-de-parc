@@ -1,0 +1,170 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Demande d’intervention
+        </h2>
+      </div>
+    </div>
+    <div>
+      <div class="flex justify-end cursor-pointer" (click)="ajouter(true)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Demande d\'intervention', 'C')">
+        <mat-icon class="pt-1 text-[#0C8040]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="maintenanceIntervention$ | async as IntervantionState">
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter" (filter)="filtrer($event)">
+      </app-shared-filter>
+    </div>
+
+    <div *ngIf="IntervantionState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+
+    <div class="mt-10">
+      <ng-container *ngIf="IntervantionState?.dataState == 'SUCCESS'">
+        <div *ngIf="IntervantionState?.maintenanceInterventions?.length <= 0" class="flex flex-col items-center">
+          <h2>La liste des interventions est vide</h2>
+        </div>
+        <ng-container *ngIf="IntervantionState?.maintenanceInterventions?.length > 0">
+          <div class="overflow-auto">
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>N° demande</p>
+                    <p>Date demande</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Code / Immatriculation</p>
+                    <p>Tonnage</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Activité</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Demandeur</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Type de panne</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Date prise en charge</p>
+                    <p>Date fin prévu</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Date fin réelle</p>
+                  </th>
+                  <th class="p-3 text-[#0C8040] font-normal">
+                    <p>Statut</p>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                  *ngFor="let item of IntervantionState.maintenanceInterventions">
+                  <td class="p-3">
+                    <p class="text-[#636363]">{{(item?.n_demande) || '---'}}</p>
+                    <p>{{(item?.date_demande | date: 'dd/MM/yyyy') || '---'}}</p>
+                  </td>
+                  <td class="p-3">
+                    <p>{{ item?.truck?.code_interne || '---'}}/{{ item.truck?.matricule || '---' }}
+                      <mat-icon class="pl-1 cursor-pointer"
+                        (click)="historiquevehicule(item?.truck)">remove_red_eye</mat-icon>
+                    </p>
+                    <p>{{(item?.truck?.tonnage?.name) || '---'}} </p>
+                  </td>
+                  <td class="p-3">
+                    <p>{{(item?.truck?.activity) || '---'}}</p>
+                  </td>
+                  <td class="p-3">
+                    <p>{{ item.demandeur?.name || '---' }}</p>
+                  </td>
+                  <td class="p-3">
+                    <mat-icon class="cursor-pointer text-center" mat-button [matMenuTriggerFor]="menuType">
+                      cached
+                    </mat-icon>
+
+                    <mat-menu #menuType="matMenu">
+                      <table class="w-full text-left text-gray-500">
+                        <thead>
+                          <tr>
+                            <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                              Type d'intervention
+                            </th>
+                            <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                              Type de panne
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                            *ngFor="let type of item?.details">
+                            <td class="p-3">
+                              {{ type.type || '---'}}
+                            </td>
+                            <td class="p-3">
+                              {{ type.panne?.name || '---'}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </mat-menu>
+                  </td>
+                  <td class="p-3">
+                    <p class="text-[#636363]">{{ (item.date_prise_charge | date : "dd/MM/yyyy") || '---' }}</p>
+                    <p class="text-[#636363]">{{(item?.date_fin_prevu | date : "dd/MM/yyyy") || '---'}}</p>
+                  </td>
+                  <td class="p-3">
+                    <p>{{(item?.date_fin_reelle | date : "dd/MM/yyyy") || '---'}}</p>
+                  </td>
+                  <td class="p-3 cursor-pointer">
+                    <div class="flex items-center">
+                      <span *ngIf="item.status === 'EN_COURS'"
+                        class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-5 inline-block w-full">En cours
+                      </span>
+                      <span *ngIf="item.status === 'EN_ATTENTE'"
+                        class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5 inline-block w-full">En attente
+                      </span>
+                      <span *ngIf="item.status === 'CLOTUREE'"
+                        class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-5 inline-block w-full">Cloturée
+                      </span>
+                      <span *ngIf="item.status === 'DIAGNOSTIQUEE'"
+                        class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-5 inline-block w-full">Diagnostiquée
+                      </span>
+                      <!-- <mat-icon class="text-red-500" *ngIf="item.status === 'EN_COURS'"
+                        [matMenuTriggerFor]="menunotif">notifications</mat-icon> -->
+                      <div *ngIf="item.status === 'EN_ATTENTE'">
+                        <mat-icon class="text-right" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="ajouter(false, item)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Demande d\'intervention', 'U')">
+                            <mat-icon>edit</mat-icon>
+                            Modifier
+                          </button>
+                          <button mat-menu-item (click)="deletDemande(item.uuid)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Demande d\'intervention', 'D')">
+                            <mat-icon>delete</mat-icon>
+                            Supprimer
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-10">
+            <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+              (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+            </p-paginator>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

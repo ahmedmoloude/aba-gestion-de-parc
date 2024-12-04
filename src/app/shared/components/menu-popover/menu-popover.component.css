@@ -1,0 +1,44 @@
+::ng-deep .mat-menu-panel.myMenu {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1607843137);
+  border: 1px solid #138742;
+  border-radius: 8px;
+  opacity: 1;
+  position: absolute;
+  top: -50px !important;
+  right: 100px;
+  z-index: 900 !important;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #138742;
+  position: absolute !important;
+  top: -24px;
+  right: 42px;
+  z-index: 99999 !important;
+}
+
+::ng-deep mat-dividerr {
+  width: 50% !important;
+}
+
+button.mat-menu-item mat-icon {
+  color: #138742;
+  opacity: 1;
+}
+
+button.mat-menu-item .label {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+}/*# sourceMappingURL=menu-popover.component.css.map */

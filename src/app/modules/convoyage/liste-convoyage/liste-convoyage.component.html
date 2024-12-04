@@ -1,0 +1,516 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2 mb-5">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-[5px]">swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Liste des convoyages</h2>
+      </div>
+    </div>
+    <div>
+      <div class="flex col-start-1 col-end-3 justify-end cursor-pointer"
+      *ngIf="permissionService.hasPermission('Convoyage', null, 'C')" (click)="openDialog()">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Créer un convoyage</h2>
+      </div>
+    </div>
+  </div>
+
+  <!--
+  <div class="flex">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Ville"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Chauffeur"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Chauffeur"
+          />
+        </div>
+      </div>
+      <div class="flex flex-row">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Secteur"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Véhicule"
+          />
+        </div>
+        <div class="basis-1/3">
+          <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Type"
+          >
+            <option value="Expedition,Invoice,General">Type</option>
+            <option value="Expedition">Expedition</option>
+            <option value="Invoice">Facture</option>
+            <option value="General">Générale</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-end">
+      <button
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div>
+  -->
+
+  <div class="flex">
+    <div class="w-5/6">
+      <div class="flex flex-row">
+        <div class="basis-1/3">
+          <!-- <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="dd-mm-yyyy"
+            [(ngModel)]="filters.from_date"
+          /> -->
+          <mat-form-field appearance="fill" class="w-11/12 mb-4">
+            <mat-label>Date de Début</mat-label>
+            <input matInput [(ngModel)]="filters.from_date" type="date" class="h-input"/>
+          </mat-form-field>
+        </div>
+        <div class="basis-1/3">
+          <!-- <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="dd-mm-yyyy"
+            [(ngModel)]="filters.to_date"
+          /> -->
+          <mat-form-field appearance="fill" class="w-11/12 mb-4">
+            <mat-label>Date de Fin</mat-label>
+            <input matInput [(ngModel)]="filters.to_date" type="date" class="h-input"/>
+          </mat-form-field>
+        </div>
+        <div class="basis-1/3">
+          <!-- <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Statut de la tournée"
+            [(ngModel)]="filters.status"
+          >
+            <option value="">Tout</option>
+            <option value="INITIALIZED">Initiées</option>
+            <option value="PLANED">Planifiées</option>
+            <option value="ASSIGNED">Assignées</option>
+            <option value="READY_TO_GO">Camion chargées</option>
+            <option value="STARTED">Démarrées</option>
+            <option value="DONE">Cloturées</option>
+          </select> -->
+          <mat-form-field appearance="fill" class="mb-4 w-11/12">
+            <mat-label>Statut de la tournée</mat-label>
+            <mat-select [(ngModel)]="filters.status">
+              <mat-option value="">Tout</mat-option>
+              <mat-option value="INITIALIZED">Initiée</mat-option>
+              <mat-option value="PLANED">Planifiée</mat-option>
+              <mat-option value="ASSIGNED">Assignée</mat-option>
+              <mat-option value="READY_TO_GO">Camion chargé</mat-option>
+              <mat-option value="STARTED">Démarrée</mat-option>
+              <mat-option value="DONE">Clôturée</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <!-- <button
+        (click)="fetchCovoyages()"
+        class="flex items-center justify-center text-white btn-filter text-[15px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filtre</span>
+      </button> -->
+      <button (click)="fetchCovoyages()" pButton pRipple type="submit" label="Filtrer" icon="pi pi-filter" iconPos="left"
+        class="p-button-rounded p-button-success h-[38px]">
+      </button>
+    </div>
+    <div class="flex justify-end ml-3">
+      <!-- <button
+        (click)="autoPlanifyCovoyages()"
+        class="flex items-center justify-center text-white btn-filter text-[15px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <span class="text-white">Planification régulieres</span>
+      </button> -->
+      <button (click)="autoPlanifyCovoyages()" *ngIf="permissionService.hasPermission('Convoyage', null, 'U')" pButton pRipple type="submit" label="Planification régulières"
+        class="p-button-rounded p-button-success h-[38px]">
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="mt-10" *ngIf="!isLoading">
+    <div class="mt-36 mb-36 text-center" *ngIf="covoyages.length == 0 ">
+      <p class="text-[#636363] text-[22px]">La Liste des convoyages est vide</p>
+    </div>
+    <div *ngIf="covoyages.length > 0 ">
+      <ng-container>
+        <div
+          class="flex flex-row justify-between bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[103px]"
+          *ngFor="let item of covoyages">
+          <div class="flex place-items-center align-middle items-center width-info">
+            <div class="pl-4 place-items-center items-center">
+              <p class="text-[12px] text-[#000000]">
+                {{ "C-" + item.uuid.split("-")[0].toUpperCase() }}
+              </p>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Ville:</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.city_from?.name }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Destination :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.city_dest?.name }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="flex width-content">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Ville de transit:</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ truncateString(getTransitCities(item), 32) }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">access_time</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]" matTooltip="Date et heure de départ">
+                  D/H de création
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.created_at | date: 'dd/MM/yyy HH:mm:ss' || "--" }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">access_time</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]" matTooltip="Date et heure d'arrivée">
+                  D/H d'arrivée :
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.end_date || "--" | truncate: [12, "..."] }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >access_time</mat-icon
+                >
+              </div>
+              <div class="pl-3">
+                <p
+                  class="text-[#b5b5b5] text-[10px]"
+                  matTooltip="Date et heure de départ"
+                >
+                 D/H de départ prévu :
+                </p>
+                <p class="text-[12px] text-[#000000]">{{ item.start_date }}</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >access_time</mat-icon
+                >
+              </div>
+              <div class="pl-3">
+                <p
+                  class="text-[#b5b5b5] text-[10px]"
+                  matTooltip="Date et heure d'arrivée"
+                >
+                  D/H de départ réel :
+                </p>
+                <p class="text-[12px] text-[#000000]">
+  
+                  {{ item.r_start_date }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="flex width-content">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">perm_identity</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Chauffeur:</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{item.driver?.first_name}} {{item.driver?.last_name}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="flex width-content mt-3 items-center">
+            <div class="flex items-center">
+              <mat-form-field class="pl-2 pr-2" appearance="filled">
+                <mat-label>
+                  <span class="icon pr-2">
+                    <mat-icon class="text-[25px] text-[#138742]">perm_identity</mat-icon>
+                  </span>
+                  Chauffeur</mat-label>
+                <mat-select (selectionChange)="onChangeDriver(item)" [(ngModel)]="item.driver_id" [disabled]="true">
+                  <mat-option value="">--- Sélectionner un camion ---</mat-option>
+                  <mat-option *ngFor="let item of drivers" [value]="item.id">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div> -->
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">local_shipping</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]" matTooltip="Date et heure de départ">
+                  Vehicule
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{item.truck?.truck_type?.name}} {{item.truck?.tonnage?.name}}T
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">horizontal_split</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]" matTooltip="Date et heure d'arrivée">
+                  Scellé(s) :
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{item.truck?.nbr_scelle}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="flex width-content mt-3 items-center">
+            <div class="flex items-center">
+              <mat-form-field class="pl-2 pr-2" appearance="filled">
+                <mat-label><span class="icon pr-2">
+                    <mat-icon class="text-[25px] text-[#138742]">local_shipping</mat-icon> </span>Véhicule</mat-label>
+                <mat-select (selectionChange)="onChangeTruck(item)" [(ngModel)]="item.truck_id" [disabled]="true">
+                  <mat-option value="">--- Sélectionner un camion ---</mat-option>
+                  <mat-option *ngFor="let item of trucks" [value]="item.id">
+                    {{ item.matricule + " | " + item.tonnage + " T" }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div> -->
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Nombre De Colis:</p>
+                <p class="text-[12px] text-[#000000]">{{ item.total_colis }}</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Poids Global :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.total_weight }} Kg
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="flex width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">where_to_vote</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[9px]">Volume global :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.total_volume }} m3
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- status  -->
+          <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="flex items-center pl-4 justify-end">
+            <span
+              *ngIf="item.status === 'INITIALIZED'"
+              class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5"
+              >Initié
+            </span>
+            <span
+              *ngIf="item.status === 'PLANED'"
+              class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2"
+              >Planifié
+            </span>
+            <span
+              *ngIf="item.status === 'ASSIGNED'"
+              class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2"
+              >Assigné
+            </span>
+            <span
+              *ngIf="item.status === 'READY_TO_GO'"
+              class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-2"
+              >Camion chargé
+            </span>
+            <span
+              *ngIf="item.status === 'STARTED'"
+              class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-2"
+              >Démarré
+            </span>
+            <span
+              *ngIf="item.status === 'DONE'"
+              class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-2"
+              >Terminé
+            </span>
+          </div> -->
+
+          <!--  -->
+          <!-- <mat-divider
+            *ngIf="['INITIALIZED', 'PLANED'].includes(item.status)"
+            [vertical]="true"
+            class="mx-auto"
+          ></mat-divider>
+          <div
+            *ngIf="['INITIALIZED', 'PLANED'].includes(item.status)"
+            class="flex pl-4 pt-4 width-content"
+          >
+            <div class="flex items-center justify-end">
+              <button
+                *ngIf="item.status === 'INITIALIZED'"
+                (click)="covoyagePlanifier(item.uuid)"
+                class="group flex items-center justify-between rounded-3xl border border-[#138742] px-2 py-2"
+              >
+                <span class="font-medium text-[#138742] text-[12px]">
+                  Planifié le covoyage
+                </span>
+              </button>
+
+              <button
+                *ngIf="item.status === 'PLANED'"
+                (click)="covoyagePlanifier(item.uuid)"
+                class="group flex items-center justify-between rounded-3xl border border-[#138742] px-2 py-2"
+              >
+                <span class="font-medium text-[#138742] text-[12px]">
+                  Modifier la planification
+                </span>
+              </button>
+            </div>
+          </div> -->
+
+          <mat-divider *ngIf="
+              ['INITIALIZED', 'PLANED'].includes(item.status) &&
+              item.driver_id &&
+              item.truck_id
+            " [vertical]="true" class="mx-auto"></mat-divider>
+          <div *ngIf="
+              ['INITIALIZED', 'PLANED'].includes(item.status) &&
+              item.driver_id &&
+              item.truck_id
+            " class="flex pl-4 pt-4 width-content">
+            <div class="flex items-center justify-end">
+              <button (click)="planifyCovoyage(item)" *ngIf="permissionService.hasPermission('Convoyage', null, 'U')"
+              [ngClass]="
+                  item.status === 'INITIALIZED' ? 'group flex items-center justify-between rounded-3xl bg-[#138742] px-2 py-2' : 'group flex items-center justify-between rounded-3xl bg-red-400 px-2 py-2'
+                  " [disabled]="isLoadingSelect">
+                <span *ngIf="item.status === 'INITIALIZED'" class="font-medium text-white text-[12px]">
+                  Planifier le convoyage
+                </span>
+                <span *ngIf="item.status === 'PLANED'" class="font-medium text-white text-[12px]">
+                  Annuler la planification
+                </span>
+              </button>
+            </div>
+          </div>
+
+
+
+
+          <div class="flex items-center justify-center">
+
+            <button (click)="downloadLoadingSheet(item.id)" pButton pRipple type="button" 
+            label="Télécharger feuille de chargement" icon="pi pi-download" iconPos="left"
+            class="p-button-rounded p-button-info ]">
+          </button>
+          </div>
+
+       
+        </div>
+      </ng-container>
+      <div class="mt-10" *ngIf="covoyages.length!=0">
+        <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,592 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="flex items-center">
+    <div class="flex col-start-1 col-end-3">
+      <div class="mt-2"><mat-icon>swap_calls</mat-icon></div>
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Génération d’une tournée
+        <span *ngIf="tour?.is_renfort_tour">( Renfort )</span>
+      </h2>
+      <div
+        *ngIf="isManyToursPlanned"
+        class="border-r-2 border-[#B2B2B2] ml-5 mr-5"
+      ></div>
+    </div>
+    <div *ngIf="isManyToursPlanned" class="flex items-center">
+      <div class="mr-3">Tournée :</div>
+      <mat-form-field>
+        <!--  -->
+        <mat-select
+          [(ngModel)]="tourIdentifant"
+          (selectionChange)="onChangeTour()"
+          [disabled]="isLoading || isLoadingPassage"
+        >
+          <mat-option value="" disabled
+            >--- Sélectionner une tournée ---</mat-option
+          >
+          <mat-option
+            *ngFor="let item of toursList"
+            [value]="item.id.toString()"
+          >
+            <span>
+              {{ item.reference + " - " }}
+            </span>
+            <!-- status -->
+            <span
+              *ngIf="item.status === 'INITIALIZED'"
+              class="text-white bg-orange-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+              >Initié
+            </span>
+            <span
+              *ngIf="item.status === 'PLANED'"
+              class="text-white bg-[#728FCE] pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+              >Planifié
+            </span>
+            <span
+              *ngIf="item.status === 'STARTED'"
+              class="text-white bg-green-500 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+              >Démarré
+            </span>
+            <span
+              *ngIf="item.status === 'DONE'"
+              class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+              >Cloturé
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="flex flex-row mb-4 items-center">
+    <div class="basis-1/6">
+      <input
+        type="date"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Date"
+        [value]="getDate(tour?.start_time)"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Ville"
+        [value]="tour?.zone?.city?.name"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Zone"
+        [value]="tour?.zone?.name"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Chauffeur"
+        [value]="tour?.driver?.name"
+        disabled
+      />
+    </div>
+    <div class="basis-1/6">
+      <input
+        type="text"
+        class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Véhicule"
+        [value]="tour?.truck?.matricule"
+        disabled
+      />
+    </div>
+    <!-- <div class="basis-1/3 border-tournee">
+      <div class="grid grid-cols-2 gap-2 ml-10">
+        <div>
+          <p class="text-[#636363] text-[12px]">Poids :</p>
+          <p class="pb-4 text-[#0C8040] text-[14px] font-medium">
+            {{ getTruckStats.total_weight + " T" }} /
+            {{ tour?.truck?.tonnage || "--" }} T
+          </p>
+          <p class="text-[#636363] text-[12px]">Nombre de colis :</p>
+          <p class="text-[#0C8040] text-[14px] font-medium">
+            {{ getTruckStats.total_colis }}
+          </p>
+        </div>
+        <div class="relative">
+          <div class="text-[#E7B25B] font-medium">
+            {{ percentWeightFilled || "--" }} %
+          </div>
+          <div>
+            <div
+              class="porcentage absolute bg-[#E3AC4F] h-[46px] left-[39px] top-[21px]"
+              [ngStyle]="{ width: truckBoxSize + 'px' }"
+            ></div>
+
+            <img src="../../../../assets/img/camion.png" />
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <div *ngIf="isLoading" class="flex items-center justify-center mt-6">
+    <mat-spinner class="text-center" [diameter]="80"></mat-spinner>
+  </div>
+
+  <!-- drag and drop -->
+  <div *ngIf="!isLoading" class="grid grid-cols-2 gap-4">
+    <!-- left side container -->
+    <div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="flex col-start-1 col-end-3">
+            <h2 class="font-semibold pl-2 text-16">
+              Liste des passages proposés :
+            </h2>
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <div
+            class="flex col-start-1 col-end-3 cursor-pointer text-[#0C8040]"
+            (click)="openDialogpassage()"
+          >
+            <mat-icon class="pt-[5px]">add_circle</mat-icon>
+            <!-- <h2 class="text-[#0C8040] font-normal text-[15px] pl-2">
+              Ajouter un passage
+            </h2> -->
+          </div>
+          <div
+            class="flex col-end-7 col-span-2 pl-8 cursor-pointer text-[14px]"
+          >
+            <mat-icon class="text-[#959595]">filter_list</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div
+        class="expedition-list"
+        cdkDropList
+        #leftSideList="cdkDropList"
+        [cdkDropListData]="leftSideItems"
+        [cdkDropListConnectedTo]="[rightSideList]"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="canDrop"
+      >
+        <ng-container *ngFor="let sector of leftSectors; let idx = index">
+          <mat-accordion
+            *ngIf="getSectorPassages(leftSideItems, sector.sector_id).length"
+          >
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="flex items-center">
+                  <mat-icon class="text-[#0C8040]">pin_drop</mat-icon>
+
+                  <h2 class="font-semibold pl-2 mb-0">
+                    Secteur :
+                    <span class="text-[#0C8040]">
+                      {{
+                        sector.name +
+                          " ( " +
+                          getSectorPassages(leftSideItems, sector.sector_id)
+                            .length +
+                          " )"
+                      }}
+                    </span>
+                  </h2>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div
+                class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[75px] cursor-pointer"
+                *ngFor="
+                  let passage of getSectorPassages(
+                    leftSideItems,
+                    sector.sector_id
+                  )
+                "
+                cdkDrag
+              >
+                <!-- type of passage -->
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ getStatusPassage(passage).label }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                <!-- customer  -->
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{
+                          passage.customer?.name || passage.customer?.first_name
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                <!-- date and hour -->
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[#b5b5b5] text-[10px]">Heure de passage</p>
+                      <p class="text-[12px] text-[#000000]">
+                        <ng-container *ngIf="passage.pickup_houre === 'DAY'">
+                          Matin
+                        </ng-container>
+                        <ng-container
+                          *ngIf="passage.pickup_houre === 'AFTERNOON'"
+                        >
+                          Aprés Midi
+                        </ng-container>
+                        <ng-container
+                          *ngIf="passage.pickup_houre === 'EVENING'"
+                        >
+                          Soir
+                        </ng-container>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                <!-- adress ramassage  -->
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[#b5b5b5] text-[10px]">Ad de ramassage</p>
+                      <p
+                        class="text-[12px] text-[#000000]"
+                        matTooltip="{{ passage.pickup_adresse?.adress }}"
+                      >
+                        {{
+                          passage.pickup_adresse?.adress | truncate: [12, "..."]
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- expéditions  -->
+                <div class="block width-content mt-3">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[#b5b5b5] text-[10px]">
+                        Nombre d'expéditions
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ passage.expeditions.length || "--" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <ng-container *ngIf="!isLoadingPassage">
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                  <div class="flex items-center pl-4 justify-end">
+                    <mat-icon
+                      class="cursor-pointer ml-4 text-[19px] text-[#138742]"
+                      >control_camera</mat-icon
+                    >
+                  </div>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+
+        <!-- <div *ngIf="!leftSectors.length">Pas d'expéditions trouvés !</div> -->
+      </div>
+    </div>
+
+    <!-- right side container -->
+    <div class="relative">
+      <div class="relative">
+        <div [@openClose]="isOpen ? true : false" class="open-close-container">
+          <div class="flex p-8">
+            <div class="w-5/6">
+              <div class="flex flex-row mb-5">
+                <div class="basis-1/2">
+                  <select
+                    class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+                    placeholder="Statut"
+                  >
+                    <option value="Demande">Demande de ramassage</option>
+                    <option value="complet">Taxation complet</option>
+                    <option value="Passage">Passage planifié</option>
+                  </select>
+                </div>
+                <div class="basis-1/2">
+                  <input
+                    type="text"
+                    class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+                    placeholder="Client"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-row">
+                <div class="basis-1/2">
+                  <input
+                    type="text"
+                    class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+                    placeholder="Heure de ramassage"
+                  />
+                </div>
+                <div class="basis-1/2">
+                  <input
+                    type="text"
+                    class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+                    placeholder="Destination"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="w-1/6 flex items-end">
+              <button
+                class="text-white btn-filter text-[20px] bg-btn-green max-w-[115px] w-[115px] p-3"
+              >
+                <span class="text-white">Filter</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <div class="flex col-start-1 col-end-3">
+              <h2 class="font-semibold pl-2 text-16">Tournée planifiée</h2>
+            </div>
+          </div>
+          <!-- <div
+            class="flex col-end-7 col-span-2 justify-end cursor-pointer text-[14px]"
+            (click)="toggleplanifiee()"
+          >
+            <mat-icon class="text-[#959595]">filter_list</mat-icon>
+          </div> -->
+          <div class="flex justify-end">
+            <!-- <div
+              class="flex col-start-1 col-end-3 cursor-pointer"
+              (click)="openDialogsecteur()"
+              
+            >
+              <mat-icon>add_circle</mat-icon>
+
+              <h2 class="text-[#0C8040] font-normal text-[15px] pl-2">
+                Ajouter un Secteur
+              </h2>
+            </div> -->
+            <div
+              class="flex col-end-7 col-span-2 pl-8 cursor-pointer text-[14px]"
+              (click)="toggleplanifiee()"
+            >
+              <mat-icon class="text-[#959595]">filter_list</mat-icon>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tourne-list"
+          cdkDropList
+          #rightSideList="cdkDropList"
+          [cdkDropListData]="rightSideItems"
+          [cdkDropListConnectedTo]="[leftSideList]"
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListEnterPredicate]="canDrop"
+        >
+          <ng-container *ngFor="let sector of rightSectors; let idx = index">
+            <mat-accordion
+              *ngIf="getSectorPassages(rightSideItems, sector.sector_id).length"
+            >
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="flex items-center">
+                    <mat-icon class="text-[#0C8040]">pin_drop</mat-icon>
+
+                    <h2 class="font-semibold pl-2 mb-0">
+                      Secteur :
+                      <span class="text-[#0C8040]">
+                        {{
+                          sector.name +
+                            " ( " +
+                            getSectorPassages(rightSideItems, sector.sector_id)
+                              .length +
+                            " )"
+                        }}
+                      </span>
+                    </h2>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div
+                  class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[75px] cursor-pointer"
+                  *ngFor="
+                    let passage of getSectorPassages(
+                      rightSideItems,
+                      sector.sector_id
+                    )
+                  "
+                  cdkDrag
+                >
+                  <!-- type of passage -->
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-3">
+                        <p class="text-[#b5b5b5] text-[10px]">Type</p>
+                        <p class="text-[12px] text-[#000000]">
+                          {{ getStatusPassage(passage).label }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                  <!-- customer  -->
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-3">
+                        <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                        <p class="text-[12px] text-[#000000]">
+                          {{
+                            passage.customer?.name ||
+                              passage.customer?.first_name
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                  <!-- date and hour -->
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-3">
+                        <p class="text-[#b5b5b5] text-[10px]">
+                          Heure de passage
+                        </p>
+                        <p class="text-[12px] text-[#000000]">
+                          <ng-container *ngIf="passage.pickup_houre === 'DAY'">
+                            Matin
+                          </ng-container>
+                          <ng-container
+                            *ngIf="passage.pickup_houre === 'AFTERNOON'"
+                          >
+                            Aprés Midi
+                          </ng-container>
+                          <ng-container
+                            *ngIf="passage.pickup_houre === 'EVENING'"
+                          >
+                            Soir
+                          </ng-container>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+
+                  <!-- adress ramassage  -->
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-2">
+                        <p class="text-[#b5b5b5] text-[10px]">Ad ramassage</p>
+                        <p
+                          class="text-[12px] text-[#000000]"
+                          matTooltip="{{ passage.pickup_adresse?.adress }}"
+                        >
+                          {{
+                            passage.pickup_adresse?.adress
+                              | truncate: [12, "..."]
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- expéditions  -->
+                  <div class="block width-content mt-3">
+                    <div class="flex items-center">
+                      <div class="pl-3">
+                        <p class="text-[#b5b5b5] text-[10px]">
+                          Nombre d'expéditions
+                        </p>
+                        <p class="text-[12px] text-[#000000]">
+                          {{ passage.expeditions.length || "--" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-container *ngIf="!isLoadingPassage">
+                    <mat-divider
+                      [vertical]="true"
+                      class="mx-auto"
+                    ></mat-divider>
+                    <div class="flex items-center pl-4 justify-end">
+                      <mat-icon
+                        class="cursor-pointer ml-4 text-[19px] text-[#138742]"
+                        >control_camera</mat-icon
+                      >
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- actions btn -->
+  <div
+    *ngIf="!isLoading && !isLoadingPassage"
+    class="flex justify-between mt-4 w-full"
+  >
+    <div>
+      <!-- <button
+        *ngIf="leftSideItems.length"
+        type="button"
+        class="bg-white p-3 shadow-[0px_3px_6px_#00000029] rounded-[28px] border-[#CEF4C9] border-[1px]"
+        (click)="dropAll()"
+      >
+        Passer toutes les passages a la tournée
+      </button> -->
+
+      <!-- <button
+       *ngIf="rightSideItems.length"
+       type="button"
+       class="ml-4 bg-[#ff8080] text-white p-3 shadow-[0px_3px_6px_#00000029] rounded-[28px]"
+       (click)="clearAll()"
+     >
+       Réinitialiser
+     </button> -->
+    </div>
+    <div>
+      <button
+        *ngIf="tour?.status === 'INITIALIZED'"
+        type="button"
+        class="bg-[#0C8040] p-3 text-white w-52 shadow-[0px_3px_6px_#00000029] rounded-[28px] border-[#0C8040] border-[1px]"
+        (click)="planifyTour(true)"
+      >
+        Planifier
+      </button>
+
+      <button
+        *ngIf="tour?.status === 'PLANED'"
+        type="button"
+        class="bg-[#ff8080] p-3 text-white w-52 shadow-[0px_3px_6px_#00000029] rounded-[28px] border-[#ff8080] border-[1px]"
+        (click)="planifyTour()"
+      >
+        Annuler la planification
+      </button>
+    </div>
+  </div>
+</div>

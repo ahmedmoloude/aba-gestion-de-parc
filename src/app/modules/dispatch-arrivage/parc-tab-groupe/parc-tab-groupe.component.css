@@ -1,0 +1,10 @@
+::ng-deep .text-size{
+  font-size: 18px;
+}
+::ng-deep .active{
+  background-color: #0C8040;
+}
+::ng-deep .mb-detail{
+  margin-bottom: 5px;
+}
+

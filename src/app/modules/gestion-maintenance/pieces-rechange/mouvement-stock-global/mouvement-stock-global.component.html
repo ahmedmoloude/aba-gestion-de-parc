@@ -1,0 +1,187 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">settings</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2 cursor-pointer">
+          <span routerLink="/piecesrechange">Pièces de rechange > </span>
+          <span class="text-[#0C8040]">Mouvements de stock</span>
+        </h2>
+      </div>
+    </div>
+    <div class="text-right cursor-pointer" (click)="inventairerechange()">
+      <p class="text-[#0C8040] pr-5"><mat-icon> list_alt</mat-icon></p>
+      <p class="text-[#0C8040]">Inventaire</p>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-5" *ngIf="!spinner">
+    <div class="bg-[#FFFFFF] shadow-[0px_3px_10px_#00000014] border-[3px] border-[#DBDBDB] rounded-[18px] p-5">
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex justify-between">
+          <div class="flex">
+            <h2 class="text-[#000] font-semibold pr-2">Entrées</h2>
+            <mat-icon class="pt-1 text-[#0C8040]">arrow_upward</mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <div class="flex cursor-pointer mr-4">
+            <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+            <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="flex col-start-1 col-end-3">
+        <h2 class="text-[#000] font-semibold pr-2">Alimentation</h2>
+        <mat-icon class="pt-1 text-[#0C8040]">arrow_upward</mat-icon>
+      </div> -->
+      <div class=" overflow-auto" *ngIf="entres?.length>0">
+        <table class="w-full text-left text-gray-500  d-block">
+          <thead>
+            <tr>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Nom de pièce</p>
+                <p>Référence</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Référence d’achat</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Date d’entrée</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Qté entrante</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Famille</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Fournisseur</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Saisi par</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of entres">
+              <td class="p-3">
+                <p>{{ item?.piece?.name?.name }}</p>
+                <p class="text-[#636363]">{{ item?.piece?.reference }}</p>
+              </td>
+              <td class="p-3">
+                <p >{{ item?.reference }}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.created_at | date: 'dd/MM/yyyy'}}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.quantite}}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.piece?.family?.name }}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.prestataire?.name}}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.user?.name}}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="bg-[#FFFFFF] shadow-[0px_3px_10px_#00000014] border-[3px] border-[#DBDBDB] rounded-[18px] p-5">
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex justify-between">
+          <div class="flex">
+            <h2 class="text-[#000] font-semibold pr-2">Sorties</h2>
+            <mat-icon class="pt-1 text-[#E10000]">arrow_downward</mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <div class="flex cursor-pointer mr-4">
+            <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+            <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="flex col-start-1 col-end-3">
+        <h2 class="text-[#000] font-semibold pr-2">Consommation</h2>
+        <mat-icon class="pt-1 text-[#E10000]">arrow_downward</mat-icon>
+      </div> -->
+      <div class="overflow-auto" *ngIf="sorties?.length>0">
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Nom de pièce</p>
+                <p>Référence</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Référence d’achat</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Date sortie</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Qté sortie</p>
+                <p>Famille</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Fournisseur</p>
+                <p>Demandeur</p>
+              </th>
+              <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                <p>Bon de sortie</p>
+                <p>Saisi par</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of sorties">
+              <td class="p-3">
+                <p>{{ item?.piece?.name?.name }}</p>
+                <p class="text-[#636363]">{{ item?.piece?.reference }}</p>
+              </td>
+              <td class="p-3">
+                <p >{{ item?.reference }}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.created_at | date: 'dd/MM/yyyy' }}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.quantite}}</p>
+                <p class="text-[#636363]">{{ item?.piece?.family?.name}}</p>
+              </td>
+              <td class="p-3">
+                <p>{{ item?.prestataire?.name}}</p>
+                <p class="text-[#636363]">{{ item?.user?.name}}</p>
+              </td>
+              <td class="p-3">
+                <p>
+                  <span *ngIf="!(item?.file)">---</span>
+                  <a *ngIf="item?.file" [href]="item?.file?.url" target="_blank" class="flex items-center">
+                    {{item?.file?.name}}
+                    <mat-icon class="pl-[5px] file-icon">attach_file</mat-icon>
+                  </a>
+                </p>
+                <p class="text-[#636363]">{{ item?.user?.name}}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

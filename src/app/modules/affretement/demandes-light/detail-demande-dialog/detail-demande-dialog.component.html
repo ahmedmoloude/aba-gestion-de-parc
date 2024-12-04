@@ -1,0 +1,78 @@
+<div class="text-right cursor-pointer" mat-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </div>
+<h1>Récapitulation de la demande</h1>
+<h3 class="m-0">Période de la demande</h3>
+<table class="w-full text-left text-gray-500 mb-3 pr-3">
+    <thead>
+        <tr>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Date début</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Date fin</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="p-2">{{data.date_debut}}</td>
+            <td class="p-2">{{data.date_fin}}</td>
+        </tr>
+    </tbody>
+</table>
+<h3 class="m-0">Expédition</h3>
+<table class="w-full text-left text-gray-500 mb-3 pr-3">
+    <thead>
+        <tr>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Type d'affretement</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Expéditeur</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Origine</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="p-2">{{data.type_affretement?.title}}</td>
+            <td class="p-2">{{data.client?.name}}</td>
+            <td class="p-2">Casa</td>
+        </tr>
+    </tbody>
+</table>
+<h3 class="m-0">Véhicule</h3>
+<table class="w-full text-left text-gray-500 mb-3 pr-3">
+    <thead>
+        <tr>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Type</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Tonage</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Matricule</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Chauffeur</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="p-2">{{data.truck_data?.truck_type?.name}}</td>
+            <td class="p-2">{{data.truck_data?.tonnage?.name}}T</td>
+            <td class="p-2">{{data.truck_data.matricule}}</td>
+            <td class="p-2">{{data.affectations[0].driver?.first_name}} {{data.affectations[0].driver?.last_name}}</td>
+        </tr>
+    </tbody>
+</table>
+<h3 class="m-0">Points de déchargement</h3>
+<table class="w-full text-left text-gray-500 mb-3 pr-3">
+    <thead>
+        <tr>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Déstinataire</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Ville</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Adresse</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">N° déclaration</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Nombre de palette</th>
+            <th class="p-2 text-black font-normal whitespace-nowrap text-center">Valeur déclarée</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of data.unloading_points_lights">
+            <td class="p-2">{{item.destinatire?.name}}</td>
+            <td class="p-2">{{item.city.name}}</td>
+            <td class="p-2">{{item.adresse?.adress}}</td>
+            <td class="p-2">{{item.dec_code}}</td>
+            <td class="p-2">{{item.nb_palette}}</td>
+            <td class="p-2">{{item.declared_value}}Dhs</td>
+        </tr>
+    </tbody>
+</table>

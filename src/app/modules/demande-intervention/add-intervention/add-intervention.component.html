@@ -1,0 +1,176 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+    <h2 mat-dialog-title class="col-span-2">
+      {{ form_btn }} une demande
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="createIntervention">
+      <div class="w-1/3 pl-4 pr-4 mt-4 mx-auto">
+        <app-shared-autcomplete
+          #searchComponent1
+          [uniqueKey]="'id'"
+          [type]="'single'"
+          [opended]="true"
+          [contentStyle]="contentStyle"
+          [inputStyle]="searchStyle"
+          [charToGetAll]="'*'"
+          [data]="vehicules"
+          [keys]="['code_interne', 'matricule']"
+          [lengthToStart]="3"
+          [display]="['code_interne','-', 'matricule']"
+          [placeholer]="''"
+          [label]="'Code / Immatriculation véhicule'"
+          [hasIcon]="false"
+          (dataEvent)="filterVehicule($event)"
+        ></app-shared-autcomplete>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-4 pr-4 pt-4">
+        <div>
+          <p>Fournisseur : <strong></strong></p>
+        </div>
+        <div>
+          <p>Date fin garantie : <strong></strong></p>
+        </div>
+        <div>
+          <p>Marque : <strong>{{ vehicule?.brand?.name }}</strong></p>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-4 pr-4">
+        <div>
+          <p>Type : <strong>{{ vehicule?.truck_type?.name }}</strong></p>
+        </div>
+        <div>
+          <p>Modèle : <strong>{{ vehicule?.modele?.name }}</strong></p>
+        </div>
+        <div>
+          <p>Gamme : <strong>{{ vehicule?.gamme?.name }}</strong></p>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-4 pr-4">
+        <div>
+          <p>Tonnage : <strong>{{ vehicule?.tonnage?.name }} T</strong></p>
+        </div>
+        <div>
+          <p>DMC :<strong>{{ vehicule?.date_circulation }}</strong></p>
+        </div>
+        <div>
+          <p>Carburant : <strong>{{ vehicule?.carburant }}</strong></p>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4 pl-4 pr-4">
+        <div>
+          <p>Index kilométrique : <strong>{{ vehicule?.km_reel }}</strong></p>
+        </div>
+        <div>
+          <p>Activité :<strong>{{ vehicule?.activity }}</strong></p>
+        </div>
+        <div>
+        </div>
+      </div>
+      <div class="pl-4 pr-4 pt-4">
+        <h2 class="text-[#0C8040] font-normal text-lg">Informations générales :</h2>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-2 mb-2 pl-4 pr-4">
+        <div>
+          <i-field [type]="'date'" [label]="'Date demande'" formControlName="date_demande" ></i-field>
+        </div>
+        <div>
+          <!-- <i-field [type]="'text'" [label]="'Code / Nom Conducteur'" formControlName="n_demande" ></i-field> -->
+          <app-shared-autcomplete
+            #searchComponent1
+            [uniqueKey]="'id'"
+            [type]="'single'"
+            [opended]="true"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="drivers"
+            [keys]="['first_name', 'last_name']"
+            [lengthToStart]="3"
+            [display]="['first_name', 'last_name']"
+            [placeholer]="''"
+            [label]="'Code / Nom Conducteur'"
+            [hasIcon]="false"
+            (dataEvent)="filterDriver($event)"
+          ></app-shared-autcomplete>
+        </div>
+      </div>
+      <div class="pl-4 pr-4 pt-4">
+        <h2 class="text-[#0C8040] font-normal text-lg">Demande :</h2>
+      </div>
+      <div formArrayName="types">
+        <div *ngFor="let type of types.controls; let i = index" [formGroupName]="i">
+          <div class="grid grid-cols-3 gap-4 mt-2 mb-2 pl-4 pr-4">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Type d’intervention</mat-label>
+                <mat-select matNativeControl formControlName="type">
+                  <mat-option value="CORRECTIF">CORRECTIF</mat-option>
+                  <mat-option value="PREVENTIF">PREVENTIF</mat-option>
+                  <mat-option value="CONDITIONNEL">CONDITIONNEL</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="pl-4 pr-4">
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Type de panne</mat-label>
+                <mat-select matNativeControl formControlName="panne_id">
+                  <mat-option *ngFor="let panne of pannes" [value]="panne.id">{{ panne.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-icon class="text-red-600 cursor-pointer" (click)="removeType(i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex cursor-pointer pl-4 pr-4">
+        <mat-icon class="pt-1 text-[#0C8040]">add_circle</mat-icon>
+        <h2 (click)="addType()" class="text-[#0C8040] font-semibold pl-2">Ajouter une ligne</h2>
+      </div>
+      <div class="pl-4 pr-4 pt-4">
+        <h2 class="text-[#0C8040] font-normal text-lg">Commentaire :</h2>
+      </div>
+      <div class="pl-4 pr-4">
+        <i-field
+        [type]="'textarea'"
+        [label]="'Commentaire'"
+        [cols]="30"
+        [rows]="2"
+        maxlength="500"
+        formControlName="commentaire"
+      ></i-field>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-2 pl-4 pr-4 mt-4">
+        <div>
+          <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button [disabled]="createIntervention.invalid" *ngIf="!spinnerAdd"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addIntervention()">{{ form_btn }}
+          </button> -->
+          <button
+            *ngIf="!spinnerAdd"
+            (click)="addIntervention()"
+            [disabled]="createIntervention.invalid"
+            pButton pRipple
+            type="button"
+            [label]="form_btn"
+            class="p-button-rounded p-button-success">
+        </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

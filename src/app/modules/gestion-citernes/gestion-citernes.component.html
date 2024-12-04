@@ -1,0 +1,209 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Gestion des citernes</h2>
+      </div>
+    </div>
+    <div>
+      <div class="flex justify-end cursor-pointer" (click)="addTank('add')" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion des citernes', 'C')">
+        <mat-icon class="pt-1 text-[#0C8040]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filter($event)"
+    ></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="mt-10" *ngIf="!spinner">
+    <div class="mt-36 mb-36 text-center" *ngIf="citernes.length == 0 ">
+      <p class="text-[#636363] text-[22px]">La liste des citernes est vide</p>
+    </div>
+    <div *ngIf="citernes.length > 0 ">
+      <div
+      class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[120px] items-center"
+      *ngFor="let item of citernes"
+    >
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Sous parc</p>
+            <p class="text-[12px] text-[#000000]">{{ item.parc?.name }}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">N° citerne</p>
+            <p class="text-[12px] text-[#000000]">{{ item.n_citerne }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Nom</p>
+            <p class="text-[12px] text-[#000000]">{{ item.name }}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Date d’installation</p>
+            <p class="text-[12px] text-[#000000]">
+              {{ item.date_installation | date: 'dd/MM/yyyy'}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Capacité (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.capacite }} L</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Qté réelle (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.qte_reel }} L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Qté consommée (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{ item.qte_consomme }} L
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Reste (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.qte_reel }} L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Stock min (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.stock_min }} L</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px]">Stock min souhaité (L)</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.stock_min_souhaite }} L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <!-- <div class="flex items-center">
+          <div class="pl-3">
+            <div class="p-8 w-36 border-[3px] border-[#000] text-center bg-[#DB9B06]">
+              <mat-icon>whatshot</mat-icon>
+            </div>
+          </div>
+        </div> -->
+        <div class="flex items-center">
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-center">
+              <img
+                src="../../../assets/img/icons8-bulk_gas_tanker.png"
+                class="w-16 mb-2"
+              />
+              <mat-progress-bar
+                mode="determinate"
+                [value]="progress(item.qte_reel, item.capacite)"
+              ></mat-progress-bar>
+            </p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{ item.qte_reel }} / {{ item.capacite }} L
+              </p>
+              <!-- <p class="text-[12px] text-[#000000]">{{ item.fournisseur }}</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="width-info">
+        <div class="flex items-center pl-4 justify-end">
+          <mat-icon mat-button [matMenuTriggerFor]="menu" class="cursor-pointer"
+            >more_vert</mat-icon
+          >
+        </div>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="recharge(item)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion des citernes', 'U')">
+            Recharger la citerne
+          </button>
+          <button mat-menu-item (click)="mouvementstock(item.uuid)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion des citernes', 'U')">
+            Mouvements de stock
+          </button>
+          <button mat-menu-item (click)="updateTank(item)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion des citernes', 'U')">
+            Modifier la citerne
+          </button>
+          <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Gestion des citernes', 'D')">Supprimer</button>
+        </mat-menu>
+      </div>
+      <!-- <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-3">
+            <button
+              mat-button
+              class="text-[#0C8040] borderbtn"
+              (click)="recharge(item)"
+            >
+              <mat-icon>add_circle_outline</mat-icon> Recharger La Citerne
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center mt-3">
+          <div class="pl-3">
+            <button
+              mat-button
+              class="text-[#000000] stockbtn"
+              (click)="mouvementstock(item.uuid)"
+            >
+              Mouvement des stocks
+            </button>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="mt-10" *ngIf="!spinner && citernes.length != 0">
+      <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+    </div>
+    </div>
+  </div>
+</div>

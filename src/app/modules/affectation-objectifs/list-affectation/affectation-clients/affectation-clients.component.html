@@ -1,0 +1,1058 @@
+<div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<div *ngIf="!spinner">
+  <mat-accordion class="example-headers-align clientobjectif">
+    <div *ngIf="objectif.type == 'agence'">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="flex cursor-pointer">
+              <mat-icon class=" text-[#0C8040]">gps_fixed</mat-icon>
+              <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Objectif : {{ objectif.name }}</h2>
+            </div>
+          </mat-panel-title>
+          <!-- <mat-panel-description>
+          </mat-panel-description> -->
+        </mat-expansion-panel-header>
+        <div class="mt-5">
+          <div class="grid grid-cols-4 gap-4 mb-5">
+            <div>
+              <!-- <app-shared-filter
+                [inputs]="inputsFiler"
+                (filter)="filter($event)"
+              ></app-shared-filter> -->
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher la ville...'"
+                (dataEvent)="onVilleChange($event)"></app-shared-autcomplete>
+            </div>
+            <div>
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="agences"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher agence...'"
+                (dataEvent)="onAgenceChange($event)"></app-shared-autcomplete>
+
+            </div>
+            <div class="col-span-2 flex justify-end items-center text-right">
+              <button (click)="filter()"
+                class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+                Filtrer
+              </button>
+              <mat-icon class="cursor-pointer mr-4 extra-search mt-[10px]" matTooltip="Réinitialiser"
+                matTooltipPosition="above" (click)="refreshFilter()">refresh</mat-icon>
+            </div>
+          </div>
+          <ng-container>
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                  <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex justify-end">Actions</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let affect of  objectif.affectation">
+                <tr>
+                  <td rowspan="1000" class="bg-[#525252] rotatclient">
+                    <!-- <div class="-rotate-90"> -->
+                    <h2 class="text-[#fff] font-normal pl-2 mb-0 text-base"><i class="pi pi-building"></i> {{
+                      affect.agency_name }}</h2>
+                    <!-- </div> -->
+                  </td>
+                </tr>
+
+
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <!-- <mat-icon class=" text-[#636363]">money</mat-icon> -->
+                      <i class="pi pi-money-bill"></i>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Cash</h2>
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let item of affect.items.cash">
+
+                  <!-- {{item | toJSON}} -->
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <!-- <mat-icon class=" text-[#0C8040]">person</mat-icon> -->
+                        <i class="pi pi-building"></i>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'cash', affect.agence_id, objectif, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                </ng-container>
+
+                <tr *ngIf="!(affect.items?.cash?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'cash', affect.agence_id, objectif, item)"
+                        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <!-- <mat-icon class=" text-[#636363]">money</mat-icon> -->
+                      <i class="pi pi-home"></i>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">En compte</h2>
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let item of affect.items?.en_compte">
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <!-- <mat-icon class=" text-[#0C8040]">person</mat-icon> -->
+                        <i class="pi pi-building"></i>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'en_compte', affect.agence_id, objectif, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+
+
+                </ng-container>
+
+                <tr *ngIf="!(affect.items?.en_compte?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'en_compte', affect.agence_id, objectif, item)"
+                        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div *ngIf="objectif.type == 'commercial_and_secteur'">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="flex cursor-pointer">
+              <mat-icon class=" text-[#0C8040]">gps_fixed</mat-icon>
+              <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Objectif : {{ objectif.name }}</h2>
+            </div>
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="mt-5">
+          <ng-container>
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                  <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex justify-end">Actions</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <ng-container *ngFor="let item of objectif?.affectation  let i = index">
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{item?.commercial?.first_name + " "
+                          + item?.commercial?.last_name}}</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <div class="cursor-pointer" (click)="onclick(i)">
+                        <mat-icon class="pl-1">
+                          {{
+                          !isVisible(i) ? "visibility" : "visibility_off"
+                          }}</mat-icon>
+                      </div>
+                      <mat-menu #menu="matMenu">
+                        <!-- objectif , edit_mode = false , sectors? : [] , commercial_id? , customer_type? , agence?  , dialog_type? , item? -->
+                        <button mat-menu-item
+                          (click)="addclient(objectif, true,  item?.details , item?.commercial?.id , null , null , null, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'd')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr *ngIf="isVisible(i)">
+                    <td colspan="14">
+                      <div class="mt-5 mb-4">
+                        <ng-container>
+                          <table class="w-full text-left text-gray-500">
+                            <thead>
+                              <tr>
+                                <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Secteur</th>
+                                <th *ngFor="let header of headerColumuns" scope="col"
+                                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                                  <div class="flex items-center">
+                                    {{ header }}
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                                *ngFor="let sector of item?.details">
+                                <td class="p-3">
+                                  <div class="flex">
+                                    <mat-icon class=" text-[#0C8040]">place</mat-icon>
+                                    <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{sector?.sector?.name}}
+                                    </h2>
+                                  </div>
+                                </td>
+                                <td class="p-3">{{ sector.janvier }}</td>
+                                <td class="p-3">{{ sector.fevrier }}</td>
+                                <td class="p-3">{{ sector.mars }}</td>
+                                <td class="p-3">{{ sector.avril }}</td>
+                                <td class="p-3">{{ sector.mai }}</td>
+                                <td class="p-3">{{ sector.juin }}</td>
+                                <td class="p-3">{{ sector.juillet }}</td>
+                                <td class="p-3">{{ sector.aout }}</td>
+                                <td class="p-3">{{ sector.septembre }}</td>
+                                <td class="p-3">{{ sector.octobre }}</td>
+                                <td class="p-3">{{ sector.novembre }}</td>
+                                <td class="p-3">{{ sector.decembre }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </ng-container>
+        </div>
+        <div class="flex mt-5 cursor-pointer" (click)="addclient(objectif)"
+          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+          <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+          <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+            Ajouter un commercial</h2>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div *ngIf="objectif.type == 'commercial_and_secteur_and_agence'">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="flex cursor-pointer">
+              <mat-icon class=" text-[#0C8040]">gps_fixed</mat-icon>
+              <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Objectif : {{ objectif.name }}</h2>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="mt-5">
+          <div class="grid grid-cols-4 gap-4 mb-5">
+            <div>
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher la ville...'"
+                (dataEvent)="onVilleChange($event)"></app-shared-autcomplete>
+            </div>
+            <div>
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="agences"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher agence...'"
+                (dataEvent)="onAgenceChange($event)"></app-shared-autcomplete>
+            </div>
+            <div class="col-span-2 flex justify-end items-center text-right">
+              <button (click)="filter()"
+                class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+                Filtrer
+              </button>
+              <mat-icon class="cursor-pointer mr-4 extra-search mt-[10px]" matTooltip="Réinitialiser"
+                matTooltipPosition="above" (click)="refreshFilter()">refresh</mat-icon>
+            </div>
+          </div>
+          <ng-container>
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                  <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex justify-end">Actions</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let affect of  objectif.affectation">
+                <tr>
+                  <td rowspan="1000" class="bg-[#525252] rotatclient">
+                    <!-- <div class="-rotate-90"> -->
+                    <h2 class="text-[#fff] font-normal pl-2 mb-0 text-base"><i class="pi pi-building"></i> {{
+                      affect.agency_name }}</h2>
+                    <!-- </div> -->
+                  </td>
+                </tr>
+
+
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <!-- <mat-icon class=" text-[#636363]">money</mat-icon> -->
+                      <i class="pi pi-money-bill"></i>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Cash</h2>
+                    </div>
+                  </td>
+                </tr>
+
+
+                <ng-container *ngFor="let item of affect.items.cash let i = index">
+
+                  <!-- {{item | toJSON}} -->
+                  <tr *ngIf="!item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <!-- <mat-icon class=" text-[#0C8040]">person</mat-icon> -->
+                        <i class="pi pi-building"></i>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'cash', affect.agence_id, objectif, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{item?.commercial?.first_name + " "
+                          + item?.commercial?.last_name}}</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <div class="cursor-pointer" (click)="onclick(i)">
+                        <mat-icon class="pl-1">
+                          {{
+                          !isVisible(i) ? "visibility" : "visibility_off"
+                          }}</mat-icon>
+                      </div>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addclient(objectif, true,  item?.details , item?.commercial?.id , 'agence-sector-commercial' , null , null , item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr *ngIf="isVisible(i)">
+                    <td colspan="14">
+                      <div class="mt-5 mb-4">
+                        <ng-container>
+                          <table class="w-full text-left text-gray-500">
+                            <thead>
+                              <tr>
+                                <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Secteur</th>
+                                <th *ngFor="let header of headerColumuns" scope="col"
+                                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                                  <div class="flex items-center">
+                                    {{ header }}
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                                *ngFor="let sector of item?.details">
+                                <td class="p-3">
+                                  <div class="flex">
+                                    <mat-icon class=" text-[#0C8040]">place</mat-icon>
+                                    <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{sector?.sector?.name}}
+                                    </h2>
+                                  </div>
+                                </td>
+                                <td class="p-3">{{ sector.janvier }}</td>
+                                <td class="p-3">{{ sector.fevrier }}</td>
+                                <td class="p-3">{{ sector.mars }}</td>
+                                <td class="p-3">{{ sector.avril }}</td>
+                                <td class="p-3">{{ sector.mai }}</td>
+                                <td class="p-3">{{ sector.juin }}</td>
+                                <td class="p-3">{{ sector.juillet }}</td>
+                                <td class="p-3">{{ sector.aout }}</td>
+                                <td class="p-3">{{ sector.septembre }}</td>
+                                <td class="p-3">{{ sector.octobre }}</td>
+                                <td class="p-3">{{ sector.novembre }}</td>
+                                <td class="p-3">{{ sector.decembre }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+
+
+
+
+                </ng-container>
+
+
+
+                <tr *ngIf="!(affect.items?.cash?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'cash', affect.agence_id, objectif, item) "
+                        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="100">
+                    <div class="flex mt-5 cursor-pointer"
+                      (click)="addclient(objectif  , false , [] , null, 'cash' , affect.agence_id , 'agence-sector-commercial' , item)"
+                      *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                      <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                        Ajouter un commercial</h2>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <!-- <mat-icon class=" text-[#636363]">money</mat-icon> -->
+                      <i class="pi pi-home"></i>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">En compte</h2>
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let item of affect.items?.en_compte let i = index">
+                  <tr *ngIf="!item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <!-- <mat-icon class=" text-[#0C8040]">person</mat-icon> -->
+                        <i class="pi pi-building"></i>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'en_compte', affect.agence_id, objectif, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{item?.commercial?.first_name + " "
+                          + item?.commercial?.last_name}}</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <div class="cursor-pointer" (click)="onclick(i)">
+                        <mat-icon class="pl-1">
+                          {{
+                          !isVisible(i) ? "visibility" : "visibility_off"
+                          }}</mat-icon>
+                      </div>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addclient(objectif, true,  item?.details , item?.commercial?.id  , null , null , 'agence-sector-commercial' , item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr *ngIf="isVisible(i)">
+                    <td colspan="14">
+                      <div class="mt-5 mb-4">
+                        <ng-container>
+                          <table class="w-full text-left text-gray-500">
+                            <thead>
+                              <tr>
+                                <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Secteur</th>
+                                <th *ngFor="let header of headerColumuns" scope="col"
+                                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                                  <div class="flex items-center">
+                                    {{ header }}
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                                *ngFor="let sector of item?.details">
+                                <td class="p-3">
+                                  <div class="flex">
+                                    <mat-icon class=" text-[#0C8040]">place</mat-icon>
+                                    <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{sector?.sector?.name}}
+                                    </h2>
+                                  </div>
+                                </td>
+                                <td class="p-3">{{ sector.janvier }}</td>
+                                <td class="p-3">{{ sector.fevrier }}</td>
+                                <td class="p-3">{{ sector.mars }}</td>
+                                <td class="p-3">{{ sector.avril }}</td>
+                                <td class="p-3">{{ sector.mai }}</td>
+                                <td class="p-3">{{ sector.juin }}</td>
+                                <td class="p-3">{{ sector.juillet }}</td>
+                                <td class="p-3">{{ sector.aout }}</td>
+                                <td class="p-3">{{ sector.septembre }}</td>
+                                <td class="p-3">{{ sector.octobre }}</td>
+                                <td class="p-3">{{ sector.novembre }}</td>
+                                <td class="p-3">{{ sector.decembre }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+
+
+
+
+
+                </ng-container>
+
+
+
+                <tr *ngIf="!(affect.items?.en_compte?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'en_compte', affect.agence_id, objectif, item)"
+                        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="100">
+                    <div class="flex mt-5 cursor-pointer"
+                      (click)="addclient(objectif  , false , [] , null, 'en_compte' , affect.agence_id , 'agence-sector-commercial')"
+                      *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                      <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                        Ajouter un commercial</h2>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div *ngIf="objectif.type == 'commercial_and_agence'">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="flex cursor-pointer">
+              <mat-icon class=" text-[#0C8040]">gps_fixed</mat-icon>
+              <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Objectif : {{ objectif.name }}</h2>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="mt-5">
+          <div class="grid grid-cols-4 gap-4 mb-5">
+            <div>
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher la ville...'"
+                (dataEvent)="onVilleChange($event)"></app-shared-autcomplete>
+            </div>
+            <div>
+              <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [opended]="true" [type]="'single'"
+                [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="agences"
+                [keys]="['name']" [lengthToStart]="3" [display]="['name']" [placeholer]="'Rechercher agence...'"
+                (dataEvent)="onAgenceChange($event)"></app-shared-autcomplete>
+            </div>
+            <div class="col-span-2 flex justify-end items-center text-right">
+              <button (click)="filter()"
+                class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+                Filtrer
+              </button>
+              <mat-icon class="cursor-pointer mr-4 extra-search mt-[10px]" matTooltip="Réinitialiser"
+                matTooltipPosition="above" (click)="refreshFilter()">refresh</mat-icon>
+            </div>
+          </div>
+          <ng-container>
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                  <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex justify-end">Actions</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let affect of  objectif.affectation">
+                <tr>
+                  <td rowspan="1000" class="bg-[#525252] rotatclient">
+                    <!-- <div class="-rotate-90"> -->
+                    <h2 class="text-[#fff] font-normal pl-2 mb-0 text-base"><i class="pi pi-building"></i> {{
+                      affect.agency_name }}</h2>
+                    <!-- </div> -->
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <mat-icon class=" text-[#636363]">money</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Cash</h2>
+                    </div>
+                  </td>
+                </tr>
+
+                <ng-container *ngFor="let item of affect.items.cash let i = index">
+                  <!-- {{item | toJSON}} -->
+                  <tr *ngIf="!item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'cash', affect.agence_id, objectif, item)"
+                          *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{item?.commercial?.first_name + " "
+                          + item?.commercial?.last_name}}</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <!-- <div class="cursor-pointer" (click)="onclick(i)">
+                      <mat-icon class="pl-1">
+                        {{
+                          !isVisible(i) ? "visibility" : "visibility_off"
+                        }}</mat-icon
+                      >
+                    </div> -->
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addclient(objectif, true,  item?.details , item?.commercial?.id, null , null , null ,'agence-sector-commercial' , item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                </ng-container>
+
+
+
+                <tr *ngIf="!(affect.items?.cash?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'cash', affect.agence_id, objectif, item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="100">
+                    <div class="flex mt-5 cursor-pointer"
+                      (click)="addclient(objectif  , false , [] , null, 'cash' , affect.agence_id , 'agence-sector-commercial')" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                      <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                        Ajouter un commercial</h2>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="14">
+                    <div class="flex p-4">
+                      <mat-icon class=" text-[#636363]">money</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">en_compte</h2>
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let item of affect.items?.en_compte let i = index">
+                  <tr *ngIf="!item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Agence</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addAffectationAgence('edit', 'en_compte', affect.agence_id, objectif, item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item (click)="delet(item.uuid)"*ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="item.commercial_id" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-3">
+                      <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{item?.commercial?.first_name + " "
+                          + item?.commercial?.last_name}}</h2>
+                      </div>
+                    </td>
+                    <td class="p-3">{{ item.janvier }}</td>
+                    <td class="p-3">{{ item.fevrier }}</td>
+                    <td class="p-3">{{ item.mars }}</td>
+                    <td class="p-3">{{ item.avril }}</td>
+                    <td class="p-3">{{ item.mai }}</td>
+                    <td class="p-3">{{ item.juin }}</td>
+                    <td class="p-3">{{ item.juillet }}</td>
+                    <td class="p-3">{{ item.aout }}</td>
+                    <td class="p-3">{{ item.septembre }}</td>
+                    <td class="p-3">{{ item.octobre }}</td>
+                    <td class="p-3">{{ item.novembre }}</td>
+                    <td class="p-3">{{ item.decembre }}</td>
+                    <td class="p-3 text-center flex justify-between">
+
+
+                      <div class="cursor-pointer" (click)="onclick(i)">
+                        <mat-icon class="pl-1">
+                          {{
+                          !isVisible(i) ? "visibility" : "visibility_off"
+                          }}</mat-icon>
+                      </div>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                          (click)="addclient(objectif, true,  item?.details , item?.commercial?.id , null , null , 'agence-sector-commercial' , item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                          <mat-icon>edit</mat-icon>
+                          Modifier
+                        </button>
+                        <button mat-menu-item *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                          <mat-icon>delete</mat-icon>
+                          Supprimer
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+
+                </ng-container>
+
+
+
+                <tr *ngIf="!(affect.items?.en_compte?.length > 0)">
+                  <td colspan="100">
+                    <div>
+                      <div class="flex mt-5 cursor-pointer"
+                        (click)="addAffectationAgence('add', 'en_compte', affect.agence_id, objectif, item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                          Objectif agence</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="100">
+                    <div class="flex mt-5 cursor-pointer"
+                      (click)="addclient(objectif  , false , [] , null, 'en_compte' , affect.agence_id , 'agence-sector-commercial')" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">
+                      <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+                      <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">
+                        Ajouter un commercial</h2>
+                    </div>
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </mat-accordion>
+</div>

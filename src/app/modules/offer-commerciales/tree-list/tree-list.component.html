@@ -1,0 +1,238 @@
+<!-- Nv -->
+<div
+  *ngIf="(isLoadingTree$ | async) || isLoadingOfferDetailsSave"
+  class="flex items-center justify-center mt-6"
+>
+  <mat-spinner [diameter]="80"></mat-spinner>
+</div>
+<ng-container
+  *ngIf="
+    (isLoadingTree$ | async) === false && isLoadingOfferDetailsSave === false
+  "
+>
+  <div class="grid grid-cols-2 mb-2">
+    <div class="mr-6 p-6 pb-0">
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="text-[#0C8040]">device_hub</mat-icon>
+
+        <!-- offre commerciale -->
+        <h2
+          *ngIf="type_tree === 'tree-offer'"
+          class="text-[#0C8040] font-semibold pl-2"
+        >
+          {{
+            mode === "UPDATE"
+              ? "Modification d'une offre commerciale"
+              : mode === "CREATE"
+              ? "Création d'une offre commerciale"
+              : "Details d'une offre commerciale"
+          }}
+        </h2>
+
+        <!-- devis -->
+        <h2
+          *ngIf="type_tree !== 'tree-offer'"
+          class="text-[#0C8040] font-semibold pl-2"
+        >
+          {{
+            mode === "UPDATE"
+              ? "Modification d'un devis"
+              : mode === "CREATE"
+              ? "Création d'un devis"
+              : "Détails d'un devis"
+          }}
+        </h2>
+      </div>
+    </div>
+    <div class="pt-5 pr-5">
+      <button
+        *ngIf="(disableActions$ | async) === false"
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px] float-right"
+        (click)="saveOfferTree()"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </div>
+
+    <div class="org_tree m-auto relative">
+      <div class="toolbar absolute grid grid-cols-1">
+        <div matTooltip="Zoom avant" matTooltipPosition="right" (click)="zoomIn()"><mat-icon class="white-icon"> zoom_in </mat-icon></div>
+        <div matTooltip="Zoom arrière" matTooltipPosition="right" (click)="zoomOut()"><mat-icon class="white-icon"> zoom_out </mat-icon></div>
+        <div matTooltip="Réinitialiser" matTooltipPosition="right" (click)="reinit()"><mat-icon class="white-icon"> cached </mat-icon></div>
+      </div>
+      <div class="org-container" #orgContainer appHandtool>
+        <ul id="treeUl relative" class="list" style="left: 0; top: 0;"  *ngIf="offerTree">
+          <li class="item">
+            <!-- offre commercial or devis -->
+            <div class="link bg-[#F2FCF1]">
+              <app-offre-commercial></app-offre-commercial>
+              <mat-card-actions>
+                <mat-icon
+                  class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer"
+                  (click)="collapsedconv = false"
+                  *ngIf="collapsedconv"
+                  >keyboard_arrow_up</mat-icon
+                >
+                <mat-icon
+                  class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer"
+                  (click)="collapsedconv = true"
+                  *ngIf="!collapsedconv"
+                  >keyboard_arrow_down</mat-icon
+                >
+              </mat-card-actions>
+            </div>
+
+            <ul class="list" *ngIf="collapsedconv">
+              <!-- conventions transport  -->
+              <li
+                class="item" [ngClass]="{'list-item':!offerTree.grids.services.length}"
+                *ngFor="let grid of offerTree.grids.transport; let idx = index"
+              >
+                <!-- convention -->
+                <div class="link bg-[#FFFFF7]">
+                  <app-convention
+                    #convention
+                    [grid]="grid"
+                    [position]="idx"
+                    rubric_type="transport"
+                  ></app-convention>
+                  <mat-card-actions *ngIf="!grid?.isLoading">
+                    <div class="flex items-center justify-center">
+                      <mat-icon
+                        class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                        (click)="convention.expand = false"
+                        *ngIf="convention.expand"
+                        >keyboard_arrow_up</mat-icon
+                      >
+                      <mat-icon
+                        class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                        (click)="convention.expand = true"
+                        *ngIf="!convention.expand"
+                        >keyboard_arrow_down</mat-icon
+                      >
+                      <span *ngIf="!convention.expand" class="pl-2 font-medium"
+                        >[{{ grid.conditions.length }}]</span
+                      >
+                    </div>
+                  </mat-card-actions>
+                </div>
+                <!-- conditions -->
+                <ul class="list" *ngIf="convention.expand">
+                  <li
+                    class="item"
+                    *ngFor="let condition of grid.conditions; let idx2 = index"
+                  >
+                    <div class="link bg-[#FFFFFF]">
+                      <app-condition
+                        [position_conv]="idx"
+                        [position]="idx2"
+                        [grid]="grid"
+                        [condition]="condition"
+                        rubric_type="transport"
+                      ></app-condition>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <!-- conventions services  -->
+              <li
+                *ngIf="
+                  (isLoadingServices$ | async) ||
+                  offerTree.grids.services.length !== 0
+                "
+                class="item" [ngClass]="{'list-item':!offerTree.grids.transport.length}"
+              >
+                <!-- convention -->
+                <div class="link bg-[#FFFFF7]">
+                  <app-convention
+                    #convention_services
+                    [grid]="{ isLoading: (isLoadingServices$ | async) }"
+                    [position]="idx"
+                    rubric_type="services-parent"
+                  ></app-convention>
+                  <mat-card-actions
+                    *ngIf="(isLoadingServices$ | async) === false"
+                  >
+                    <mat-icon
+                      class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                      (click)="convention_services.expand = false"
+                      *ngIf="convention_services.expand"
+                      >keyboard_arrow_up</mat-icon
+                    >
+                    <mat-icon
+                      class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                      (click)="convention_services.expand = true"
+                      *ngIf="!convention_services.expand"
+                      >keyboard_arrow_down</mat-icon
+                    >
+                  </mat-card-actions>
+                </div>
+                <!-- conditions groupped by rubrics -->
+                <ul
+                  class="list"
+                  *ngIf="
+                    (isLoadingServices$ | async) === false &&
+                    convention_services.expand
+                  "
+                >
+                  <li
+                    class="item"
+                    *ngFor="let grid of offerTree.grids.services; let idx = index"
+                  >
+                  <!-- rubrics -->
+                  <div
+                  class="link bg-[#FFFFFF]">
+                  <mat-icon class="icon-close" *ngIf="grid.conditions.length <=0">cancel</mat-icon>
+                  <mat-icon class="icon-ok" *ngIf="grid.conditions.length > 0">check_circle</mat-icon>
+                      <app-convention
+                        #convention
+                        [grid]="grid"
+                        [position]="idx"
+                        rubric_type="services"
+                      ></app-convention>
+                      <mat-card-actions>
+                        <mat-icon
+                          class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                          (click)="convention.expand = false"
+                          *ngIf="convention.expand"
+                          >keyboard_arrow_up</mat-icon
+                        >
+                        <mat-icon
+                          class="rounded-[50%] text-[#fff] bg-[#555555] cursor-pointer mt-2"
+                          (click)="convention.expand = true"
+                          *ngIf="!convention.expand"
+                          >keyboard_arrow_down</mat-icon
+                        >
+                      </mat-card-actions>
+                    </div>
+                    <!-- conditions -->
+                    <ul class="list" *ngIf="convention.expand">
+                      <li
+                        class="item"
+                        *ngFor="
+                          let condition of grid.conditions;
+                          let idx2 = index
+                        "
+                      >
+                        <div class="link bg-[#FFFFFF]">
+                          <app-condition
+                            [position_conv]="idx"
+                            [position]="idx2"
+                            [grid]="grid"
+                            [condition]="condition"
+                            rubric_type="services"
+                          ></app-condition>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+</ng-container>

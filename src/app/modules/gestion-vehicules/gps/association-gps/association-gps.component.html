@@ -1,0 +1,165 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">
+      {{gps.last_association?.statut == 'ASSOCIE' ? "Dissociation" : "Association" }} du GPS N° {{ gps.imei_gps }}
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="associerGps">
+    <div mat-dialog-content>
+      <p class="text-center">
+        <mat-icon class="text-[#636363] text-[70px] icon-gps">pin_drop</mat-icon>
+      </p>
+      <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-label>IMEI GPS</mat-label>
+        <input matInput type="text" [value]="gps.imei_gps" readonly/>
+      </mat-form-field> -->
+      <div
+        class="bg-[#0C8040] text-center text-[#fff] border-[#0C8040] rounded-[22px] shadow-[0px_3px_6px_#00000029] p-4 mr-7 ml-7 font-normal text-[18px] mb-5"
+      >
+        <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="16.436" height="17.12" viewBox="0 0 16.436 17.12">
+          <path id="icons8-gps_signal" d="M10.037,0A.344.344,0,1,0,10.1.685a5.627,5.627,0,0,1,5.65,5.65.342.342,0,1,0,.685,0A6.327,6.327,0,0,0,10.1,0h-.064Zm0,2.4a.344.344,0,1,0,.064.685,3.246,3.246,0,0,1,3.253,3.253.342.342,0,1,0,.685,0A3.943,3.943,0,0,0,10.1,2.4h-.064Zm-7.019.92a.3.3,0,0,0-.246.107C1.078,5.163-.281,9.273,3.285,12.9a6.813,6.813,0,0,0,4.922,2.172,6.628,6.628,0,0,0,4.462-1.648.34.34,0,0,0,0-.482L3.253,3.424A.328.328,0,0,0,3.017,3.317ZM10.1,5.136A1.191,1.191,0,0,0,8.913,6.27a.394.394,0,0,0-.1.011l-1.434.342,2.1,2.119L9.8,7.49a1.227,1.227,0,0,0,.3.043,1.2,1.2,0,0,0,0-2.4ZM2.675,13.258,1.562,14.381h2.4a8.678,8.678,0,0,1-1.166-1C2.75,13.342,2.717,13.3,2.675,13.258ZM.342,15.066A.342.342,0,0,0,0,15.408v1.37a.342.342,0,0,0,.342.342H5.821a.342.342,0,0,0,.342-.342V15.462a7.172,7.172,0,0,1-1.038-.4Z" fill="#fff"/>
+        </svg>
+        IMEI GPS :  {{ gps.imei_gps}}
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="w-[100%] pl-7 pr-7 mb-4">
+            <app-shared-autcomplete *ngIf="gps.last_association?.statut == 'DISSOCIE' || gps.last_association == null "
+              #searchComponent1
+              [opended]="true"
+              [type]="'single'"
+              [contentStyle]="contentStyle"
+              [inputStyle]="searchStyle"
+              [charToGetAll]="'*'"
+              [data]="vehicules"
+              [keys]="['code_interne', 'matricule']"
+              [lengthToStart]="3"
+              [display]="['code_interne', 'matricule']"
+              [placeholer]="'Rechercher véhicule...'"
+              [hasIcon]="false"
+              (dataEvent)="filterTruck($event)"
+            >
+            </app-shared-autcomplete>
+    
+            <mat-form-field appearance="fill" *ngIf="gps.last_association?.statut == 'ASSOCIE'">
+              <mat-label>Véhicule</mat-label>
+              <input matInput type="text" [value]="gps.last_association?.vehicule?.matricule" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+        <div >
+          <div class="w-[100%] pl-7 pr-7 mb-4">
+            <app-shared-autcomplete
+              #searchComponent1
+              [opended]="true"
+              [type]="'single'"
+              [contentStyle]="contentStyle"
+              [inputStyle]="searchStyle"
+              [charToGetAll]="'*'"
+              [data]="drivers"
+              [keys]="['first_name', 'last_name']"
+              [lengthToStart]="3"
+              [display]="['first_name', 'last_name']"
+              [placeholer]="'Rechercher personnel...'"
+              [hasIcon]="false"
+              (dataEvent)="filterPersonnel($event)"
+            >
+            </app-shared-autcomplete>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-2 gap-4">
+        <div *ngIf="gps.last_association?.statut == 'DISSOCIE' || gps.last_association == null " class="w-[100%] pl-7 mb-4">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Date d'installation</mat-label>
+            <input matInput type="date" formControlName="date_association"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date d\'installation'" formControlName="date_association"></i-field>
+        </div>
+        <div *ngIf="gps.last_association?.statut == 'ASSOCIE'" class="w-[100%] pl-7  mb-4">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Date dissociation</mat-label>
+            <input matInput type="date" formControlName="date_dissociation"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date dissociation'" formControlName="date_dissociation"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+            <mat-label>Prestataire</mat-label>
+            <input matInput type="text" [value]="gps.prestataire?.name" readonly />
+          </mat-form-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] pl-7 mb-4">
+            <mat-select placeholder="Sonde">
+              <mat-option *ngFor="let type of [0, 1, 2]"> Sonde</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+      </div>
+      <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <!-- <mat-select placeholder="Sonde">
+          <mat-option *ngFor="let type of [0, 1, 2]"> Sonde</mat-option>
+        </mat-select> -->
+        <mat-label>Sonde</mat-label>
+        <input matInput type="text" [value]="gps.sonde ? 'Avec sonde' : 'Sans sonde'" readonly />
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-label>Observation</mat-label>
+        <textarea
+          matInput
+          placeholder="Observation"
+          rows="3"
+          cols="50"
+          formControlName="observation"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 pt-2 font-bold text-[18px]"
+          mat-dialog-close
+        >
+          Annuler
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button *ngIf="!spinnerAdd"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          type="submit"
+          [disabled]="associerGps.invalid"
+          (click)="associer()"
+          >
+          <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="16.436" height="17.12" viewBox="0 0 16.436 17.12">
+            <path id="icons8-gps_signal" d="M10.037,0A.344.344,0,1,0,10.1.685a5.627,5.627,0,0,1,5.65,5.65.342.342,0,1,0,.685,0A6.327,6.327,0,0,0,10.1,0h-.064Zm0,2.4a.344.344,0,1,0,.064.685,3.246,3.246,0,0,1,3.253,3.253.342.342,0,1,0,.685,0A3.943,3.943,0,0,0,10.1,2.4h-.064Zm-7.019.92a.3.3,0,0,0-.246.107C1.078,5.163-.281,9.273,3.285,12.9a6.813,6.813,0,0,0,4.922,2.172,6.628,6.628,0,0,0,4.462-1.648.34.34,0,0,0,0-.482L3.253,3.424A.328.328,0,0,0,3.017,3.317ZM10.1,5.136A1.191,1.191,0,0,0,8.913,6.27a.394.394,0,0,0-.1.011l-1.434.342,2.1,2.119L9.8,7.49a1.227,1.227,0,0,0,.3.043,1.2,1.2,0,0,0,0-2.4ZM2.675,13.258,1.562,14.381h2.4a8.678,8.678,0,0,1-1.166-1C2.75,13.342,2.717,13.3,2.675,13.258ZM.342,15.066A.342.342,0,0,0,0,15.408v1.37a.342.342,0,0,0,.342.342H5.821a.342.342,0,0,0,.342-.342V15.462a7.172,7.172,0,0,1-1.038-.4Z" fill="#fff"/>
+          </svg>
+            Associé
+        </button> -->
+            <button
+              type="submit"
+              mat-stroked-button
+              extended
+              [ngClass]="gps.last_association?.statut == 'ASSOCIE' ? 'btn-dissocie' : 'btn-associe'"
+              [disabled]="associerGps.invalid"
+              (click)="associer()"
+            >
+              <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="16.436" height="17.12" viewBox="0 0 16.436 17.12">
+                <path id="icons8-gps_signal" d="M10.037,0A.344.344,0,1,0,10.1.685a5.627,5.627,0,0,1,5.65,5.65.342.342,0,1,0,.685,0A6.327,6.327,0,0,0,10.1,0h-.064Zm0,2.4a.344.344,0,1,0,.064.685,3.246,3.246,0,0,1,3.253,3.253.342.342,0,1,0,.685,0A3.943,3.943,0,0,0,10.1,2.4h-.064Zm-7.019.92a.3.3,0,0,0-.246.107C1.078,5.163-.281,9.273,3.285,12.9a6.813,6.813,0,0,0,4.922,2.172,6.628,6.628,0,0,0,4.462-1.648.34.34,0,0,0,0-.482L3.253,3.424A.328.328,0,0,0,3.017,3.317ZM10.1,5.136A1.191,1.191,0,0,0,8.913,6.27a.394.394,0,0,0-.1.011l-1.434.342,2.1,2.119L9.8,7.49a1.227,1.227,0,0,0,.3.043,1.2,1.2,0,0,0,0-2.4ZM2.675,13.258,1.562,14.381h2.4a8.678,8.678,0,0,1-1.166-1C2.75,13.342,2.717,13.3,2.675,13.258ZM.342,15.066A.342.342,0,0,0,0,15.408v1.37a.342.342,0,0,0,.342.342H5.821a.342.342,0,0,0,.342-.342V15.462a7.172,7.172,0,0,1-1.038-.4Z" fill="#fff"/>
+              </svg>
+              {{ gps.last_association?.statut == 'ASSOCIE' ? "Dissocier" : "Associer" }} 
+            </button>
+        <span *ngIf="spinnerAdd">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

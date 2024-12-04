@@ -1,0 +1,39 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">Confirmation</h2>
+      <div class="text-right cursor-pointer" mat-button  (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+        <form class="pr-4">
+          
+          <h3 class="flex justify-center" *ngIf="data.type == 'POLYGON'">Êtes-vous sûr de vouloir effectuer cette action ?</h3>
+          <h3 class="flex justify-center" *ngIf="data.type == 'MARKER'">Êtes-vous sûr de vouloir valider ce centre pour &nbsp;<span class="city_name">{{data.city_name}}</span></h3>
+          <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+              <div>
+                  <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" (click)="closeDialog()">
+                    Abondonner
+                  </button>
+              </div>
+              <div class="text-right">
+                  <button  *ngIf="!spinner && data.type == 'POLYGON'"
+                  class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+                  (click)="saveGeo(data)">Enregistrer</button>
+
+                  <button  *ngIf="!spinner && data.type == 'MARKER'"
+                  class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+                  (click)="saveMarker()">Enregistrer</button>
+          
+                  <span *ngIf="spinner">
+                  <mat-spinner [diameter]="40"></mat-spinner>
+                  </span>
+              </div>
+          </div>
+        
+      </form>
+    </div>
+  </div>
+  

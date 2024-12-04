@@ -1,0 +1,261 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-2">
+    <h2 mat-dialog-title class="col-span-2">{{ form_btn }} un contrat {{ typeContrat | lowercase }} du véhicule {{ vehicule.code_interne }}</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="pl-5 mt-2 mb-3" *ngIf=" type == 'add' ">
+      <mat-radio-group aria-label="Select an option"  (change)="typeChange($event)">
+        <mat-radio-button value="ACHAT" [checked]="typeContrat == 'ACHAT' ">ACHAT</mat-radio-button>
+        <mat-radio-button value="LOCATION" class="ml-3 mr-3" [checked]="typeContrat == 'LOCATION' ">LOCATION</mat-radio-button>
+        <mat-radio-button value="LEASING" [checked]="typeContrat == 'LEASING' ">LEASING</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <form [formGroup]="createContart">
+      <div class="grid grid-cols-3 gap-3 p-4 m-1">
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Véhicule</mat-label>
+            <input matInput type="text" formControlName="codeVehicule" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Véhicule'" formControlName="codeVehicule"></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Immatriculation</mat-label>
+            <input matInput type="text" formControlName="matriculeVehicule" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Immatriculation'" formControlName="matriculeVehicule"></i-field>
+        </div>
+        <!-- <div  class="w-[100%] mb-2">
+          <i-field [type]="'text'" [label]="'Fournisseur'" formControlName="fournisseur" ></i-field>
+        </div> -->
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Fournisseur</mat-label>
+            <mat-select placeholder="Prestataire" formControlName="prestataire_id">
+              <mat-option *ngFor="let item of prestataires" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete
+            #searchComponent1
+            [hasIcon]="false"
+            [type]="'single'"
+            [opended]="true"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="prestataires"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="''"
+            [label]="'Rechercher fournisseur...'"
+            [required]="true"
+            (dataEvent)="onprestataireChange($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div  class="w-[100%] mb-2">
+
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>N° de contrat</mat-label>
+            <input matInput type="text" formControlName="num_contract" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'N° de contrat'" formControlName="num_contract"  ></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>N° de contrat</mat-label>
+            <input matInput type="text" formControlName="num_contract" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date de contrat'" formControlName="date_contrat" (changeValue)="setDateDebut($event)"></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Contact</mat-label>
+            <input matInput type="text" formControlName="contact" autocomplete="off" readonly/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Contact'" formControlName="contact" readonly></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>N° Tél contact</mat-label>
+            <input matInput type="number" formControlName="phone" autocomplete="off" readonly/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Téléphone'"class="w-[100%] mb-2" formControlName="phone" readonly></i-field>
+        </div>
+        <!-- <div  class="w-[100%] mb-2">
+          <i-field [type]="'date'" [label]="'Date d’entrée'" formControlName="date_entree" (changeValue)="setDateDebut($event)" [maxValue]="end_time"></i-field>
+        </div> -->
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Kilométrage initial</mat-label>
+            <input matInput type="number" formControlName="kilometrage" autocomplete="off" readonly/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Kilométrage initial'" formControlName="kilometrage" readonly></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'ACHAT'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Date de fin de garantie</mat-label>
+            <input matInput type="date" formControlName="date_fin_garantie" autocomplete="off"
+            (change)="setDateFin($event)" [min]="start_time"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date de fin de garantie'" formControlName="date_fin_garantie" (changeValue)="setDateFin($event)" [minValue]="start_time"></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LOCATION'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Date d’expiration</mat-label>
+            <input matInput type="date" formControlName="date_expiration" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date d’expiration'" formControlName="date_expiration" [minValue]="start_time"></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Date de prélèvement</mat-label>
+            <input matInput type="date" formControlName="date_prelevement" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date de prélèvement'" formControlName="date_prelevement" [minValue]="start_time"></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING' || typeContrat == 'LOCATION' ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label *ngIf="typeContrat == 'LEASING'">Sté leasing</mat-label>
+            <mat-label *ngIf="typeContrat == 'LOCATION'">Sté location</mat-label> -->
+            <app-shared-autcomplete *ngIf="typeContrat == 'LEASING'"
+                #searchComponent1
+                [hasIcon]="false"
+                [type]="'single'"
+                [opended]="true"
+                [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle"
+                [charToGetAll]="'*'"
+                [data]="leasings"
+                [keys]="['name']"
+                [lengthToStart]="3"
+                [display]="['name']"
+                [placeholer]="''"
+                [label]="'Rechercher prestataire...'"
+                (dataEvent)="onSteLeasingChange($event)"
+              ></app-shared-autcomplete>
+              <app-shared-autcomplete *ngIf="typeContrat == 'LOCATION'"
+                  #searchComponent1
+                  [hasIcon]="false"
+                  [type]="'single'"
+                  [opended]="true"
+                  [contentStyle]="contentStyle"
+                  [inputStyle]="searchStyle"
+                  [charToGetAll]="'*'"
+                  [data]="locations"
+                  [keys]="['name']"
+                  [lengthToStart]="3"
+                  [display]="['name']"
+                  [placeholer]="''"
+                  [label]="'Rechercher la société de location...'"
+                  (dataEvent)="onSteLocationChange($event)"
+                ></app-shared-autcomplete>
+            <!-- <input matInput type="text" formControlName="ste"  autocomplete="off"/> -->
+          <!-- </mat-form-field> -->
+        </div>
+
+        <div class="w-[100%] mb-2" *ngIf="type == 'edit' && (typeContrat == 'LEASING' || typeContrat == 'LOCATION') ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label >Date de prolongement</mat-label>
+            <input matInput type="date" formControlName="date_prolongement"  autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date de prolongement'" formControlName="date_prolongement" ></i-field>
+        </div>
+
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING' || typeContrat == 'LOCATION' ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Validité (Jour)</mat-label>
+            <input matInput type="number" formControlName="validite_jour" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Validité (Jour)'" formControlName="validite_jour" ></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING' || typeContrat == 'LOCATION' ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Rappel avant (Jour)</mat-label>
+            <input matInput type="number" formControlName="rappel_jour" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Rappel avant (Jour)'" formControlName="rappel_jour" ></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING' || typeContrat == 'LOCATION' ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Validité (Km)</mat-label>
+            <input matInput type="number" formControlName="validite_km" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Validité (Km)'" formControlName="validite_km" ></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING' || typeContrat == 'LOCATION' ">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Rappel avant (Km)</mat-label>
+            <input matInput type="number" formControlName="rappel_km" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Rappel avant (Km)'" formControlName="rappel_km" ></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'LEASING'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Durée de leasing (Jours)</mat-label>
+            <input matInput type="number" formControlName="durée_location" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Durée de leasing (Jours)'" formControlName="durée_location" ></i-field>
+        </div>
+        <div class="mb-2">
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Type de paiment</mat-label>
+            <mat-select formControlName="type_paiement">
+              <mat-option *ngFor="let paiement of paiements" value="{{ paiement }}">
+                {{ paiement }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'ACHAT'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Montant HT</mat-label>
+            <input matInput type="number" formControlName="montant_ht" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Montant HT'" formControlName="montant_ht" (changeValue)="setMontantHt($event)"></i-field>
+        </div>
+        <div class="w-[100%] mb-2" *ngIf="typeContrat == 'ACHAT'">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>TVA</mat-label>
+            <input matInput type="number" formControlName="tva" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'TVA'" formControlName="tva"></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <!-- <mat-form-field appearance="fill">
+            <mat-label>Montant TTC</mat-label>
+            <input matInput type="number" formControlName="montant_ttc" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Montant TTC'" formControlName="montant_ttc"></i-field>
+        </div>
+        <div  class="w-[100%] mb-2">
+          <label>Contrat</label>
+          <input #imgInput
+           type="file"
+           accept="image/jpeg,image/png,application/pdf"
+           (change)="onSelectImage($event)"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div  class="w-[100%] mb-2">
+          <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close>
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button (click)="addContratForm()" [disabled]="createContart.invalid" *ngIf="!spinnerAdd"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+            {{ form_btn }}
+          </button>
+          <span *ngIf="spinnerAdd" >
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

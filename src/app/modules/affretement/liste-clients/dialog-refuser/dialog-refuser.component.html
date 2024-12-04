@@ -1,0 +1,56 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">Refuser la demande N° {{ demande.reference }} </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <form [formGroup]="decision">
+        <div class="text-center">
+            <mat-icon class="text-[#FF000026] text-[70px]">cancel</mat-icon>
+        </div>
+        <div>
+            <mat-form-field appearance="fill" class="w-[94%] mb-2 mt-2 ml-3 mr-3">
+              <mat-label>Motif de refus</mat-label>
+              <mat-select matNativeControl required formControlName="motif_id">
+                <mat-option *ngFor="let item of motifs" [value]="item.id">{{ item.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="w-[94%] mb-2 mt-2 ml-3 mr-3">
+            <i-field
+            [type]="'textarea'"
+            [label]="'Commentaire'"
+            formControlName="commentaire"
+            [cols]="30"
+            [rows]="2"
+            maxlength="500"
+          ></i-field>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+              mat-dialog-close
+            >
+            Fermer
+            </button>
+          </div>
+            <div class="text-right">
+                <button
+                  class="bg-[#fff] text-[#e71616] border-[#e71616] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px] text-center"
+                  (click)="intervenir()" *ngIf="!spinner"
+                  >
+                  Refuser
+                </button>
+                <span *ngIf="spinner">
+                  <mat-spinner [diameter]="40"></mat-spinner>
+                </span>
+              </div>
+          </div>
+        </form>
+    </div>
+</div>

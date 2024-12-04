@@ -1,0 +1,253 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Liste des tournées clôturés
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="flex">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Ville"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Chauffeur"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Chauffeur"
+          />
+        </div>
+      </div>
+      <div class="flex flex-row">
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Secteur"
+          />
+        </div>
+        <div class="basis-1/3">
+          <input
+            type="text"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Véhicule"
+          />
+        </div>
+        <div class="basis-1/3">
+          <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Type"
+          >
+            <option value="Expedition,Invoice,General">Type</option>
+            <option value="Expedition">Expedition</option>
+            <option value="Invoice">Facture</option>
+            <option value="General">Générale</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-end">
+      <button
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div> -->
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <div class="mt-10">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[103px]"
+        *ngFor=" let item of tours | paginate: { itemsPerPage: 6, currentPage: p } ">
+        <div class="flex place-items-center align-middle items-center width-info">
+          <div class="pl-4 place-items-center items-center">
+            <p class="text-[12px] text-[#000000]">{{ item.id }}</p>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="block width-content mt-3">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Ville:</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.zone?.city?.name }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">my_location</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Zone :</p>
+              <p class="text-[12px] text-[#000000]">{{ item.zone?.name }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="block width-content mt-3">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">access_time</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">
+                Date et heure de départ :
+              </p>
+              <p class="text-[12px] text-[#000000]">{{ item.start_time }}</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">access_time</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">
+                Date et heure d'arrivée :
+              </p>
+              <p class="text-[12px] text-[#000000]">{{ item.end_time }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="block width-content mt-3">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">perm_identity</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Chauffeur :</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.driver?.name || "--" }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">transfer_within_a_station</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Ramasseur :</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.driver?.name || "--" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="block width-content mt-3">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">local_shipping</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Véhicule :</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.truck?.tonnage ? item.truck?.tonnage + " T" : "--" }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Matricule :</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.truck?.matricule || "--" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <!-- <div class="block width-content mt-3">
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]"
+                >where_to_vote</mat-icon
+              >
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Nombre d'éxpeditions :</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ item.expedetions_count }} (Total colis:
+                {{ item.expedition_items_count }} Colis)
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-4">
+              <mat-icon class="text-[19px] text-[#138742]">bar_chart</mat-icon>
+            </div>
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Progression:</p>
+              <p class="text-[12px] text-[#000000]">
+                <mat-progress-bar
+                  mode="determinate"
+                  [color]="updateColor(item.progression)"
+                  value="{{ item.progression }}"
+                >
+                </mat-progress-bar>
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider> -->
+        <div class="flex items-center pl-4 justify-end">
+          <span *ngIf="item.status === 'INITIALIZED'"
+            class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Initié
+          </span>
+          <span *ngIf="item.status === 'PLANED'" class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2">Planifié
+          </span>
+          <span *ngIf="item.status === 'STARTED'" class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-2">Démarré
+          </span>
+          <span *ngIf="item.status === 'DONE'" class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-2">Cloturé
+          </span>
+
+          <!-- <button
+            class="group flex items-center justify-between rounded-3xl border border-[#0C8040] px-3 py-2 mr-2"
+          >
+            <span class="mr-1">
+              <mat-icon class="text-[#0C8040]">check</mat-icon>
+            </span>
+            <span class="font-medium text-[#0C8040] mr-2">
+              {{ item.status }}
+            </span>
+          </button> -->
+          <mat-icon (click)="getTourDetails(item)"
+            class="cursor-pointer ml-4 text-[19px] text-[#138742]">menu</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

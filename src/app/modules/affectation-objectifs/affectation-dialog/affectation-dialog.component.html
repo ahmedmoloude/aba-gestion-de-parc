@@ -1,0 +1,222 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Affectation des objectifs</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="text-center">
+      <mat-icon class="text-6xl pb-5"> bar_chart</mat-icon>
+    </div>
+    <form [formGroup]="createObjectif">
+      <div class="grid grid-cols-4 gap-3 pl-4 pr-4">
+        <div></div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Objectif</mat-label>
+            <mat-select matNativeControl formControlName="objectif_id">
+              <mat-option *ngFor="let item of objectifs" [value]="item.id">{{
+                item.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Attendu</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="attendu"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div> -->
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Mois</mat-label>
+            <input matInput type="month" (change)="setDateDebut($event)" [min]="now" />
+          </mat-form-field>
+        </div>
+        <!-- <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Au</mat-label>
+            <input matInput type="date" formControlName="date_fin" />
+          </mat-form-field>
+        </div> -->
+        <div></div>
+      </div>
+
+      <div class="pl-4 pr-4 mt-3">
+        <p class="text-[#0C8040]">Liste des commerciaux :</p>
+      </div>
+
+      <div class="flex mt-3 pl-4 pr-4">
+        <div class="w-5/6">
+          <div class="flex flex-row mb-5">
+            <div class="basis-1/3">
+              <div>
+                <app-shared-autcomplete
+                  #searchComponent1
+                  [uniqueKey]="'id'"
+                  [type]="'multiple'"
+                  [opended]="true"
+                  [contentStyle]="contentStyle"
+                  [inputStyle]="searchStyle"
+                  [charToGetAll]="'*'"
+                  [data]="cities"
+                  [keys]="['code', 'name']"
+                  [lengthToStart]="3"
+                  [display]="['code', 'name']"
+                  [placeholer]="'Rechercher la ville...'"
+                  (dataEvent)="filterZone($event)"
+                ></app-shared-autcomplete>
+              </div>
+            </div>
+
+            <div class="basis-1/3">
+              <!-- <mat-select
+                type="text"
+                class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+                placeholder="Zone"
+                (selectionChange)="onChangeZone($event)"
+              >
+                <mat-option
+                  *ngFor="let zone of zonesFilter"
+                  [value]="zone.id"
+                  >{{ zone.name }}</mat-option
+                >
+              </mat-select> -->
+              <mat-form-field appearance="fill" class="w-[94%] mb-4 ml-2">
+                <mat-label>Zone</mat-label>
+                <mat-select (selectionChange)="onChangeZone($event)">
+                  <mat-option
+                    *ngFor="let zone of zonesFilter"
+                    [value]="zone.id"
+                    >{{ zone.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="basis-1/3">
+              <!-- <select
+                type="text"
+                class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+                placeholder="Commercial"
+              >
+                <option
+                  *ngFor="let commercial of commerciauxFilter"
+                  [value]="commercial.id"
+                >
+                  {{ commercial.first_name }} {{ commercial.last_name }}
+                </option>
+              </select> -->
+              <mat-form-field appearance="fill" class="w-[94%] mb-4">
+                <mat-label>Commercial</mat-label>
+                <mat-select>
+                  <mat-option
+                    *ngFor="let commercial of commerciauxFilter"
+                    [value]="commercial.id"
+                    [value]="commercial.id"
+                  >
+                    {{ commercial.first_name }}
+                    {{ commercial.last_name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="w-1/6 flex items-start">
+          <button
+            (click)="filter()"
+            class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+          >
+            <mat-icon class="mr-3">filter_list</mat-icon>
+            <span class="text-white">Filter</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+
+      <div
+        class="grid grid-cols-1 gap-3 pl-4 pr-4 h-52 min-h-min overflow-auto"
+        *ngIf="!spinner"
+      >
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+            <button mat-icon-button disabled></button>
+            <span class="flex"
+              ><mat-icon *ngIf="node.level == 0">business</mat-icon>
+              <mat-icon *ngIf="node.level == 1">location_on</mat-icon>
+              <span class="pl-2">{{ node.item }}</span></span
+            >
+            <div *ngIf="node.level == 2" class="w-full text-right">
+              <mat-form-field appearance="fill" class="w-[17%] mb-1 mt-1 mr-3">
+                <mat-label>Attendu</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  (change)="todoLeafItemSelectionToggle(node, $event)"
+                />
+              </mat-form-field>
+            </div>
+          </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+            <button
+              mat-icon-button
+              matTreeNodeToggle
+              [attr.aria-label]="'Toggle ' + node.item"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{
+                  treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                }}
+              </mat-icon>
+            </button>
+            <!-- <mat-checkbox
+              [checked]="descendantsAllSelected(node)"
+              [indeterminate]="descendantsPartiallySelected(node)"
+              (change)="todoItemSelectionToggle(node)"
+            > -->
+            <span class="flex">
+              <mat-icon *ngIf="node.level == 0">business</mat-icon>
+              <mat-icon *ngIf="node.level == 1">location_on</mat-icon>
+              <span class="pl-2">{{ node.item }}</span>
+            </span>
+            <!-- </mat-checkbox> -->
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+          Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <button
+            *ngIf="!spinnerAdd"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addObjectif()"
+          >
+            Affecter
+          </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

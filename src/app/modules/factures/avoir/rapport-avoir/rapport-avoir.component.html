@@ -1,0 +1,32 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Rapport avoir</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content >
+    <div *ngIf="avoir$ | async as avoirState">
+      <div *ngIf="avoirState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+      <div class="flex justify-evenly mb-5" *ngIf="avoirState?.rapportAvoir && avoirState?.dataState == 'SUCCESS'" >
+        <div *ngFor="let item of avoirState?.rapportAvoir"
+          class="bg-[#F5FFF4] w-[387px] p-5 shadow-[0px_3px_20px_#00000019] border-[1px]border-[#CEF4C9] rounded-[18px]">
+          <p class="text-[#0C8040] font-medium">
+            {{(item?.nature == 'Afferetement') ? 'Affrètement': item?.nature }}
+          </p>
+          <mat-list role="list" class="pt-6 list-statut">
+            <mat-list-item class="p-0" role="listitem">
+              Avoir :<strong class="pl-2">{{item?.avoir_count || 0}}</strong>
+            </mat-list-item>
+            <mat-list-item class="p-0" role="listitem">
+              Montant avoir :<strong class="pl-2"> {{item?.total_montant_avoir || 0}}</strong>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

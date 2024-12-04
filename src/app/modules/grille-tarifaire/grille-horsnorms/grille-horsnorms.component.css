@@ -1,0 +1,14 @@
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }
+
+.toggle {
+
+  background-color: white;
+  position: absolute;
+  right: 0%;
+  padding: 20px;
+  z-index: 1;
+  display: none;
+
+}

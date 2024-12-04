@@ -1,0 +1,63 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Facture N° {{facture?.reference}}</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+        <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-4">
+          <div>
+            <pdf-viewer
+                [src]="pdfglobal"
+                [render-text]="true"
+                [original-size]="false"
+                style="width: 400px; height: 300px"
+                >
+            </pdf-viewer>
+            <div (click)="openPdf(pdfglobal)">
+              <div class="flex cursor-pointer">
+                <mat-icon class="pt-1">local_printshop</mat-icon>
+                <h2 class="text-[#0C8040] font-semibold pl-2">
+                  Imprimer Facture globale
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div>
+            <pdf-viewer
+                [src]="pdfDetail"
+                [render-text]="true"
+                [original-size]="false"
+                style="width: 400px; height: 300px"
+                >
+            </pdf-viewer>
+            <div (click)="openPdf(pdfDetail)">
+              <div class="flex cursor-pointer">
+                <mat-icon class="pt-1">local_printshop</mat-icon>
+                <h2 class="text-[#0C8040] font-semibold pl-2">
+                  Imprimer facture Détaillée
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+      <div>
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close>
+        Fermer
+        </button>
+      </div>
+      <!-- <div class="text-right">
+        <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-96 p-4 mr-3 font-bold text-[18px]">
+        Valider et générer une facture
+        </button>
+      </div> -->
+    </div>
+  </div>

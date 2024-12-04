@@ -1,0 +1,21 @@
+
+<div *ngIf="!loading">
+  <ng-container *ngIf="step === 1">
+    <app-destinataire (stepNextEvent)="goNext($event)"></app-destinataire>
+  </ng-container>
+  <ng-container *ngIf="step >= 2 && !hiddenSteps.includes(2)">
+    <app-marchandise
+      (stepNextEvent)="goNext($event)"
+      (stepBackEvent)="goBack($event)"
+    ></app-marchandise>
+  </ng-container>
+  <ng-container *ngIf="step >= 3 && !hiddenSteps.includes(3)">
+    <app-list-marchandise
+      (stepBackEvent)="goBack($event)"
+    ></app-list-marchandise>
+  </ng-container>
+</div>
+
+<div *ngIf="loading" class="flex justify-center items-center ">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>

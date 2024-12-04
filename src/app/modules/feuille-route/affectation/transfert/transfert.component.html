@@ -1,0 +1,121 @@
+<div class="mt-7 text-[#0C8040] font-medium">
+  Liste des missions transfert :
+</div>
+
+<div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<div class="mt-10" *ngIf="!spinner">
+  <div
+    class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px] items-center"
+    *ngFor="let item of transferts" >
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Référence</p>
+          <p class="text-[12px] text-[#000000]">{{ item.reference}}</p>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Date</p>
+          <p class="text-[12px] text-[#000000]">{{ item.created_at | date: 'dd/MM/yyyy'}}</p>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Activité</p>
+          <p class="text-[12px] text-[#000000]">Transfert</p>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Agence départ</p>
+          <div class="flex">
+            <p class="text-[12px] text-[#000000]">{{ item.agency_from.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Agence destination</p>
+          <div class="flex">
+            <p class="text-[12px] text-[#000000]">{{ item.agency_dest.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Conducteur</p>
+          <div class="flex" *ngIf="item.is_affected">
+            <p class="text-[12px] text-[#000000]">{{ item.driver?.first_name || "--" }}</p>
+          </div>
+          <div class="flex" *ngIf="!item.is_affected">
+            <p class="text-[12px] text-[#000000]">--</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Véhicule</p>
+          <div class="flex">
+            <p class="text-[12px] text-[#000000]">{{ item.truck?.matricule || "--"  }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <p class="text-[#b5b5b5] text-[10px]">Tonnage</p>
+          <div class="flex">
+            <p class="text-[12px] text-[#000000]">{{ item.truck?.tonnage?.name || "--"  }} T</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <button *ngIf="item.is_affected == false" class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-2" >Non affectée </button>
+          <button *ngIf="item.is_affected === true" class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-2" >Affectée </button>
+        </div>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+    <div class="width-content">
+      <div class="flex items-center">
+        <div class="pl-3">
+          <button mat-button class="text-[#0C8040] borderbtn" (click)="openDialog(type, item)">
+            Affecter
+          </button>
+          <!-- <button class="bg-[#DDFFF4] text-[#1AD598] p-3" (click)="openDialog(type, item)">Affecter</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-10">
+    <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+  </div>
+</div>

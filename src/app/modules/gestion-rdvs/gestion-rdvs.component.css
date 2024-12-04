@@ -1,0 +1,194 @@
+.e-time-zone-container { 
+    display: none; 
+  } 
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #0C8040 !important;
+}
+.mat-radio-button.mat-accent .mat-radio-inner-circle{
+  background-color: #0C8040 !important;
+}
+.e-btn.e-flat.e-primary{
+  color: #0C8040 !important;
+}
+.e-schedule .e-schedule-toolbar .e-active-view .e-tbar-btn-text{
+  color: #0C8040 !important;
+}
+.e-schedule .e-vertical-view .e-header-cells.e-current-day {
+  color: #0C8040 !important;
+}
+.e-schedule-dialog{
+  width: 800px !important;
+}
+.e-input-group{
+  width: 85% !important;
+  margin-left: 10px !important;
+}
+.e-input:focus:not(.e-success):not(.e-warning):not(.e-error){
+  border-color: #0C8040 !important;
+}
+.e-cell-popup {
+  display: none !important;
+}
+.e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::before,
+.e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::after{
+  background: #0C8040 !important;
+}
+.e-quick-popup-wrapper .e-event-popup .e-popup-header {
+  background-color: #fff !important;
+}
+.e-quick-popup-wrapper .e-event-popup .e-date-time{
+  padding-top: 0px !important;
+  padding-bottom: 0px;
+}
+.icon-event{
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 18px;
+}
+.e-quick-popup-wrapper .e-event-popup .e-popup-content {
+  padding-bottom: 10px !important;
+}
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment{
+  width: 100% !important;
+}
+
+::ng-deep .mat-form-field-wrapper{
+  padding: 0px;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+  background-color: #fff;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before{
+  display: none !important;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+  display: none !important;
+}
+::ng-deep .exportrdv .mat-form-field-appearance-fill .mat-form-field-flex{
+  border: 3px solid #DBDBDB;
+  border-radius: 28px !important;
+}
+.navigate {
+  opacity: 0.3;
+  pointer-events: none;
+}
+.export-btn{
+  margin-left: 20px;
+  background: #149046;
+  color: white;
+  border-radius: 5px;
+  padding: 11px;
+}
+::ng-deep .btn-history{
+  background-color: #9D9D9D !important;
+}
+.e-appointment-wrapper{
+  width: 14.4% !important;
+}
+::ng-deep .mat-form-field-wrapper{
+  padding: 0px;
+}
+::ng-deep .exportrdv .mat-form-field-appearance-fill .mat-form-field-flex{
+  background-color: #fff;
+}
+::ng-deep .exportrdv .mat-form-field-appearance-fill .mat-form-field-underline::before{
+  display: none !important;
+}
+::ng-deep .exportrdv .mat-form-field-appearance-fill .mat-form-field-ripple{
+  display: none !important;
+}
+::ng-deep .exportrdv .mat-form-field-appearance-fill .mat-form-field-flex{
+  border: 3px solid #DBDBDB;
+  border-radius: 28px !important;
+}
+::ng-deep .exportrdv .mat-form-field-flex{
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.bg-btn-green{
+  color: #fff !important;
+}
+.motif{
+  border-color: rgba(0, 0, 0, 0.42);
+    border: 1px solid;
+    border-width: 0 0 1px 0;
+    padding-top: 14px;
+}
+.history-btn{
+  margin-top: 0.75rem !important;
+}
+.popup-loader{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background: white;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arrow{
+  background: #0c8040c2;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  top: 50%;
+  right: 35px;
+}
+
+/* .box-indicator{
+  z-index: 9999;
+  left: 34px;
+  top: 205px;
+  background-color: white;
+  padding: 7px;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
+  border-radius: 4px;
+} */
+
+.indicator{
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  /* padding: 5px;
+  margin: 5px; */
+  /* cursor: url(assets/img/camion.png), auto; */
+  /* cursor: url("assets/cursor.png"), auto; */
+}
+
+.span{
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  border-right: 1px solid #ccc;
+}
+
+.loader{
+  pointer-events: none;
+  opacity: 0.3; 
+  width: 100%; 
+  height: 100%; 
+  z-index: 1;
+}
+.number-commercial{
+  width: 20px;
+    height: 20px;
+    background: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    margin-left: 20px;
+    margin-top: 4px;
+    font-size: 12px;
+    text-align: center;
+}

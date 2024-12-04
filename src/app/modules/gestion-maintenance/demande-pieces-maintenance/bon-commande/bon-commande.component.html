@@ -1,0 +1,94 @@
+<div class="dialog">
+  <ng-container *ngIf="demandePiece$ | async as demandePieceState">
+    <div *ngIf="demandePieceState?.BonCommandeState =='LOADING'" class="flex items-center justify-center mt-6">
+      <div mat-dialog-content class="dialog-carte">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+    </div>
+    <ng-container *ngIf="demandePieceState?.BonCommandeState == 'SUCCESS'">
+      <ng-container *ngIf="demandePieceState?.BonCommande as BonCommande">
+        <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+          <h2 mat-dialog-title class="col-span-2">Bon de commande interne N° {{(BonCommande?.bon_commande) || '---'}}
+          </h2>
+          <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+          </div>
+        </div>
+        <div mat-dialog-content class="dialog-carte">
+          <div class="text-center text-black">
+            <p class="font-medium">Bon de commande interne N° {{(BonCommande?.bon_commande) || '---'}}</p>
+          </div>
+          <div class="grid grid-cols-3 gap-4 mt-5">
+            <div>Date de la commande :
+              <span class="pl-5">{{(BonCommande?.date_demande | date: 'dd/MM/yyyy') || '---'}}</span>
+            </div>
+            <div>Date de livraison souhaitée :
+              <span class="pl-5">{{(BonCommande?.date_livraison | date: 'dd/MM/yyyy') || '---'}}</span>
+            </div>
+          </div>
+          <div class="mt-5">
+            <ng-container *ngIf="BonCommande?.data?.length > 0">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th *ngIf="show"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of BonCommande?.data">
+                    <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngIf="item?.reference">
+                      <td class="p-3">{{(item?.reference) || '---'}}</td>
+                      <td class="p-3">{{(item?.designation) || '---'}} </td>
+                      <td class="p-3">{{(item?.demandeur) || '---'}}</td>
+                      <td class="p-3">{{(item?.quantity_demande) || 0}} </td>
+                      <td class="p-3">{{(item?.quantity_stock) || 0}} </td>
+                      <td class="p-3">{{(item?.demande_achat) || 0}} </td>
+                      <!-- <td class="p-3">{{(item?.prix_unitaire | number) || 0}} </td>
+                      <td class="p-3">{{(item?.total_ht | number) || 0}} </td>
+                      <td class="p-3">{{(item?.tva | number) || 0}} </td>
+                      <td class="p-3">{{(item?.total_ttc | number) || 0}} </td> -->
+                      <td class="p-3" *ngIf="show">
+                        <p *ngIf="(item?.demande_achat)>0 && !item.bon_achat"
+                          (click)="generateBonAchat(item?.diagnostique_id)"
+                          class="cursor-pointer flex items-center p-1 border-[#0C8040] border rounded-3xl">
+                          <mat-icon class="pr-2">add_circle</mat-icon> Générer Un Bon D’achat
+                        </p>
+                        <p *ngIf="item.bon_achat"
+                          class="cursor-pointer flex items-center pl-4 pr-4 pt-1 pb-1 border-[#0C8040] border rounded-3xl"
+                          (click)="VoirBon(item?.bon_achat, 'ACHAT')">
+                          <mat-icon class="pr-2 text-[#0C8040]">check_circle</mat-icon>
+                          Bon d’achat Généré <mat-icon class="pl-2 pr-2">remove_red_eye</mat-icon>
+                        </p>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button mat-dialog-close class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+              Annuler
+            </button>
+          </div>
+          <div class="text-right" *ngIf="bonSortiePartiel">
+            <button *ngIf="!spinner" (click)="generateBonSortie()" [disabled]="disabled" pButton pRipple type="submit"
+              [label]="show && bonSortiePartiel ?'Bon de sortie partiel':'Bon de sortie'" class="mr-5 p-button-rounded p-button-success">
+            </button>
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

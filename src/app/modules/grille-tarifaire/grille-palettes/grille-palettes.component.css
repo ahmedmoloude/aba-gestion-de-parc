@@ -1,0 +1,7 @@
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }
+  ::ng-deep .pagination-next,
+  ::ng-deep .pagination-previous{
+    display: none !important;
+  }

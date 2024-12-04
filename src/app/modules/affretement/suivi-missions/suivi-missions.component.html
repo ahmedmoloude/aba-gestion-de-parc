@@ -1,0 +1,197 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Anomalie-Dechargement</h2>
+      </div>
+    </div>
+  </div>
+  <div class="grid mt-2  pl-4 pr-4">
+    <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="overflow-x-auto relative mt-5" *ngIf="!spinner">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of demandes | paginate: { itemsPerPage: 5, currentPage: p };let i = index">
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+            <td>
+              <div class="cursor-pointer" (click)="onclick(i)">
+                <mat-icon>
+                  {{ !isVisible(i) ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+                </mat-icon>
+              </div>
+            </td>
+            <td class="p-3">{{ item.reference }}</td>
+            <td class="p-3">{{ item.missions[0]?.reference }}</td>
+            <td class="p-3">{{ item.date_debut | date: 'dd/MM/yyyy'}}</td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.truck?.code_interne }}
+              </p>
+            </td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.truck?.matricule }}
+              </p>
+            </td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.truck?.tonnage?.name }}
+              </p>
+            </td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.truck?.truck_type?.name }}
+              </p>
+            </td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.truck?.truck_category?.name }}
+              </p>
+            </td>
+            <td class="p-2" [matTooltip]="ville(item.points_chargements)" matTooltipPosition="above"> {{
+              ville(item.points_chargements) | truncate: [15, "..."] }}
+            </td>
+            <td class="p-3">
+              <p *ngFor="let affectation of item.affectations">
+                {{ affectation?.driver?.first_name }} {{ affectation?.driver?.last_name }}
+              </p>
+            </td>
+            <td class="p-3 flex items-center justify-between">
+              <div class="flex items-center">
+                <span *ngIf="item.statut === 'IN_PROGRESS'"
+                  class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">En cours
+                </span>
+                <span *ngIf="item.statut === 'EN_ATTENTE_AFFECTATION'"
+                  class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2">En attente d'affectation
+                </span>
+                <span *ngIf="item.statut === 'REFUSED'"
+                  class="text-white bg-[#ff0000] px-3 py-2 rounded-[20px] mr-2">Refusée
+                </span>
+                <span *ngIf="item.statut === 'ACCEPTED'"
+                  class="text-white bg-[#0c8040] px-3 py-2 rounded-[20px] mr-2">Confirmée
+                </span>
+                <span *ngIf="item.statut === 'CANCELED'"
+                  class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-2">Anulée
+                </span>
+              </div>
+              <mat-icon mat-button [matMenuTriggerFor]="menu"
+                class="align-middle pl-4 pr-4 cursor-pointer">more_vert</mat-icon>
+            </td>
+            <mat-menu #menu="matMenu">
+              <!-- [routerLink]="['/detailsAffretement', item.uuid]" -->
+              <button mat-menu-item (click)="detailsAffretement(item.uuid)">
+                Détail
+              </button>
+            </mat-menu>
+          </tr>
+          <tr *ngIf="isVisible(i)">
+            <td colspan="14">
+              <table class="w-full text-left text-gray-500 pl-9 pr-9 bg-white">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns1" scope="col"
+                      class="p-3 text-[#636363] bg-white font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let point of item?.points_dechargements">
+                    <!-- <div *ngFor="let point of destinataire?.points_dechargement"> -->
+                    <td class="p-3">{{ point.date | date: 'dd/MM/yyyy HH:mm:s'}}</td>
+                    <td class="p-3">{{ point.client?.first_name }} {{ point.client?.last_name }}</td>
+                    <td class="p-3">{{ point.city?.name }}</td>
+                    <td class="p-3">{{ point.adresse?.adress }}</td>
+                    <!-- <td class="p-3"></td> -->
+                    <td class="p-3">{{ point?.items_envois?.length }}</td>
+                    <td class="p-3">{{ typePalette(point?.items_envois) }}</td>
+                    <!-- <td class="p-3">{{ point?.expedition_affretement.nbr_palette }}</td>
+                        <td class="p-3">{{ point?.expedition_affretement.type_palette }}</td> -->
+                    <td class="p-3">
+                      <p *ngFor="let fond of point?.retour_fonds">
+                        {{ returnFonds[fond?.type] }} : {{ fond?.montant }}
+                      </p>
+                    </td>
+                    <td class="p-3">{{ point?.retour_documents?.length }}</td>
+                    <td class="p-3">{{ point?.motif?.name }}</td>
+                    <td class="p-3 flex items-center justify-between">
+                      <div class="flex items-center">
+                        <span *ngIf="point.statut === 'IN_PROGRESS'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">En cours
+                        </span>
+                        <span *ngIf="point.statut === 'PICKED'"
+                          class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2">Ramassé
+                        </span>
+                        <span *ngIf="point.statut === 'ANOMALY'"
+                          class="text-white bg-[#FF0000] px-3 py-2 rounded-[20px] mr-2">Anomalie
+                        </span>
+                        <span *ngIf="point.statut === 'WAITING'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Attendre
+                        </span>
+                        <span *ngIf="point.statut === 'IMMOBILISATION'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Immobilisation
+                        </span>
+                        <span *ngIf="point.statut === 'CONTINUE_MISSION'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Continuer la mission
+                        </span>
+                        <span *ngIf="point.statut === 'RETURN_SDTM'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Retour Marchandises
+                        </span>
+                        <!-- <span *ngIf="point.statut === 'NEW_MISSION'"
+                          class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5">Nouvelle mission
+                        </span> -->
+                      </div>
+                      <ng-container *ngIf="permissionService.hasPermission('Affrètement', 'Suivi des missions', 'U')">
+                        <button mat-button *ngIf="point.statut == 'ANOMALY'" (click)="openDialogcomment(point)">
+                          <mat-icon> comment</mat-icon>
+                        </button>
+                        <mat-icon mat-button [matMenuTriggerFor]="menu"
+                          *ngIf="point.statut == 'ANOMALY' || point.statut == 'WAITING' || point.statut == 'IMMOBILISATION'"
+                          class="align-middle pl-4 pr-4 cursor-pointer">4
+                          more_vert
+                        </mat-icon>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="openDialogintervention(point)">
+                            Intervenir
+                          </button>
+                        </mat-menu>
+                      </ng-container>
+                    </td>
+
+                    <!-- </div> -->
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <div class="mt-10">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>

@@ -1,0 +1,91 @@
+<div class="overflow-x-auto relative mt-4">
+  <!-- <div class="relative mt-5 mb-5">
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Destination"
+    >
+      <option>Destination 1</option>
+      <option>Destination 1</option>
+      <option>Destination 1</option>
+    </select>
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Destinations principals"
+    >
+      <option>principals 1</option>
+      <option>principals 2</option>
+      <option>principals 3</option>
+    </select>
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Tranche de poids"
+    >
+      <option>Tranche de poids 1</option>
+      <option>Tranche de poids 2</option>
+      <option>Tranche de poids 3</option>
+    </select>
+    <input
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Prix"
+    />
+    <button mat-button class="text-white p-3 bg-btn-green text-[18px]">
+      <mat-icon class="mr-1">filter_list</mat-icon>
+      <span class="text-white">Filter</span>
+    </button>
+  </div> -->
+
+  <div *ngIf="isLoading$ | async" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+  <ng-container *ngIf="(isLoading$ | async) === false">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex justify-end">Actions</div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor=" let item of grill_horsnorms | paginate : { id: 'pagination-hors_normes', itemsPerPage: 6, currentPage: page } ">
+          <td class="p-3 flex">
+            <mat-icon>save</mat-icon>
+            <span class="pl-2 font-normal text-[#000]">{{
+              item.categorie_produit.title
+              }}</span>
+          </td>
+          <td class="p-3">{{ item.calcul_val }}</td>
+          <td class="p-3 text-right cursor-pointer">
+            <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openHorsnormsupdate(item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre Standard', 'U')">
+                Modification
+              </button>
+              <button mat-menu-item (click)="delete(item.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Offre Standard', 'D')">
+                Supprimer
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mt-10">
+      <pagination-controls id="pagination-hors_normes" previousLabel="" nextLabel=""
+        (pageChange)="page = $event"></pagination-controls>
+    </div>
+  </ng-container>
+
+
+</div>

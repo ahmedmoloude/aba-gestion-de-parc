@@ -1,0 +1,111 @@
+
+
+<div class="mb-4">
+  <h4 *ngIf="isActiveLoading" class="text-loading">Chargement en cours ...</h4>
+  <table [ngClass]="isActiveLoading ? 'loading' : ''" class="w-full text-left text-gray-500 mt-4">
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              Date de création
+            </div>
+          </th>
+          <th
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              Grille
+            </div>
+          </th>
+          <th
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              Base de calcul
+            </div>
+          </th>
+          <th
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              Statut
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let grid of gridTransport">
+          <td class="p-3">{{grid.created_at | date: 'dd/MM/yyyy'}}</td>
+          <td class="p-3">{{grid.title}}</td>
+          <td class="p-3">{{grid.baseCalcul}}</td>
+          <td class="p-3">
+            <button *ngIf="grid.is_activated" class="active">Active</button>
+            <button *ngIf="!grid.is_activated" class="inactive" (click)="permissionService.hasPermission('Gestion commerciale', 'Grille affretement', 'U') ? activeGrid(grid.title, grid.baseCalcul) : null">Inactive</button>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+
+<div  *ngIf="!loading">
+  <div class="grid mt-4">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filtrer($event)"
+    ></app-shared-filter>
+  </div>
+  <ng-container>
+    <table class="w-full text-left text-gray-500 mt-4">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let header of headerColumuns"
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let transport of data  | paginate: { itemsPerPage: 15, currentPage: p };"
+        >
+          <td class="p-3">{{transport.offerable.truck_type?.name}}</td>
+          <td class="p-3">{{transport.offerable.tonnage?.name}}</td>
+          <td class="p-3">{{transport.origine?.name}}</td>
+          <td class="p-3">{{transport.destination?.name}}</td>
+          <td class="p-3">{{transport.prix_fixe}}</td>
+          <td class="p-3">{{transport.tranche_min}}</td>
+          <td class="p-3">{{transport.tranche_max}}</td>
+          <td class="p-3">{{transport.tranche_prix}}</td>
+          <td class="p-3">{{transport.prix_supp}}</td>
+          <td class="p-3">{{transport.min_prix}}</td>
+          <td class="p-3">{{transport.max_prix}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <pagination-controls
+      (pageChange)="p = $event"
+      ></pagination-controls>
+    </div>
+  </ng-container>
+</div>
+
+
+<div
+    *ngIf="loading"
+    class="flex items-center justify-center mt-6 mb-6"
+    >
+    <mat-spinner [diameter]="40"></mat-spinner>
+</div>

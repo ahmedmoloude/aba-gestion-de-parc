@@ -1,0 +1,300 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="flex justify-end mb-4">
+    <div class="flex gap-3">
+      <button
+        class="flex items-center justify-center text-white  text-[18px] py-3 px-2 bg-[#0c8040]  rounded-2xl	"
+
+
+        (click)="exportGlobal()"
+      >
+        <span  *ngIf="!exportGeneralLoading" class="text-white">Export général</span>
+        <span  *ngIf="exportGeneralLoading" class="white-loader">
+
+          <mat-spinner [color] [diameter]="30"></mat-spinner>
+        </span>
+
+      </button>
+
+      <button
+        class="flex items-center justify-center text-white  text-[18px] py-3 px-2   bg-[#0c8040]  rounded-2xl  "
+
+
+        (click)="openExportDialog()"
+      >
+        <span class="text-white">Export détaillé</span>
+      </button>
+    </div>
+  </div>
+  <div class="flex justify-between">
+      <div class="flex">
+        <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Liste des demandes Light:
+        </h2>
+      </div>
+      <div class="flex items-baseline" *ngIf="!spinner">
+        <p class="text-base font-medium">Nombre des demandes light :</p>
+        <h2 class="text-[#0C8040] font-semibold pl-2">{{ count }}</h2>
+      </div>
+
+
+      <div class=" flex items-baseline "  *ngIf="!spinner">
+        <p class="text-base font-medium">Montant de demandes taxés (HT) :</p>
+        <h2 class="text-[#0C8040] font-semibold pl-2">{{ taxed_amount }}</h2>
+      </div>
+
+
+      <div>
+        <div
+          class="flex justify-end cursor-pointer"
+          routerLink="/newDemandeLight"
+        >
+          <mat-icon class="text-[#0C8040] pt-1">add_circle</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">
+            Créer une nouvelle demande
+          </h2>
+        </div>
+      </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filter($event)"
+    ></app-shared-filter>
+  </div>
+
+  <div *ngIf="!spinner">
+    <ng-container *ngFor="let demande of demandes">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[115px] items-center"
+      >
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Statut</p>
+              <p class="text-[17px] text-[#000000] font-bold">
+                {{ getDeamndeLightStatus(demande?.light_demande_status) }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">N° Demande</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande?.reference }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Crée le {{ demande?.created_at | date: "dd/MM/yyyy" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p
+                class="text-[#b5b5b5] text-[11px] font-medium"
+                matTooltip="Date début de Réservation"
+              >
+                Date début de Rése
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.date_debut | date: "dd/MM/yyyy" }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p
+                class="text-[#b5b5b5] text-[11px] font-medium"
+                matTooltip="Date fin de Réseservation"
+              >
+                Date fin de Rése
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.date_fin | date: "dd/MM/yyyy" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Expéditeur</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.client?.first_name }}
+                {{ demande.client?.last_name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Valeur déclarée globale
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ declaredValue(demande) }} Dhs
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Type de camion / Tonnage
+              </p>
+
+              <p class="text-[12px] text-[#000000]">
+                {{
+                  demande?.truck_data?.truck_type?.name +
+                    " / " +
+                    demande?.truck_data?.tonnage?.name +
+                    " T"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">money</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-black text-[11px] font-medium">
+                Cotation total (HT)
+              </p>
+              <p class="text-black text-[12px] font-medium">
+                {{ demande.taxed_price_ht + " DHs" || "--" }}
+              </p>
+            </div>
+
+            <div class="pl-4" *ngIf="demande?.old_amount_demande_light">
+              <p class="text-black text-[11px] font-medium">
+                / Ancienne cotation total (HT)
+              </p>
+              <p class="text-black text-[12px] font-medium">
+                {{ demande.old_amount_demande_light + " DHs" || "--" }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <mat-icon
+          
+          mat-button
+          [matMenuTriggerFor]="menu"
+          class="cursor-pointer"
+          >more_vert</mat-icon
+        >
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="openDetailDialog(demande)">
+            <mat-icon>remove_red_eye</mat-icon>Consulter
+          </button>
+          <button *ngIf="demande.light_demande_status == 'IN_PROGRESS'" mat-menu-item (click)="NavigateToTaxation(demande.uuid)">
+            <mat-icon>money</mat-icon>Modifier la taxation
+          </button>
+          <button *ngIf="demande.light_demande_status == 'IN_PROGRESS'" mat-menu-item (click)="openDialog(demande?.uuid)">
+            <mat-icon>delete</mat-icon>Supprimer la demande
+          </button>
+        </mat-menu>
+      </div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="spinner">
+    <div class="flex items-center justify-center">
+      <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isDeleteModalVisible"
+  nzTitle="Supprimer la demande"
+  (nzOnCancel)="handleCancel()"
+  [nzFooter]="modalFooter"
+>
+  <div *nzModalContent>
+    <textarea
+      class="input block w-full p-2 border-[#DBDBDB]"
+      [(ngModel)]="motif"
+      placeholder="Motif"
+      aria-label="Motif"
+      cols="50"
+      rows="2"
+    ></textarea>
+  </div>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Retour</button>
+    <button
+      nz-button
+      nzType="primary"
+      nzDanger
+      (click)="submitDialog()"
+      [nzLoading]="isSubmitLoading"
+    >
+      Supprimer
+    </button>
+  </ng-template>
+</nz-modal>
+
+
+
+<nz-modal
+  [(nzVisible)]="isExportDialogVisible"
+  nzTitle="Export détaillé  par client"
+  (nzOnCancel)="handleCancelExport()"
+  [nzFooter]="fotter"
+>
+  <div *nzModalContent>
+   
+    <app-shared-autcomplete
+      #searchComponentExp
+      [charToGetAll]="'*'"
+      [data]="customers"
+      [keys]="['first_name', 'last_name', 'name']"
+      [lengthToStart]="1"
+      [display]="['name']"
+      [placeholer]="'Rechercher l\'expéditeur...'"
+      (dataEvent)="onCustomerChange($event)"
+    >
+    </app-shared-autcomplete>
+
+  </div>
+  <ng-template #fotter>
+    <button nz-button nzType="default" (click)="handleCancelExport()">Retour</button>
+    <button
+      nz-button
+      nzType="primary"
+
+      (click)="exportDetailed()"
+      [nzLoading]="exportGeneralLoading"
+      >
+      Exporter
+    </button>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,288 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">
+      {{
+        currentAddress
+          ? currentAddress
+          : "Détails point de chargement:" + numberPointChargement
+      }}
+    </h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <ng-container *ngIf="!visual">
+    <form #form="ngForm" [formGroup]="formDetail">
+      <div mat-dialog-content class="ml-5 mr-5 mb-4">
+        <div class="grid grid-cols-4 gap-4 mt-4">
+          <div>
+            <div class="select-field">
+              <label class="select-label">Nature M/ses</label>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-select formControlName="nature_palette">
+                  <mat-option
+                    *ngFor="let nature_palette of naturePalettes"
+                    [value]="nature_palette"
+                  >
+                    {{ nature_palette }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div>
+            <div class="select-field">
+              <label class="select-label">Type de palette</label>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-select formControlName="type_palette_chargement">
+                  <mat-option
+                    *ngFor="let palette of palettes"
+                    [value]="palette?.title"
+                  >
+                  {{ palette.title }} - {{ palette.dimension }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="select-field">
+              <label class="select-label">Catégorie de marchandise</label>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-select >
+                  <mat-option
+                    *ngFor="let n of ['Fragilles', 'Non fragiles']"
+                    [value]="n"
+                  >
+                    {{ n }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- <div *ngIf="nbrPalttesGlobal$ | async as nbrPalttesGlobal"> -->
+          <div>
+            <i-field
+              #nbrPalette
+              [type]="'number'"
+              [label]="'Nbr palettes'"
+              formControlName="nbr_palettes"
+              (keyup)="nbrPaletteChange($event)"
+              (change)="nbrPaletteChange($event)"
+            ></i-field>
+          </div>
+       
+        </div>
+        <div class="flex gap-4 mt-5">
+          <div class="w-1/4">
+            <i-field
+              [type]="'number'"
+              [label]="'Volume (m³)'"
+              formControlName="volume"
+              [minValue]="0"
+            ></i-field>
+          </div>
+          <div class="w-1/4">
+            <i-field
+              [type]="'number'"
+              [label]="'Valeur déclarée (Dhs)'"
+              formControlName="valeur_declaree"
+              [minValue]="0"
+            ></i-field>
+          </div>
+          <div class="w-1/4">
+            <i-field
+              [type]="'number'"
+              [label]="'Poids (kg)'"
+              formControlName="poids"
+              [minValue]="0"
+            ></i-field>
+          </div>
+        </div>
+        <div class="flex mt-4 cursor-pointer">
+          <mat-icon class="text-[#0C8040] text-[20px]">insert_photo</mat-icon>
+          <h3 class="text-[#0C8040] font-normal">Photos de marchandise</h3>
+        </div>
+        <div class="flex mt-4">
+          <div class="flex mt-4" *ngFor="let image of images; let i = index">
+            <div>
+              <button
+                class="btn-remove"
+                (click)="removeImage(i)"
+                [hidden]="visual"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <img
+                [src]="image?.url"
+                class="w-48 mb-3 rounded-xl p-2"
+                style="max-width: 80px; max-height: 80px"
+              />
+            </div>
+          </div>
+          <div
+            [hidden]="visual"
+            class="file-images flex justify-center items-center cursor-pointer"
+          >
+            <input
+              #imgInput
+              hidden="true"
+              type="file"
+              (change)="imgInputChange($event)"
+              accept="image/png, image/svg+xml, image/jpeg, image/jpg"
+            />
+            <div class="text-center" (click)="imgInput.click()">
+              <mat-icon>add_circle</mat-icon>
+              <p>Ajouter une image</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+            Annuler
+          </button>
+        </div>
+        <div class="flex col-end-7 col-span-2">
+          <button
+            *ngIf="mode === 'ajout'"
+            [hidden]="visual"
+            [disabled]="!formDetail.valid"
+            (click)="onSubmitDetails()"
+            type="submit"
+            class="bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44 h-10"
+          >
+            Ajouter
+          </button>
+          <button
+            *ngIf="mode === 'edit'"
+            [hidden]="visual"
+            [disabled]="!formDetail.valid"
+            (click)="onSubmitDetails()"
+            type="submit"
+            class="bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44 h-10"
+          >
+            Modifier
+          </button>
+          <button
+            #resetButton
+            *ngIf="mode === 'edit'"
+            [hidden]="visual"
+            (click)="resetFormDetail()"
+            class="bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44 h-10"
+          >
+            Initialiser
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="visual">
+    <div mat-dialog-content class="ml-5 mr-5 mb-4">
+      <div class="grid mt-4">
+        <div class="overflow-x-auto relative mt-5">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">Nature M/ses</div>
+                </th>
+                <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">Nbr palettes</div>
+                </th>
+                <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">Poids</div>
+                </th>
+                <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">Volume</div>
+                </th>
+                <!-- <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">Poids volumétrique</div>
+                </th> -->
+                <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">valeur declarée</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              >
+                <td class="p-3">{{ detailVisual?.nature_palette }}</td>
+                <td class="p-3">
+                  {{ detailVisual?.nbr_palettes || detailVisual?.nbr_palette }}
+                </td>
+                <td class="p-3">{{ detailVisual?.poids }}</td>
+                <td class="p-3">{{ detailVisual?.volume }}</td>
+                <td class="p-3">
+                  {{
+                    detailVisual?.valeur_declaree ||
+                      detailVisual?.valeur_declare
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flex mt-4 cursor-pointer">
+        <mat-icon class="text-[#0C8040] text-[20px]">insert_photo</mat-icon>
+        <h3 class="text-[#0C8040] font-normal">Photos de marchandise</h3>
+        <hr />
+      </div>
+
+      <div class="flex mt-4">
+        <div
+          class="flex mt-4"
+          *ngFor="let image of detailVisual?.images; let i = index"
+        >
+          <div>
+            <img
+              [src]="getChargementPointsImages(detailVisual?.id, image?.file)"
+              class="w-48 mb-3 rounded-xl p-2"
+              style="height: 70px; width: 70px"
+            />
+            <p class="text-center">{{ image?.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+          Annuler
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

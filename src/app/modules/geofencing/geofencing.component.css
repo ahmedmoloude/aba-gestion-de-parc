@@ -1,0 +1,67 @@
+/* ::ng-deep .mat-select{
+    border-radius: 3px;
+    padding: 13px 7px; 
+} */
+.btn-add{
+    background-color: #138742;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+}
+::ng-deep .btn-add.mat-mini-fab .mat-button-wrapper{
+    display: initial !important;
+}
+.btn-add .mat-icon{
+    height: 31px !important;
+}
+::ng-deep .btn-save-geo.mat-fab{
+    position: absolute !important;
+    right: 45px;
+    bottom: 45px;
+    z-index: 9999;
+    box-shadow: 0 0px 12px black;
+    animation: bounce 0.7s ease 5;
+}
+
+.box-indicator{
+    z-index: 9999;
+    left: 34px;
+    top: 205px;
+    background-color: white;
+    padding: 7px;
+    border: 2px solid rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    border-radius: 4px;
+}
+
+.indicator{
+    width: 15px;
+    height: 15px;
+    cursor: help;
+}
+
+.disable-map{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+@keyframes bounce{
+    from {bottom: 45px;}
+    50%  {bottom: 55px;}
+    to   {bottom: 45px;}
+}
+
+
+
+
+

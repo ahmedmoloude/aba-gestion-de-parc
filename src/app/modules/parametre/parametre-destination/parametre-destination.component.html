@@ -1,0 +1,153 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <form>
+        <h1 class="text-[#06152B] text-[22px] font-normal">
+          Voyage automatique
+        </h1>
+
+        <div class="grid grid-cols gap-4 p-4">
+          <div>
+            
+          </div>
+          <div>
+            <!-- *ngIf="spinner" -->
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Axe d'acheminement</mat-label>
+              <mat-select matNativeControl [(ngModel)]="voyageItems.axe" name="axe">
+                <mat-option *ngFor="let axe of axes" [value]="axe.id">
+                  {{ axe.title }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <table class="table-form">
+          <tbody>
+            <tr *ngFor="let item of voyageItems.items; let i = index">
+              <td>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                  <mat-label>Jour</mat-label>
+                  <mat-select matNativeControl [(ngModel)]="item.day" name="day-{{i}}">
+                    <mat-option *ngFor="let jour of jours" [value]="jour.index">
+                      {{ jour.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4 dates">
+                  <mat-label>Date de départ</mat-label>
+                  <input matInput type="time" [(ngModel)]="item.depart" name="depart-{{i}}" />
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4 dates">
+                  <mat-label>Date d'arrivée</mat-label>
+                  <input matInput type="time"  [(ngModel)]="item.arrive" name="arrive-{{i}}"/>
+                </mat-form-field>
+              </td>
+              <td>
+                <button type="button" [disabled]="voyageItems.items.length == 1" (click)="deleteLigne(i)"><mat-icon style="color:red">cancel</mat-icon></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="add-ligne" (click)="addLigne()">Ajouter une ligne</small>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-5 p-4">
+          <div>
+            <button
+              class="cursor-pointer underline w-32 pt-2 font-bold text-[18px]"
+              mat-dialog-close
+            >
+              Annuler
+            </button>
+          </div>
+          <div class="flex justify-end" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+            <!-- <button
+              class="cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+              (click)="addPlanifiedCovoyage()"
+              *ngIf="!spinnerAdd"
+              [disabled]="createPlanifiedCovoyage.invalid"
+            >
+              Ajouter
+            </button> -->
+            <button
+            
+            (click)="addPlanifiedCovoyage()"
+            *ngIf="!spinnerAdd"
+            pButton pRipple
+            type="submit"
+            label="Ajouter"
+            class="p-button-rounded p-button-success">
+          </button>
+            <span *ngIf="spinnerAdd">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="padding">
+      <h1 class="text-[#06152B] text-[22px] font-normal">
+        Liste des voyages automatique
+      </h1>
+      <div
+        *ngIf="spinner"
+        class="flex items-center justify-center mt-6 mb-6"
+        style="position: center"
+      >
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+      <div *ngIf="!spinner">
+        <div *ngFor="let key of planifiedPassage; let idx = index">
+          <div *ngIf="key">
+            <h3 class="text-[#0C8040] p-2">{{ jour(idx).name }}</h3>
+            <div class="overflow-y-auto relative">
+              <table class="w-full text-left text-gray-500">
+                <thead>
+                  <tr>
+                    <th
+                      *ngFor="let header of headerColumuns"
+                      scope="col"
+                      class="p-3 text-[#636363] font-normal whitespace-nowrap"
+                    >
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let item of key"
+                  >
+                    <td class="p-3">{{ item.axe.title }}</td>
+                    <td class="p-3">{{ item.start_hour }}</td>
+                    <td class="p-3">{{ item.end_hour }}</td>
+                    <td class="p-3 text-right cursor-pointer">
+                      <mat-icon *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')"
+                        class="text-[#636363] text-[20px]"
+                        (click)="editPlanifiedCovoyage(item, axes)"
+                        >edit</mat-icon
+                      >
+                      <mat-icon *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')"
+                        class="text-[#e11111] text-[20px]"
+                        (click)="deletePlanifiedCovoyage(item)"
+                        >delete</mat-icon
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

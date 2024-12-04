@@ -1,0 +1,85 @@
+
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4 pb-1">
+    <h2 mat-dialog-title class="col-span-2">Ajouter un encaissement</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <!-- <div *ngIf="!(customers?.length>0)"  class="flex flex-col items-center text-center">
+      <h2 class>
+        La liste des clients est vide, <br> vous ne pouvez pas ajouter un encaissement.
+      </h2>
+    </div> -->
+    <form [formGroup]="reglementForm">
+      <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-2 mb-3">
+        <div>
+          <app-shared-autcomplete
+            #searchComponent3
+            [hasIcon]="false"
+            [type]="'single'"
+            [opended]="true"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [apiUrl]="apiUrl"
+            [keys]="['code']"
+            [lengthToStart]="3"
+            [display]="['code','-', 'name']"
+            [placeholer]="'Rechercher client...'"
+            [label]="'Rechercher client...'"
+            (dataEvent)="selectClient($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] ">
+            <mat-label>Mode de règlement</mat-label>
+            <mat-select matNativeControl required formControlName="mode_paiement">
+              <mat-option *ngFor="let item of modeReglements" [value]="item?.id">{{item?.libelle}}</mat-option>
+              <!-- <mat-option value="CHEQUE">CHEQUE</mat-option>
+              <mat-option value="VIREMENT">VIREMENT</mat-option>
+              <mat-option value="EFFET">EFFET</mat-option> -->
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-4 mb-3">
+        <div>
+          <i-field [type]="'date'" [label]="'Date demande'" formControlName="date_demande"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Montant'" formControlName="reglement"></i-field>
+        </div>
+        <div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-4 mb-3">
+        <div>
+          <i-field [type]="'text'" [label]="'Référence'" formControlName="reference_reglement"></i-field>
+        </div>
+        <div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button mat-dialog-close
+            class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button type="submit" *ngIf="!spinner" (click)="createReglement()" [disabled]="reglementForm.invalid"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+            Créer
+          </button> -->
+          <button *ngIf="!spinner" (click)="createReglement()" [disabled]="reglementForm.invalid" pButton pRipple type="submit" label="Créer" class="p-button-rounded p-button-success"></button>
+
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

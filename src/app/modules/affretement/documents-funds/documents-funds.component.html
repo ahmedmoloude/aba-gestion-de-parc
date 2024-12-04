@@ -1,0 +1,372 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Liste des documents et fonds
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex">
+    <div class="w-4/5">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)">
+      </app-shared-filter>
+    </div>
+    <div class="w-1/5">
+      <button type="submit" (click)="bordeareaudialog()" class="bordereau-btn"><mat-icon class="cursor-pointer mr-2">assignment</mat-icon> <span>Générer le bordereau</span></button>
+    </div>
+  </div>
+  <div class="relative tabs-utilisateur">
+    <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event); getIndex()">
+      <!-- demendes non cloturees  -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">folder_open</mat-icon>
+          Demandes non clôturées
+        </ng-template>
+        <div *ngIf="demande$ | async as demandeState">
+          <div *ngIf="demandeState?.dataState =='LOADING'" class="flex items-center justify-center mt-6 mb-6">
+            <mat-spinner [diameter]="50"></mat-spinner>
+          </div>
+
+          <div class="mt-5" *ngIf="demandeState?.dataState !='LOADING'">
+            <div class="mt-36 mb-36 text-center" *ngIf="demandeState?.demandes?.length == 0 ">
+              <p class="text-[#636363] text-[22px]">
+                La Liste des documents et fonds est vide
+              </p>
+            </div>
+            <div *ngIf="demandeState?.demandes?.length > 0">
+              <div class="overflow-auto">
+                <table class="w-full text-left text-gray-500 pl-3 pr-3">
+                  <thead>
+                    <tr>
+                      <th class="p-2 text-black font-normal whitespace-nowrap text-center"
+                        [attr.colspan]="(countStatus > 0 && permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')) ? 7 : 6">
+                      </th>
+                      <th class="p-2 text-black font-normal whitespace-nowrap text-center" colspan="2">Documents</th>
+                      <th class="p-2 text-black font-normal whitespace-nowrap text-center" colspan="3">Fonds</th>
+                      <th class="p-2 text-black font-normal whitespace-nowrap text-center" *ngIf="countStatus > 0"></th>
+                    </tr>
+  
+                    <tr>
+                      <ng-container
+                        *ngIf="permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')">
+                        <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap" *ngIf="countStatus > 0">
+                          <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                          </mat-checkbox>
+                        </th>
+                      </ng-container>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Date de création demande</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">N° déclaration</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Destinataire Destination</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Agent</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">N° Demande</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Expéditeur</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                        <div class="flex justify-between">
+                          <span>BL</span>
+                          <span><mat-icon class="cursor-pointer"
+                              (click)="opendocumentsedialog(demandeState?.demandes, 'BL')">remove_red_eye</mat-icon></span>
+                        </div>
+                      </th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                        <div class="flex justify-between">
+                          <span>Facture</span>
+                          <span><mat-icon class="cursor-pointer"
+                              (click)="opendocumentsedialog(demandeState?.demandes, 'Facture')">remove_red_eye</mat-icon></span>
+                        </div>
+                      </th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                        <div class="flex justify-between">
+                          <span>Traite</span>
+                          <span><mat-icon class="cursor-pointer"
+                              (click)="opendocumentsedialog(demandeState?.demandes, 'Trait')">remove_red_eye</mat-icon></span>
+                        </div>
+                      </th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                        <div class="flex justify-between">
+                          <span>Chèque</span>
+                          <span><mat-icon class="cursor-pointer"
+                              (click)="opendocumentsedialog(demandeState?.demandes, 'Cheque')">remove_red_eye</mat-icon></span>
+                        </div>
+                      </th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Espèce</th>
+                      <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap" *ngIf="countStatus > 0">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let demande of demandeState?.demandes | paginate: { itemsPerPage: 5, currentPage: p }; let i = index"
+                      class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                      <ng-container
+                        *ngIf="permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')">
+                        <td class="p-2" *ngIf="countStatus > 0">
+                          <mat-checkbox
+                            *ngIf="demande?.document_counts?.SCANNED > 0 || demande?.document_counts?.RECOVER > 0"
+                            (change)="$event ? selection.toggle(demande) : null" [checked]="selection.isSelected(demande)"
+                            [aria-label]="checkboxLabel(demande)">
+                          </mat-checkbox>
+                        </td>
+                      </ng-container>
+                      <td class="p-2">02/03/2024</td>
+                      <td class="p-2">09836326</td>
+                      <td class="p-2">
+                        <div class="flex">
+                          <mat-icon class="text-[#0E7D41]">local_activity</mat-icon>
+                          <p class="text-base pl-2">
+                            Carrefour
+                          </p>
+                        </div>
+                        <div class="flex">
+                          <mat-icon class="text-[#0E7D41]">place</mat-icon>
+                          <p class="text-base pl-2">
+                            Agadir
+                          </p>
+                        </div>
+                      </td>
+                      <td class="p-2">Amine Saadi</td>
+                      <td class="p-2">{{demande?.demande?.reference || '---'}}</td>
+                      <td class="p-2">{{demande?.customer?.name || '---'}}</td>
+                      <td class="p-2">
+                        <ul *ngIf="demande?.return_documents?.BL?.length>0" class="w-28">
+                          <li *ngFor="let item of demande?.return_documents?.BL">
+                            <span>{{ item?.reference || '---'}}</span>
+                            <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                          </li>
+                        </ul>
+                        <span *ngIf="demande?.return_documents?.BL?.length<=0">---</span>
+                      </td>
+                      <td class="p-2">
+                        <ul *ngIf="demande?.return_documents?.Facture?.length>0" class="w-28">
+                          <li *ngFor="let item of demande?.return_documents?.Facture">
+                            <span>{{ item?.reference || '---'}}</span>
+                            <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                          </li>
+                        </ul>
+                        <span *ngIf="demande?.return_documents?.BL?.length<=0">---</span>
+                      </td>
+                      <td class="p-2">
+                        <ul *ngIf="demande?.return_fonds?.Trait?.length>0" class="w-32">
+                          <li *ngFor="let item of demande?.return_fonds?.Trait" >
+                            <span *ngIf="item?.montant">{{ item?.montant}} Dhs</span>
+                            <span *ngIf="!item?.montant">--</span>
+                            <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                          </li>
+                        </ul>
+                        <span *ngIf="demande?.return_fonds?.Trait?.length<=0">---</span>
+                      </td>
+                      <td class="p-2">
+                        <ul *ngIf="demande?.return_fonds?.Cheque?.length>0" class="w-32">
+                          <li *ngFor="let item of demande?.return_fonds?.Cheque">
+                            <span *ngIf="item?.montant">{{ item?.montant}} Dhs</span>
+                            <span *ngIf="!item?.montant">--</span>
+                            <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                          </li>
+                        </ul>
+                        <div class="flex">
+                          <p>FC36572</p>
+                          <p (click)="referencecheque()"><mat-icon class="edit-cheque">edit</mat-icon></p>
+                        </div>
+                        <span *ngIf="demande?.return_fonds?.Cheque?.length<=0">---</span>
+                      </td>
+                      <td class="p-2">
+                        <ul  class="w-32">
+                          <li>
+                            <span>1000 Dhs</span>
+                            <span class="cursor-pointer" (click)="Voirbordereauversement()"><mat-icon>remove_red_eye</mat-icon></span>
+                          </li>
+                        </ul>
+                      </td>
+                      <ng-container
+                        *ngIf="permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')">
+  
+                        <td class="p-2" *ngIf="countStatus > 0">
+                          <span class="cursor-pointer pl-2">
+                            <mat-icon [matMenuTriggerFor]="menu" id="actions"
+                              *ngIf="demande?.document_counts?.SCANNED > 0 || demande?.document_counts?.RECOVER > 0">
+                              more_vert
+                            </mat-icon>
+                          </span>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="openStatusDialog('SCANNED', demande)"
+                              *ngIf="demande?.document_counts?.SCANNED > 0 ">
+                              Récupération physique
+                            </button>
+                            <button mat-menu-item (click)="openStatusDialog('RECOVER', demande)"
+                              *ngIf="demande?.document_counts?.RECOVER > 0">
+                              Remise
+                            </button>
+                            <button mat-menu-item (click)="affectagentdialog()">
+                              Affecter un agent
+                            </button>
+                            <button mat-menu-item (click)="accusereceptiondialog()">
+                              Accusé de réception
+                            </button>
+                            <button mat-menu-item (click)="voirreceptiondialog()">
+                              Voir l’accusé de réception
+                            </button>
+                            <button mat-menu-item (click)="bordereauversementdialog()">
+                              Bordereau de versement
+                            </button>
+                          </mat-menu>
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-10">
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+              </div>
+
+              <ng-container *ngIf="permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')">
+                <div class="grid grid-cols-2 gap-4 mt-16 mb-5" *ngIf="selection?.hasValue()">
+                  <div>
+                    <button class="underline w-32 text-left mr-3 font-bold text-[18px] mt-3" mat-dialog-close>
+                      Annuler
+                    </button>
+                  </div>
+                  <div class="text-right">
+                    <button *ngIf="displayRecuperation" (click)="openStatusDialog('SCANNED')" pButton pRipple
+                      type="submit" label="Récupération physique" class="p-button-rounded p-button-success"></button>
+                    <!-- <button *ngIf="displayRecuperation" (click)="openStatusDialog('SCANNED')"
+                    class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] p-4 ml-9font-bold text-[18px]"
+                    type="submit">
+                    Récupération physique
+                  </button>
+                  <button *ngIf="displayRemise" (click)="openStatusDialog('RECOVER')"
+                  class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] p-4 ml-9font-bold text-[18px] ml-1"
+                  type="submit">
+                  Remise
+                </button> -->
+                    <button *ngIf="displayRemise" (click)="openStatusDialog('RECOVER')" pButton pRipple type="submit"
+                      label="Remise" class="ml-3 p-button-rounded p-button-success"></button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- demendes cloturees  -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">folder_open</mat-icon>
+          Demandes clôturées
+        </ng-template>
+        <div *ngIf="demande$ | async as demandeState">
+          <div *ngIf="demandeState?.dataState =='LOADING'" class="flex items-center justify-center mt-6 mb-6">
+            <mat-spinner [diameter]="50"></mat-spinner>
+          </div>
+
+          <div class="mt-5" *ngIf="demandeState?.dataState !='LOADING'">
+            <div class="mt-36 mb-36 text-center" *ngIf="demandeState?.closedDemandes?.length == 0 ">
+              <p class="text-[#636363] text-[22px]">
+                La Liste des documents et fonds est vide
+              </p>
+            </div>
+            <div *ngIf="demandeState?.closedDemandes?.length > 0">
+              <table class="w-full text-left text-gray-500 pl-3 pr-3">
+                <thead>
+                  <tr>
+                    <th class="p-2 text-black font-normal whitespace-nowrap text-center" colspan="2"></th>
+                    <th class="p-2 text-black font-normal whitespace-nowrap text-center" colspan="2">Documents</th>
+                    <th class="p-2 text-black font-normal whitespace-nowrap text-center" colspan="2">Fonds</th>
+                  </tr>
+
+                  <tr>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">N° Demande</th>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">Expéditeur</th>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-between">
+                        <span>BL</span>
+                        <span><mat-icon class="cursor-pointer"
+                            (click)="opendocumentsedialog(demandeState?.closedDemandes, 'BL')">remove_red_eye</mat-icon></span>
+                      </div>
+                    </th>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-between">
+                        <span>Facture</span>
+                        <span><mat-icon class="cursor-pointer"
+                            (click)="opendocumentsedialog(demandeState?.closedDemandes, 'Facture')">remove_red_eye</mat-icon></span>
+                      </div>
+                    </th>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-between">
+                        <span>Traite</span>
+                        <span><mat-icon class="cursor-pointer"
+                            (click)="opendocumentsedialog(demandeState?.closedDemandes, 'Trait')">remove_red_eye</mat-icon></span>
+                      </div>
+                    </th>
+                    <th class="p-2 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex justify-between">
+                        <span>Chèque</span>
+                        <span><mat-icon class="cursor-pointer"
+                            (click)="opendocumentsedialog(demandeState?.closedDemandes, 'Cheque')">remove_red_eye</mat-icon></span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let demande of demandeState?.closedDemandes | paginate: { itemsPerPage: 5, currentPage: p }; let i = index"
+                    class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                    <td class="p-2">{{demande?.demande?.reference || '---'}}</td>
+                    <td class="p-2">{{demande?.customer?.name || '---'}}</td>
+                    <td class="p-2">
+                      <ul *ngIf="demande?.return_documents?.BL?.length>0">
+                        <li *ngFor="let item of demande?.return_documents?.BL">
+                          <span>{{ item?.reference || '---'}}</span>
+                          <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                        </li>
+                      </ul>
+                      <span *ngIf="demande?.return_documents?.BL?.length<=0">---</span>
+                    </td>
+                    <td class="p-2">
+                      <ul *ngIf="demande?.return_documents?.Facture?.length>0">
+                        <li *ngFor="let item of demande?.return_documents?.Facture">
+                          <span>{{ item?.reference || '---'}}</span>
+                          <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                        </li>
+                      </ul>
+                      <span *ngIf="demande?.return_documents?.BL?.length<=0">---</span>
+                    </td>
+                    <td class="p-2">
+                      <ul *ngIf="demande?.return_fonds?.Trait?.length>0">
+                        <li *ngFor="let item of demande?.return_fonds?.Trait">
+                          <span *ngIf="item?.montant">{{ item?.montant}} Dhs</span>
+                          <span *ngIf="!item?.montant">--</span>
+                          <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                        </li>
+                      </ul>
+                      <span *ngIf="demande?.return_fonds?.Trait?.length<=0">---</span>
+                    </td>
+                    <td class="p-2">
+                      <ul *ngIf="demande?.return_fonds?.Cheque?.length>0">
+                        <li *ngFor="let item of demande?.return_fonds?.Cheque">
+                          <span *ngIf="item?.montant">{{ item?.montant}} Dhs</span>
+                          <span *ngIf="!item?.montant">--</span>
+                          <span class="lispan" [ngClass]="item?.status_retour">{{getStatus(item?.status_retour)}}</span>
+                        </li>
+                      </ul>
+                      <span *ngIf="demande?.return_fonds?.Cheque?.length<=0">---</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="mt-10">
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+</div>

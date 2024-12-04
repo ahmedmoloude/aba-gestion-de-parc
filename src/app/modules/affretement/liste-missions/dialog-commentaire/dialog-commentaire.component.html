@@ -1,0 +1,68 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">Commentaire</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+        <div class="text-center">
+            <mat-icon class="text-[#FF000026] text-[70px]">cancel</mat-icon>
+            <p class="text-[#E10000]">Mission ignorée</p>
+            <!-- <p>Retour avec attente</p> -->
+        </div>
+        <div class="mt-4 mb-4 ml-3">
+            <p class="text-[#919191]">Motif de refus :</p>
+            <p class="text-black">{{ pointChargement.motif?.name }}</p>
+        </div>
+        <div class="mt-4 mb-4 ml-3">
+            <p class="text-[#919191]">Photos :</p>
+            <div *ngIf="pointChargement.images.length">
+              <p-galleria
+                [(value)]="images"
+                [(visible)]="displayCustom"
+                [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{ 'max-width': '850px' }"
+                [numVisible]="7"
+                [circular]="true"
+                [fullScreen]="false"
+                [showItemNavigators]="true"
+                [showThumbnails]="false"
+                [baseZIndex]="3"
+                [showIndicators]="true" 
+                [showItemNavigatorsOnHover]="true"
+                [showIndicatorsOnItem]="true">
+              >
+                <ng-template pTemplate="item" let-item>
+                  <img
+                    [src]="item"
+                    style="width: 100%; display: block"
+                    class="img-vh"
+                  />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                  <div class="p-grid p-nogutter p-justify-center">
+                    <img [src]="item" style="display: block" />
+                  </div>
+                </ng-template>
+              </p-galleria>
+            </div>
+        </div>
+        <!-- <div class="mt-4 mb-4 ml-3">
+            <p class="text-[#919191]">Commenataire</p>
+            <p class="text-black">{{ pointChargement.motif?.name }}</p>
+        </div> -->
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+            <div>
+              <button
+                class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+                mat-dialog-close
+              >
+              Fermer
+              </button>
+            </div>
+          </div>
+    </div>
+</div>

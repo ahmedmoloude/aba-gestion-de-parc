@@ -1,0 +1,130 @@
+::ng-deep .mat-dialog-container{
+  padding: 0px;
+  overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+  margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel{
+  margin-left: 130px;
+}
+:host .mat-dialog-content{
+  margin-top: 40px;
+}
+::ng-deep .mat-form-field-wrapper{
+  padding: 0px;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+  background-color: #fff;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before{
+  display: none !important;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+  display: none !important;
+}
+/* ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+  border: 3px solid #DBDBDB;
+  border-radius: 28px !important;
+} */
+::ng-deep .mat-form-field-flex{
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.example-section {
+  margin: 12px 0;
+}
+
+.example-margin {
+  margin: 0 12px;
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+}
+
+
+::ng-deep  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  opacity: 0 !important; /*click effect color change*/
+  background-color:  #005691!important;  }
+  
+  ::ng-deep  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color:  #005691!important; /*inner circle color change*/  }
+  
+  ::ng-deep   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:  #005691!important; /*outer ring color change*/  }
+
+  .block-info{
+    border: 1px solid ;
+    padding: 25px 10px 10px 10px;
+    position: relative;
+  }
+  .block-info.first{
+    margin-bottom: 25px !important;
+  }
+  .info-title{
+    position: absolute;
+    top: -17px;
+    left: 1%;
+    background: white;
+    font-size: 20px;
+    color: #0c8040;
+    padding: 0 13px;
+  }
+  input[type="text"]{
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  display: inline-block;
+  margin: 0 0 0 -20px;
+  padding: 4px 25px;
+  background-color: #ddd;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #0c8040;
+  color: #fff;
+}
+.remarque{
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 20px;
+  outline: none;
+}
+
+.date-prospection{
+  border: 1px solid #ccc;
+  padding: 5px 8px;
+  border-radius: 3px;
+}
+
+.error{
+  color: red;
+}
+::ng-deep .mat-form-field-label-wrapper{
+  position: unset !important;
+}
+::ng-deep .mat-form-field-label{
+  position: absolute !important;
+  top: -14px !important;
+  z-index: 9999;
+  background-color: #fff;
+  width: 45% !important;
+  padding: 0px 10px !important;
+  font-size: 11px !important;
+  color: grey;
+}
+::ng-deep .mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label{
+     transform: inherit !important;
+}

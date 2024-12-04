@@ -1,0 +1,14 @@
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+::ng-deep  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  opacity: 0 !important;
+  background-color:  #0C8040!important;  }
+
+  ::ng-deep  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color:  #0C8040!important;   }
+
+  ::ng-deep   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:  #0C8040!important;   }
+
+

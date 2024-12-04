@@ -1,0 +1,92 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">Plan itinéraire</h1>
+    </div>
+    <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialogAdd()" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+          Ajouter une plan itinéraire
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- filter -->
+  <form [formGroup]="filter">
+    <div class="grid grid-cols-3 gap-1 mb-6 mt-5">
+      <mat-select matNativeControl formControlName="depart_id"
+        class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]" placeholder="Ville de départ">
+        <mat-option value="">Origine</mat-option>
+        <mat-option *ngFor="let city of cities" value="{{ city.id }}">
+          {{ city.name }}
+        </mat-option>
+      </mat-select>
+      <mat-select matNativeControl formControlName="destination_id"
+        class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]" placeholder="Destination">
+        <mat-option value="">Destination</mat-option>
+        <mat-option *ngFor="let city of cities" value="{{ city.id }}">
+          {{ city.name }}
+        </mat-option>
+      </mat-select>
+      <button mat-button class="text-white p-3 bg-btn-green text-[18px] w-[50%]" (click)="filterAxe()">
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filtrer</span>
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6"
+    style="position: absolute; top: 50%; left: 50%; z-index: 10">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <div class="grid grid-cols-2 gap-2 mt-10">
+      <div
+        class="flex flex-row ml-5 mr-5 pr-2 bg-[#E8E8E8] mb-5 shadow-[0px_1px_5px_#00000029] rounded-[18px] h-[75px] border-[#B2B2B2]"
+        *ngFor="let item of axes | paginate: { itemsPerPage: 6, currentPage: page }">
+        <div class="flex items-center w-4/5 pl-2 pr-2 bg-[#fff] shadow-[0px_1px_5px_#00000029] rounded-[13px]">
+          <div class="d-block w-24">
+            <p class="text-[#b5b5b5] text-[10px]">Origine</p>
+            <p class="text-[12px] text-[#000000]">{{ item.passage[0].name }}</p>
+          </div>
+          <div class="icon">
+            <mat-icon class="text-[19px] text-[#138742]">swap_horiz</mat-icon>
+          </div>
+          <div class="pl-2 w-24">
+            <p class="text-[#b5b5b5] text-[10px]">Destination</p>
+            <p class="text-[12px] text-[#000000]">
+              {{ item.passage[item.passage.length - 1].name }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center w-4/5">
+          <div class="icon"></div>
+          <div class="pl-3">
+            <p class="text-[10px] text-[#b5b5b5]">Axe d’acheminement</p>
+            <p class="text-[12px] text-[#000000]">
+              {{ item.passage.length - 2 }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center w-1/5 justify-end">
+          <mat-icon class="cursor-pointer text-[19px] text-[#138742]" mat-button
+            [matMenuTriggerFor]="menu">more_vert</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDialogEdit(item)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+              Modification
+            </button>
+            <button mat-menu-item (click)="openDialogrecapitulatif(item)">
+              Détails
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

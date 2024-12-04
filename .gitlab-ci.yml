@@ -1,0 +1,53 @@
+# stages:
+#   - build
+#   - deploy_dev
+
+# cache:
+#  key:
+#    files:
+#      - package-lock.json
+#  paths:
+#      - node_modules/
+
+# build_job_dev:
+#   stage: build
+#   image: node:16
+#   script:
+#      - npm install -g n
+#      - n v16.15.0
+#      - echo " node = $(node -v)"
+#      - npm install -g @angular/cli@11.2.19
+#      - npm install --force
+#      - npm run build
+#   artifacts:
+#       paths:
+#        - dist/
+#       expire_in: 1 week
+#   tags:
+#      - cicd-runner
+#   only:
+#      - develop
+
+
+# deploy_dev_env:
+#   stage: deploy_dev
+#   image: 
+#     name: ubuntu:18.04
+#   before_script:
+#      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+#      - eval $(ssh-agent -s)
+#      - echo "$ID_RSA_GITLAB_RUNNER" | tr -d '\r' | ssh-add -
+#      - mkdir -p ~/.ssh
+#      - chmod 700 ~/.ssh
+#      - apt-get install -y rsync
+#   script:
+#      - rsync -e "ssh -o StrictHostKeyChecking=no" -atv --delete --progress ./dist root@$DEV_SERVER:$SDTM_BO_PATH
+#      - ssh -o StrictHostKeyChecking=no root@$DEV_SERVER "yes |cp  /home/sdtm/.htaccess /home/sdtm/bo/dist/sdtm-fo"
+#   tags:
+#      - cicd-runner
+
+#   environment:
+#      name: dev
+#      url: https://bo.sdtm.devcorp.fr/
+#   only:
+#      - develop 

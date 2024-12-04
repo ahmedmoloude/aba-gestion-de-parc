@@ -1,0 +1,57 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Historique des modifications sur factures</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <!-- <mat-icon class="pt-[5px]">cloud_download</mat-icon> -->
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div *ngIf="facture$ | async as factureState">
+    <div *ngIf="factureState?.history?.length <= 0 && factureState?.dataState =='Loading'"
+      class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div class="grid mt-8  pl-4 pr-4" *ngIf="factureState?.dataState == 'Success'">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <div *ngIf="factureState?.history?.length <= 0 && factureState?.dataState=='Success'"
+      class="flex flex-col items-center">
+      <h2>L'historique des factures est vide</h2>
+    </div>
+    <div *ngIf="factureState?.history?.length>0">
+      <div mat-dialog-content>
+        <div class="grid grid-cols-1 gap-3 pl-4 pr-4">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let facture of factureState?.history">
+                <td class="p-3">{{(facture?.reference_facture) ? facture.reference_facture : '---'}}</td>
+                <td class="p-3">{{(facture?.updated_at)? (facture.updated_at | date: 'dd/MM/yyyy') : '---'}}</td>
+                <td class="p-3">{{(facture?.customer) ? (facture.customer | titlecase | truncate: [15, "..."]) : '---'}}</td>
+                <td class="p-3">{{(facture?.statut) ? (facture.statut | titlecase) : '---'}}</td>
+                <td class="p-3">{{(facture?.ancien_montant) ? (facture.ancien_montant | number) : 0}}</td>
+                <td class="p-3">{{(facture?.nouveau_montant) ? (facture.nouveau_montant | number) : 0}}</td>
+                <td class="p-3">{{(facture?.base_calcule) ? (facture.base_calcule | titlecase) : '---'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10">
+          <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+            (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+          </p-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

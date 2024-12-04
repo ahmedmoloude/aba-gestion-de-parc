@@ -1,0 +1,97 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">settings</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2 cursor-pointer">
+          <span class="text-[#636363] " routerLink="/demande_pieces">Demande de pièces ></span>
+          <span class="text-[#0C8040] pl-1">Historique</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="demandePiece$ | async as demandePieceState">
+    <!--Start  Fliter -->
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <!--End  Fliter -->
+
+
+    <div *ngIf="demandePieceState?.historicState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div class="mt-10">
+      <ng-container *ngIf="demandePieceState?.historicState == 'SUCCESS'">
+        <div *ngIf="demandePieceState?.demandesHistoric?.length <= 0" class="flex flex-col items-center">
+          <h2>La liste des demande pieces est vide</h2>
+        </div>
+        <ng-container *ngIf="demandePieceState?.demandesHistoric?.length > 0">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of demandePieceState.demandesHistoric">
+                <td class="p-3">{{(item?.n_demande) || '---'}}</td>
+                <td class="p-3">{{(item?.date) | date: 'dd/MM/yyyy' || '---'}} </td>
+                <td class="p-3">{{(item?.demandeur) || '---'}} </td>
+                <td class="p-3">{{(item?.n_bon_comande) || '---'}} </td>
+                <td class="p-3">
+                  {{(item?.n_demande_achat[0]) || '---'}}
+                  <mat-icon class="text-right cursor-pointer" mat-button [matMenuTriggerFor]="menuAchat"
+                    *ngIf="item?.n_demande_achat?.length>1">more_vert</mat-icon>
+                  <mat-menu #menuAchat="matMenu">
+                    <button class="cursor-pointer" *ngFor="let element of item?.n_demande_achat" mat-menu-item
+                      (click)="VoirBon(element, 'ACHAT')">
+                      <span>{{element}}</span>
+                    </button>
+                  </mat-menu>
+                  <mat-icon class="pl-1 cursor-pointer" *ngIf="item?.n_demande_achat[0]"
+                    (click)="VoirBon(item?.n_demande_achat[0], 'ACHAT')">remove_red_eye</mat-icon>
+                </td>
+                <td class="p-3">
+                  {{(item?.n_demande_sortie[0]) || '---'}}
+                  <mat-icon class="text-right cursor-pointer" mat-button [matMenuTriggerFor]="menuSortie"
+                    *ngIf="item?.n_demande_sortie?.length>1">more_vert</mat-icon>
+                  <mat-menu #menuSortie="matMenu">
+                    <button class="cursor-pointer" *ngFor="let element of item?.n_demande_sortie" mat-menu-item
+                      (click)="VoirBon(element, 'SORTIE')">
+                      <span>{{element}}</span>
+                    </button>
+                  </mat-menu>
+                  <mat-icon class="pl-1 cursor-pointer" *ngIf="item?.n_demande_sortie[0]"
+                    (click)="VoirBon(item?.n_demande_sortie[0], 'SORTIE')">remove_red_eye</mat-icon>
+                </td>
+                <td class="p-3 cursor-pointer">
+                  <div class="flex items-center">
+                    <span *ngIf="item.statut === 'FINISHED'" class="text-white bg-[#1AD598] border border-[#1AD598] rounded-2xl pt-2 pb-2 pl-4 pr-4 text-base flex">Livraison Totale</span>
+                    <mat-icon  class="text-right" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                    </div>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addPiecejointe(item?.id)">
+                      <mat-icon>attach_file</mat-icon>
+                      Ajouter une pièce jointe
+                    </button>
+                    <button mat-menu-item (click)="getdetaildemande(item)">
+                      <mat-icon>remove_red_eye</mat-icon>
+                      Détails
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

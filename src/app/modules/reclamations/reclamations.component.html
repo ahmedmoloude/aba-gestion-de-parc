@@ -1,0 +1,317 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <!-- filter -->
+  <div class="grid grid-cols-5 gap-1 mb-6" [formGroup]="complaintForm">
+    <!-- <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="N° de réclamation"
+      formControlName="reference"
+    /> -->
+    <mat-form-field appearance="fill" class="w-11/12 mb-4">
+      <mat-label>N° de réclamation</mat-label>
+      <input matInput formControlName="reference" type="text" />
+    </mat-form-field>
+    <!-- <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="N° d'envoi"
+      formControlName="num_envoi"
+    /> -->
+    <mat-form-field appearance="fill" class="w-11/12">
+      <mat-label>Date</mat-label>
+      <mat-date-range-input [rangePicker]="picker" formGroupName="created_at_range">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input matEndDate formControlName="end" placeholder="End date" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker>
+        <mat-date-range-picker-actions>
+          <button mat-button matDateRangePickerCancel (click)="clearDate()">
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" matDateRangePickerApply>
+            Apply
+          </button>
+        </mat-date-range-picker-actions>
+      </mat-date-range-picker>
+    </mat-form-field>
+    <!-- <select
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Type"
+      formControlName="types"
+    >
+      <option value="Expedition,Invoice,General">Type</option>
+      <option value="Expedition">Expedition</option>
+      <option value="Invoice">Facture</option>
+      <option value="General">Générale</option>
+    </select> -->
+    <mat-form-field appearance="fill" class="mb-4 w-11/12">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="types">
+        <mat-option value="Expedition,Invoice,General">Type</mat-option>
+        <mat-option value="Expedition">Expedition</mat-option>
+        <mat-option value="Invoice">Facture</mat-option>
+        <mat-option value="General">Générale</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <select
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Type"
+      formControlName="status"
+    >
+      <option value="">Statut</option>
+      <option value="CREATED">A faire</option>
+      <option value="IN_PROGRESS">En cours</option>
+      <option value="UNSOLVED">Non résolue</option>
+      <option value="FINISHED">résolue</option>
+    </select> -->
+    <mat-form-field appearance="fill" class="mb-4 w-11/12">
+      <mat-label>Statut</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="CREATED">A faire</mat-option>
+        <mat-option value="IN_PROGRESS">En cours</mat-option>
+        <mat-option value="UNSOLVED">Non résolue</mat-option>
+        <mat-option value="FINISHED">Résolue</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <button
+      mat-button
+      class="text-white p-3 bg-btn-green text-[18px]"
+      (click)="applyFilter()"
+      [ngClass]="{ disable: complaintForm.invalid }"
+    >
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filtre</span>
+    </button> -->
+    <button (click)="applyFilter()" [ngClass]="{ disable: complaintForm.invalid }" pButton pRipple type="submit"
+      label="Filtrer" icon="pi pi-filter" iconPos="left" class="p-button-rounded p-button-success w-2/4 h-[38px]">
+    </button>
+  </div>
+  <!-- filter -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+    <div class="flex items-center gap-4 p-5 bg-white rounded-[20px] shadow-[1px_2px_8px_#00000029]">
+      <span class="p-2 text-white bg-[#B2B2B280] rounded-[10px]">
+        <mat-icon>check</mat-icon>
+      </span>
+      <p>
+        <strong class="text-sm font-medium text-[#999999]"> À faire </strong>
+
+        <span class="block text-xs opacity-90">
+          {{ groupedTasks["CREATED"].length }}
+        </span>
+      </p>
+    </div>
+    <div class="flex items-center gap-4 p-5 bg-white rounded-[20px] shadow-[1px_2px_8px_#00000029]">
+      <span class="p-2 text-white bg-[#F8F2CB] rounded-[10px]">
+        <mat-icon>check</mat-icon>
+      </span>
+      <p>
+        <strong class="text-sm font-medium text-[#999999]"> En cours </strong>
+
+        <span class="block text-xs opacity-90">
+          {{ groupedTasks["IN_PROGRESS"].length }}
+        </span>
+      </p>
+    </div>
+    <div class="flex items-center gap-4 p-5 bg-white rounded-[20px] shadow-[1px_2px_8px_#00000029]">
+      <span class="p-2 text-white bg-[#F04343] rounded-[10px]">
+        <mat-icon>check</mat-icon>
+      </span>
+      <p>
+        <strong class="text-sm font-medium text-[#999999]">
+          Non résolue
+        </strong>
+
+        <span class="block text-xs opacity-90">
+          {{ groupedTasks["UNSOLVED"].length }}
+        </span>
+      </p>
+    </div>
+    <div class="flex items-center gap-4 p-5 bg-white rounded-[20px] shadow-[1px_2px_8px_#00000029]">
+      <span class="p-2 text-white bg-[#1AD59829] rounded-[10px]">
+        <mat-icon>check</mat-icon>
+      </span>
+      <p>
+        <strong class="text-sm font-medium text-[#999999]"> Résolue </strong>
+
+        <span class="block text-xs opacity-90">
+          {{ groupedTasks["FINISHED"].length }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+  <div *ngIf="(isLoading$ | async) === false" class="grid grid-cols-1 gap-4 mt-9 sm:grid-cols-4">
+    <div
+      class="h-[528px] overflow-auto bg-white shadow-[0px_3px_10px_#00000029] rounded-[20px] border-[2px] border-[#B2B2B252] cursor-pointer">
+      <p class="text-[#6F6F6F] text-center pt-5">À faire</p>
+      <div>
+        <div *ngFor="let complaint of groupedTasks['CREATED']"
+          class="pl-2 h-[150px] bg-white shadow-[0px_3px_8px_#00000017] border-[2px] border-[#B2B2B252] m-4 rounded-[10px]"
+          (click)="
+            openReclamationDetailDialog({
+              complaint: complaint,
+              step: 'CREATED'
+            })
+          ">
+          <div class="flex flex-wrap justify-between p-3">
+            <div class="mb-2">
+              {{ complaint.reference }}
+            </div>
+            <div *ngIf="userDirection(complaint.tasks)"
+              class="text-[#003DE3] shadow-[0px_3px_26px_#00000017] bg-[#003de321] text-sm rounded-[100px] pt-1 pb-1 pl-[10px] pr-[10px]">
+              Direction :
+              {{ userDirection(complaint.tasks) }}
+            </div>
+          </div>
+          <div class="flex justify-between pb-2 pl-3">
+            <div class="text-sm">
+              Type: {{ detailsComplaint[complaint.type]["label"] }}
+            </div>
+            <div class="text-sm mr-2" *ngIf="complaint.details && complaint.details.length >= 1">
+              {{ complaint.details[0].reference }}
+            </div>
+          </div>
+          <div class="text-[#B2B2B2] text-sm pl-2 mt-2 mr-2 float-right">
+            Créé le:
+            {{ complaint.created_at | date: "dd/MM/y HH:mm" | if_null }}
+          </div>
+        </div>
+
+        <!-- <div
+          *ngFor="let task of complaint?.tasks"
+          class="h-[125px] bg-white shadow-[0px_3px_8px_#00000017] border-[2px] border-[#B2B2B252] ml-1 mr-1 mb-2 rounded-[10px]"
+          (click)="openTaskDetailDialog({ task: task, step: 'CREATED' })"
+        >
+          <div class="flex flex-wrap justify-between p-3">
+            <div class="mb-2">
+            {{ task.uuid.split("-")[4].toUpperCase() }}
+            </div>
+          </div>
+
+          <div class="flex justify-between pb-2 pl-3">
+            <div class="text-sm">
+              {{ detailsComplaint[selectedComplaint.type]["label"] }}
+            </div>
+            <div class="text-[#B2B2B2] text-sm pl-2">
+              Créé le: {{ selectedComplaint.created_at | date: "dd/MM/y HH:mm" | if_null }}
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+    <div
+      class="h-[528px] overflow-auto bg-white shadow-[0px_3px_10px_#00000029] rounded-[20px] border-[2px] border-[#B2B2B252]">
+      <p class="text-[#9B8C27] text-center pt-5">En cours</p>
+      <div *ngFor="let complaint of groupedTasks['IN_PROGRESS']"
+        class="h-[150px] bg-white shadow-[0px_3px_8px_#00000017] border-[2px] border-[#B2B2B252] m-4 rounded-[15px]"
+        (click)="
+          openReclamationDetailDialog({
+            complaint: complaint,
+            step: 'IN_PROGRESS'
+          })
+        ">
+        <div class="flex flex-wrap justify-between p-3">
+          <div class="mb-2">
+            {{ complaint.reference }}
+          </div>
+          <div
+            class="text-[#003DE3] shadow-[0px_3px_26px_#00000017] bg-[#003de321] text-sm rounded-[100px] pt-1 pb-1 pl-[10px] pr-[10px]">
+            Direction :
+            {{ userDirection(complaint.tasks) }}
+          </div>
+        </div>
+
+        <div class="flex justify-between pb-2 pl-3">
+          <div class="text-sm">
+            Type: {{ detailsComplaint[complaint.type]["label"] }}
+          </div>
+          <div class="text-sm mr-2" *ngIf="complaint.details && complaint.details.length >= 1">
+            {{ complaint.details[0].reference }}
+          </div>
+        </div>
+        <div class="text-[#B2B2B2] text-sm pl-2 mt-2 mr-2 float-right">
+          Créé le:
+          {{ complaint.created_at | date: "dd/MM/y HH:mm" | if_null }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="h-[528px] overflow-auto bg-white shadow-[0px_3px_10px_#00000029] rounded-[20px] border-[2px] border-[#B2B2B252]">
+      <p class="text-[#F04343] text-center pt-5">Non résolue</p>
+
+      <div *ngFor="let complaint of groupedTasks['UNSOLVED']"
+        class="h-[150px] bg-white shadow-[0px_3px_8px_#00000017] border-[2px] border-[#B2B2B252] m-4 rounded-[15px]"
+        (click)="
+          openReclamationDetailDialog({
+            complaint: complaint,
+            step: 'UNSOLVED'
+          })
+        ">
+        <div class="flex flex-wrap justify-between p-3">
+          <div class="mb-2">
+            {{ complaint.reference }}
+          </div>
+          <div
+            class="text-[#003DE3] shadow-[0px_3px_26px_#00000017] bg-[#003de321] text-sm rounded-[100px] pt-1 pb-1 pl-[10px] pr-[10px]">
+            Direction :
+            {{ userDirection(complaint.tasks) }}
+          </div>
+        </div>
+
+        <div class="flex justify-between pb-2 pl-3">
+          <div class="text-sm">
+            Type: {{ detailsComplaint[complaint.type]["label"] }}
+          </div>
+          <div class="text-sm mr-2" *ngIf="complaint.details && complaint.details.length >= 1">
+            {{ complaint.details[0].reference }}
+          </div>
+        </div>
+        <div class="text-[#B2B2B2] text-sm pl-2 mt-2 mr-2 float-right">
+          Créé le:
+          {{ complaint.created_at | date: "dd/MM/y HH:mm" | if_null }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="h-[528px] overflow-auto bg-white shadow-[0px_3px_10px_#00000029] rounded-[20px] border-[2px] border-[#B2B2B252]">
+      <p class="text-[#0C8040] text-center pt-5">Résolue</p>
+
+      <div *ngFor="let complaint of groupedTasks['FINISHED']"
+        class="h-[150px] bg-white shadow-[0px_3px_8px_#00000017] border-[2px] border-[#B2B2B252] m-4 rounded-[15px]"
+        (click)="
+          openReclamationDetailDialog({ complaint: complaint, step: 'DONE' })
+        ">
+        <div class="flex flex-wrap justify-between p-3">
+          <div class="mb-2">
+            {{ complaint.reference }}
+          </div>
+          <div
+            class="text-[#003DE3] shadow-[0px_3px_26px_#00000017] bg-[#003de321] text-sm rounded-[100px] pt-1 pb-1 pl-[10px] pr-[10px]">
+            Direction :
+            {{ userDirection(complaint.tasks) }}
+          </div>
+        </div>
+
+        <div class="flex justify-between pb-2 pl-3">
+          <div class="text-sm">
+            Type: {{ detailsComplaint[complaint.type]["label"] }}
+          </div>
+          <div class="text-sm mr-2" *ngIf="complaint.details && complaint.details.length >= 1">
+            {{ complaint.details[0].reference }}
+          </div>
+        </div>
+        <div class="text-[#B2B2B2] text-sm pl-2 mt-2 mr-2 float-right">
+          Créé le:
+          {{ complaint.created_at | date: "dd/MM/y HH:mm" | if_null }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

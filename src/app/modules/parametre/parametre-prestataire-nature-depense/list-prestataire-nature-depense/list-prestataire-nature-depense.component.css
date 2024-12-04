@@ -1,0 +1,17 @@
+::ng-deep mat-divider {
+    height: 70%;
+    margin: auto !important;
+}
+.btn-filter{
+    padding: 10px !important;
+}
+.width-info {
+    width: 10%
+}
+
+.width-content {
+    width: 25%
+}
+::ng-deep .ngx-pagination .current {
+    background: #0C8040 !important;
+}

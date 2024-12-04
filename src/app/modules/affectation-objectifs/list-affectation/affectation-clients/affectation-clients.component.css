@@ -1,0 +1,48 @@
+.example-action-buttons {
+    padding-bottom: 20px;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: end;
+    align-items: center;
+  }
+  
+  .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+  .mb-0{
+    margin-bottom: 0px !important;
+}
+.text-base {
+    font-size: 1rem !important;
+    line-height: 1.5rem !important;
+}
+/* :host .clientobjectif .mat-expansion-panel-header {
+  height: 80px;
+} */
+.rotatclient{
+  min-width: 50px;
+  max-width: 50px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.rotatclient h2 {
+  min-width: 250px;
+  font-size: 0.9rem !important;
+  transform: rotate(-90deg);
+  margin-left: -98px;
+}
+
+.extra-search{
+  display: flex;
+  width: 50px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  height: 39px;
+  border-radius: 12px;
+  background: #cccc;
+}
+
+  

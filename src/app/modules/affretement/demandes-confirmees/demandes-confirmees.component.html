@@ -1,0 +1,286 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Liste des demandes confirmées
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="grid mt-2 pl-4 pr-4">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filtrer($event)"
+    ></app-shared-filter>
+  </div>
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="mt-5" *ngIf="!spinner">
+    <div class="mt-36 mb-36 text-center" *ngIf="demandes.length == 0">
+      <p class="text-[#636363] text-[22px]">
+        La Liste des demandes confirmées est vide
+      </p>
+    </div>
+    <div *ngIf="demandes.length > 0">
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[115px] items-center"
+        *ngFor="
+          let demande of demandes
+            | paginate: { itemsPerPage: 5, currentPage: p };
+          let i = index
+        "
+      >
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">N° Demande</p>
+              <p class="text-[12px] text-[#000000]">{{ demande.reference }}</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Expéditeur</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.client?.first_name }} {{ demande.client?.last_name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Date départ</p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.date_debut | date: "dd/MM/yyyy" }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Date d’arrivée
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.date_fin | date: "dd/MM/yyyy" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Ville De départ
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande?.points_chargements[0]?.city?.name }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">person</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Nbr des clients
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.demande_destinataires?.length }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Nbr de Palette
+              </p>
+              <p class="text-[12px] text-[#000000]">
+                {{ demande.marchandise_globale?.nbr_palette }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Pièce Jointe</p>
+              <p class="text-[12px] text-[#000000]">
+                <span *ngIf="!demande?.file">---</span>
+                <a
+                  *ngIf="demande?.file"
+                  [href]="demande?.file?.url"
+                  target="_blank"
+                  class="flex items-center"
+                >
+                  {{ demande?.file?.name }}
+                  <mat-icon class="pl-[5px] file-icon">attach_file</mat-icon>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Type Véhicule
+              </p>
+              <p
+                class="text-[12px] text-[#000000]"
+                *ngFor="let affectation of demande?.affectations"
+              >
+                {{ affectation?.truck?.truck_type?.name }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Tonnage</p>
+              <p
+                class="text-[12px] text-[#000000]"
+                *ngFor="let affectation of demande?.affectations"
+              >
+                {{ affectation?.truck?.tonnage?.name }} T
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">local_atm</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Immatriculation
+              </p>
+              <p
+                class="text-[12px] text-[#000000]"
+                *ngFor="let affectation of demande?.affectations"
+              >
+                {{ affectation?.truck?.matricule }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">person</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">Conducteur</p>
+              <p
+                class="text-[12px] text-[#000000]"
+                *ngFor="let affectation of demande?.affectations"
+              >
+                {{ affectation?.driver?.first_name }}
+                {{ affectation?.driver?.last_name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">person</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-[#b5b5b5] text-[11px] font-medium">
+                Accompagnateur
+              </p>
+              <p
+                class="text-[12px] text-[#000000]"
+                *ngFor="let affectation of demande?.affectations"
+              >
+                {{ affectation?.accompagnateur?.first_name }}
+                {{ affectation?.accompagnateur?.last_name }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="icon ml-1">
+              <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+            </div>
+            <div class="pl-1">
+              <p class="text-black text-[11px] font-medium">Cotation totale</p>
+              <p class="text-black text-[12px] font-medium">
+                {{ demande?.taxed_price_ht + " DHs" || "--" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center">
+          <span
+            class="text-white bg-[#5cb85c] border border-[#5cb85c] rounded-2xl pt-2 pb-2 pl-4 pr-4 text-base"
+            >Confirmée</span
+          >
+        </div>
+        <mat-icon mat-button [matMenuTriggerFor]="menu" class="cursor-pointer"
+          >more_vert</mat-icon
+        >
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="openDialog(demande?.uuid)">
+            <mat-icon>edit</mat-icon>
+            Prendre une décision
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+    <div class="mt-10" *ngIf="demandes.length > 0">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  (nzOnCancel)="handleCancel()"
+  [nzFooter]="modalFooter"
+>
+  <div *nzModalContent>
+
+
+      <mat-form-field class="w-full mb-4" appearance="fill">
+        <mat-label>Décision</mat-label>
+        <mat-select  [(ngModel)]="status" >
+          <mat-option *ngFor="let item of decesions" [value]="item?.value">
+            {{ item?.text }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Retour</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitDialog()"
+    >
+      Valider
+    </button>
+  </ng-template>
+</nz-modal>

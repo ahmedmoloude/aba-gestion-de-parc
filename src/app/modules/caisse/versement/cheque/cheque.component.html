@@ -1,0 +1,86 @@
+<ng-container *ngIf="versement$ | async as versementState">
+  <div class="grid mt-4">
+    <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+  <div *ngIf="versementState?.checkDataState =='LOADING'" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="versementState?.checkDataState == 'SUCCESS'">
+    <div *ngIf="versementState?.versementsCheck?.length <= 0" class="flex flex-col items-center">
+      <h2>La liste des Versements est vide</h2>
+    </div>
+    <ng-container *ngIf="versementState?.versementsCheck?.length > 0">
+      <div class="overflow-auto">
+        <table class="w-full text-left text-gray-500 mt-4">
+          <thead>
+            <tr>
+              <th class="p-3 text-[#0C8040]" *ngIf="permissionService.hasPermission('Caisse', 'Versement', 'U')">
+                <mat-checkbox class="mr-2" (change)="$event ? toggleAllRows() : null" *ngIf="versements?.length>0"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+                Client à rembourser
+              </th>
+              <th class="p-3 text-[#0C8040]">N° EXP </th>
+              <th class="p-3 text-[#0C8040]">Total à rembourser</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let versement of versementState.versementsCheck   | paginate: { itemsPerPage: 5, currentPage: p };">
+              <td class="p-3 font-medium" *ngIf="permissionService.hasPermission('Caisse', 'Versement', 'U')">
+                <mat-checkbox class="mr-2" *ngIf="(versement?.remis =='DELIVERED') || (versement?.remis =='READY')"
+                  (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(versement) : null"
+                  [checked]="selection.isSelected(versement)" [aria-label]="checkboxLabel(versement)">
+                </mat-checkbox>
+                {{(versement?.customer_name) || '---'}}
+              </td>
+              <td class="p-3 font-medium"> {{(versement?.n_expedition) || '---'}} </td>
+              <td class="p-3 relative">
+                {{(versement?.total | number) || '---'}}
+                <span class="border border-[#DDFFF4] rounded-2xl pt-2 pb-2 pl-4 pr-4 text-base ml-2"
+                  [ngClass]="(versement?.remis =='REMIS')?'bg-[#E0ECFF] text-[#2A00FF]':((versement?.remis =='READY')?'text-[#1AD598] bg-[#DDFFF4]':'text-[#1AD598] bg-[#DDFFF4]')">
+                  {{(versement?.remis =='REMIS')? 'Remis' : ((versement?.remis == 'READY')? 'Validé':'En cours')}}</span>
+                <ng-container *ngIf="permissionService.hasPermission('Caisse', 'Versement', 'U')">
+
+                  <mat-icon *ngIf="(versement?.remis =='DELIVERED') || (versement?.remis =='READY')"
+                    class="cursor-pointer absolute right-6 top-3" mat-button [matMenuTriggerFor]="menu1">
+                    more_vert
+                  </mat-icon>
+                </ng-container>
+              </td>
+              <mat-menu #menu1="matMenu" class="pl-6 pr-6 pt-3 pb-3"
+                *ngIf="permissionService.hasPermission('Caisse', 'Versement', 'U')">
+                <div class="flex items-center  cursor-pointer"
+                  *ngIf="(versement?.remis =='DELIVERED') || (versement?.remis =='READY')"
+                  (click)=" validate(versement)">
+                  <div class="icon ml-1">
+                    <mat-icon class="text-[19px] text-[#b5b5b5]">check_circle</mat-icon>
+                  </div>
+                  <div class="pl-0">
+                    <p class="text-[#b5b5b5] text-[12px] font-medium">Valider</p>
+                  </div>
+                </div>
+              </mat-menu>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-10">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-16 mb-5" *ngIf="selection.hasValue()">
+        <div>
+        </div>
+        <div class="text-right">
+          <button (click)="validate()" *ngIf="permissionService.hasPermission('Caisse', 'Versement', 'U')"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] p-4 ml-9font-bold text-[18px]"
+            type="submit">
+            Valider
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

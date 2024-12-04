@@ -1,0 +1,273 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">pin_drop</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Affectation GPS</h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer mr-4">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcel()">Exporter</h2>
+        <!-- [matMenuTriggerFor]="menu"  -->
+      </div>
+      <!-- <div class="flex cursor-pointer" >
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2" (click)="openDialogAdd('add', '')">Ajouter</h2>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter
+      [inputs]="inputsFiler"
+      (filter)="filtrer($event)"
+    ></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="mt-2" *ngIf="!spinner">
+
+    <div class="mt-36 text-center" *ngIf="gps.length == 0 ">
+      <p class="text-[#636363] text-[22px]">La liste des GPS est vide</p>
+    </div>
+
+    <div *ngIf="gps.length > 0 ">
+      <div
+      class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[104px] items-center"
+      *ngFor="let item of gps">
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">pin_drop</mat-icon>
+          </div>
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">IMEI</p>
+            <p class="text-[12px] text-[#000000]">{{ item.imei_gps }}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">poll</mat-icon>
+          </div>
+          <div class="pl-3">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">Statut</p>
+            <p class="text-[12px] text-[#000000]">{{ item.status.split('_').join(' ') }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="block width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">
+              Date d'acquisition
+            </p>
+            <p class="text-[12px] text-[#000000]">{{ item.date_acquisition_gps | date: 'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">date_range</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">
+              Date de mise en service
+            </p>
+            <p class="text-[12px] text-[#000000]">{{ item.date_mise_en_service | date: 'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">Prestataire</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ item.prestataire?.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="pl-1">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">Sonde</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">
+                {{ item.sonde == false ? "Sans sonde" : "" }}
+                {{ item.sonde == true ? "Avec sonde" : "" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]">attach_money</mat-icon>
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">Montant </p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]">{{ formatNumber(item.montant) }} DH</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]"
+              >local_shipping</mat-icon
+            >
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">
+              Code Véhicule
+            </p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]"><span *ngIf="item.last_association?.statut == 'ASSOCIE'">{{ item.last_association?.vehicule?.code_interne }}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="icon ml-1">
+            <mat-icon class="text-[19px] text-[#138742]"
+              >confirmation_number</mat-icon
+            >
+          </div>
+          <div class="pl-0">
+            <p class="text-[#b5b5b5] text-[10px] font-medium">Immatriculation</p>
+            <div class="flex">
+              <p class="text-[12px] text-[#000000]"><span *ngIf="item.last_association?.statut == 'ASSOCIE'">{{ item.last_association?.vehicule?.matricule }}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="width-content">
+        <div class="flex items-center">
+          <div class="ml-1 mr-1">
+            <button
+              mat-stroked-button
+              extended
+              [ngClass]="item.last_association?.statut == 'ASSOCIE' ? 'btn-dissocie' : 'btn-associe'"
+              (click)="AssociationGps(item)"
+            >
+              <!-- <mat-icon>network_check</mat-icon> -->
+              <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="16.436" height="17.12" viewBox="0 0 16.436 17.12">
+                <path id="icons8-gps_signal" d="M10.037,0A.344.344,0,1,0,10.1.685a5.627,5.627,0,0,1,5.65,5.65.342.342,0,1,0,.685,0A6.327,6.327,0,0,0,10.1,0h-.064Zm0,2.4a.344.344,0,1,0,.064.685,3.246,3.246,0,0,1,3.253,3.253.342.342,0,1,0,.685,0A3.943,3.943,0,0,0,10.1,2.4h-.064Zm-7.019.92a.3.3,0,0,0-.246.107C1.078,5.163-.281,9.273,3.285,12.9a6.813,6.813,0,0,0,4.922,2.172,6.628,6.628,0,0,0,4.462-1.648.34.34,0,0,0,0-.482L3.253,3.424A.328.328,0,0,0,3.017,3.317ZM10.1,5.136A1.191,1.191,0,0,0,8.913,6.27a.394.394,0,0,0-.1.011l-1.434.342,2.1,2.119L9.8,7.49a1.227,1.227,0,0,0,.3.043,1.2,1.2,0,0,0,0-2.4ZM2.675,13.258,1.562,14.381h2.4a8.678,8.678,0,0,1-1.166-1C2.75,13.342,2.717,13.3,2.675,13.258ZM.342,15.066A.342.342,0,0,0,0,15.408v1.37a.342.342,0,0,0,.342.342H5.821a.342.342,0,0,0,.342-.342V15.462a7.172,7.172,0,0,1-1.038-.4Z" fill="#fff"/>
+              </svg>
+
+              {{ item.last_association?.statut == 'ASSOCIE' ? "Dissocier" : "Associer" }}
+            </button>
+
+            <!-- <button
+              mat-stroked-button
+              extended
+              class="btn-charge"
+              (click)="AssociationGps(item)"
+            >
+              <mat-icon>network_check</mat-icon>
+              Associé
+            </button> -->
+          </div>
+          <div>
+            <button mat-mini-fab class="btn-history" (click)="Voirhistorique(item)">
+              <mat-icon>history</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="flex items-center pl-2 justify-end">
+        <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu1"
+          >more_vert</mat-icon
+        >
+        <mat-menu #menu1="matMenu">
+          <button mat-menu-item>
+            <mat-icon>edit</mat-icon>
+            Éditer
+          </button>
+          <button mat-menu-item>
+            <mat-icon>delete</mat-icon>
+            Supprimer
+          </button>
+        </mat-menu>
+      </div> -->
+    </div>
+    </div>
+    <div class="mt-10" *ngIf="!spinner">
+      <app-pagination
+      [Links]="links"
+      (getPage)="getTheNext($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>
+
+<mat-menu #menu="matMenu">
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <form class="mt-7 mb-7" [formGroup]="export">
+      <div class="grid grid-cols-1 gap-3 exportrdv">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date début</mat-label>
+            <input
+              matInput
+              type="date"
+              formControlName="start_date"
+              (change)="setDateDebut($event)"
+              [max]="end_time"
+              [min]="start_time"
+            />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date fin</mat-label>
+            <input
+              matInput
+              type="date"
+              formControlName="end_date"
+              (change)="setDateFin($event)"
+              [min]="start_time"
+              [max]="end_time"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 mt-2">
+        <div class="text-left">
+          <button
+            mat-button
+            class="bg-btn-green text-[18px] text-white p-3 w-full"
+            (click)="exportExcel()"
+            [disabled]="export.invalid"
+          >
+            Valider
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-menu>

@@ -1,0 +1,263 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full" >
+  <div class="grid grid-cols-1 gap-2 mb-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">description</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Documents</h2>
+      </div>
+      <div *ngIf="!spinner">
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Nombre total des véhicules :
+          <span class="text-[#000]">{{ formatNumber(result.vehicules) }}</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <div class="grid grid-cols-3 gap-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Assurance
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.assurances) }}</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total :
+              <span class="text-[#0C8040]">{{ formatNumber(result.sum_assurance) }} DH</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Assurance')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Vignette
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.vignettes) }}</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total :
+              <span class="text-[#0C8040]">{{ formatNumber(result.sum_vignette) }} DH</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Vignette')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#04BFBF] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Visite technique
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.visites) }}</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total :
+              <span class="text-[#0C8040]">{{ formatNumber(result.sum_visite) }} DH</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Viste technique')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-5 mt-8">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#F2B263] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Carte grise
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.grises) }}</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">1 100 911 DH</span>
+            </p>
+            <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Carte grise')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#83A603] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Autorisation de circulation
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.autorisations) }}</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">1 100 911 DH</span>
+            </p>
+            <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Autorisation de circulation')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#2D4030] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Carnet tachygraphe
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.tachygraphes) }}</span>
+            </p>
+            <!-- <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">1 100 911 DH</span>
+            </p>
+            <p class="text-[#636363]">
+              TVA : <span class="text-[#0C8040]">11</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total HT : <span class="text-[#0C8040]">11</span>
+            </p> -->
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Carnet tachygraphe')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p
+          class="bg-[#636363] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        >
+          Taxe Essieu
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]">
+              Total documents :
+              <span class="text-[#0C8040]">{{ formatNumber(result.essieus) }}</span>
+            </p>
+            <p class="text-[#636363]">
+              Montant total :
+              <span class="text-[#0C8040]">{{ formatNumber(result.sum_essieu) }} DH</span>
+            </p>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2
+              class="font-semibold text-size mb-detail"
+              (click)="detailsDoc('Taxe Essieu')"
+            >
+              Afficher
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

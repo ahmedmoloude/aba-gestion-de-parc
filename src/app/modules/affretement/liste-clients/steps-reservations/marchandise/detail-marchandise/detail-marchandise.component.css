@@ -1,0 +1,77 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel{
+    margin-left: 130px;
+}
+:host .mat-dialog-content{
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+::ng-deep .mat-form-field-wrapper{
+    padding: 0px;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+    background-color: #fff;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before{
+    display: none !important;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+    display: none !important;
+  }
+  .file-images{
+    background: #CEF4C9 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px dashed #B2B2B2;
+    border-radius: 12px;
+    width: 100px;
+    height: 100px;
+    margin-left: 30px;
+}
+.file-images button{
+    margin: auto;
+    background-color: #CEF4C9;
+}
+
+.select-label{
+  position: absolute;
+  left: 5px; /* Adjust the value to your desired positioning */
+  color: #808080; /* Adjust the color as needed */
+z-index: 1;
+ top: -14px;
+ background-color: white;
+   font-size: 10px;
+  width: 90px;
+ text-align: center;
+}
+.select-field{
+  position: relative;
+
+}
+
+.valc{  margin: 4px;
+  border: 1px solid;
+line-height: 1.4rem;}
+
+::ng-deep .mat-form-field-label-wrapper{
+  position: unset !important;
+}
+::ng-deep .mat-form-field-label{
+  position: absolute !important;
+  top: -14px !important;
+  z-index: 9999;
+  background-color: #fff;
+  width: 45% !important;
+  padding: 0px 10px !important;
+  font-size: 11px !important;
+  color: grey;
+}
+::ng-deep .mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label{
+     transform: inherit !important;
+}

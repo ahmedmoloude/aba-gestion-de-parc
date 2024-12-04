@@ -1,0 +1,114 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Création d'une tournée de ramassage</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="w-11/12 mx-auto">
+      <img src="../../../../assets/img/creation.png" class="mx-auto" />
+      <div class="grid grid-cols-5 gap-4 pt-16 pb-16">
+        <div>
+          <!-- <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Date de tournée"
+            [(ngModel)]="selectedDate"
+            [disabled]="isLoading"
+          /> -->
+          <mat-form-field appearance="fill" class="mb-4">
+            <mat-label>Date de tournée</mat-label>
+            <input
+              matInput
+              [(ngModel)]="selectedDate"
+              [disabled]="isLoading"
+              type="date"
+              class="hd-input"
+            />
+          </mat-form-field>
+        </div>
+        <div>
+
+          <app-shared-autcomplete
+           [disabled]="isLoading"
+            #searchComponentOrigin
+            [charToGetAll]="'*'"
+            [data]="cities"
+            [keys]="['code', 'name']"
+            [lengthToStart]="1"
+            [display]="['code', 'name']"
+            [placeholer]="'Rechercher l\'origine...'"
+            (dataEvent)="onChangeCity($event)">
+          </app-shared-autcomplete>
+          <!-- <mat-form-field appearance="fill" class="mb-4">
+            <mat-label>Ville</mat-label>
+            <mat-select  
+              [(ngModel)]="selectedCity"
+              (ngModelChange)="onChangeCity()"
+              [disabled]="isLoading">
+              <mat-option value="">---Sélectionner une ville ---</mat-option>
+              <mat-option *ngFor="let item of cities" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+        <div>
+          <!-- <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Zone"
+            [(ngModel)]="selectedZone"
+            [disabled]="isLoading"
+          >
+            <option value="">---Sélectionner une zone ---</option>
+            <option *ngFor="let item of cityZones" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select> -->
+          <mat-form-field appearance="fill" class="mb-4">
+            <mat-label>Zone</mat-label>
+            <mat-select  
+              [(ngModel)]="selectedZone"
+              [disabled]="isLoading">
+              <mat-option value="">---Sélectionner une zone ---</mat-option>
+              <mat-option *ngFor="let item of cityZones" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex items-center">
+          <div>
+            <mat-checkbox class="ml-6" [(ngModel)]="isRenfort" color="primary"
+              >Tournée renfort
+            </mat-checkbox>
+            <mat-checkbox class="ml-6" [(ngModel)]="isHoliday" color="primary"
+              >Jour férié
+            </mat-checkbox>
+          </div>
+        </div>
+        <div>
+          <div *ngIf="isLoading" class="flex items-center justify-center">
+            <mat-spinner class="text-center" [diameter]="40"></mat-spinner>
+          </div>
+
+          <!-- <button
+            *ngIf="!isLoading"
+            type="button"
+            class="text-white btn-filter text-[15px] bg-btn-green max-w-[170px] w-[170px] p-[10px]"
+            (click)="initializeTour()"
+          >
+            Générer
+          </button> -->
+          <button 
+            *ngIf="!isLoading"
+            (click)="initializeTour()" 
+            pButton pRipple 
+            type="button" 
+            label="Générer"
+            class="p-button-rounded p-button-success">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

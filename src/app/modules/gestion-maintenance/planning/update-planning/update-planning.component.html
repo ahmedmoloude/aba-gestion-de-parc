@@ -1,0 +1,97 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Modifier un planning</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="planningForm">
+    <div mat-dialog-content class="dialog-carte">
+      <div class="mt-5 w-1/3 ml-auto mr-auto">
+        <app-shared-autcomplete #searchComponent1 [hasIcon]="false" [type]="'single'" [opended]="true"
+        [contentStyle]="contentStyle" [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="trucks"
+        [keys]="['code_interne', 'matricule']" [lengthToStart]="3" [display]="['code_interne', 'matricule']"
+        [placeholer]="''" [label]="'Rechercher véhicule...'"
+        (dataEvent)="onTruckChange($event)"></app-shared-autcomplete>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-5 text-center">
+        <div>
+          <p>Code : <strong class="ml-2">{{(truck?.code_interne) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Immatriculation : <strong class="ml-2">{{(truck?.matricule) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Marque : <strong class="ml-2">{{(truck?.brand?.name) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Type : <strong class="ml-2">{{(truck?.truck_type?.name) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Modèle : <strong class="ml-2">{{(truck?.modele?.name) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Gamme : <strong class="ml-2">{{(truck?.gamme?.name) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Index kilométrique : <strong class="ml-2">{{(truck?.km_reel) || '---'}}</strong></p>
+        </div>
+        <div>
+          <p>Activité : <strong class="ml-2">{{(truck?.activity) || '---'}}</strong></p>
+        </div>
+      </div>
+      <div class="mt-5 w-3/6 ml-auto mr-auto">
+        <mat-form-field appearance="fill" class="w-[100%] mb-4">
+          <mat-label>Opération</mat-label>
+          <mat-select matNativeControl formControlName="operation">
+            <mat-option value="revision_generale">Révision générale</mat-option>
+            <mat-option value="revision_partielle">Révision partielle</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5 w-3/6 ml-auto mr-auto">
+        <div>
+          <i-field [type]="'date'" [label]="'Date début'" formControlName="date_debut"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'date'" [label]="'Date fin'" formControlName="date_fin"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5 w-3/6 ml-auto mr-auto">
+        <div>
+          <i-field [type]="'number'" [label]="'Rappel avant (jours)'"  formControlName="rappel_jour"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Rappel avant (Kms)'"  formControlName="rappel_km"></i-field>
+        </div>
+      </div>
+      <div class="mt-5 w-3/6 ml-auto mr-auto">
+        <i-field  formControlName="comment"
+            [type]="'textarea'"
+            [label]="'Commentaire'"
+            [cols]="30"
+            [rows]="2"
+            maxlength="500"
+          ></i-field>
+      </div>
+        <div class="grid grid-cols-2 gap-4 mt-5 mb-2">
+          <div>
+            <button
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+              mat-dialog-close >
+              Annuler
+            </button>
+          </div>
+          <div class="text-right">
+              <button  *ngIf="!spinner" (click)="onAddPlanning()" pButton pRipple type="submit" label="Valider" class="mr-5 p-button-rounded p-button-success"></button>
+              <span *ngIf="spinner">
+                <mat-spinner [diameter]="40"></mat-spinner>
+              </span>
+          </div>
+        </div>
+    </div>
+  </form>
+</div>

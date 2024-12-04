@@ -1,0 +1,97 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex">
+        <mat-icon class="pt-[5px]">settings</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Planning</h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer" (click)="addplanning()" *ngIf="permissionService.hasPermission('Gestion de parc', 'Planning', 'C')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="planning$ | async as planningState">
+
+    <!--Start  Fliter -->
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <!--End  Fliter -->
+
+    <div *ngIf="planningState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+
+    <div class="mt-10">
+      <ng-container *ngIf="planningState?.dataState == 'SUCCESS'">
+        <div *ngIf="planningState?.plannings?.length <= 0" class="flex flex-col items-center">
+          <h2>La liste des plannings est vide</h2>
+        </div>
+        <ng-container *ngIf="planningState?.plannings?.length > 0">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of planningState.plannings | paginate: { itemsPerPage: 5, currentPage: p };"
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                <td class="p-3">{{(item?.reference) || '---'}}</td>
+                <td class="p-3">{{ item?.truck?.code_interne || '---'}}/{{ item.truck?.matricule || '---' }}</td>
+                <td class="p-3">{{(item?.operation == 'REVISION_GENERAL'? 'Révision générale': 'Révision partielle')}}</td>
+                <td class="p-3">{{(item?.date_debut | date: 'dd/MM/yyyy') || '---'}} </td>
+                <td class="p-3">{{(item?.date_fin | date: 'dd/MM/yyyy') || '---'}} </td>
+                <td class="p-3">{{(item?.rappel_jour) || '---'}} </td>
+                <td class="p-3">{{(item?.rappel_km) || '---'}} </td>
+                <td class="p-3">
+                  <mat-icon class="text-right cursor-pointer" mat-button [matMenuTriggerFor]="menuComment">comment</mat-icon>
+                  <mat-menu #menuComment="matMenu">
+                    <p mat-menu-item>
+                      {{(item?.comment) || '---'}}
+                    </p>
+                  </mat-menu>
+                </td>
+                <td class="p-3">
+                  <div class="inline-block">
+                    <button *ngIf="item?.statut === 'ACCOMPLI'" pButton pRipple type="button" label="Accompli"
+                      class="p-button-rounded p-button-success"></button>
+                    <button *ngIf="item?.statut === 'NON_ACCOMPLI'" pButton pRipple type="button" label="Non Accompli"
+                      class="p-button-rounded p-button-secondary"></button>
+                  </div>
+                  <mat-icon class="text-right cursor-pointer" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item *ngIf="item?.statut === 'NON_ACCOMPLI'" (click)="accomplishPlanning(item?.uuid, item?.statut)">
+                      <mat-icon>check</mat-icon>
+                      Accomplir
+                    </button>
+                    <button mat-menu-item (click)="updateplanning(item)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Planning', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletePlanning(item?.uuid)" *ngIf="permissionService.hasPermission('Gestion de parc', 'Planning', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-10">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

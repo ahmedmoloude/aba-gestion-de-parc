@@ -1,0 +1,91 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">
+        Alimentation de carte <span class="text-[#0C8040]"> N° {{(carte?.n_carte) || '---'}} " {{(carte?.libelle) || '---'}} "</span>
+      </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <div class="text-center mb-5">
+        <mat-icon class="text-[50px]">payment</mat-icon>
+        <p class="text-[#0C8040]">
+          Solde disponible : <span class="text-black">{{(carte?.solde | number) || 0 }} DH</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+        <div>
+          <p class="text-[#0C8040] text-[11px]">N° de carte :</p>
+          <p class="font-medium">{{(carte?.n_carte) || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Libellé :</p>
+          <p class="font-medium">{{(carte?.libelle) || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Banque :</p>
+          <p class="font-medium">{{(carte?.banque) || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Agence :</p>
+          <p class="font-medium">{{(carte?.agence?.name) || '---'}}</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4 pl-4 pr-4">
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Affectée le :</p>
+          <p class="font-medium">{{(carte?.date_affectation | date: 'dd/MM/yyyy') || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Date fin :</p>
+          <p class="font-medium">{{(carte?.expiration_date | date: 'dd/MM/yyyy') || '---'}}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Plafond (Dhs) :</p>
+          <p class="font-medium">{{(carte?.plafond) || 0 }}</p>
+        </div>
+        <div>
+          <p class="text-[#0C8040] text-[11px]">Solde consommé :</p>
+          <p class="font-medium">{{(carte?.solde_consomme | number) || 0 }}</p>
+        </div>
+      </div>
+      <form [formGroup]="alimentCardForm">
+        <div class="grid grid-cols-4 gap-3 pl-4 pr-4 mt-8">
+          <div>
+            <i-field [type]="'number'" [label]="'Montant (DH)'" formControlName="montant"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'text'" [label]="'Motif'" formControlName="motif"></i-field>
+          </div>
+          <div>
+            <i-field [type]="'date'" [label]="'Date d’alimentation'" formControlName="date_alimentation"></i-field>
+          </div>
+          <div class="custom-file-input">
+            <label for="file-upload" class="file-label block w-full text-sm text-black bg-white  border-[2px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3">
+              <span class="file-name">Pièce jointe</span>
+              <mat-icon class="p-[5px] upload-icon">attach_file</mat-icon>
+            </label>
+            <input type="file" id="file-upload" class="hidden" accept="image/png, image/svg+xml, image/jpeg, image/jpg, image/gif, application/pdf,image/x-eps'" formControlName="attachement"/>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button
+              class="underline w-32 pt-2 mr-3 font-bold text-[18px]"
+              mat-dialog-close >
+              Abondonner
+            </button>
+          </div>
+          <div class="text-right">
+            <button *ngIf="!spinner" (click)="confirmCreation()" [disabled]="alimentCardForm.invalid" pButton pRipple type="submit" label="Confirmer" class="p-button-rounded p-button-success"></button>
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

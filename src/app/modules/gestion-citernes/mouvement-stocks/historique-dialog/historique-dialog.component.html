@@ -1,0 +1,59 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4" >
+    <h2 mat-dialog-title class="col-span-2">Historique de Jaugeage</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <!-- <mat-icon class="pt-[5px]">cloud_download</mat-icon> -->
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <div class="flex cursor-pointer mr-4">
+      <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcel()">Exporter</h2>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div mat-dialog-content *ngIf="!spinner">
+    <div class="grid grid-cols-1 gap-3 pl-4 pr-4">
+
+      <!-- <div class="grid">
+        <app-shared-filter
+          [inputs]="inputsFiler"
+          (filter)="filter($event)"
+        ></app-shared-filter>
+      </div> -->
+
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of jaugeages" >
+            <td class="p-3">{{ item.date | date: 'dd/MM/yyyy' }}</td>
+            <td class="p-3">{{ item.quantite-item.ecart }} L</td>
+            <td class="p-3">{{ item.quantite }} L</td>
+            <td class="p-3">{{ item.ecart }} L</td>
+            <td class="p-3">{{ item.user?.name }}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

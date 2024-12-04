@@ -1,0 +1,345 @@
+<div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Modifier une ville de transit</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+  
+    <form [formGroup]="editAxe">
+        <div mat-dialog-content>
+          <div class="grid grid-cols-3 sm:grid-cols-3 gap-2 pl-3 pr-3">
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Titre</mat-label>
+                <input
+                  matInput
+                  placeholder="Titre"
+                  formControlName="title" autocomplete="off" (input)="changeTextToUppercase('title')"
+                  required/>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  placeholder="Code"
+                  formControlName="code" 
+                  required readonly
+                />
+              </mat-form-field>
+            </div>
+            <div class="w-[100%] mb-4">
+              <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Camion</mat-label>
+                <mat-select
+                  matNativeControl formControlName="truck_id">
+                  <mat-option *ngFor="let truck of trucks" [value]="truck.id">
+                    {{ truck.matricule }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+
+              <app-shared-autcomplete 
+                [opended]="true"
+                [hasIcon]="false"
+                [type]="'single'" 
+                [contentStyle]="contentStyle" 
+                [inputStyle]="searchStyle" 
+                [charToGetAll]="'*'" 
+                [data]="trucks" 
+                [keys]="['code_interne', 'matricule']" 
+                [lengthToStart]="3" 
+                [display]="['code_interne', 'matricule']" 
+                [placeholer]="'Rechercher le véhicule...'" 
+                (dataEvent)="truckChange($event)">
+              </app-shared-autcomplete>
+            </div>
+          </div>
+          <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-3 pr-3">
+          <div class="w-[100%] mb-4">
+            <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Ville de départ</mat-label>
+              <input type="text"
+                     placeholder="Ville"
+                     aria-label="Ville"
+                     matInput [value]="depart"
+                     (keyup)="filterCityDepart($event)"
+                     [matAutocomplete]="auto"
+                     >
+              <mat-icon matPrefix class="my-icon">search</mat-icon>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="departChange($event)">
+                <mat-option *ngFor="let city of citiesFilterDepart" [value]="city.name">
+                  {{ city.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field> -->
+            <app-shared-autcomplete #searchComponent1 
+              [opended]="true"
+              [hasIcon]="false"
+              [type]="'single'" 
+              [contentStyle]="contentStyle" 
+              [inputStyle]="searchStyle" 
+              [charToGetAll]="'*'" 
+              [data]="cities" 
+              [keys]="['code', 'name']" 
+              [lengthToStart]="3" 
+              [display]="['code', 'name']" 
+              [placeholer]="'Rechercher la ville...'" 
+              (dataEvent)="departChange($event)">
+            </app-shared-autcomplete>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Heure de depart</mat-label>
+                <input matInput type="time" formControlName="heure_depart"/>
+            </mat-form-field>
+          </div>  
+        </div>
+    
+        <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-3 pr-3">
+        <div class="w-[100%] mb-4">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Destination</mat-label>
+            <input type="text"
+                    placeholder="Destination"
+                    aria-label="Destination"
+                    matInput [value]="destination"
+                    (keyup)="filterCityDestination($event)"
+                    [matAutocomplete]="autoo"
+                    >
+            <mat-icon matPrefix class="my-icon">search</mat-icon>
+            <mat-autocomplete #autoo="matAutocomplete" (optionSelected)="destinationChange($event)">
+              <mat-option *ngFor="let city of citiesFilterDestination" [value]="city.name">
+                {{ city.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
+          <app-shared-autcomplete 
+            [opended]="true"
+            [hasIcon]="false"
+            [type]="'single'" 
+            [contentStyle]="contentStyle" 
+            [inputStyle]="searchStyle" 
+            [charToGetAll]="'*'" 
+            [data]="cities" 
+            [keys]="['code', 'name']" 
+            [lengthToStart]="3" 
+            [display]="['code', 'name']" 
+            [placeholer]="'Rechercher la ville...'" 
+            (dataEvent)="destinationChange($event)">
+          </app-shared-autcomplete>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Heure d'arrivée</mat-label>
+              <input matInput type="time" formControlName="heure_arrivee"/>
+          </mat-form-field>
+        </div>  
+      </div>
+
+        </div>
+        <!-- <div
+            *ngIf="spinnergetCities"
+            class="flex items-center justify-center mt-6 mb-6">
+            <mat-spinner [diameter]="35"></mat-spinner>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-3 pr-3" *ngIf="!spinnergetCities">
+            <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Ville de départ</mat-label>
+                <mat-select formControlName="depart_id" (selectionChange)="departChange($event)" required>
+                  <mat-option *ngFor="let city of filteredCityDepart()" [value]="city.id">
+                    {{ city.name }} </mat-option>
+                </mat-select>
+
+            </mat-form-field>
+            </div>
+            <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Heure de depart</mat-label>
+                <input matInput type="time" formControlName="heure_depart"/>
+            </mat-form-field>
+            </div>  
+        </div> -->
+        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-3 pr-3" *ngIf="!spinnergetCities">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Destination</mat-label>
+            <mat-select
+              matNativeControl
+              required
+              formControlName="destination_id"
+              (selectionChange)="destinationChange($event)">
+              <mat-option *ngFor="let city of filteredCityDestination()" [value]="city.id">
+                {{ city.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Heure d'arrivée</mat-label>
+              <input matInput type="time" formControlName="heure_arrivee"/>
+          </mat-form-field>
+        </div>  
+      </div> -->
+      <div mat-dialog-content *ngIf="aff && !spinnergetCities" class="max-hig-80 overflow-auto">
+        <div class="w-[100%] mb-4 pl-4 pr-4">
+          <div class="flex">
+            <mat-icon class="text-[#636363]">local_shipping</mat-icon>
+            <h2 class="text-[#636363] font-normal pl-2 text-[14px]">
+              {{ depart }}
+            </h2>
+          </div>
+          <!-- //TODO -->
+          <div *ngIf="allPassage.length > 0 && spinnerAgence">
+            <div cdkDropList class="example-list mb-4"
+              (cdkDropListDropped)="drop($event)">
+              <div class="example-box " *ngFor="let passage of passageConfirmation()" cdkDrag>
+                <div class="flex cursor-pointer">
+                  <div class="grid grid-cols-4 sm:grid-cols-4 gap-2 pl-3 pr-3">
+                    <div>
+                      <mat-icon class="text-[#0C8040] text-[20px] ">place</mat-icon>
+                      <mat-icon class="text-[#636363] text-[20px] ">list</mat-icon>
+                      <mat-label class=" font-normal text-[14px]" >{{ cityName(passage.city_id).name }}</mat-label>
+                    </div>
+                    <div *ngIf="passage.agence_id">
+                      <h4 class="text-[#636363]"> | {{ AgenceName(passage.agence_id).name}} </h4>
+                    </div>
+                    <div>
+                      <mat-icon class="text-[#636363]">access_time</mat-icon>
+                      <mat-label class="text-[#636363]" >Heure d'arrivée</mat-label>
+                      <p class="text-[#0C8040] pl-4">{{ passage.hour_arrivee }}</p>
+                    </div>
+                    <div>
+                      <mat-icon class="text-[#636363]">access_time</mat-icon>
+                      <mat-label class="text-[#636363]">Heure de départ</mat-label>
+                      <p class="text-[#0C8040]  pl-4">{{ passage.hour_depart }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right" (click)="deletePassage(passage)">
+                  <mat-icon class="text-[#e11111] text-[20px] ">delete</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+              
+          <ng-container formArrayName="passages">
+            <ng-container *ngFor="let initeraryForm of passages.controls; let index = index">
+              <div [formGroupName]="index">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                  <div class="w-[100%] mb-4">
+                    <app-shared-autcomplete 
+                      [opended]="true"
+                      [hasIcon]="false"
+                      [type]="'single'" 
+                      [contentStyle]="contentStyle" 
+                      [inputStyle]="searchStyle" 
+                      [charToGetAll]="'*'" 
+                      [data]="cities" 
+                      [keys]="['code', 'name']" 
+                      [lengthToStart]="3" 
+                      [display]="['code', 'name']" 
+                      [placeholer]="'Rechercher la ville...'" 
+                      (dataEvent)="cityAgence($event)">
+                    </app-shared-autcomplete>
+                      <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                          <mat-label>Destination</mat-label>
+                          <mat-select
+                              matNativeControl
+                              formControlName="city_id" (selectionChange)="cityAgence($event)">
+                              <mat-option *ngFor="let city of filteredCityPassage()" value="{{ city.id }}">
+                              {{ city.name }}
+                              </mat-option>
+                          </mat-select>
+                          <input type="text"
+                                placeholder="Destination"
+                                aria-label="Destination"
+                                matInput
+                                (keyup)="filterCityAxe($event)"
+                                [matAutocomplete]="autooo"
+                                >
+                        <mat-icon matPrefix class="my-icon">search</mat-icon>
+                        <mat-autocomplete #autooo="matAutocomplete" (optionSelected)="cityAgence($event)">
+                          <mat-option *ngFor="let city of citiesFilterAxe" [value]="city.name">
+                            {{ city.name }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field> -->
+                  </div>
+                  <div *ngIf="agenceSpinner">
+                    <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                        <mat-label>Agence</mat-label>
+                        <mat-select
+                              matNativeControl
+                              formControlName="agence_id" >
+                              <mat-option *ngFor="let agence of agences" [value]="agence.id">
+                              {{ agence.name }}
+                              </mat-option>
+                          </mat-select>
+                    </mat-form-field>
+                  </div> 
+                    <div>
+                      <mat-form-field appearance="fill" class="w-[100%] mb-2">
+                          <mat-label>Heure d'arrivée</mat-label>
+                          <input matInput type="time" formControlName="hour_arrivee"/>
+                      </mat-form-field>
+                    </div> 
+                    <div>
+                        <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                            <mat-label>Heure de depart</mat-label>
+                            <input matInput type="time" formControlName="hour_depart"/>
+                        </mat-form-field>
+                    </div>  
+                </div>                                
+              </div>
+            </ng-container>
+          </ng-container>
+  
+          <div class="flex cursor-pointer" (click)="addNewPointAxe()">
+            <mat-icon class="text-[#0C8040] text-[20px] pt-[5px]">add_circle</mat-icon>
+            <h2 class="text-[#0C8040] font-normal text-[14px]">
+              Ajouter une ville
+            </h2>
+          </div>
+  
+          <div class="flex">
+            <mat-icon class="text-[#636363]">outlined_flag</mat-icon>
+            <h2 class="text-[#636363] font-normal pl-2 text-[14px]">
+              {{ destination }}
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <button
+            class="cursor-pointer underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close>
+            Abondonner
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button
+            class="cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            type="submit"
+            (click)="editAxeSubmit()" *ngIf="!spinner"><!--[disabled]="createAxe.invalid" -->
+            Modifier
+          </button>
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+
+    </form> 
+</div>
+
+  
+  

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.533" height="19.687" viewBox="0 0 19.533 19.687">
+  <g id="Group_1165" data-name="Group 1165" transform="translate(-2.118)">
+    <g id="Group_52" data-name="Group 52" transform="translate(2.118)">
+      <path id="Path_92" data-name="Path 92" d="M73.71,130.721,71.83,122.1a2.671,2.671,0,0,0-2.61-2.1H65.672a2.678,2.678,0,0,0-2.619,2.147l-1.715,8.576A1.985,1.985,0,0,0,60,132.6v2.458H75.054V132.6A1.985,1.985,0,0,0,73.71,130.721Zm-9.522-8.347a1.517,1.517,0,0,1,1.484-1.216H69.22a1.522,1.522,0,0,1,1.478,1.19l1.8,8.267h-4.4V129.2a2.7,2.7,0,1,0-1.158,0v1.414H62.54Zm3.339,5.732a1.544,1.544,0,1,1,1.544-1.544A1.546,1.546,0,0,1,67.527,128.106ZM73.9,133.9H61.158v-1.3a.824.824,0,0,1,.824-.824H73.073a.824.824,0,0,1,.824.824Z" transform="translate(-57.766 -115.368)"/>
+      <path id="Path_93" data-name="Path 93" d="M240,0h1.158V3.474H240Z" transform="translate(-230.818)"/>
+      <path id="Path_94" data-name="Path 94" d="M0,0H3.474V1.158H0Z" transform="matrix(0.981, -0.196, 0.196, 0.981, 15.898, 7.305)"/>
+      <path id="Path_95" data-name="Path 95" d="M0,0H3.474V1.158H0Z" transform="translate(13.982 3.838) rotate(-45)"/>
+      <path id="Path_96" data-name="Path 96" d="M0,0H1.158V3.474H0Z" transform="matrix(0.196, -0.981, 0.981, 0.196, 0, 7.753)"/>
+      <path id="Path_97" data-name="Path 97" d="M0,0H1.158V3.474H0Z" transform="translate(2.263 2.199) rotate(-45)"/>
+    </g>
+  </g>
+</svg>

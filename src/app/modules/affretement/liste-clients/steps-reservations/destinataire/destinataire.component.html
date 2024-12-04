@@ -1,0 +1,297 @@
+<form [formGroup]="expediteurForm" >
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mb-5"
+  >
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Données de d'expéditeur
+      </p>
+    </div>
+
+
+          <div class="mb-5 mt-5">
+            <mat-radio-group
+              (change)="onTypeChangeExpediteur()"
+              aria-label="Select an option"
+              formControlName="type"
+            >
+              <mat-radio-button #entity value="entity"
+                >Entreprise</mat-radio-button
+              >
+              <mat-radio-button #individual value="individual" class="ml-4"
+                >Particulier</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+          <div class="flex p-3">
+            <div
+              class="w-1/2"
+              [ngClass]="{ pointer: !entity.checked && !individual.checked }"
+            >
+              <app-select-expediteur
+                [selectedType]="selectedType"
+                (customerEvent)="onExpediteurChange($event)"
+              ></app-select-expediteur>
+            </div>
+            <ng-container *ngIf="entity.checked">
+              <div class="w-1/4 ml-3">
+                <i-field
+                  *ngIf="entity.checked"
+                  [type]="'text'"
+                  [label]="'ICE'"
+                  formControlName="identity_number"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'E-mail'"
+                  formControlName="email"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-2/4 ml-3" *ngIf="entity.checked">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Name'"
+                  formControlName="name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Téléphone'"
+                  formControlName="phone"
+                  [maxlength]="10"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="flex items-center cursor-pointer">
+                <mat-icon
+                  class="text-red-500"
+                  *ngIf="i > 0"
+                  (click)="deleteDestinataire(i)"
+                  >delete_forever</mat-icon
+                >
+              </div>
+            </ng-container>
+            <ng-container *ngIf="individual.checked">
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'CIN'"
+                  formControlName="identity_number"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'E-mail'"
+                  formControlName="email"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Nom'"
+                  formControlName="last_name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Prénom'"
+                  formControlName="first_name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Téléphone'"
+                  formControlName="phone"
+                  [maxlength]="10"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="flex items-center cursor-pointer">
+                <mat-icon
+                  class="text-red-500"
+                  *ngIf="i > 0"
+                  (click)="deleteDestinataire(i)"
+                  >delete_forever</mat-icon
+                >
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+
+
+</form>
+
+
+<form [formGroup]="destinataireForm" (ngSubmit)="onSubmitDestinataire()">
+  <div
+    class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5"
+  >
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Données de destinataire
+      </p>
+    </div>
+
+    <ng-container formArrayName="destinataires">
+      <ng-container
+        *ngFor="
+          let destinataireFormArray of destinataires.controls;
+          let i = index
+        "
+      >
+        <div [formGroup]="destinataireFormArray">
+          <div class="mb-5 mt-5">
+            <mat-radio-group
+              (change)="onTypeChange(i)"
+              aria-label="Select an option"
+              formControlName="type"
+            >
+              <mat-radio-button #entity value="entity"
+                >Entreprise</mat-radio-button
+              >
+              <mat-radio-button #individual value="individual" class="ml-4"
+                >Particulier</mat-radio-button
+              >
+            </mat-radio-group>
+          </div>
+          <div class="flex p-3">
+            <div
+              class="w-1/2"
+              [ngClass]="{ pointer: !entity.checked && !individual.checked }"
+            >
+              <app-select-client
+                [selectedType]="selectedType"
+                (customerEvent)="onCustomerChange($event, i)"
+              ></app-select-client>
+            </div>
+            <ng-container *ngIf="entity.checked">
+              <div class="w-1/4 ml-3">
+                <i-field
+                  *ngIf="entity.checked"
+                  [type]="'text'"
+                  [label]="'ICE'"
+                  formControlName="identity_number"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'E-mail'"
+                  formControlName="email"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-2/4 ml-3" *ngIf="entity.checked">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Name'"
+                  formControlName="name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Téléphone'"
+                  formControlName="phone"
+                  [maxlength]="10"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="flex items-center cursor-pointer">
+                <mat-icon
+                  class="text-red-500"
+                  *ngIf="i > 0"
+                  (click)="deleteDestinataire(i)"
+                  >delete_forever</mat-icon
+                >
+              </div>
+            </ng-container>
+            <ng-container *ngIf="individual.checked">
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'CIN'"
+                  formControlName="identity_number"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'E-mail'"
+                  formControlName="email"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Nom'"
+                  formControlName="last_name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Prénom'"
+                  formControlName="first_name"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="w-1/4 ml-3">
+                <i-field
+                  [type]="'text'"
+                  [label]="'Téléphone'"
+                  formControlName="phone"
+                  [maxlength]="10"
+                  [disabled]="true"
+                ></i-field>
+              </div>
+              <div class="flex items-center cursor-pointer">
+                <mat-icon
+                  class="text-red-500"
+                  *ngIf="i > 0"
+                  (click)="deleteDestinataire(i)"
+                  >delete_forever</mat-icon
+                >
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <div class="flex mt-4 cursor-pointer" (click)="addDestinataires()">
+      <mat-icon class="pt-1 text-[#0C8040] text-[20px]">add_circle</mat-icon>
+      <h3 class="text-[#0C8040]">Ajouter un destinataire</h3>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-1 mb-4 p-4">
+    <div class="col-end-7 col-span-2">
+
+      <button  pButton pRipple type="submit" label="Suivant" class="p-button-rounded p-button-success"></button>
+    </div>
+  </div>
+</form>

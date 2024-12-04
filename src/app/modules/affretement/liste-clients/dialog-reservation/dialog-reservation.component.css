@@ -1,0 +1,28 @@
+::ng-deep .mat-dialog-container {
+  padding: 0px;
+  overflow: hidden;
+}
+::ng-deep .mat-dialog-title {
+  margin-bottom: 0px;
+}
+::ng-deep .detail-information.mat-menu-panel {
+  margin-left: 130px;
+}
+::ng-deep .mat-dialog-content {
+  margin-top: 40px;
+}
+
+.select-label {
+  position: absolute;
+  left: 5px; /* Adjust the value to your desired positioning */
+  color: #808080; /* Adjust the color as needed */
+  z-index: 1;
+  top: -14px;
+  background-color: white;
+  font-size: 10px;
+  width: 60px;
+  text-align: center;
+}
+.select-field {
+  position: relative;
+}

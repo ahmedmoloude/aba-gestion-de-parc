@@ -1,0 +1,166 @@
+<div
+  class="bg-[#F5FCF8] shadow-[0px_3px_10px_#00000029] border-[2px] border-[#E3E3E3] rounded-[18px] pl-6 pr-6 pb-6 pt-0 ml-5 mr-5 mt-5"
+>
+  <div class="mapping-container" [formGroup]="mappingFormGroup">
+    <div class="border-b-2 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-60 p-2 rounded-[12px_12px_0px_0px]">
+        Configuration du trajet
+      </p>
+    </div>
+
+    <ng-container formArrayName="trucks">
+      <div
+        *ngFor="let truck of mappingFormGroup.get('trucks')['controls']"
+        class="truck"
+      >
+        <div [formGroup]="truck">
+          <div class="flex items-center gap-2 justify-between w-1/2">
+            <div class="flex gap-3 items-center">
+              <i
+                class="pi pi-truck"
+                style="color: black; width: 20px; height: 20px"
+              ></i>
+              <div class="truck-name">
+                {{ truck.value.truck_name }}
+              </div>
+            </div>
+          </div>
+
+          <div class="points-section">
+            <div>
+              <i
+                class="pi pi-map-marker"
+                style="color: black; width: 20px; height: 20px"
+              ></i>
+              <span class="section-title">Points de chargements</span>
+            </div>
+            <div formArrayName="points_chargements" class="points-container">
+              <div
+                *ngFor="
+                  let point_chargement of truck.get('points_chargements')[
+                    'controls'
+                  ];
+                  let point_chargement_index = index
+                "
+                class="point-chargement"
+              >
+                <div
+                  class="point-chargement-content"
+                  [formGroup]="point_chargement"
+                >
+                  <mat-checkbox
+                    class="example-margin"
+                    formControlName="value"
+                  ></mat-checkbox>
+                  <span>{{ point_chargement.value.title }}</span>
+                  <span class="font-bold">
+                    (
+                    {{ point_chargement.value.city }}
+                    )
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="points-section">
+            <div>
+              <i
+                class="pi pi-map-marker"
+                style="color: black; width: 20px; height: 20px"
+              ></i>
+              <span class="section-title">Points de déchargements</span>
+            </div>
+            <div formArrayName="points_dechargements" class="points-container">
+              <div
+                *ngFor="
+                  let point_dechargement of truck.get('points_dechargements')[
+                    'controls'
+                  ];
+                  let point_dechargement_index = index
+                "
+                class="point-dechargement"
+              >
+                <div
+                  class="point-dechargement-content"
+                  [formGroup]="point_dechargement"
+                >
+                  <mat-checkbox
+                    class="example-margin"
+                    formControlName="value"
+                  ></mat-checkbox>
+
+                  <span>{{ point_dechargement.value.title }}</span>
+                  <span class="font-bold">
+                    (
+                    {{ point_dechargement.value.city }}
+                    )
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="points-section">
+            <div class="flex gap-2 items-center">
+              <i
+                class="pi pi-map"
+                style="color: black; width: 20px; height: 20px"
+              ></i>
+              <span class="section-title">Trajet</span>
+            </div>
+
+            <div formArrayName="nodes" class="points-container">
+              <div
+                *ngFor="
+                  let node of truck.get('nodes')['controls'];
+                  let node_index = index
+                "
+                class="flex gap-2 items-center"
+              >
+                <div class="node-content" [formGroup]="node">
+                  <i
+                    class="pi pi-home"
+                    style="color: black; width: 20px; height: 20px"
+                  ></i>
+                  <span class="node-link">
+                    {{ node.value.title }}
+                  </span>
+                  <span class="font-bold">
+                    (
+                    {{ node.value.city }}
+                    )
+                  </span>
+                </div>
+                <span
+                  *ngIf="node_index < truck.get('nodes').value.length - 1"
+                  class="arrow-icon"
+                >
+                  <mat-icon>arrow_right_alt</mat-icon>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-1 mb-4 p-4">
+    <div class="col-end-7 col-span-2">
+      <!-- [disabled]="!destinataireForm.valid" -->
+      <button
+        type="button"
+        (click)="submit()"
+        [disabled]="!mappingFormGroup.valid"
+        [ngClass]="
+          !mappingFormGroup.invalid
+            ? 'bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44'
+            : 'bg-[#B2ADAD] text-white  rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44'
+        "
+      >
+        <span class="pl-2">Valider</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="w-full" #myComponent>
+    <div class="relative">
+        <span class="label">{{label}} <i *ngIf="required" class="text-danger"> *</i></span>
+        <div  *ngIf="hasIcon && type != 'text'" class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <mat-icon class="search-icon" *ngIf="!loading">search</mat-icon>
+            <mat-spinner class="search-icon" [diameter]="20" *ngIf="loading"></mat-spinner>
+        </div>
+        <div *ngIf="type != 'text'" class="absolute inset-y-0 right-0 text-black flex items-center pl-3 pointer-events-none">
+            <mat-icon class="cursor-pointer" style="color: rgba(0, 0, 0, 0.54);">arrow_drop_down</mat-icon>
+        </div>
+        <input *ngIf="type != 'text'" [ngClass]="{'cursor-not-allowed': disabled}" [disabled]="disabled" [ngStyle]="inputStyle" class="search-input block w-full p-2 pl-10 border-[#DBDBDB]" [ngclass]="class" [placeholder]="placeholer" (click)="getRecentData()" (keyup)="search($event)" [(ngModel)]="value" type="text" />
+        <input *ngIf="type == 'text'" [maxlength]="maxLength" [ngClass]="{'cursor-not-allowed': disabled}" [disabled]="disabled" [ngStyle]="inputStyle" class="search-input block w-full p-2 border-[#DBDBDB]" [placeholder]="placeholer" (click)="getRecentData()" [(ngModel)]="value" (ngModelChange)="onChange($event)" [type]="typeInput" />
+    </div>
+    <div class="relative">
+        <ul class="list" *ngIf="showResult" [ngStyle]="contentStyle">
+            <div *ngIf="type == 'single'">
+                <li *ngFor="let item of result; let i = index" (mouseover)="hoverIn(item)" (mouseout)="hoverOut(item)"
+                    (click)="selectObject(item)" [ngStyle]="contentStyle ? contentStyle.li : ''"
+                    [ngStyle]="contentStyle && contentStyle.hover && item.isHovering ? contentStyle.hover : ''">
+                    <span *ngFor="let key of display; let j = index">{{ item[key] ? item[key] : '' }}&nbsp;&nbsp;<span *ngIf="addSeparator && j !== display.length - 1"> / </span></span>
+                </li>
+            </div>
+            <div *ngIf="type == 'multiple'">
+                <li *ngFor="let item of result; let i = index" (mouseover)="hoverIn(item)" (mouseout)="hoverOut(item)"
+                    [ngStyle]="contentStyle ? contentStyle.li : ''"
+                    [ngStyle]="contentStyle && contentStyle.hover && item.isHovering ? contentStyle.hover : ''">
+                    <input [id]="item[uniqueKey]" [checked]="checked(item)" type="checkbox" (change)="toggleSelection(item)" class="checkbox checkbox-success checkbox-md" />
+                    <label *ngFor="let key of display; let j = index" [for]="item[uniqueKey]" class="block w-full cursor-pointer">
+                        {{ item[key] }}&nbsp;&nbsp;<span *ngIf="addSeparator && j !== display.length - 1"> / </span>
+                    </label>
+                </li>
+            </div>
+        </ul>
+    </div>
+</div>

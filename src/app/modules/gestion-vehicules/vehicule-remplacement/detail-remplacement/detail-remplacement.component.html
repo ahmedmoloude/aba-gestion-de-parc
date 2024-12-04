@@ -1,0 +1,178 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+
+      <h2 class="text-[#0C8040] font-semibold pl-2">Détails de remplacement</h2>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div class="detail-vehicules p-4 mb-5" *ngIf="!spinner">
+    <div class="border-b-4 border-[#0C8040]">
+      <p class="bg-[#0C8040] text-[#fff] w-40 p-2 rounded-[12px_12px_0px_0px]">
+        Véhicule Remplacé :
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Immatriculation de véhicule :</p>
+        <p class="font-medium">{{ remplacements?.old.matricule }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date / heure de demande</p>
+        <p class="font-medium">{{ remplacements?.date_demande }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Km départ :</p>
+        <p class="font-medium">{{ remplacements?.old.km_initial }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Modèle :</p>
+        <p class="font-medium">{{ remplacements?.old.modele.name }}</p>
+      </div>
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">Km fin :</p>
+        <p class="font-medium">{{ remplacements?.old.matricule }}</p>
+      </div> -->
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
+        <p class="font-medium">{{ remplacements?.old.tonnage.name }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Véhicule de Remplacement
+      </p>
+    </div>
+    <div class="grid grid-cols-7 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">
+          Immatriculation de nouveau véhicule :
+        </p>
+        <p class="font-medium">{{ remplacements?.new.matricule }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Km début :</p>
+        <p class="font-medium">{{ remplacements?.new.km_initial }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date début :</p>
+        <p class="font-medium">{{ remplacements?.date_demande }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Date Fin :</p>
+        <p class="font-medium">{{ remplacements?.end_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">date de restitution :</p>
+        <p class="font-medium">{{ remplacements?.restitution_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Distance :</p>
+        <p class="font-medium">{{ remplacements?.distance }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Ville :</p>
+        <p class="font-medium">{{ remplacements?.city.name }}</p>
+      </div>
+    </div>
+    <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Sous parc :</p>
+        <p class="font-medium">{{ remplacements?.parc.name }}</p>
+      </div>
+
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Service :</p>
+        <p class="font-medium">{{ remplacements?.services.name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Zone :</p>
+        <p class="font-medium">{{ remplacements?.zone.name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[11px]">Motif :</p>
+        <p class="font-medium">{{ remplacements?.motif }}</p>
+      </div>
+      <!-- <div>
+        <p class="text-[#0C8040] text-[11px]">P. Jointe :</p>
+        <p class="font-medium">{{ remplacements?.old.matricule }}</p>
+      </div> -->
+    </div>
+    <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
+    <div class="flex items-center justify-center pl-4 pr-4 mt-5">
+      <div class="grow flex flex-col items-center justify-center pl-4 pr-4">
+        <p class="text-center text-[#0C8040] pb-3">Véhicule Remplacé :</p>
+        <div *ngIf="oldimages?.length">
+          <p-galleria [(value)]="oldimages" [(visible)]="displayCustom" [responsiveOptions]="responsiveOptions"
+            [containerStyle]="{ 'max-width': '100px' }" [numVisible]="7" [circular]="true" [fullScreen]="false"
+            [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="3" [showIndicators]="true"
+            [showItemNavigatorsOnHover]="true" [showIndicatorsOnItem]="true">
+            >
+            <ng-template pTemplate="item" let-item>
+              <img [src]="item" style="width: 100%; display: block" class="img-vh" />
+            </ng-template>
+            <ng-template pTemplate="thumbnail" let-item>
+              <div class="p-grid p-nogutter p-justify-center">
+                <img [src]="item" style="display: block" />
+              </div>
+            </ng-template>
+          </p-galleria>
+        </div>
+        <div *ngIf="!oldimages?.length">
+          <img src="../../../../assets/img/camion.png" class="img-vh" />
+        </div>
+        <p class="text-center">{{ remplacements?.old?.matricule }}</p>
+      </div>
+      <div class="grow-0 flex flex-col items-center justify-center pl-4 pr-4">
+        <mat-icon class="text-[45px] text-[#138742] cursor-pointer">swap_horiz</mat-icon>
+      </div>
+      <div class="grow flex flex-col items-center justify-center pl-4 pr-4">
+        <p class="text-center text-[#0C8040] pb-3">Véhicule de Remplacement :</p>
+        <div *ngIf="images?.length">
+          <p-galleria [(value)]="images" [(visible)]="displayCustom" [responsiveOptions]="responsiveOptions"
+            [containerStyle]="{ 'max-width': '100px' }" [numVisible]="7" [circular]="true" [fullScreen]="false"
+            [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="3" [showIndicators]="true"
+            [showItemNavigatorsOnHover]="true" [showIndicatorsOnItem]="true">
+            >
+            <ng-template pTemplate="item" let-item>
+              <img [src]="item" style="width: 100%; display: block" class="img-vh" />
+            </ng-template>
+            <ng-template pTemplate="thumbnail" let-item>
+              <div class="p-grid p-nogutter p-justify-center">
+                <img [src]="item" style="display: block" />
+              </div>
+            </ng-template>
+          </p-galleria>
+        </div>
+        <div *ngIf="!images?.length">
+          <img src="../../../../assets/img/camion.png" class="img-vh" />
+        </div>
+        <p class="text-center">{{ remplacements?.new?.matricule }}</p>
+      </div>
+    </div>
+
+    <!-- <div class="flex pl-4 pr-4 mt-5">
+      <div class="grow">
+        <p class="text-center text-[#0C8040] pb-3">Véhicule Remplacé :</p>
+        <img *ngIf="remplacements?.old.image" src="{{ url + remplacements?.old.id + '/' }}{{ remplacements?.old.image }}" />
+        <img *ngIf="!remplacements?.old.image" src="../../../../assets/img/camion.png" />
+        <p class="text-center">{{ remplacements?.old.matricule }}</p>
+      </div>
+      <div class="grow-0 flex items-center">
+        <mat-icon class="text-[45px] text-[#138742] cursor-pointer" >swap_horiz</mat-icon >
+      </div>
+      <div class="grow">
+        <p class="text-center text-[#0C8040] pb-3"> Véhicule de Remplacement : </p>
+        <img *ngIf="remplacements?.new.image" src="{{ url + remplacements?.new.id + '/' }}{{ remplacements?.new.image }}" class="text-left"/>
+        <img *ngIf="!remplacements?.new.image" src="../../../../assets/img/camion.png" class="text-right"/>
+        <p class="text-center">{{ remplacements?.new.matricule }}</p>
+      </div>
+    </div> -->
+  </div>
+</div>

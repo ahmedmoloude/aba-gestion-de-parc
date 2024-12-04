@@ -1,0 +1,108 @@
+* {
+    color: #8E8E8E;
+    font-weight: 500;
+}
+
+.ignore{
+    width: 0 !important;
+    height: 150px !important;
+    /* margin: 0 !important; */
+    padding: 0 !important;
+    border: 0 !important;
+    opacity: 0 !important;
+}
+.demande{
+    background-color: #2bdaab;
+    text-align: left;
+    margin: 10px;
+    padding: 10px 10px 0px 10px;
+    z-index: 1;
+    position: relative;
+    width: 146px;
+    min-height: 140px;
+    box-shadow:  0 0 2px #00000061;
+    background: #F2FCF1 0% 0% no-repeat padding-box;
+    border: 1px solid #E0E0E0;
+    border-radius: 11px;
+    opacity: 1;
+}
+.text-lg{
+    color: #8E8E8E;
+    font-weight: 500;
+}
+strong{
+    font-weight: 600;
+    color: #000000;
+}
+.edit{
+    right: 20px;
+    position: absolute;
+    cursor: pointer;
+}
+.linked{
+    position: absolute;
+    font-size: 26px !important;
+    font-weight: bold !important;
+    right: 6px;
+    bottom: 2px;
+    color: #138742;
+}
+.mat-icon{
+    font-size: 1rem;
+}
+.left{
+    display: flex;
+    flex-direction: row;
+    bottom: 42%;
+    left: -25px;
+    background: #f2fcf1;
+    border: 2px solid #E0E0E0;
+    border-radius: 3px 0 0 3px;
+    border-right: 0;
+    width: 25px;
+    justify-content: center;
+}
+.right{
+    display: flex;
+    flex-direction: row;
+    bottom: 42%;
+    right: -25px;
+    background: #f2fcf1;
+    border: 2px solid #E0E0E0;
+    border-radius: 0 3px 3px 0;
+    border-left: 0;
+    width: 25px;
+    justify-content: center;
+}
+.pi-angle-left, .pi-angle-right{
+    font-size: 24px;
+    color: #8e8e8e52;
+}
+.pi-angle-left:first-child{
+    margin-right: -17px;
+}
+.pi-angle-right:last-child{
+    margin-left: -17px;
+}
+
+.pad-left{
+    padding-left: 23px;
+}
+.recline{
+    background-color: #F67373;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    line-height: 1.4;
+}
+@keyframes glowing {
+    0% { box-shadow: 0 0 -10px #F67373; }
+    40% { box-shadow: 0 0 30px #F67373; }
+    60% { box-shadow: 0 0 30px #F67373; }
+    100% { box-shadow: 0 0 -10px #F67373; }
+  }
+  
+  .button-glow {
+    animation: glowing 3000ms infinite;
+  }
+  

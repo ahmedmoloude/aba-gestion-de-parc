@@ -1,0 +1,43 @@
+<div class="overflow-x-auto relative mt-4">
+  <div *ngIf="isLoading$ | async" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="(isLoading$ | async) === false">
+    <table class="w-full text-left text-gray-500 ">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of grids | paginate: {id: 'pagination-' + position,itemsPerPage: 6,currentPage: page }">
+          <td class="p-3">{{ item.originable?.name }}</td>
+          <td class="p-3">{{ item.destinationable?.name }}</td>
+          <td class="p-3">{{ item.basis_calcul.title_affichage }}</td>
+          <td class="p-3">{{ item.min + " - " + item.max }} {{ item.basis_calcul.title_affichage === "Poids" ? "Kg" :
+            ""}}
+            {{ item.basis_calcul.title_affichage === "Tranche colis" ? "Colis" : ""}}</td>
+          <td class="p-3">
+            {{ item.calcul_val }} {{ item.type_val === "PRICE" ? " DH" : "" }}
+            {{ item.type_val === "COEF" ? " %" : "" }}
+          </td>
+          <td class="p-3">{{ item?.max || "-" }} DH</td>
+          <td class="p-3">{{ item?.min || "-"}} DH</td>
+          <td class="p-3" *ngIf="item.basis_calcul.title_affichage === 'Poids'">{{ item?.min_by_package || "-"}} DH</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <pagination-controls [id]="'pagination-' + position" previousLabel="" nextLabel=""
+        (pageChange)="pageChange($event)"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

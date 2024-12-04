@@ -1,0 +1,195 @@
+<div
+  class="top-container bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+<div style="padding: 17px 15px">
+  <div class="flex col-start-1 col-end-3">
+    <mat-icon>settings_applications</mat-icon>
+
+    <h2 class="text-[#0C8040] font-semibold pl-2">Configuration {{ isAnOffer ? "d'une offre" : "d'un devis" }}</h2>
+  </div>
+  <div class="flex col-start-1 col-end-3 gap-6" >
+    <button class="text-[#0C8040]" [matMenuTriggerFor]="menu">
+      <span class="relative top-[5px]"
+      ><mat-icon>cloud_upload</mat-icon></span
+      >
+      Importer
+    </button>
+
+    <button class="text-[#0C8040]" (click)="exporter()">
+      <span class="relative top-[5px]"><mat-icon>cloud_download</mat-icon></span>
+      Exporter le canvas 
+    </button>
+  </div>
+</div>
+<mat-menu #menu="matMenu">
+  <div class="p-config" (click)="$event.stopPropagation()">
+    <input
+      class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-config mb-config"
+      id="excel_file"
+      type="file"
+      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+      (change)="uploadFile($event)"
+    />
+    <div class="mb-2 mt-2">
+      <label for="">Remise sur transport (%)</label>
+      <input
+        class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB]  focus:outline-none dark:placeholder-gray-400 p-config  mb-config"
+        type="number"
+        [(ngModel)]="remiseTransport"
+      />
+    </div>
+    <div class="mb-2">
+      <label for="">Remise sur services (%)</label>
+      <input
+        class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB]  focus:outline-none dark:placeholder-gray-400 p-config mb-config"
+        type="number"
+        [(ngModel)]="remiseServices"
+      />
+    </div>
+    <div class="grid grid-cols-2 mt-5">
+      <div><button class="underline">Guide</button></div>
+      <div class="text-right" *ngIf="!spinner">
+        <button
+          (click)="onSubmitForm()"
+          mat-button
+          class="bg-btn-green text-[18px] p-btn"
+        >
+          <span class="text-white ">
+            Importer
+          </span>
+        </button>
+      </div>
+      <div class="text-right" *ngIf="spinner">
+        <mat-spinner [diameter]="18"></mat-spinner>
+      </div>
+    </div>
+  </div>
+</mat-menu>
+  <mat-tab-group [selectedIndex]="selected.value"
+                 [backgroundColor]="'secondary'"
+                 (selectedIndexChange)="selected.setValue($event); refreshFilter()">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Services
+        <mat-icon (click)="openTransportDialog()" class="absolute right-0" [matTooltip]="'Ajouter un type du camion'"
+        matTooltipPosition="above">add_circle</mat-icon>
+      </ng-template>
+        <div class="pt-4">
+
+          <div class="rubric-grid overflow-hidden">
+            <ng-container *ngIf="!isServicesLoaing">
+              <div *ngFor="let rubric of rubrics" class="rubric-card relative">
+                <button class="rubric-button">
+                  <div class="rubric-title">{{ rubric.title_affichage }}</div>
+                  <div class="rubric-count">{{ countCondition(rubric.title) }}</div>
+                </button>
+                  <mat-icon class="cursor-pointer popover" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu" class="custom-menu">
+                    <button mat-menu-item (click)="openServiceDialog(rubric)">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                  </mat-menu>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="isServicesLoaing">
+              <h4 class="contents">Chargement de services en cours...</h4>
+            </ng-container>
+          </div>
+          
+          <button *ngIf="!isLoading" (click)="submitServices()" class="save-button mt-4" style="float: right;">Enregister les conditions</button>
+          <button *ngIf="isLoading"  class="save-button mt-4" style="float: right;">Chargement...</button>
+        </div>
+    </mat-tab>
+    <mat-tab *ngFor="let tab of tabs; let index = index">
+      <ng-template mat-tab-label>
+        {{tab.camion_name}} {{tab.tonnage_name}}T
+        <mat-icon class="removeTab" [disabled]="tabs.length === 1" (click)="removeTab(index , tab)" [matTooltip]="'Supprimer toutes les conditions'"
+        matTooltipPosition="above">cancel</mat-icon>
+        <mat-icon (click)="openTransportDialog()" [matTooltip]="'Ajouter un type du camion'"
+        matTooltipPosition="above">add_circle</mat-icon>
+      </ng-template>
+      <div class="pt-4">
+        <div class="filter-container mb-4">
+          <div class="filter-input-group">
+            <app-shared-autcomplete
+                  #searchComponent1
+                  [charToGetAll]="'*'"
+                  [data]="cities"
+                  [keys]="['code', 'name']"
+                  [lengthToStart]="3"
+                  [display]="['code', 'name']"
+                  [placeholer]="'Rechercher l\'origine...'"
+                  (dataEvent)="filterOrigin($event, tab)"
+                ></app-shared-autcomplete>
+          </div>
+          <div class="filter-input-group">
+            <app-shared-autcomplete
+                  #searchComponent1
+                  [charToGetAll]="'*'"
+                  [data]="cities"
+                  [keys]="['code', 'name']"
+                  [lengthToStart]="3"
+                  [display]="['code', 'name']"
+                  [placeholer]="'Rechercher la destination...'"
+                  (dataEvent)="filterDestination($event, tab)"
+                ></app-shared-autcomplete>
+          </div>
+          <mat-icon class="filter-button cursor-pointer mr-4 extra-search" matTooltip="Réinitialiser" matTooltipPosition="above" (click)="refreshFilter()">refresh</mat-icon>
+          <mat-icon class="cursor-pointer mr-2 filter-button" matTooltip="Rechercher" matTooltipPosition="above" (click)="getFilterResult()">filter_list</mat-icon>
+        </div>
+
+        <div (click)="openTransportConditionDialog(tab)" class="add-condition mb-4 float-right">
+          <mat-icon class="icon">add_circle</mat-icon>
+          Ajouter une condition
+        </div>
+        <div style="clear: both;"></div>
+        
+        <div class="rubric-grid mt-4 mb-4 overflow-hidden">
+          <ng-container *ngFor="let city of conditionByCities; let i = index">
+            <div *ngIf="tab.type == city.type && tab.tonnage == city.tonnage" class="rubric-card relative">
+              <button class="rubric-button">
+                <div class="rubric-title flex justify-between items-center">{{city.origin_name}} <mat-icon class="arrow">arrow_right_alt</mat-icon> {{city.destination_name}}</div> 
+                <div  class="rubric-count">{{(city.count)}}</div>
+              </button>
+              <mat-icon class="cursor-pointer popover" mat-button [matMenuTriggerFor]="menuTransport">more_vert</mat-icon>
+                <mat-menu #menuTransport="matMenu" class="custom-menu">
+                  <button mat-menu-item (click)="openTransportConditionDialog(tab, city)">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                  <button mat-menu-item (click)="deleteConditionTransport(i , tab)">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
+                </mat-menu>
+            </div>
+          </ng-container>
+        </div>
+        <div class="rubric-grid mt-4 overflow-hidden">
+          <ng-container *ngIf="!isServicesCamionLoaing">
+            <div *ngFor="let rubric of rubricsCamion" class="rubric-card relative">
+              <button class="rubric-button">
+                <div class="rubric-title">{{ rubric.title_affichage }}</div>
+                <div class="rubric-count">{{ countCamionCondition(tab, rubric.id) }}</div>
+              </button>
+                <mat-icon class="cursor-pointer popover" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu" class="custom-menu">
+                  <button mat-menu-item (click)="openServiceTransportConditionDialog(tab, rubric)">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                </mat-menu>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isServicesCamionLoaing">
+            <h4 class="contents">Chargement de services en cours...</h4>
+          </ng-container>
+        </div>
+        <button *ngIf="!isLoading" (click)="submit(tab)" class="save-button mt-4" style="float: right;">Enregister les conditions</button>
+        <button *ngIf="isLoading" class="save-button mt-4" style="float: right;">Chargement...</button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>

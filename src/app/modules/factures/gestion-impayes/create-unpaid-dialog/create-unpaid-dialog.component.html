@@ -1,0 +1,78 @@
+
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4 pb-1">
+    <h2 mat-dialog-title class="col-span-2">Ajouter</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="unpaidForm">
+      <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-2 mb-3">
+        <div>
+          <app-shared-autcomplete
+            #searchComponent3
+            [hasIcon]="false"
+            [type]="'single'"
+            [opended]="true"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [apiUrl]="apiUrl"
+            [keys]="['code', 'name']"
+            [lengthToStart]="3"
+            [display]="['code','-', 'name']"
+            [placeholer]="''"
+            [label]="'Rechercher client...'"
+            (dataEvent)="selectClient($event)"
+          ></app-shared-autcomplete>
+        </div>
+        <div>
+          <app-shared-autcomplete
+          #searchComponent3
+          [hasIcon]="false"
+          [type]="'single'"
+          [opended]="true"
+          [contentStyle]="contentStyle"
+          [inputStyle]="searchStyle"
+          [charToGetAll]="'*'"
+          [data]="references"
+          [keys]="['reference_reglement']"
+          [lengthToStart]="3"
+          [display]="['reference_reglement']"
+          [placeholer]="''"
+          [label]="'Rechercher Référence...'"
+          (dataEvent)="selectReference($event)"
+        ></app-shared-autcomplete>
+          <!-- <i-field [type]="'text'" [label]="'Référence'" formControlName="reference_reglement"></i-field> -->
+        </div>
+        <div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pl-4 pr-4 mt-4 mb-3">
+        <div>
+          <i-field [type]="'date'" [label]="'Date demande'" formControlName="date_demande" disabled="true"></i-field>
+        </div>
+        <div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button mat-dialog-close
+            class="underline w-32 pt-2 mr-3 font-bold text-[18px]">
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button type="submit" *ngIf="!spinner" (click)="createUnpaid()" [disabled]="unpaidForm.invalid"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+            Créer
+          </button> -->
+          <button *ngIf="!spinner" (click)="createUnpaid()" [disabled]="unpaidForm.invalid" pButton pRipple type="submit" label="Créer" class="p-button-rounded p-button-success"></button>
+          <span *ngIf="spinner">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

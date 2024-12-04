@@ -1,0 +1,136 @@
+<div class="grid grid-cols-3">
+    <h2 mat-dialog-title class="col-span-2">Configuration des conditions ({{data.rubric.title_affichage}})</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </div>
+</div>
+<div mat-dialog-content>
+<ng-container *ngFor="let form of servicesFormsArray; let i = index">
+
+    <form [formGroup]="form" class="p-4 bg-gray-100 mb-4 rounded shadow-md">
+        <div class="grid grid-cols-7 gap-4">
+          <div>
+            <label class="block font-medium text-gray-700" for="trancheMin">min 
+              <strong>({{data.rubric.title == 'IMMOBILISATION' ? "Jours" : "Points de dechargement" }})</strong>:</label>
+            <input formControlName="trancheMin" type="text" id="trancheMin" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="trancheMax">max 
+              <strong>({{data.rubric.title == 'IMMOBILISATION' ? "Jours" : "Points de dechargement" }})</strong>:</label>
+            <input formControlName="trancheMax" type="text" id="trancheMax" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="typeValeur">Type valeur:</label>
+            <select formControlName="typeValeur" id="typeValeur" name="" 
+            disabled="true"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+              <option value="PRICE">Prix fixe</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="valeur">Valeur 
+              
+             <strong>(DH)</strong> :</label>
+            <input formControlName="valeur" type="text" id="valeur" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="prixU">Prix/U supp 
+              
+              <strong>(DH)</strong> :</label>
+            <input formControlName="prixU" type="text" id="prixU" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="prixMin">Prix minimum <strong>(DH)</strong>:</label>
+            <input formControlName="prixMin" type="text" id="prixMin" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700" for="prixMax">Prix maximum <strong>(DH)</strong> :</label>
+            <input formControlName="prixMax" type="text" id="prixMax" value="0"
+              class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50">
+          </div>
+          <div class="col-span-3 flex mt-2">
+            <button (click)="addServiceCondition()"
+              class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md transition-colors duration-300 mr-2">
+              Ajouter une condition
+            </button>
+            <button (click)="removeServiceCondition()"
+              class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-md transition-colors duration-300">
+              Supprimer la condition
+            </button>
+          </div>
+        </div>
+      </form>
+      
+</ng-container>
+
+<div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+      <button
+      class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+      mat-dialog-close
+      >
+      Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]" (click)="saveConditions()"
+        ><!--[disabled]="contact.invalid"-->
+        Enregistrer
+      </button>
+    </div>
+  </div>
+
+
+<!-- <ng-container *ngFor="let form of servicesFormsArray; let i = index">
+    <form [formGroup]="form">
+        <table class="form-table">
+        <tr>
+            <td class="form-cell">
+            <label for="trancheMin">Tranche min:</label>
+            <input formControlName="trancheMin" type="text" id="trancheMin" value="0">
+            </td>
+            <td class="form-cell">
+            <label for="trancheMax">Tranche max:</label>
+            <input formControlName="trancheMax" type="text" id="trancheMax" value="0">
+            </td>
+            <td class="form-cell">
+            <label for="typeValeur">Type valeur:</label>
+            <select formControlName="typeValeur" id="typeValeur" name="">
+                <option value="PRICE">Prix fixe</option>
+                <option value="COEF">Coefficient</option>
+            </select>
+            </td>
+            <td class="form-cell">
+            <label for="valeur">Valeur:</label>
+            <input formControlName="valeur" type="text" id="valeur" value="0">
+            </td>
+            <td class="form-cell">
+            <label for="prixU">Prix/U supp:</label>
+            <input formControlName="prixU" type="text" id="prixU" value="0">
+            </td>
+            <td class="form-cell">
+            <label for="prixMin">Prix minimum:</label>
+            <input formControlName="prixMin" type="text" id="prixMin" value="0">
+            </td>
+            <td class="form-cell">
+            <label for="prixMax">Prix maximum:</label>
+            <input formControlName="prixMax" type="text" id="prixMax" value="0">
+            </td>
+            <td class="form-cell">
+            <div class="icon-container">
+                <mat-icon class="addCondition" (click)="addServiceCondition()">add_circle</mat-icon>
+                <mat-icon class="removeCondition" (click)="removeServiceCondition()">cancel</mat-icon>
+            </div>
+            </td>
+        </tr>
+        </table>
+    </form>
+    
+</ng-container> -->
+</div>

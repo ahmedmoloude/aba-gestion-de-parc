@@ -1,0 +1,62 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">Ajouter</h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <form [formGroup]="gridForm">
+    <div mat-dialog-content>
+      <div class="flex flex-col">
+        <!-- <mat-form-field appearance="outline" class="mb-4 w-full">
+          <mat-label>Titre</mat-label>
+          <input type="text" matInput formControlName="grid_title"/>
+        </mat-form-field> -->
+        <i-field
+            [type]="'text'"
+            [label]="'Titre'"
+            formControlName="grid_title"
+          ></i-field>
+          <!-- <div class="grid grid-cols-3 mb-4 gap-y-4 "> -->
+        <div class="mb-5 mt-4">
+          <label class="block mb-2 font-medium text[#0C8040" for="excel_file"
+            >Importer un fichier</label
+          >
+          <input
+            class="block w-full text-sm text-black bg-white  border-[1px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-2"
+            id="excel_file"
+            type="file"
+            accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+            (change)="uploadFile($event)"
+          />
+
+        </div>
+          <!-- <div class="flex items-center">
+              <button
+                  mat-button
+                  class="w-full bg-btn-green btn-black text-[18px] text-[#ffff] p-3"
+                  >
+                  Parcourir
+              </button>
+          </div> -->
+      </div>
+      <div class="flex">
+        <mat-icon>info</mat-icon>
+        <button class="underline ml-2">Guide</button>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2 dialog-action">
+      <div (click)="close()" class="w-full cursor-pointer align-middle"><span class="text-[18px] underline font-bold">Annuler</span></div>
+      <button
+        mat-button
+        class="w-full bg-btn-green text-[18px] btn-text p-8"
+        (click)="onSubmitForm()"
+      >
+        Ajouter
+      </button>
+    </div>
+  </form>
+</div>

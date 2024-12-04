@@ -1,0 +1,78 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">Services</h1>
+    </div>
+    <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialogDetails()">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+          Ajouter un service
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- filter -->
+  <!-- <div class="grid grid-cols-4 gap-1 mb-6 mt-5">
+    <select
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Rubrique"
+    >
+      <option value="Expedition,Invoice,General">Rubrique</option>
+      <option value="Expedition">Rubrique 1</option>
+      <option value="Invoice">Rubrique 2</option>
+      <option value="General">Rubrique 3</option>
+    </select>
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Base de calcul"
+    />
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Valeur"
+    />
+    <button mat-button class="text-white p-3 bg-btn-green text-[18px] w-[50%]">
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filtre</span>
+    </button>
+  </div> -->
+  <!-- filter -->
+
+  <div *ngIf="spinnerRubrics" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinnerRubrics">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor=" let item of rubrics | paginate: { itemsPerPage: 6, currentPage: p }">
+          <td class="p-3">{{ item.title }}</td>
+          <td class="p-3">
+            <span *ngFor="let calcul_basis of item.calcul_basis">
+              {{ calcul_basis.title_affichage }}
+            </span>
+          </td>
+          <td class="p-3">{{ item.taxe }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>

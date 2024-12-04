@@ -1,0 +1,84 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Recalculer la facture {{(facture?.reference) ? 'N°' + facture?.reference : 0}}</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="factureForm">
+      <div class="grid grid-cols-3 gap-2 pl-4 pr-4 mt-4 mb-3">
+        <div>
+          <i-field [type]="'text'" [label]="'Client / Code'" formControlName="customer" disabled="true"></i-field>
+        </div>
+        <div>
+          <i-field [type]="'text'" [label]="'Montant facture (Dhs)'" formControlName="montant_facture" disabled="true"></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date de facture</mat-label>
+            <input matInput type="date" formControlName="date_facture"/>
+          </mat-form-field>
+          <!-- <i-field [type]="'date'" [label]="'Date de facture'" formControlName="date_facture" ></i-field> -->
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 pl-4 pr-4">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label><i class="fa fa-info-circle pe" matTooltip="Base de calcul"></i> Base de calcul</mat-label>
+            <mat-select matNativeControl required formControlName="base_calcule">
+              <mat-option value="Saisi Manuelle" >Saisi Manuelle</mat-option>
+              <mat-option value="Convention client">Convention client</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label><i class="fa fa-info-circle pe" matTooltip="Montant saisi / recalculé (Dhs)"></i> Montant saisi / recalculé (Dhs)</mat-label>
+            <input matInput type="text" formControlName="montant_calcule" [disabled]="disable"/>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Motif</mat-label>
+            <mat-select matNativeControl required formControlName="motif">
+              <mat-option value="Erreur de calcul">Erreur de calcul</mat-option>
+              <mat-option value="Facture erronée">Facture erronée</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 pl-4 pr-4">
+        <div class="custom-file-input">
+          <label for="file-upload" class="file-label block w-full text-sm text-black bg-white  border-[2px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3">
+            <span class="file-name">Pièce jointe</span>
+            <mat-icon class="p-[5px] upload-icon">attach_file</mat-icon>
+          </label>
+          <input type="file" id="file-upload" class="hidden" accept="image/png, image/svg+xml, image/jpeg, image/jpg, image/gif, application/pdf,image/x-eps'" formControlName="attachement"/>
+        </div>
+        <div>
+          <i-field [type]="'textarea'" [label]="'Commentaire'" formControlName="commentaire"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button (click)="recalculateFacture()" [disabled]="factureForm.invalid"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          >
+            Valider
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

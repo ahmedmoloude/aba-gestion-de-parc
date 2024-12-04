@@ -1,0 +1,17 @@
+.nav-container {
+  display: flex;
+}
+
+::ng-deep .mat-drawer-side {
+  border: none;
+}
+
+::ng-deep mat-sidenav-content {
+  height: 100vh !important;
+  background: #ffffff 0% 0% no-repeat padding-box !important;
+}
+
+::ng-deep .button-menu {
+  position: absolute !important;
+  top: 30px;
+}/*# sourceMappingURL=admin.component.css.map */

@@ -1,0 +1,207 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">view_stream</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2">
+          Gestion des citernes >
+          <span class="text-[#0C8040]">Mouvements de stock</span>
+        </h2>
+      </div>
+    </div>
+    <div class="flex flex-row justify-between">
+      <div class="flex items-center">
+        <div class="icon ml-1">
+          <mat-icon class="text-[19px] text-[#138742]">view_stream</mat-icon>
+        </div>
+        <div class="pl-0">
+          <p class="text-[#000000] text-[13px] font-medium">
+            Stock théorique :
+          </p>
+          <div *ngIf="spinnerCiterne" class="flex items-center justify-center mt-6 mb-6">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <div class="flex" *ngIf="!spinnerCiterne">
+            <p class="text-[14px] text-[#0C8040]">{{ citerne.qte_theorique }} L</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="flex items-center">
+        <div class="pl-0">
+          <p class="text-[#000000] text-[13px] font-medium">Écart :</p>
+          <div *ngIf="spinnerCiterne" class="flex items-center justify-center mt-6 mb-6">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <div class="flex" *ngIf="!spinnerCiterne">
+            <p class="text-[14px] text-[#0C8040]" *ngIf="citerne.jaugeages.length > 0">{{ citerne.jaugeages['0'].ecart }} L</p>
+            <p class="text-[14px] text-[#0C8040]" *ngIf="citerne.jaugeages.length == 0">0 L</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="flex items-center">
+        <div class="pl-0 cursor-pointer" (click)="jaugeage(citerne.id)">
+          <p class="text-[#0C8040] text-[13px] text-center">
+            <mat-icon>add_circle</mat-icon>
+          </p>
+          <div class="flex">
+            <p class="text-[14px] text-[#0C8040]">Jaugeage</p>
+          </div>
+        </div>
+      </div>
+      <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+      <div class="flex items-center">
+        <div class="pl-0 cursor-pointer" (click)="hostoriquejaugeage(citerne.jaugeages)">
+          <p class="text-[#9D9D9D] text-[13px] text-center">
+            <mat-icon>update</mat-icon>
+          </p>
+          <div class="flex">
+            <p class="text-[14px] text-[#9D9D9D]">Historique de Jaugeage</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5">
+
+    <div *ngIf="spinnerAli" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <div *ngIf="!spinnerAli" class="bg-[#FFFFFF] shadow-[0px_3px_10px_#00000014] border-[3px] border-[#DBDBDB] rounded-[18px] p-5">
+
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex justify-between">
+          <div class="flex">
+            <h2 class="text-[#000] font-semibold pr-2">Alimentation</h2>
+            <mat-icon class="pt-1 text-[#0C8040]">arrow_upward</mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <div class="flex cursor-pointer mr-4">
+            <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+            <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcelAlimentation()">Exporter</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="grid">
+        <app-shared-filter
+          [inputs]="inputsFiler"
+          (filter)="filter_alimentation($event)"
+        ></app-shared-filter>
+      </div> -->
+
+      <table class="w-full text-left text-gray-500 d-block overflow-auto" style="display: block;">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of alimentations">
+            <td class="p-3">{{ item.created_at | date: 'dd/MM/yyyy' }}</td>
+            <td class="p-3">{{ item.user?.name || "SYSTEME" }}</td>
+            <td class="p-3">{{ item.quantite }} L</td>
+            <td class="p-3">{{ item.compteur || "---" }} L</td>
+            <td class="p-3">{{ citerne?.name || '---' }}</td>
+            <td class="p-3">{{ item?.montant || '---' }}</td>
+            <td class="p-3">{{ item?.prestataire?.name || '---' }}</td>
+            <td class="p-3">{{ (item?.carNumberPart1|| '---' ) + ' ' + (item?.carNumberPart2|| '---' ) + ' ' + (item?.carNumberPart3|| '---' ) }}</td>
+            <td class="p-3">{{ (item?.supplier_driver || '---' ) + ' - ' +  (item?.supplier_driver_cin || '---') }}</td>
+            <td class="p-3">
+              <div>
+                <a *ngIf="item?.file" href="{{ url + item?.id + '/' }}{{ item?.file }} " target="_blank">
+                  <mat-icon>file_copy</mat-icon>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <div class="mt-10" *ngIf="!spinnerAli">
+        <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+      </div> -->
+    </div>
+
+  <div *ngIf="spinnerConso" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+    <div *ngIf="!spinnerConso" class="bg-[#FFFFFF] shadow-[0px_3px_10px_#00000014] border-[3px] border-[#DBDBDB] rounded-[18px] p-5" >
+      <!-- <div class="flex col-start-1 col-end-3">
+        <h2 class="text-[#000] font-semibold pr-2">Consommation</h2>
+        <mat-icon class="pt-1 text-[#E10000]">arrow_downward</mat-icon>
+      </div> -->
+
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex justify-between">
+          <div class="flex">
+            <h2 class="text-[#000] font-semibold pr-2">Consommation</h2>
+            <mat-icon class="pt-1 text-[#E10000]">arrow_downward</mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <div class="flex cursor-pointer mr-4">
+            <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+            <h2 class="text-[#0C8040] font-semibold pl-2" (click)="exportExcelConsommation()">Exporter</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="grid">
+        <app-shared-filter
+          [inputs]="inputsFiler"
+          (filter)="filter_consommation($event)"
+        ></app-shared-filter>
+      </div> -->
+
+      <table class="w-full text-left text-gray-500 d-block overflow-auto" style="display: block;">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerConsommation"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of consommations" >
+          <td class="p-3">{{ item.created_at | date: 'dd/MM/yyyy' }}</td>
+          <td class="p-3">{{ item.user?.name || "SYSTEME" }}</td>
+          <td class="p-3">{{ item.quantite }}</td>
+          <td class="p-3">{{ item.truck?.matricule }}</td>
+          <td class="p-3">{{ item.truck?.tonnage?.name }} T</td>
+          <td class="p-3">{{ item.truck?.taux_consommation_reel }} L</td>
+          <td class="p-3">{{ item.truck?.taux_consommation_theorique }} L</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <div class="mt-10" *ngIf="!spinnerConso">
+        <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+      </div> -->
+    </div>
+  </div>
+</div>

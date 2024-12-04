@@ -1,0 +1,31 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 rounded-[12px_12px_0px_0px] p-4">
+    <h1 mat-dialog-title class="col-span-2">
+      {{ dialogData.title }}
+      <span class="font-normal text-[#0C8040] underline">{{
+        dialogData.reference
+      }}</span>
+    </h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <mat-dialog-content>
+    <mat-card class="example-card">
+      <img mat-card-image [src]="document_path" alt="Photo of a Shiba Inu" />
+    </mat-card>
+  </mat-dialog-content>
+  <mat-dialog-actions class="reclamation-footer">
+    <div class="w-full flex flex-wrap justify-end items-center">
+      <div>
+        <button
+          [mat-dialog-close]="true"
+          type="button"
+          class="inline-block px-8 py-2.5 bg-white-800 font-semibold text-md underline leading-tight shadow-lg disabled:opacity-25 hover:bg-white-800 hover:shadow-lg focus:bg-white-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-white-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </mat-dialog-actions>
+</div>

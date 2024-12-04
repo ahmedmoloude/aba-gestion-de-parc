@@ -1,0 +1,109 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-1 gap-2 mb-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">description</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Paramétrage des contacts
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <div class="grid grid-cols-2 gap-5">
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p class="bg-[#D9674E] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          Département
+        </p>
+        <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div class="max-h-40 h-40 overflow-auto">
+            <div *ngFor="let item of departements">
+              <div class="grid grid-cols-2 gap-3 pt-3 pl-3 pr-3 pb-0">
+                <div>
+                  <p class="text-[#636363]">{{ item.name }}</p>
+                </div>
+                <div class="p-3 text-right cursor-pointer">
+                  <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialogAjouterDepartement(item, 'edit')"
+                      *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                      <mat-icon>edit</mat-icon>
+                      Modifier
+                    </button>
+                    <button mat-menu-item (click)="deletDepartement(item.uuid)"
+                      *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                      <mat-icon>delete</mat-icon>
+                      Supprimer
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+              <!-- <p class="text-[#636363]">{{ item.name }}</p> -->
+            </div>
+          </div>
+          <div class="border-t-2 border-[#00000029]"></div>
+          <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+            <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+            <h2 class="font-semibold text-size mb-detail" (click)="openDialogAjouterDepartement()">
+              Ajouter un département
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+        <p class="bg-[#32508C] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3">
+          Fonction
+        </p>
+        <div class="grid grid-cols-3 gap-3 pt-3 pl-3 pr-3 pb-0">
+          <div>
+            <p class="text-[#636363]"><strong>Département</strong></p>
+          </div>
+          <div>
+            <p class="text-[#636363]"><strong>Fonction</strong></p>
+          </div>
+          <div>
+            <p class="text-[#636363]"><strong>Action</strong></p>
+          </div>
+        </div>
+        <div class="max-h-40 h-40 overflow-auto">
+          <div *ngFor="let item of fonctions">
+            <div class="grid grid-cols-3 gap-3 pt-3 pl-3 pr-3 pb-0">
+              <div>
+                <p class="text-[#636363]">{{ item.departement?.name }}</p>
+              </div>
+              <div>
+                <p class="text-[#636363]">{{ item.name }}</p>
+              </div>
+              <div class="p-3 text-right cursor-pointer">
+                <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openDialogAjouterFonction(item, 'edit')" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                  </button>
+                  <button mat-menu-item (click)="deletFonction(item.uuid)" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'D')">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t-2 border-[#00000029]"></div>
+        <div class="flex cursor-pointer justify-center" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2 class="font-semibold text-size mb-detail" (click)="openDialogAjouterFonction()">
+            Ajouter une fonction
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,146 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">money</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Affectation des cartes
+        </h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex justify-end cursor-pointer" *ngIf="permissionService.hasPermission('Caisse', 'Affectation des cartes', 'C')"
+        (click)="addCarte()">
+        <mat-icon class="pt-1">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter une carte</h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="carte$ | async as CaisseCarteState">
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <div *ngIf="CaisseCarteState?.cartesState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="CaisseCarteState?.cartesState == 'SUCCESS'">
+      <div *ngIf="CaisseCarteState?.caisseCartes?.length <= 0" class="flex flex-col items-center">
+        <h2>La liste des Cartes est vide</h2>
+      </div>
+      <ng-container *ngIf="CaisseCarteState?.caisseCartes?.length > 0">
+        <div class="overflow-auto">
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center"> {{ header }} </div>
+                </th>
+                <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex justify-end"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let carte of CaisseCarteState.caisseCartes">
+                <td class="p-3 font-medium">{{(carte?.n_carte) || '---'}}</td>
+                <td class="p-3 font-medium">{{(carte?.libelle) || '---'}}</td>
+                <td class="p-3 font-medium">{{(carte?.agence?.name) || '---'}}</td>
+                <td class="p-3 font-medium">{{(carte?.banque) || '---'}}</td>
+                <td class="p-3 font-medium">{{(carte?.date_affectation | date: 'dd/MM/yyyy') || '---'}}</td>
+                <td class="p-3 font-medium">{{(carte?.expiration_date | date: 'dd/MM/yyyy') || ''}}</td>
+                <td class="p-3 font-medium">{{(carte?.plafond | number) || 0}}</td>
+                <td class="p-3 font-medium">{{(carte?.solde_consomme | number) || 0}}</td>
+                <td class="p-3 cursor-pointer">
+                  <div class="flex items-center">
+                    <span *ngIf="carte?.is_affected"
+                      class="text-[#1AD598] bg-[#DDFFF4] border border-[#DDFFF4] rounded-2xl pt-2 pb-2 pl-3 pr-3 text-base flex mr-2">Affectée</span>
+                    <span *ngIf="!carte?.is_affected"
+                      class="text-white bg-[#FC8181] border border-[#FC8181] rounded-2xl pt-2 pb-2 pl-3 pr-3 text-base flex mr-2">Désaffectée</span>
+                    <mat-icon mat-button [matMenuTriggerFor]="menu1">remove_red_eye</mat-icon>
+                    <mat-menu #menu1="matMenu" class="pl-6 pr-6 pt-3 pb-3">
+                      <div class="flex items-center">
+                        <div class="icon ml-1">
+                          <mat-icon class="text-[19px] text-[#b5b5b5]">credit_card</mat-icon>
+                        </div>
+                        <div class="pl-0">
+                          <p class="text-[#b5b5b5] text-[12px] font-medium">Numéro de carte</p>
+                          <p class="text-[12px] text-[#000000]">{{(carte?.n_carte) || '---'}}</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center">
+                        <div class="icon ml-1">
+                          <mat-icon class="text-[19px] text-[#b5b5b5]">date_range</mat-icon>
+                        </div>
+                        <div class="pl-0">
+                          <p class="text-[#b5b5b5] text-[12px] font-medium">Date d’expiration</p>
+                          <p class="text-[12px] text-[#000000]">{{(carte?.expiration_date | date: 'dd/MM/yyyy') ||
+                            '---'}}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="flex items-center">
+                        <div class="icon ml-1">
+                          <mat-icon class="text-[19px] text-[#b5b5b5]">credit_card</mat-icon>
+                        </div>
+                        <div class="pl-0">
+                          <p class="text-[#b5b5b5] text-[12px] font-medium">cvv</p>
+                          <p class="text-[12px] text-[#000000]">{{(carte?.cvv) || '---'}}</p>
+                        </div>
+                      </div>
+                    </mat-menu>
+                  </div>
+                </td>
+                <td class="p-3 flex">
+                  <div class="text-center">
+                    <mat-icon class="text-[30px]">payment</mat-icon>
+                    <div class="flex justify-center">
+                      <p class="text-[12px] text-[#000000]">
+                        {{(carte?.solde_consomme | number) || 0}} / {{(carte?.plafond | number) || 0}} DH
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center relative float-right top-0 -right-4">
+                    <mat-icon class="cursor-pointer left-4" mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                    <mat-menu #menu="matMenu">
+                      <ng-container *ngIf="permissionService.hasPermission('Caisse', 'Affectation des cartes', 'U')">
+                        <button mat-menu-item (click)="alimenterCarte(carte)">
+                          <mat-icon>money</mat-icon>
+                          Alimenter la carte
+                        </button>
+                        <button mat-menu-item *ngIf="!carte?.is_affected" (click)="affecterCarte(carte)">
+                          <mat-icon>link_off</mat-icon>
+                          Affecter à une agence
+                        </button>
+                        <button mat-menu-item *ngIf="carte?.is_affected" (click)="desaffecterCarte(carte?.uuid)">
+                          <mat-icon>link_off</mat-icon>
+                          Désaffecter la carte
+                        </button>
+                      </ng-container>
+                      <button mat-menu-item (click)="historiqueCarte(carte?.id, carte?.n_carte)">
+                        <mat-icon>show_chart</mat-icon>
+                        Mouvement de la carte
+                      </button>
+                      <button mat-menu-item class="text-[#FDA7A7]" *ngIf="permissionService.hasPermission('Caisse', 'Affectation des cartes', 'D')"
+                        (click)="deleteCaisseCarte(carte?.uuid)">
+                        <mat-icon class="text-[#FDA7A7]">delete</mat-icon>
+                        Supprimer
+                      </button>
+                    </mat-menu>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10">
+          <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+            (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+          </p-paginator>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <div class="grid mt-4">
+  </div>

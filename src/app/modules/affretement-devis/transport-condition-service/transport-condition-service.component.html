@@ -1,0 +1,135 @@
+<div class="grid grid-cols-3">
+    <h2 mat-dialog-title class="col-span-2">Configuration des conditions ({{data['camion']['camion_name']}} - {{data['camion']['tonnage_name']  + " T"}})</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </div>
+</div>
+<div mat-dialog-content>
+
+<ng-container [formGroup]="conditionFormGroup">
+    <div class="grid p-4 bg-gray-100 mb-4 rounded shadow-md gap-4" [ngClass]="hasRetour ? 'grid-cols-6' : 'grid-cols-4'">
+    <div>
+        <label class="block font-medium text-gray-700" for="origin">Origine:</label>
+
+        <app-shared-autcomplete
+          #searchComponentOrigin
+          [charToGetAll]="'*'"
+          [data]="cities"
+          [keys]="['code', 'name']"
+          [lengthToStart]="1"
+          [display]="['code', 'name']"
+          [placeholer]="'Rechercher l\'origine...'"
+          (dataEvent)="onOriginChange($event)">
+        </app-shared-autcomplete>
+
+    </div>
+    <div>
+        <label class="block font-medium text-gray-700" for="destination">Destination:</label>
+        <app-shared-autcomplete
+          #searchComponentDest
+          [charToGetAll]="'*'"
+          [data]="cities"
+          [keys]="['code', 'name']"
+          [lengthToStart]="1"
+          [display]="['code', 'name']"
+          [placeholer]="'Rechercher la destination...'"
+          (dataEvent)="onDestChange($event)">
+        </app-shared-autcomplete>
+    </div>
+    <div>
+        <label class="block font-medium text-gray-700" for="baseCalcul">Base de calcul:</label>
+        <select class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" id="destination" formControlName="baseCalcul">
+            <option value="KM">KM</option>
+            <option value="DESTINATION">DESTINATION</option>
+        </select>
+      </div>
+    <div>
+        <label class="block font-medium text-gray-700" for="baseCalcul">Avec retour:</label>
+        <label class="switch">
+          <input type="checkbox" formControlName="avecRetour">
+          <span class="slider"></span>
+        </label>        
+      </div>
+      <div *ngIf="hasRetour">
+        <label class="block font-medium text-gray-700" for="baseCalcul">Type de retour:</label>
+        <select  class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" id="destination" formControlName="typeRetour">
+            <option value="COEF">Coefficient</option>
+            <option value="PRICE">Prix fixe</option>
+        </select>
+      </div>
+      <div *ngIf="hasRetour">
+        <label class="block font-medium text-gray-700" for="trancheMax">Valeur <strong>({{conditionFormGroup.get('typeRetour').value == 'COEF' ? "%" : "DH"}})</strong>:</label>
+        <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="trancheMax" formControlName="valeurRetour" value="1">
+    </div>
+    </div>
+    <ng-container formArrayName="transportFormsArray">
+        <ng-container *ngFor="let form of transportFormsArray.controls; let i = index">
+        
+            <form [formGroup]="form" class="p-4 bg-gray-100 mb-4 rounded shadow-md">
+                <div class="grid grid-cols-7 gap-4">
+                  <div  #min>
+                    <label class="block font-medium text-gray-700" for="trancheMin">Min  <strong>(KM)</strong>:</label>
+                    <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="trancheMin" formControlName="trancheMin" value="0">
+                  </div>
+                  <div #max>
+                      <label class="block font-medium text-gray-700" for="trancheMax">max <strong>(KM)</strong>:</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="trancheMax" formControlName="trancheMax" value="0">
+                  </div>
+                  <div>
+                      <label class="block font-medium text-gray-700" for="prixFixe">Prix fixe <strong>(DH)</strong>:</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="prixFixe" formControlName="prixFixe" value="0">
+                  </div>
+                  <div>
+                      <label class="block font-medium text-gray-700"  for="prixKm">Prix/KM <strong>(DH)</strong>:</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="prixKm" formControlName="prixKm" value="0">
+                  </div>
+                  <div>
+                      <label class="block font-medium text-gray-700" for="prixKmSupp">Prix/KM supp <strong>(DH)</strong>:</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="prixKmSupp" formControlName="prixKmSupp" value="0">
+                  </div>
+                  <div>
+                      <label class="block font-medium text-gray-700" for="prixMin">Prix min <strong>(DH)</strong>:</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="prixMin" formControlName="prixMin" value="0">
+                  </div>
+                  <div>
+                      <label class="block font-medium text-gray-700" for="prixMax">Prix max <strong>(DH)</strong>::</label>
+                      <input class="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-opacity-50" type="text" id="prixMax" formControlName="prixMax" value="0">
+                  </div>
+                  
+                  <div class="col-span-6 flex mt-2">
+                    <button
+                      (click)="addCondition()"
+                      class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md transition-colors duration-300 mr-2">
+                      Ajouter une condition
+                    </button>
+                    <button
+                      (click)="removeCondition(i)"
+                      class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-md transition-colors duration-300">
+                      Supprimer la condition
+                    </button>
+                  </div>
+                </div>
+              </form>
+              
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+<div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+    <div>
+      <button
+      class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+      mat-dialog-close
+      >
+      Annuler
+      </button>
+    </div>
+    <div class="text-right">
+      <button
+        class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]" (click)="saveConditions()"
+        ><!--[disabled]="contact.invalid"-->
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>

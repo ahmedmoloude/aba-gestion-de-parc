@@ -1,0 +1,76 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">money</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Validation de versement
+        </h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex justify-end cursor-pointer">
+        <i-field [type]="'number'" [label]="'Scanner la déclaration'"></i-field>
+        <button pButton pRipple type="button" label="Valider"
+          class="ml-3 p-button-rounded p-button-success h-9 w-1/2"></button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="validationVersement$ | async as validationVersementState">
+
+    <div class="grid mt-4">
+      <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+    </div>
+    <div *ngIf="validationVersementState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="validationVersementState?.dataState == 'SUCCESS'">
+      <div *ngIf="validationVersementState?.validationVersements?.length <= 0" class="flex flex-col items-center">
+        <h2>La liste des versements est vide</h2>
+      </div>
+      <ng-container *ngIf="validationVersementState?.validationVersements?.length > 0">
+        <div class="overflow-auto">
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+                <!-- <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex justify-end">Action</div>
+                </th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let item of validationVersementState.validationVersements  | paginate: { itemsPerPage: 5, currentPage: p };">
+                <td class="p-3">{{(item?.date_versement | date: 'dd/MM/yyyy')|| '---'}}</td>
+                <td class="p-3">{{(item?.ppcr_exp | number)|| 0}}</td>
+                <td class="p-3">{{(item?.check_exp | number)|| 0}}</td>
+                <td class="p-3">{{(item?.total_exp | number)|| 0}}</td>
+                <td class="p-3">{{(item?.pd_arv | number)|| 0}}</td>
+                <td class="p-3">{{(item?.crb_arv | number)|| 0}}</td>
+                <td class="p-3">{{(item?.total_arv | number)|| 0}}</td>
+                <td class="flex justify-around p-3">
+                  {{(item?.total_arv | number)|| 0}} Dhs
+                  <div>
+                    <ng-container *ngIf="permissionService.hasPermission('Caisse', 'Validation de versement', 'U')">
+                      <mat-icon class="text-green-600 cursor-pointer" *ngIf="!(item?.valideted_versement)"
+                        (click)="validateVersement(item?.id)">check_circle</mat-icon>
+                    </ng-container>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-10">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

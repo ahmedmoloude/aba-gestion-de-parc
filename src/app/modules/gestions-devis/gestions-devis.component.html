@@ -1,0 +1,206 @@
+<div [ngClass]="
+    merchant_uuid
+      ? ''
+      : 'bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6'
+  ">
+  <div class="grid grid-cols-2" *ngIf="!merchant_uuid">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">Gestion des devis</h1>
+    </div>
+    <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer"
+        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Devis', 'C')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-normal pl-2" (click)="openDialog()">Devis</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+      (filter)="filter($event)"></app-shared-filter>
+  </div>
+
+  <div *ngIf="isLoading" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div class="overflow-x-auto relative mt-4">
+      <!-- <div class="relative mb-5" *ngIf="!merchant_uuid">
+      <select
+        type="text"
+        class="p-3 w-1/4 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+        placeholder="Status"
+        [(ngModel)]="selectedStatus"
+      >
+        <option value="">Statut</option>
+        <option *ngFor="let item of statusFilters" [value]="item.id">
+          {{ item.name }}
+        </option>
+      </select>
+      <button
+        mat-button
+        class="text-white p-3 bg-btn-green text-[18px]"
+        (click)="getQuotes()"
+      >
+        <mat-icon class="mr-1">filter_list</mat-icon>
+        <span class="text-white">Filtre</span>
+      </button>
+    </div> -->
+
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of quotes">
+            <td class="p-3">
+              {{ item.reference }}
+              <!-- <span *ngIf="item.last_version.length > 0" class="text-green">
+              {{ "V" + item.last_version[0].version }}
+            </span> -->
+            </td>
+            <td class="p-3">
+              {{ item.service?.name }}
+            </td>
+            <td class="p-3">
+              {{ item.customer?.name || item.customer?.first_name }}
+            </td>
+            <td class="p-3">
+              {{ item.commercial?.name || item.commercial?.first_name }}
+            </td>
+            <td class="p-3 ">
+              <span *ngIf="
+                item.last_version.length > 0 &&
+                item.last_version[0].status === 'DRAFT'
+              " class="text-white bg-orange-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2">Devis</span>
+              <span *ngIf="
+                item.last_version.length > 0 &&
+                item.last_version[0].status === 'CREATED'
+              " class="text-white bg-[#728FCE] pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2">Confirmé</span>
+              <span *ngIf="
+                item.last_version.length > 0 &&
+                item.last_version[0].status === 'ACCEPTED'
+              " class="text-white bg-green-500 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2">Accepté</span>
+              <span *ngIf="
+                item.last_version.length > 0 &&
+                item.last_version[0].status === 'REJECTED'
+              " class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2">Non Accepté</span>
+              <span *ngIf="
+                item.last_version.length > 0 &&
+                item.last_version[0].status === 'CANCELED'
+              " class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2">Archivé</span>
+            </td>
+            <td class="p-3">
+              <span *ngIf="item.last_version.length > 0">
+                {{ item.last_version[0].start_date }}</span>
+            </td>
+            <td class="p-3">
+              <span *ngIf="item.last_version.length > 0">
+                {{ item.last_version[0].end_date || "---" }}</span>
+            </td>
+            <td class="p-3">
+              <span *ngIf="item.mode_payment === 'guichet'">Cash</span>
+              <span *ngIf="item.mode_payment === 'en_compte'">En Compte</span>
+            </td>
+            <td class="p-3">
+              <span *ngIf="item.last_version.length > 0">
+                {{
+                  getWorkflowValidation(item) +
+                " / " +
+                item.last_version[0].workflow.length
+                }}</span>
+            </td>
+            <td class="p-3">
+              <button (click)="openQuoteExtraDataDialog(item, true)"
+                class="bg-[#0C8040] text-[#fff] rounded-[10px] shadow-[0px_3px_6px_#00000029] w-18 px-3 pt-1 text-[12px]">
+                <mat-icon class="p-0 m-0">arrow_right_alt</mat-icon>
+              </button>
+            </td>
+            <td class="p-3">
+              <button (click)="openQuoteExtraDataDialog(item, false)" *ngIf="item.versions.length > 0"
+                class="bg-[#808080] text-[#fff] rounded-[10px] shadow-[0px_3px_6px_#00000029] w-18 px-3 pt-1 text-[12px]">
+                <mat-icon class="p-O m-0">history</mat-icon>
+              </button>
+              <span *ngIf="item.versions.length == 0"> --- </span>
+            </td>
+            <td class="p-3 text-right cursor-pointer">
+              <ng-container *ngIf="item.last_version.length > 0">
+                <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button *ngIf="item?.service?.name != 'Affretement' && permissionService.hasPermission('Gestion commerciale', 'Devis', 'R')" mat-menu-item (click)="showQuoteGridDetails(item.last_version[0].uuid)">
+                    <mat-icon>remove_red_eye</mat-icon>
+                    Voir les conditions
+                  </button>
+                  <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Devis', 'U')">
+                    <!-- Draft status -->
+                    <button *ngIf="item.last_version[0].status === 'DRAFT'"
+                      (click)="updateQuoteGridDetails(item.last_version[0].uuid , item?.service?.name)" mat-menu-item>
+                      <mat-icon>edit</mat-icon>
+                      Modifier les conditions
+                    </button>
+                    <ng-container *ngIf="item.last_version[0].workflow">
+                      <button mat-menu-item *ngIf="showValidateDevisBtn(item) && item.last_version[0].status != 'ACCEPTED' && item.last_version[0].status != 'REJECTED'" (click)="validateQuote(item, 'CREATED')"><mat-icon>check_circle</mat-icon> Valider le devis</button>
+                    <button mat-menu-item *ngIf="showValidateDevisBtn(item) && item.last_version[0].status != 'ACCEPTED' && item.last_version[0].status != 'REJECTED'" (click)="validateQuote(item, 'REJECTED')"><mat-icon>cancel</mat-icon> Refuser le devis</button>
+                    </ng-container>
+                    
+                  </ng-container>
+                  <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Devis', 'R')">
+                    <!-- Created or accepted or rejeted status -->
+                    <button *ngIf="item.last_version[0].quote_grids_details"
+                      (click)="downloadOffer(item.last_version[0].id)" mat-menu-item>
+                      <mat-icon>print</mat-icon>
+                      Imprimer le devis
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="permissionService.hasPermission('Gestion commerciale', 'Devis', 'U') && item.last_version[0].workflow">
+                    <!-- Created status -->
+                    <!-- ? workflow action : accept devis -->
+                    <button
+                      *ngIf="showValidateClientBtn(item) && item.last_version[0].status != 'ACCEPTED'"
+                      mat-menu-item (click)="openQuoteActionsDialog(item, 'accept-quote')">
+                      <mat-icon>insert_drive_file</mat-icon>
+                      <!-- Conclure le devis -->
+                      Approbation du client
+                    </button>
+                    <!-- ? workflow action : decline devis -->
+                    <button
+                      *ngIf="showValidateClientBtn(item) && item.last_version[0].status != 'ACCEPTED'"
+                      mat-menu-item (click)="openQuoteActionsDialog(item, 'decline-quote')">
+                      <mat-icon>cancel</mat-icon>
+                      Refus du client
+                    </button>
+
+                    <!-- Rejected status  -->
+                    <button mat-menu-item (click)="openNewQuoteVersionDialog(item.last_version[0].uuid)"
+                      *ngIf="['REJECTED'].includes(item.last_version[0].status)">
+                      <mat-icon>add_circle</mat-icon>
+                      Nouvelle proposition
+                    </button>
+                  </ng-container>
+                </mat-menu>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-10" *ngIf="quotes?.length != 0">
+    
+      <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+              (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 15 , 20 , 25 , 30]"></p-paginator>
+    </div>
+  </div>
+
+</div>

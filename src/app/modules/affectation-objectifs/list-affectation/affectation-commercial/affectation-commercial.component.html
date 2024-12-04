@@ -1,0 +1,88 @@
+<div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<div *ngIf="!spinner">
+  <mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            <div class="flex cursor-pointer">
+              <mat-icon class=" text-[#0C8040]">gps_fixed</mat-icon>
+              <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">Objectif : {{ objectif.name }}</h2>
+            </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="mt-5">
+        <ng-container>
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th></th>
+                <th
+                  *ngFor="let header of headerColumuns"
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+                <th
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+              >
+                <div class="flex justify-end">Actions</div>
+              </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let item of objectif.affectation">
+                <td class="p-3">
+                    <div class="flex">
+                        <mat-icon class=" text-[#0C8040]">person</mat-icon>
+                        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base">{{ item.commercial?.first_name }} {{ item.commercial?.last_name }}</h2>
+                    </div>
+                </td>
+                <td class="p-3">{{ item.janvier }}</td>
+                <td class="p-3">{{ item.fevrier }}</td>
+                <td class="p-3">{{ item.mars }}</td>
+                <td class="p-3">{{ item.avril }}</td>
+                <td class="p-3">{{ item.mai }}</td>
+                <td class="p-3">{{ item.juin }}</td>
+                <td class="p-3">{{ item.juillet }}</td>
+                <td class="p-3">{{ item.aout }}</td>
+                <td class="p-3">{{ item.septembre }}</td>
+                <td class="p-3">{{ item.octobre }}</td>
+                <td class="p-3">{{ item.novembre }}</td>
+                <td class="p-3">{{ item.decembre }}</td>
+                <td class="p-3 text-center ">
+                    <mat-icon class="cursor-pointer" mat-button [matMenuTriggerFor]="menu"
+                >more_vert</mat-icon
+              >
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="addcommercial(objectif, 'edit', item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'U')">
+                  <mat-icon>edit</mat-icon>
+                  Modifier
+                </button>
+                <button mat-menu-item (click)="delet(item.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'D')">
+                  <mat-icon>delete</mat-icon>
+                  Supprimer
+                </button>
+              </mat-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+      <div class="flex mt-5 cursor-pointer" >
+        <mat-icon class=" text-[#0C8040]">add_circle</mat-icon>
+        <h2 class="text-[#636363] font-normal pl-2 mb-0 text-base" (click)="addcommercial(objectif, 'add', '')" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Objectifs', 'C')">Ajouter un commercial</h2>
+    </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

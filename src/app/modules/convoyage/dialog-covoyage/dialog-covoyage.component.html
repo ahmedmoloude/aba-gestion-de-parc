@@ -1,0 +1,176 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Création d'un convoyage</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="w-11/12 mx-auto">
+      <img src="../../../../assets/img/creation.png" class="mx-auto" />
+
+      <!-- covoyage kpis   -->
+      <div class="grid grid-cols-5 items-center gap-4 mt-8 mb-10">
+        <div>
+          Nombre d'expéditions :
+          {{ covoyageKpis ? covoyageKpis.total_expeditions : "--" }}
+        </div>
+        <div>
+          Nombre de colis : {{ covoyageKpis ? covoyageKpis.total_colis : "--" }}
+        </div>
+        <div>
+          Documents à retourner :
+          {{ covoyageKpis ? covoyageKpis.total_return_documents  : "--" }}
+        </div>
+        <div>
+          Poids global :
+          {{ covoyageKpis ? covoyageKpis.total_weight + " Kg" : "--" }}
+        </div>
+        <div>
+          Volume global :
+          {{ covoyageKpis ? covoyageKpis.total_volume + " m3" : "--" }}
+        </div>
+      </div>
+
+      <!-- driver and truck -->
+      <div class="grid grid-cols-4 gap-4 mb-10">
+        <div>
+          <input
+            type="datetime-local"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Date planifié"
+            [(ngModel)]="covoyageForm.start_date"
+            [min]="minDate"
+          />
+        </div>
+        <div>
+          <select
+            (change)="onChangeAxe()"
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Axe d’acheminement"
+            [(ngModel)]="covoyageForm.axe_id"
+          >
+            <option value="">--- Villes de transit ---</option>
+            <option *ngFor="let item of axes" [value]="item.id">
+              {{ item.title }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Ville depart"
+            disabled
+            [(ngModel)]="covoyageForm.city_from_id"
+          >
+            <option value="">--- Ville de départ ---</option>
+            <option *ngFor="let item of cities" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <select
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Ville de destination"
+            disabled
+            [(ngModel)]="covoyageForm.city_dest_id"
+          >
+            <option value="">--- Ville de destination ---</option>
+            <option *ngFor="let item of cities" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- driver and truck -->
+        <!-- <div>
+          <select
+            [(ngModel)]="covoyageForm.truck_id"
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+          >
+            <option value="">--- Sélectionner un camion ---</option>
+            <option *ngFor="let item of trucks" [value]="item.id">
+              {{ item.matricule + " | " + item.tonnage + " tonnes" }}
+            </option>
+          </select>
+        </div> -->
+        <!-- <div>
+          <select
+            [(ngModel)]="covoyageForm.driver_id"
+            class="p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]"
+          >
+            <option value="">--- Sélectionner un chauffeur ---</option>
+            <option *ngFor="let item of drivers" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div> -->
+      </div>
+
+      <!-- covoyage setup   -->
+      <div class="grid grid-cols-3 gap-4 mt-8 mb-8"></div>
+
+      <!-- covoyage intineraries   -->
+      <!-- <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Agences de transits</h2>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mb-10">
+        <ng-container
+          *ngFor="
+            let passage of covoyageForm.axe?.passage || [];
+            let idx = index
+          "
+        >
+          <select
+            *ngIf="idx > 0"
+            [(ngModel)]="covoyageForm.itineraries_ids[idx].agency_id"
+            [ngClass]="
+              idx === covoyageForm.axe.passage.length - 1
+                ? 'p-3 pr-12 w-11/12 border rounded-3xl border-[#0C8040]'
+                : 'p-3 pr-12 w-11/12 border rounded-3xl border-[#DBDBDB]'
+            "
+            (change)="getCovoyageKpis()"
+          >
+            <option value="">
+              {{
+                idx === covoyageForm.axe.passage.length - 1
+                  ? "--- Sélectionner agence de destination ( " +
+                    passage.name +
+                    " )"
+                  : "--- Sélectionner une agence ( " + passage.name + " )"
+              }}
+            </option>
+            <option *ngFor="let item of passage.agencies" [value]="item.id">
+              {{ item.name + " | " + passage.name }}
+            </option>
+          </select>
+        </ng-container>
+      </div> -->
+
+      <div class="mb-10 flex justify-end">
+        <!-- <button
+          *ngIf="!isLoading"
+          (click)="onSubmit()"
+          type="button"
+          class="text-white btn-filter text-[15px] bg-btn-green max-w-[170px] w-[170px] p-[10px]"
+        >
+          Générer
+        </button> -->
+        <button 
+            *ngIf="!isLoading"
+            (click)="onSubmit()" 
+            pButton pRipple 
+            type="button" 
+            label="Générer"
+            class="p-button-rounded p-button-success">
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>

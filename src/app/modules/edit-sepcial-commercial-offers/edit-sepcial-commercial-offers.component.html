@@ -1,0 +1,86 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6" [formGroup]="offerFormGroup">
+
+  <div *ngIf="!loading">
+
+    <div class="flex items-center justify-end mb-8">
+      <button class="p-2 bg-green-600 text-white font-bold" (click)="addNewLine()">Nouvelle ligne</button>
+    </div>
+  
+    <div formArrayName="details" class="flex  flex-col gap-3" >
+      <div  class="flex items-center gap-3" *ngFor="let item of offerFormGroup.get('details')['controls']; let i = index" [formGroupName]="i"  >
+
+
+        <ng-container *ngIf="!item.get('to_delete').value">
+
+
+          <i-field [type]="'number'" [label]="'Prix par KM'" formControlName="pricePerKM"></i-field>
+          <i-field [type]="'number'" [label]="'Min prix par Mois'" formControlName="minPerMonth"></i-field>
+          <app-shared-autcomplete
+            
+              [type]="'single'"
+              [contentStyle]="contentStyle"
+              [inputStyle]="searchStyle"
+              [charToGetAll]="'*'"
+              [data]="availableTrucks"
+              [keys]="['code_interne', 'matricule']"
+              [lengthToStart]="2"
+              [display]="['code_interne', 'matricule']"
+              [placeholer]="'Camion...'"
+              [hasIcon]="false"
+              [addSeparator]="true"
+              (dataEvent)="selectTruck($event , i)"
+              #searchComponent{{i}}
+  
+              >
+          </app-shared-autcomplete>
+          <i-field [type]="'number'" [label]="'Max Km'" formControlName="maxKM"></i-field>
+          <i-field [type]="'number'" [label]="'prix pour chaque Km sup'" formControlName="pricePerExtraKM"></i-field>
+          
+          <i-field [type]="'text'" [label]="'Type de camion'" formControlName="truckType"></i-field>
+          <i-field [type]="'text'" [label]="'Tonnage de camion'" formControlName="truckTonnage"></i-field>
+  
+  
+          <mat-icon class="cursor-pointer text-red-400" (click)="deleteRow(i)">delete</mat-icon> 
+      
+  
+        </ng-container>
+
+
+
+    
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end mt-6 mb-8">
+        <button  *ngIf="!submitloader" class="p-2 bg-green-600 text-white font-bold" (click)="submit()">
+          
+          
+          <span >
+
+            Valider
+          </span>
+        
+
+        
+           
+        </button>
+
+        <div *ngIf="submitloader" >
+          <mat-spinner  [diameter]="30"></mat-spinner>
+        </div>
+      </div>
+    
+
+
+  </div>
+  
+
+
+
+
+
+  <div *ngIf="loading" class="flex items-center justify-center w-full h-full">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+</div>
+  

@@ -1,0 +1,126 @@
+<div class="p-4">
+  <!-- filter -->
+  <!-- <div class="grid grid-cols-7 gap-2 mb-6 mt-5" *ngIf="!spinner">
+    <mat-form-field appearance="fill" class="w-[100%] mb-4">
+      <mat-label>Parc</mat-label>
+      <mat-select matNativeControl required (selectionChange)="getParc($event)">
+        <mat-option>Parc</mat-option>
+        <mat-option *ngFor="let parc of parcs" value="{{ parc.id }}">{{
+          parc.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Code Véhicule"
+      (keyup)="getCodevehicule($event)"
+      style="height: 80%"
+    />
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Marque"
+      style="height: 80%"
+      (keyup)="getMarque($event)"
+    />
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Km parcouru"
+      style="height: 80%"
+      (keyup)="getkmParcouru($event)"
+    />
+    <mat-form-field appearance="fill" class="w-[100%] mb-4">
+      <mat-label>Statut </mat-label>
+      <mat-select
+        matNativeControl
+        required
+        (selectionChange)="getStatut($event)"
+      >
+        <mat-option value="Disponible">Disponible</mat-option>
+        <mat-option value="Non Disponible">Non Disponible</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="opacity: 0" appearance="fill" class="w-[100%] mb-4">
+      <mat-label>Statut </mat-label>
+      <mat-select matNativeControl required>
+        <mat-option>Disponible</mat-option>
+        <mat-option>Non Disponible</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-button
+      class="text-white p-3 bg-btn-green text-[18px]"
+      (click)="getVehicule()"
+    >
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filtre</span>
+    </button>
+  </div> -->
+
+  <div class="grid">
+    <app-shared-filter
+    [inputs]="inputsFiler"
+    [extraInputs]="extraInputsFiler"
+    (filter)="filtrer($event)"
+    ></app-shared-filter>
+  </div>
+
+  <!-- filter -->
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <ng-container *ngIf="!spinner">
+    <div class="overflow-x-auto relative mt-4">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of trucks"
+          >
+            <td class="p-3">{{ item.id }}</td>
+            <td class="p-3">{{ item.parc ? item.parc?.name : "" }}</td>
+            <td class="p-3">{{ item.code_interne + " / " + item.matricule }}</td>
+            <td class="p-3">{{ item.brand ? item.brand?.name : "" }}</td>
+            <td class="p-3">{{ item.modele ? item.modele?.name : "" }}</td>
+            <td class="p-3">{{ item.tonnage ? item.tonnage.name + "T" : "" }}</td>
+            <td class="p-3">{{ item.missions_month?.length }}</td>
+            <td class="p-3">{{ getKmParcouru(item.froute_closed) }}</td>
+            <td class="p-3">
+              <button class="disponible" *ngIf="item.disponible?.status  && item.last_status?.status == 'En circulation' ">
+                Disponible
+              </button>
+              <button class="indisponible" *ngIf="!item.disponible.status  || item.last_status?.status != 'En circulation'">
+                Indisponible
+              </button>
+            </td>
+            <td class="p-3">
+              <p class="truck-status" *ngIf="!item?.disponible?.status">{{ item?.disponible?.motif }}</p>
+              <p class="truck-status" *ngIf="item?.disponible?.status">---</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <div class="mt-10">
+    <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+      (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+    </p-paginator>
+  </div>
+</div>

@@ -1,0 +1,192 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 vehiculetabs">
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">check_circle_outline</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">
+        Liste des feuilles de route
+      </h2>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+      (filter)="filtrer($event)"></app-shared-filter>
+  </div>
+
+  <!-- <div  *ngIf="!spinner">
+    <div class="flex justify-between">
+      <div class="date-filter ">
+        <mat-form-field appearance="fill">
+          <mat-label>Entrer une période </mat-label>
+          <mat-date-range-input [rangePicker]="picker" [formGroup]="RangePicker">
+            <input matStartDate placeholder="Start date" formControlName="start"/>
+            <input matEndDate placeholder="End date" formControlName="end" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <div class="w-1/6 flex items-start ">
+        <button
+          class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+          (click)="getRoadMaps()"
+        >
+          <mat-icon class="mr-3">filter_list</mat-icon>
+          <span class="text-white">Filter</span>
+        </button>
+      </div>
+    </div>
+  </div> -->
+  <div *ngIf="spinner" style="margin-left: 47%; margin-top: 2%;">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <div class="mt-5" *ngIf="!spinner">
+    <div class="mt-36 mb-36 text-center" *ngIf="roadMapds.length == 0 ">
+      <p class="text-[#636363] text-[22px]">La Liste des feuilles de route est vide</p>
+    </div>
+    <div *ngIf="roadMapds.length > 0 ">
+
+      <div
+        class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px] items-center"
+        *ngFor="let roadMapd of roadMapds">
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">N° feuille de route</p>
+              <p class="text-[12px] text-[#000000]">{{roadMapd.id || '---'}}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">feuille de route parent</p>
+              <p class="text-[12px] text-[#000000]"><a [routerLink]="'/detailfeuille/'+roadMapd.parent?.uuid">{{roadMapd.parent?.id || '---'}}</a></p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Véhicule</p>
+              <p class="text-[12px] text-[#000000]">{{roadMapd.truck?.matricule || '---'}}</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Km départ</p>
+              <p class="text-[12px] text-[#000000]">{{roadMapd.km_depart || '---'}} KM</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date début</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{(roadMapd.start_date | date: 'dd/MM/yyyy') || '---' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Qté carburant départ</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{roadMapd.qte_carburant_depart || '---'}} L</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Lieu d’approvisionnement</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{getParck(roadMapd.truck?.parc_id) || '---'}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Date fin</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{(roadMapd.end_date | date: 'dd/MM/yyyy') || '---'}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">Km fin</p>
+              <div class="flex">
+                <p class="text-[12px] text-[#000000]">{{roadMapd.km_fin || '---'}} KM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <p class="text-[#b5b5b5] text-[10px]">km parcouru</p>
+              <p class="text-[12px] text-[#000000]">{{roadMapd.km_fin? roadMapd.km_fin-roadMapd.km_depart: '---'}} KM</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <button style="background: #7fffd4;border-radius: 15px;padding: 10px;"
+                *ngIf="roadMapd.status==='OPENED'">Ouvert </button>
+              <button style="background: rgb(255, 146, 127); border-radius: 15px;padding: 10px;"
+                *ngIf="roadMapd.status==='CLOSED'">Cloturé </button>
+            </div>
+          </div>
+        </div>
+        <div class="width-content">
+          <div class="flex items-center">
+            <div class="pl-3">
+              <button mat-button class="text-[#0C8040] borderbtn" (click)="detailfeuille(roadMapd.uuid)">
+                <mat-icon>remove_red_eye</mat-icon> Voir Plus
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="width-info">
+          <div class="flex items-center">
+            <div class="pl-3 cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>Imprimer</button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10" *ngIf="roadMapds.length!=0">
+        <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+          (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 15 , 20 , 25 , 30]">
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</div>

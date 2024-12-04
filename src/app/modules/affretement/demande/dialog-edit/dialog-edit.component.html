@@ -1,0 +1,50 @@
+  <div class="dialog">
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+      <h2 mat-dialog-title class="col-span-2">Editer</h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <form [formGroup]="createDemande">
+      <div mat-dialog-content>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="mt-5 mb-4 ml-3 mr-3">
+                <i-field
+                [type]="'date'"
+                [label]="'Date début'"
+                formControlName="date_debut"
+            ></i-field>
+            </div>
+            <div class="mt-5 mb-4 ml-3 mr-3">
+                <i-field
+                [type]="'date'"
+                [label]="'Date fin'"
+                formControlName="date_fin"
+            ></i-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+            <div>
+              <button
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+              mat-dialog-close
+              >
+              Annuler
+              </button>
+            </div>
+            <div class="text-right">
+              <button
+                class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9 mt-5 font-bold text-[18px]"
+                type="submit"  *ngIf="!spinner" (click)="editDemande()"
+                ><!--[disabled]="contact.invalid"-->
+                Enregistrer
+              </button>
+      
+              <span *ngIf="spinner">
+                <mat-spinner [diameter]="40"></mat-spinner>
+              </span>
+            </div>
+          </div>
+    </div>
+    </form>
+</div>

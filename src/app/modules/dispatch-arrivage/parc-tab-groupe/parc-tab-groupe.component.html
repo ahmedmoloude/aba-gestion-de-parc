@@ -1,0 +1,153 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 h-full"
+>
+  <div class="grid grid-cols-1 gap-2 mb-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_parking</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Dispatch arrivage <span class="text-[#636363]">( HUB Agadir )</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-4 gap-5">
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+      <p
+        class="bg-[#636363] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        [ngClass]="{ active: showDiv.convoyage }"
+      >
+        En gare
+      </p>
+      <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+        <div>
+          <p class="text-[#636363]">
+            Total expéditions : <span class="text-[#0C8040]">32</span>
+          </p>
+          <p class="text-[#636363]">
+            Total Colis : <span class="text-[#0C8040]">10</span>
+          </p>
+        </div>
+        <div class="border-t-2 border-[#00000029]"></div>
+        <div
+          class="flex cursor-pointer justify-center"
+          (click)="
+            showDiv.convoyage = !showDiv.convoyage;
+            showDiv.stock = false;
+            showDiv.livraison = false;
+            showDiv.transit = false
+          "
+        >
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2 class="font-semibold text-size mb-detail">Affecter</h2>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+      <p
+        class="bg-[#636363] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        [ngClass]="{ active: showDiv.livraison }"
+      >
+        Livraison
+      </p>
+      <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+        <div>
+          <p class="text-[#636363]">
+            Total expéditions : <span class="text-[#0C8040]">32</span>
+          </p>
+          <p class="text-[#636363]">
+            Total Colis : <span class="text-[#0C8040]">10</span>
+          </p>
+        </div>
+        <div class="border-t-2 border-[#00000029]"></div>
+        <div
+          class="flex cursor-pointer justify-center"
+          (click)="
+            showDiv.livraison = !showDiv.livraison;
+            showDiv.stock = false;
+            showDiv.convoyage = false;
+            showDiv.transit = false
+          "
+        >
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2 class="font-semibold text-size mb-detail">Affecter</h2>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+      <p
+        class="bg-[#636363] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        [ngClass]="{ active: showDiv.transit }"
+      >
+        Transit
+      </p>
+      <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+        <div>
+          <p class="text-[#636363]">
+            Total expéditions : <span class="text-[#0C8040]">32</span>
+          </p>
+          <p class="text-[#636363]">
+            Total Colis : <span class="text-[#0C8040]">10</span>
+          </p>
+        </div>
+        <div class="border-t-2 border-[#00000029]"></div>
+        <div
+          class="flex cursor-pointer justify-center"
+          (click)="
+            showDiv.transit = !showDiv.transit;
+            showDiv.stock = false;
+            showDiv.convoyage = false;
+            showDiv.livraison = false
+          "
+        >
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2 class="font-semibold text-size mb-detail">Affecter</h2>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[18px]">
+      <p
+        class="bg-[#636363] shadow-[0px_3px_20px_#00000029] text-white font-medium rounded-[18px_18px_0px_0px] p-3"
+        [ngClass]="{ active: showDiv.stock }"
+      >
+        Stock
+      </p>
+      <div class="grid grid-cols-1 gap-3 pt-3 pl-3 pr-3 pb-0">
+        <div>
+          <p class="text-[#636363]">
+            Total expéditions : <span class="text-[#0C8040]">32</span>
+          </p>
+          <p class="text-[#636363]">
+            Total Colis : <span class="text-[#0C8040]">10</span>
+          </p>
+        </div>
+        <div class="border-t-2 border-[#00000029]"></div>
+        <div
+          class="flex cursor-pointer justify-center"
+          (click)="
+            showDiv.stock = !showDiv.stock;
+            showDiv.transit = false;
+            showDiv.convoyage = false;
+            showDiv.livraison = false
+          "
+        >
+          <mat-icon class="pt-[5px] text-[20px]">remove_red_eye</mat-icon>
+          <h2 class="font-semibold text-size mb-detail">Affecter</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showDiv.convoyage">
+    <app-parc-convoyage></app-parc-convoyage>
+  </div>
+  <div *ngIf="showDiv.livraison">
+    <app-parc-livraison></app-parc-livraison>
+  </div>
+  <div *ngIf="showDiv.transit">
+    <app-parc-transit></app-parc-transit>
+  </div>
+  <div *ngIf="showDiv.stock">
+    <app-parc-stock></app-parc-stock>
+  </div>
+</div>

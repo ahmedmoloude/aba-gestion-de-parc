@@ -1,0 +1,282 @@
+<div class="dialog">
+  <div mat-dialog-content>
+    <div *ngIf="!preview_mode">
+
+      <div class="justify-between mb-5 items-center">
+        <div class="overflow-x-auto relative mt-5">
+          <span>
+            <h2 class="text-[#0C8040]">{{title}} sur Transport :</h2>
+          </span>
+
+          <div class="flex gap-8 justify-between pl-4 items-center " *ngIf="isForfait">
+            <div class=" flex-col gap-2  w-1/4 items-center justify-center mb-5 ">
+              <span>
+                <strong>
+                  Montant de Forfait ( {{transport_forfait}} / {{total_transport}})
+                </strong>
+              </span>
+              <input type="number" class="p-3 border rounded-smborder-[#DBDBDB] w-full" placeholder="Montant de Forfait"
+                [max]="total_transport" [(ngModel)]="transport_forfait" />
+            </div>
+          </div>
+
+          <div class="flex gap-8 justify-between pl-4 items-center " *ngIf="!isForfait">
+
+            <div class="flex-col gap-3 w-full">
+              <span>
+                <strong>
+                  Merci de glisser la barre de remise
+                </strong>
+              </span>
+              <nz-slider class=" w-full  custom-slider" [nzMarks]="marks" [(ngModel)]="transport_rate"></nz-slider>
+            </div>
+
+            <div class=" flex-col gap-2  w-1/4 items-center justify-center mb-5 ">
+              <input type="number" class="p-3 border rounded-smborder-[#008000] w-full" placeholder="Taux de remise"
+                [(ngModel)]="transport_rate" min="0" max="100" />
+            </div>
+          </div>
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead>
+              <tr>
+                <th *ngFor="let header of ['Transport', 'HT', 'TVA', 'TTC']" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                <td class="p-3">Transport</td>
+                <td class="p-3">
+                  {{ transport_rate > 0 ?
+                  calculateRemise(calcul_details.transport.transport_alle_ht , transport_rate) :
+                  calcul_details.transport.transport_alle_ht }} Dhs
+                </td>
+                <td class="p-3">{{ multiply(calcul_details.transport.transport_alle_tva , 100)}}%</td>
+                <td class="p-3">
+                  {{ transport_rate > 0 ? calculateRemise(calcul_details.transport.transport_alle_ttc , transport_rate) :
+                  calcul_details.transport.transport_alle_ttc }} Dhs
+                </td>
+              </tr>
+
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngIf="calcul_details.transport.transport_retour_ttc">
+                <td class="p-3">Transport Retour</td>
+                <td class="p-3">
+                  {{ transport_rate > 0 ? calculateRemise(calcul_details.transport.transport_retour_ht , transport_rate) :
+                  calcul_details.transport.transport_retour_ht }} Dhs
+                </td>
+                <td class="p-3">{{ multiply(calcul_details.transport.transport_alle_tva , 100)}}%</td>
+                <td class="p-3">
+                  {{ transport_rate > 0 ? calculateRemise(calcul_details.transport.transport_retour_ttc , transport_rate) :
+                  calcul_details.transport.transport_retour_ttc }} Dhs
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <span class="mt-4">
+            <h2 class="text-[#0C8040]">{{title}} sur Service global :</h2>
+          </span>
+          <div class="flex gap-8 justify-between pl-4 items-center " *ngIf="isForfait">
+            <div class=" flex-col gap-2  w-1/4 items-center justify-center mb-5 ">
+              <span>
+                <strong>
+                  Montant de Forfait ( {{global_service_forfait}} / {{total_service_global}})
+                </strong>
+              </span>
+              <input type="number" class="p-3 border rounded-smborder-[#DBDBDB] w-full" placeholder="Montant de Forfait"
+                [max]="total_service_global" [(ngModel)]="global_service_forfait" />
+            </div>
+          </div>
+          <div class="flex gap-8 justify-between pl-4 items-center " *ngIf="!isForfait">
+            <nz-slider class=" w-full custom-slider " [nzMarks]="marks" [(ngModel)]="global_service_rate"></nz-slider>
+            <div class=" flex-col gap-2  w-1/4 items-center justify-center mb-5 ">
+              <span>
+                <strong>
+                  Taux de remise
+                </strong>
+              </span>
+              <input type="number" class="p-3 border rounded-smborder-[#DBDBDB] w-full" placeholder="Taux de remise"
+                [(ngModel)]="global_service_rate" min="0" max="100" />
+            </div>
+          </div>
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead class="mt-4">
+              <tr>
+                <th *ngFor="let header of ['Service global', 'HT', 'TVA', 'TTC']" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let service of calcul_details?.services_global | keyvalue">
+                <td class="p-3">{{ service.key }}</td>
+                <td class="p-3">{{ global_service_rate > 0 ? calculateRemise(service.value.ht , global_service_rate) :
+                  service.value.ht }} Dhs</td>
+
+                  <td class="p-3">{{ multiply( service.value.tva , 100)}}%</td>
+
+                <td class="p-3">{{ global_service_rate > 0 ? calculateRemise(service.value.ttc , global_service_rate) :
+                  service.value.ttc }} Dhs</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <span class="mt-4">
+            <h2 class="text-[#0C8040]">{{title}} sur Service par camion :</h2>
+          </span>
+
+          <div class="flex gap-8 justify-between pl-4 items-center " *ngIf="isForfait">
+            <div class=" flex-col gap-2  w-1/4 items-center justify-center mb-5 ">
+              <span>
+                <strong>
+                  Montant de Forfait ( {{particular_service_forfait}} / {{total_service}})
+                </strong>
+              </span>
+              <input type="number" class="p-3 border rounded-smborder-[#DBDBDB] w-full" placeholder="Montant de Forfait"
+                [max]="total_service" [(ngModel)]="particular_service_forfait" />
+            </div>
+          </div>
+          <div class="flex gap-8 justify-between  items-center  pl-4" *ngIf="!isForfait">
+            <nz-slider class=" w-full  custom-slider" [nzMarks]="marks"
+              [(ngModel)]="particular_service_rate"></nz-slider>
+
+            <div class=" flex-col gap-2  w-1/4  items-center justify-center mb-5">
+              <span>
+                <strong>
+                  Taux de remise
+                </strong>
+              </span>
+              <input type="number" class="p-3 border rounded-smborder-[#DBDBDB] w-full" placeholder="Taux de remise"
+                [(ngModel)]="particular_service_rate" min="0" max="100" />
+            </div>
+          </div>
+          <table class="w-full text-left text-gray-500 mt-4">
+            <thead>
+              <tr>
+                <th *ngFor="let header of ['Service par camion', 'HT', 'TVA', 'TTC']" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let service of calcul_details?.services | keyvalue">
+                <td class="p-3">{{ service.key }}</td>
+                <td class="p-3">{{ particular_service_rate > 0 ? calculateRemise(service.value.ht ,
+                  particular_service_rate) : service.value.ht }} Dhs</td>
+
+                <td class="p-3">{{ multiply( service.value.tva , 100)}}%</td>
+
+                <td class="p-3">{{ particular_service_rate > 0 ? calculateRemise(service.value.ttc ,
+                  particular_service_rate) : service.value.ttc }} Dhs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class=" flex justify-end" *ngIf="!preview_mode">
+        <button *ngIf="!spinner" type="button" (click)="submit()"
+          class="bg-[#0C8040] text-[#fff] rounded-[28px] confirm-btn shadow-[0px_3px_6px_#00000029] p-2 mr-3 font-bold text-[15px] w-44">
+          <span class="pl-2">Valider</span>
+        </button>
+        <div *ngIf="spinner" class="flex items-center p-7">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="preview_mode">
+      <div class=" flex justify-between px-8" *ngIf="!isForfait">
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Taux de remise sur transport :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{transport_rate + ' %'}}
+          </span>
+        </div>
+
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Taux de remise sur service global :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{global_service_rate + ' %'}}
+          </span>
+        </div>
+
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Taux de remise sur service par camion :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{particular_service_rate + ' %'}}
+          </span>
+        </div>
+      </div>
+
+      <div class=" flex justify-between px-8" *ngIf="isForfait">
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Forfait sur transport :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{transport_forfait + ' MDH'}}
+          </span>
+        </div>
+
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Forfait sur service global :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{global_service_forfait + ' MDH'}}
+          </span>
+        </div>
+
+        <div class="flex gap-4">
+          <span class="font-bold">
+            Forfait sur service par camion :
+          </span>
+          <span class="text-[#0C8040] font-normal ">
+            {{particular_service_forfait + ' MDH'}}
+          </span>
+        </div>
+      </div>
+      <table class="w-full text-left text-gray-500 mt-4">
+        <thead>
+          <tr>
+            <th *ngFor="let header of ['Service', 'HT', 'TVA', 'TTC']" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let service of calcul_details">
+            <td class="p-3">{{service['service']}}</td>
+            <td class="p-3"> {{service['ht']}}</td>
+            <td class="p-3">{{service['tva']}}</td>
+            <td class="p-3">
+              {{service['ttc']}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,485 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex justify-between">
+      <div class="flex">
+        <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Liste des demandes clients:</h2>
+      </div>
+      <div class="flex items-baseline" *ngIf="!spinner">
+        <p class="text-base font-medium">Nombre des demandes  :</p>
+        <h2 class="text-[#0C8040] font-semibold pl-2">{{count}}</h2>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <div>
+        <div class="flex justify-end cursor-pointer"
+          *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'C')"
+          (click)="openDialogreservation()">
+          <mat-icon class="text-[#0C8040] pt-1">add_circle</mat-icon>
+          <h2 class="text-[#0C8040] font-semibold pl-2">
+            Créer une nouvelle demande
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler"
+      (filter)="filter($event)"></app-shared-filter>
+  </div>
+
+  
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <ng-container *ngIf="loader$ | async as isLoading">
+      <div *ngIf="isLoading.loading" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading.loading">
+        <div class="mt-36 mb-36 text-center" *ngIf="demandeList.length == 0">
+          <p class="text-[#636363] text-[22px]">
+            La Liste des demandes clients est vide
+          </p>
+        </div>
+        <div *ngIf="demandeList.length > 0">
+          <div class="mt-5">
+            <div class="bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px]"
+              *ngFor="let demande of demandeList; let i = index">
+              <div
+                class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[115px] items-center">
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        N° Demande
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.reference }}
+                        <span class="valeur flex justify-end" *ngIf="
+                            demande.marchandise_globale?.valeur_declare >
+                            2000000
+                          "></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Crée le {{ demande?.created_at | date: "dd/MM/yyyy" }}
+                      </p>
+                    </div>
+                  </div>
+                  <!-- <div class="flex items-center">
+                  <div class="pl-1">
+                    <p class="text-[#b5b5b5] text-[11px] font-medium">Expéditeur</p>
+                    <p class="text-[12px] text-[#000000]">
+                      {{ demande.client?.first_name }}
+                      {{ demande.client?.last_name }}
+                    </p>
+                  </div>
+                </div> -->
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+                    </div>
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium" matTooltip="Date début de Réservation">
+                        Date début de Rése
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.date_debut | date: "dd/MM/yyyy" }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[18px] text-[#138742]">date_range</mat-icon>
+                    </div>
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium" matTooltip="Date fin de Réseservation">
+                        Date fin de Rése
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.date_fin | date: "dd/MM/yyyy" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[18px] text-[#138742]">place</mat-icon>
+                    </div>
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Adresse de départ
+                      </p>
+                      <p class="text-[12px] text-[#000000]" matTooltip="{{
+                          demande?.points_chargements[0]?.adresse?.adress
+                        }}">
+                        {{
+                        demande?.points_chargements[0]?.adresse?.adress
+                        | slice: 0:11
+                        }}...
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[18px] text-[#138742]">place</mat-icon>
+                    </div>
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Adresse d’arrivée
+                      </p>
+                      <p matTooltip="{{
+                          demande?.demande_destinataires[i]
+                            ?.points_dechargement[0].adresse.adress
+                        }}" class="text-[12px] text-[#000000]">
+                        {{
+                        demande?.demande_destinataires[0]
+                        ?.points_dechargement[0]?.adresse?.adress
+                        | slice: 0:11
+                        }}...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Nbr des destinataires
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.demande_destinataires?.length }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Nbr de palettes
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.marchandise_globale?.nbr_palette }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Valeur déclarée globale
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.marchandise_globale?.valeur_declare }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Volume global
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.marchandise_globale?.volume }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Poids global
+                      </p>
+                      <p class="text-[12px] text-[#000000]">
+                        {{ demande.marchandise_globale?.poids }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="pl-1">
+                      <p class="text-[#b5b5b5] text-[11px] font-medium">
+                        Type de camion / Tonnage
+                      </p>
+                      <p class="text-[12px] text-[#000000]" *ngIf="demande.vehicules.length > 0">
+                        {{demande.vehicules[0]?.truck_type?.name + " / " + demande.vehicules[0]?.tonnage?.name + " T"}}
+                      </p>
+                      <p class="text-[12px] text-[#000000]" *ngIf="demande.vehicules.length === 0">
+                        --
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                <div class="width-content">
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[18px] text-[#138742]">money</mat-icon>
+                    </div>
+                    <div class="pl-1">
+                      <p class="text-black text-[11px] font-medium">
+                        Cotation totale  (HT)
+                      </p>
+                      <p class="text-black text-[12px] font-medium">
+                        {{ demande.taxed_price_ht + " DHs" || "--" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="inline-block btn-statut">
+                    <button *ngIf="demande.statut === 'IN_PROGRESS'" pButton pRipple type="button" label="En attente"
+                      class="p-button-rounded p-button-warning"></button>
+                    <button *ngIf="demande.statut === 'EN_ATTENTE_AFFECTATION'" pButton pRipple type="button"
+                      label="En cours" class="p-button-rounded p-button-info"></button>
+                    <button *ngIf="demande.statut === 'REFUSED'" pButton pRipple type="button" label="refusée"
+                      class="p-button-rounded p-button-danger"></button>
+                    <button *ngIf="demande.statut === 'ACCEPTED'" pButton pRipple type="button" label="Validée"
+                      class="p-button-rounded p-button-success"></button>
+                    <button *ngIf="demande.statut === 'CANCELED'" pButton pRipple type="button" label="Refusée"
+                      class="p-button-rounded p-button-danger"></button>
+                  </div>
+                  <div *ngIf="demande.statut != 'IN_PROGRESS'" class="text-center">
+                    <!-- [routerLink]="['/detailsAffretement', demande.uuid]" -->
+                    <button class="underline text-sm" (click)="detailsAffretement(demande.uuid, false)"
+                      *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'R')">
+                      Voir détails
+                    </button>
+                  </div>
+                  <div class="text-center"
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'R')">
+                    <button *ngIf="demande.statut == 'IN_PROGRESS'" (click)="detailsAffretement(demande.uuid, true)"
+                      class="underline text-sm">
+                      Décision
+                    </button>
+                  </div>
+                </div>
+                <div class="cursor-pointer" (click)="onclick(i)">
+                  <mat-icon class="pl-1">
+                    {{ !isVisible(i) ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+                  </mat-icon>
+                </div>
+
+                <div class="block pl-1 relance text-center">
+                  <div *ngIf="spinnerRelance[i]">
+                    <mat-spinner [diameter]="20"></mat-spinner>
+                  </div>
+                  <div *ngIf="!spinnerRelance[i]">
+                    {{ demande?.relances?.length }}
+                  </div>
+                  <!-- <mat-icon
+                    class="iconrelance text-[#fff] bg-[#268FDD] rounded-[50%] p-1 pl-1 pt-[2px] cursor-pointer"
+                    mat-button
+                    [matMenuTriggerFor]="menuRelance"
+                    >cached
+                  </mat-icon> -->
+                  <button class="underline text-sm cursor-pointer" mat-button [matMenuTriggerFor]="menuRelance">
+                    Relances
+                    </button>
+                  <mat-menu #menuRelance="matMenu">
+                    <table class="w-full text-left text-gray-500">
+                      <thead>
+                        <tr>
+                          <th
+                            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                          >
+                            Date/Heure
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                          *ngFor="let relance of demande?.relances"
+                        >
+                          <td class="p-3">
+                            {{
+                              relance.created_at | date : "dd/MM/yyyy  HH:mm"
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </mat-menu>
+                </div>
+                <mat-icon mat-button [matMenuTriggerFor]="menu" class="cursor-pointer">more_vert</mat-icon>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="editDemande(demande.uuid)"
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'U')">
+                    <mat-icon>edit</mat-icon> Modifier la demande
+                  </button>
+                  <button mat-menu-item (click)="NavigateToTaxation(demande)"
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'U')">
+                    <mat-icon>money</mat-icon>Taxer la demande
+                  </button>
+                  <ng-container
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'R')">
+                    <button mat-menu-item (click)="downloadDecleartion(demande.id)"
+                      *ngIf="demande.trajectories?.length > 0">
+                      <mat-icon>print</mat-icon> Imprimer la fiche de déclaration
+                    </button>
+                  </ng-container>
+                  <ng-container
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'U')">
+                    <button mat-menu-item (click)="annuler(demande)" *ngIf="
+                      demande.statut === 'IN_PROGRESS'">
+                      <mat-icon>cancel</mat-icon> Annuler la demande
+                    </button>
+                  </ng-container>
+                  <ng-container
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'R')">
+                    <button mat-menu-item *ngIf="demande?.discounts.length > 0" (click)="openTimeLine(demande, true)">
+                      <mat-icon>arrow_right_alt</mat-icon>Workflow de validation
+                    </button>
+                  </ng-container>
+                  <ng-container
+                    *ngIf="permissionService.hasPermission('Affrètement', 'Liste des demandes clients', 'U')">
+                    <button *ngIf="demande.discounts.length > 0 && demande.discounts[0]?.status != 'CREATED'"
+                      mat-menu-item (click)="openConfirmDiscountPopUp(demande)">
+                      <mat-icon>check_circle</mat-icon>
+                      Validation du {{demande.discounts[0].is_forfait ? 'Forfait ' : 'Remise'}}
+                    </button>
+                    <button
+                      *ngIf="demande.discounts.length > 0 && demande.discounts[0]?.workflow_step >= 0 && demande.discounts[0]?.status == 'DRAFT' "
+                      mat-menu-item (click)="openDeclinePopUP(demande)">
+                      <mat-icon>cancel</mat-icon>
+                      Refus de {{demande.discounts[0].is_forfait ? 'Forfait ' : 'Remise'}}
+                    </button>
+                    <button *ngIf="demande.discounts.length > 0" mat-menu-item (click)="discountPreviewMode(demande)">
+                      <mat-icon>more_horiz</mat-icon>
+                      Détail de {{demande.discounts[0].is_forfait ? 'Forfait ' : 'Remise'}}
+                    </button>
+                  </ng-container>
+                </mat-menu>
+              </div>
+              <ng-container *ngIf="isVisible(i)">
+                <div class="overflow-auto w-full pl-3 pr-3">
+                  <table class="w-full text-left text-gray-500">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let header of headerColumuns" scope="col"
+                          class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                          <div class="flex items-center">
+                            {{ header }}
+                          </div>
+                        </th>
+                        <!-- <th
+                          scope="col"
+                          class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                        >
+                          <div class="flex justify-end">Actions</div>
+                        </th> -->
+                      </tr>
+                    </thead>
+                    <!-- <tbody>
+                      <tr
+                        class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                        *ngFor="let item of demande.demande_destinataires"
+                      >
+                        <div class="flex items-center">
+                          {{ header }}
+                        </div>
+                      </tr>
+                    </tbody> -->
+                    <tbody>
+                      
+
+                      <ng-container
+                      *ngFor="let item of demande.demande_destinataires"
+                    >
+                      <tr
+                        class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                        *ngFor="
+                          let p of item.points_dechargement;
+                          let last = last
+                        "
+                      >
+                        <td class="p-3">
+                          <span *ngIf="p.dec_code">
+                            {{ p.dec_code }}
+                          </span>
+                        </td>
+                        <td class="p-3">
+                          {{ demande?.client.first_name }} {{ demande?.client.last_name }}
+                        </td>
+
+                        <td class="p-3">
+                          {{ item.first_name }} {{ item.last_name }}
+                        </td>
+                        <td class="p-3">
+                          {{ p.adresse?.sector?.zone?.city?.name }}
+                        </td>
+                        <td class="p-3">
+                          {{ p.adresse?.adress }}
+                        </td>
+                        <td class="p-3">
+                          {{ getNumberPalettes(p) }}
+                        </td>
+                        <td class="p-3">
+                          <ng-container
+                            *ngFor="let envoi of p.item_envois; let last = last"
+                          >
+                            {{ envoi?.type_palette }}
+                            <span *ngIf="!last">/</span>
+                          </ng-container>
+                        </td>
+                        <td class="p-3">
+                          <div class="flex gap-2">
+                            <ng-container
+                              *ngFor="
+                                let doc of getRetourDocuments(p);
+                                let last = last
+                              "
+                            >
+                              {{ doc }}
+                              <span *ngIf="!last">/</span>
+                            </ng-container>
+                          </div>
+                        </td>
+                        <td class="p-3">
+                          <div class="flex gap-1 items-center justify-center">
+                            <ng-container
+                              *ngFor="
+                                let fond of getRetourFonds(p);
+                                let last = last
+                              "
+                            >
+                              <span class="p-1">
+                                {{ returnFonds[fond.type] }}
+                              </span>
+                              {{ fond.montant }}
+                              <span *ngIf="!last">/</span>
+                            </ng-container>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-10"></div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="mt-10" *ngIf="!isLoading.loading">
+            <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+              (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 15 , 20 , 25 , 30]"></p-paginator>
+          </div>
+        </div>
+      </div>

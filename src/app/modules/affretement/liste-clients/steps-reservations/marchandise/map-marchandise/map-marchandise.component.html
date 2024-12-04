@@ -1,0 +1,22 @@
+<div class="map-container">
+  <!-- <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h1 mat-dialog-title class="col-span-2">
+        Ajouter la position géographique
+      </h1>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div> -->
+  <div class="map-frame">
+    <div id="map" class="map"></div>
+    <button
+      (click)="onSavePosition()"
+      type="button"
+      class="inline-block px-8 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase shadow-md disabled:opacity-25 hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+    >
+      {{ this.dialogData.isPreviewMode ? "Valider" : "Fermer" }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+::ng-deep .mat-dialog-container{
+    padding: 0px;
+    overflow: hidden;
+}
+:host .mat-dialog-content{
+  padding: 2rem 4rem 2rem 4rem;
+  margin-top: 0px !important;
+
+}
+
+::ng-deep .mat-dialog-actions {
+    padding: 0rem 4rem 2rem 4rem;
+}
+
+.dialog-action {
+  padding: 0rem 3rem 2rem 3rem;
+}
+
+::ng-deep .mat-dialog-title{
+    margin-bottom: 0px;
+}
+
+::ng-deep .mat-form-field-infix {
+  margin-left: 1.5em !important;
+}
+
+/* ::ng-deep .mat-form-field-outline-start {
+    border-radius: 28px 0 0 28px !important;
+    min-width: 28px !important;
+  } */
+
+/* ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 28px 28px 0 !important;
+} */
+
+/* default and hover color */
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #dbdbdb ;
+}
+
+/* focused color */
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #dbdbdb ;
+}
+
+.btn-black {
+    background-color: black !important;
+    color: white !important;
+}
+.btn-text{
+    color: white !important;
+}
+
+/* floating label color */
+/* ::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+    color: #dbdbdb;
+    padding-left: 10px !important;
+} */
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end,
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap {
+    border-width: 2px !important;
+}
+
+

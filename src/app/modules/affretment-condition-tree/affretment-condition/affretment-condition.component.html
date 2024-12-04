@@ -1,0 +1,53 @@
+<div class="name text-left text-[#0C6080] pb-3 font-medium text-xs">
+  Condition
+  <span
+    *ngIf="this.loadedConditionsMetaIds?.includes(condition?.meta_?.cond_id)"
+    class="ml-1 pt-1"
+    ><mat-icon style="scale: 0.9">cloud_download</mat-icon></span
+  >
+</div>
+<div class="grid grid-cols-2 gap-2 text-xs">
+  <div class="text-left">
+    <p class="pb-2">
+      Origine:
+      <strong>{{ condition.origine ? condition.origine.name : "Tout" }}</strong>
+    </p>
+  </div>
+  <div class="text-left">
+    <p class="pb-2">
+      Destination:
+      <strong>{{
+        condition.destination ? condition.destination.name : "Tout"
+      }}</strong>
+    </p>
+  </div>
+</div>
+<div class="border-b-2 border-[#B2B2B252]"></div>
+<div class="grid grid-cols-2 text-xs">
+  <div
+    *ngIf="disableActions$ | async"
+    class="flex cursor-pointer text-[#0C8040]"
+    (click)="openConditionDialog(true)"
+  >
+    <mat-icon class="pt-2">add_circle</mat-icon>
+    <p class="pl-1 pt-2">Détails</p>
+  </div>
+
+  <div
+    *ngIf="(disableActions$ | async) === false"
+    class="flex cursor-pointer text-[#0C8040]"
+    (click)="openConditionDialog(true)"
+  >
+    <mat-icon class="pt-2">add_circle</mat-icon>
+    <p class="pl-1 pt-2">Modifier</p>
+  </div>
+
+  <div
+    *ngIf="(disableActions$ | async) === false"
+    class="flex cursor-pointer text-[#D80404]"
+    (click)="onDeleteCondition()"
+  >
+    <mat-icon class="pt-2">delete</mat-icon>
+    <p class="pl-1 pt-2">Supprimer</p>
+  </div>
+</div>

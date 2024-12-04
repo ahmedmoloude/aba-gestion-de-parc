@@ -1,0 +1,379 @@
+/* styles.css */
+
+/* Reset some default styles for better consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .top-container{
+    height: calc(100vh - 100px);
+  }
+  
+  /* Center the content horizontally and vertically */
+  .flex {
+    display: flex;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .gap-2 {
+    gap: 2rem; /* Adjust the gap as needed */
+  }
+  
+  /* Style for the buttons */
+  .head-button,
+  .save-button {
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 230px;
+    background-color: #138742; /* Updated color to #138742 */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 33px;
+  }
+  
+  .head-button:hover,
+  .save-button:hover {
+    background-color: #0e6337; /* A slightly darker shade on hover */
+  }
+  
+  /* Style for the tab group */
+  .mat-tab-group {
+    border-radius: 6px;
+    padding: 1rem;
+  }
+  
+  /* Style for the individual tabs */
+  .mat-tab-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .mat-tab-label::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: transparent; /* Initial underline color */
+    transition: background-color 0.2s ease;
+  }
+  
+  .mat-tab-label.active {
+    color: #138742; /* Updated color to #138742 for active tab text */
+  }
+  
+  .mat-tab-label:hover {
+    background-color: #f0f0f0; /* Light gray background on hover */
+  }
+  
+  .mat-tab-label.active::before,
+  .mat-tab-label:hover::before {
+    background-color: #138742; /* Updated color to #138742 for underline on hover and when active */
+  }
+  
+  /* Style for the removeTab icon */
+  .removeTab {
+    margin-left: 0.5rem;
+    color: #d9534f; /* Red color for remove icon */
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .removeTab:hover {
+    color: #b52b27; /* A slightly darker shade on hover */
+  }
+  
+  /* Style for the form elements and labels */
+  .form-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .form-cell {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0; /* Light gray border */
+  }
+  
+  .form-cell label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-cell select,
+  .form-cell input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 14px;
+    border: 1px solid #e0e0e0; /* Light gray border */
+    border-radius: 4px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .form-cell select {
+    appearance: none;
+    background-color: #ffffff;
+  }
+  
+  .form-cell input[type="text"] {
+    box-sizing: border-box;
+  }
+  
+  .form-cell select:focus,
+  .form-cell input:focus {
+    outline: none;
+    border-color: #138742; /* Updated color to #138742 for blue color on focus */
+  }
+  
+  /* Style for the icon container */
+  .icon-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .icon-container mat-icon {
+    cursor: pointer;
+  }
+  
+  .icon-container mat-icon:hover {
+    color: #138742; /* Updated color to #138742 for blue color on hover */
+  }
+  
+  /* Additional style for the tab content */
+  .pt-4 {
+    padding-top: 1rem;
+  }
+  
+  /* Style for the tab group background color */
+  .mat-tab-body-content {
+    background-color: #ffffff;
+  }
+  .rubric-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 23px 23px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+  }
+  
+  .rubric-card {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    padding-right: 20px;
+    box-shadow: 3px 8px 3px #00000008;
+  }
+  
+  .rubric-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .rubric-button:hover{
+    background-color: #0e6337; /* A slightly darker shade on hover */
+  }
+  
+  .rubric-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .rubric-count {
+    height: 30px;
+    width: 30px;
+    background: white;
+    border-radius: 50%;
+    color: #4caf50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  
+  .menu-container {
+  position: relative;
+}
+
+.rubric-menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-option {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.popover{
+  position: absolute;
+  right: -6px;
+  top: 29px;
+  font-size: 30px;
+  color: #837c7c;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.custom-menu {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px 0;
+  min-width: 120px;
+}
+
+.custom-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 8px 10px 8px;
+  border-color: transparent transparent #fff transparent;
+}
+
+.mat-menu-item {
+  color: #333;
+  font-size: 14px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.mat-icon {
+  margin-right: 8px;
+}
+
+.mb-4{
+  margin-bottom: 20px !important;
+}
+.arrow{
+  margin-left: 8px !important;
+}
+
+::ng-deep .mat-tab-label-active{
+  background: #e6e3e3;
+}
+::ng-deep .mat-tab-label:first-child{
+  border-radius: 9px 0 0 0;
+}
+::ng-deep .mat-tab-label:last-child{
+  border-radius: 0px 9px 0 0;
+}
+.add-condition{
+    color: #138742;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+    justify-content: end;
+    height: 33px;
+}
+.add-condition .icon{
+  color: #4caf50;
+}
+
+.filter-container {
+  margin: 0px auto;
+  padding: 9px 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.filter-input-group {
+  flex: 1; /* Utilise tout l'espace disponible */
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.filter-input {
+  width: 100%; /* Remplit tout l'espace disponible dans le conteneur parent */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+.filter-button{
+  background: #d7d2d2;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+
+  

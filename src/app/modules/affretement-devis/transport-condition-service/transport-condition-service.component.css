@@ -1,0 +1,61 @@
+/* The switch container */
+.switch {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 16px;
+    margin-top: 18px;
+    margin-left: 24px;
+  }
+  
+  /* Hide the default checkbox input */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  
+  /* Styling for the checked state */
+  .switch input:checked + .slider {
+    background-color: #0c8040; /* Blue for ON */
+  }
+  
+  /* Styles for the slider's appearance when OFF */
+  .switch .slider::before {
+    content: "Non";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    left: 0;
+    background-color: #f44336;
+    color: #fff;
+    border-radius: 10px;
+    transition: 0.4s;
+    font-size: 10px;
+  }
+  
+  /* Styles for the slider's appearance when ON */
+  .switch input:checked + .slider::before {
+    content: "Oui";
+    background-color: #3b82f6;
+    left: 76%;
+    transform: translateX(-50%);
+  }
+  

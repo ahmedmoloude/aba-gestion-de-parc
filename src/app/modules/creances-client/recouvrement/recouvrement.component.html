@@ -1,0 +1,273 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <!-- <div class="grid grid-cols-3 gap-4">
+        <div>
+            <div class="flex col-start-1 col-end-3">
+                <mat-icon class="pt-1">assignment</mat-icon>
+
+                <h2 class="text-[#0C8040] font-semibold pl-2">
+                    Créances clients<span class="text-black pl-1">“Recouvrement”</span>
+                </h2>
+            </div>
+        </div>
+        <div class="flex justify-around col-span-2">
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Recouvreur</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let recouvreur of [0,1,2]">
+                            Recouvreur
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Code / Client</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let code_client of [0,1,2]">
+                            code_client
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Activité</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let activite of [0,1,2]">
+                            activite
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-start">
+        <div class="bg-[#F7F7F7] rounded-[18px] p-3">
+            <p *ngFor="let facteur of [0,1,2]" class="flex text-[#747474]">Facture échus : <span>+
+                    0</span><span><mat-icon>arrow_forward</mat-icon>
+                </span><span>30 :</span><span class="text-[#E10000] pl-1">212.00 Dhs / 24 Fact / 24 Clients</span></p>
+            <p class="flex text-[#747474]">Facture échus : <span>+ au delà de</span><span
+                    class="text-[#E10000] pl-1">212.00 Dhs / 24 Fact / 24 Clients</span></p>
+        </div>
+        <div class="flex items-center bg-[#F7F7F7] rounded-[18px] p-3 ml-5">
+            <div class="icon ml-1">
+                <mat-icon class="text-[30px] text-[#0C8040]">person</mat-icon>
+            </div>
+            <div class="pl-2">
+                <p class="text-black text-[20px] font-medium">Total client</p>
+                <p class="text-[20px] text-[#0C8040] pt-2">32</p>
+            </div>
+        </div>
+        <div class="flex items-center bg-[#F7F7F7] rounded-[18px] p-3 ml-5">
+            <div class="icon ml-1">
+                <mat-icon class="text-[30px] text-[#0C8040]">money</mat-icon>
+            </div>
+            <div class="pl-4">
+                <p class="text-black text-[20px] font-medium">Créance total</p>
+                <p class="text-[20px] text-[#0C8040] pt-2">20.000 Dhs</p>
+            </div>
+        </div>
+    </div> -->
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">assignment</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Créances clients<span class="text-black pl-1">“Recouvrement”</span>
+        </h2>
+      </div>
+    </div>
+
+    <div *ngIf="recouvrement$ | async as recouvrementState">
+      <div class="grid mt-4">
+        <app-shared-filter [inputs]="inputsFiler" (filter)="filtrer($event)"></app-shared-filter>
+      </div>
+    </div>
+
+    <!-- <div class="flex justify-around col-span-2">
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Recouvreur</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let recouvreur of [0,1,2]">
+                            Recouvreur
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Code / Client</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let code_client of [0,1,2]">
+                            code_client
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Activité</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let activite of [0,1,2]">
+                            activite
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div> -->
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header style="height: fit-content;padding-top: 25px;">
+        <mat-panel-title class="font-bold mb-4 pl-2">
+          Factures échues
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngIf="recouvrement$ | async as recouvrementState">
+        <div
+          *ngIf="recouvrementState?.recouvrementsStatistics?.statisitiques?.length <= 0 && recouvrementState?.dataState =='LOADING'"
+          class="flex items-center justify-center mt-6">
+          <mat-spinner [diameter]="80"></mat-spinner>
+        </div>
+        <div
+          *ngIf="recouvrementState?.recouvrementsStatistics?.statisitiques?.length <= 0 && recouvrementState?.dataState=='SUCCESS'"
+          class="flex flex-col items-center">
+          <h2>Le total des Factures échues est nul </h2>
+        </div>
+        <ng-container *ngIf="recouvrementState?.recouvrementsStatistics?.statisitiques?.length>0 ">
+          <div class="overflow-auto">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerColumuns" scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let creance of recouvrementState?.recouvrementsStatistics?.statisitiques">
+                <th scope="row" class="p-3">{{(creance?.range)?creance.range:'---'}}</th>
+                <td class="p-3">{{(creance?.total_amount)?creance.total_amount:0}}</td>
+                <td class="p-3">{{(creance?.total_factures)?creance.total_factures:0}}</td>
+                <td class="p-3">{{(creance?.total_customers)?creance.total_customers:'---'}}</td>
+              </tr>
+            </tbody>
+            <tfoot *ngIf="recouvrementState?.recouvrementsStatistics?.total as total">
+              <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                <th scope="row" class="p-3">Total</th>
+                <th scope="col" class="p-3">{{(total?.total_amount)?total.total_amount:0}}</th>
+                <th scope="col" class="p-3">---</th>
+                <th scope="col" class="p-3">{{(total?.total_customers)?total.total_customers:0}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        </ng-container>
+      </ng-container>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div *ngIf="recouvrement$ | async as recouvrementsState">
+    <div *ngIf="recouvrementsState?.recouvrements?.length <= 0 && recouvrementsState?.dataState =='LOADING'"
+      class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div *ngIf="recouvrementsState?.recouvrements?.length <= 0 && recouvrementsState?.dataState=='SUCCESS'"
+      class="flex flex-col items-center">
+      <h2>La liste des recouvrements est vide</h2>
+    </div>
+    <ng-container *ngIf="recouvrementsState?.recouvrements?.length>0">
+      <table class="w-full text-left text-gray-500 mt-5">
+        <thead>
+          <tr>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center">Code / Client</div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center">Ville</div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center cursor-pointer" (click)="dialogrecouvrement('0-30')" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                <span>+ 0</span><span><mat-icon>arrow_forward</mat-icon>
+                </span><span>30 :</span><span class="pl-1"><mat-icon>remove_red_eye</mat-icon>
+                </span>
+              </div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center cursor-pointer" (click)="dialogrecouvrement('30-60')" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                <span>+ 30</span><span><mat-icon>arrow_forward</mat-icon>
+                </span><span>60 :</span><span class="pl-1"><mat-icon>remove_red_eye</mat-icon>
+                </span>
+              </div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center cursor-pointer" (click)="dialogrecouvrement('60-90')" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                <span>+ 60</span><span><mat-icon>arrow_forward</mat-icon>
+                </span><span>90 :</span><span class="pl-1"><mat-icon>remove_red_eye</mat-icon>
+                </span>
+              </div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center cursor-pointer" (click)="dialogrecouvrement('90+')" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                <span>+ au delà de</span><span>90 :</span><span class="pl-1"><mat-icon>remove_red_eye</mat-icon>
+                </span>
+              </div>
+            </th>
+            <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center justify-center">
+                Total créances
+              </div>
+            </th>
+            <!-- <th scope="col" class="text-[#0C8040] font-normal whitespace-nowrap">
+                        <div class="flex items-center justify-center">
+                            Relance
+                        </div>
+                    </th> -->
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-center">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let recouvrement of recouvrementsState?.recouvrements">
+            <td class="p-3">{{(recouvrement?.customer?.code)?recouvrement.customer.code:'---'}} -
+              {{(recouvrement?.customer?.name)?(recouvrement.customer.name | titlecase):'---'}}</td>
+            <td class="p-3">{{(recouvrement?.customer?.city?.name) ? (recouvrement.customer.city.name | titlecase) :
+              '---'}}</td>
+            <td class="p-3">{{(recouvrement?.data['0-30'])? recouvrement.data['0-30'] : 0}}</td>
+            <td class="p-3">{{(recouvrement?.data['30-60'])? recouvrement.data['30-60'] : 0}}</td>
+            <td class="p-3">{{(recouvrement?.data['60-90'])? recouvrement.data['60-90'] : 0}}</td>
+            <td class="p-3">{{(recouvrement?.data['90+'])? recouvrement.data['90+'] : 0}}</td>
+            <td class="p-3">{{getTotalCreance(recouvrement?.data)}}</td>
+            <!-- <td class="p-3">0</td> -->
+            <td class="p-3 text-center cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="visualistationglobal(recouvrement?.customer)" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                  <mat-icon>remove_red_eye</mat-icon>
+                  <span>Visualisation globale</span>
+                </button>
+                <button mat-menu-item (click)="visualistationdetails(recouvrement?.customer?.id)" *ngIf="permissionService.hasPermission('Facturation', 'Recouvrement', 'R')">
+                  <mat-icon>list</mat-icon>
+                  <span>Visualisation détaillée</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-10">
+        <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+          (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+        </p-paginator>
+      </div>
+    </ng-container>
+  </div>
+</div>

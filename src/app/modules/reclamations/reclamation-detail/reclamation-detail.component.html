@@ -1,0 +1,479 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">
+      Détail de réclamation
+      <span class="font-normal text-[#0C8040] underline">
+        N° {{ selectedComplaint.reference }}</span
+      >
+    </h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <mat-dialog-content>
+    <div class="grid grid-cols-4 gap-4 reclamation-row">
+      <div class="col-span-3 font-normal left-grid-border">
+        <div>
+          <div
+            [class]="'flex flex-wrap mb-6 font-medium text-[18px] ' + (detailsComplaint[selectedComplaint.type].name ? 'justify-between' : 'justify-end') "
+          >
+            <div
+              class="flex"
+              *ngIf="detailsComplaint[selectedComplaint.type].name">
+              <div class="text-green mr-2">
+                {{ label[selectedComplaint.type] }}:
+              </div>
+              <span>N° {{ prepareIds(selectedComplaint.details) }}</span>
+            </div>
+            <div
+              class="text-green cursor-pointer flex items-center float-right"
+              [matMenuTriggerFor]="menu"
+              *ngIf="!selectedComplaint.childs.length"
+            >
+              <mat-icon>add_circle_outline</mat-icon>
+              <span class="font-normal text-[16px] pl-3"> Créer un ticket</span>
+            </div>
+            <mat-menu #menu="matMenu" class="p-6">
+              <p class="font-semibold text-green text-[17px] mb-6">Création d'un ticket</p>
+              <form
+                [formGroup]="taskForm"
+                (ngSubmit)="onSubmit(selectedComplaint.id)"
+                class="border-b-2"
+                (click)="$event.stopPropagation()"
+              >
+                <mat-form-field appearance="outline" class="w-[100%] mb-2">
+                  <mat-label>Motif</mat-label>
+                  <input matInput formControlName="description" />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="w-[100%] mb-2"
+                >
+                  <mat-label>Assigné à </mat-label>
+                  <mat-select formControlName="assigned_user">
+                  <mat-option
+                    *ngFor="let item of accounts$ | async"
+                    [value]="item.id"
+                  >
+                    <ng-container *ngIf="item.id != authUserId">
+                      {{
+                        item.name +
+                          " | Direction " +
+                          item.email.split("@")[0].split("-")[1]
+                      }}
+                    </ng-container>
+                    <ng-container *ngIf="item.id == authUserId">
+                      Moi | Direction
+                      {{ item.email.split("@")[0].split("-")[1] }}
+                    </ng-container>
+                  </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="flex justify-end">
+                  <button
+                    type="submit"
+                    class=" mb-5 px-8 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight shadow-md disabled:opacity-25 hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+                  >
+                    Assigné
+                  </button>
+                </div>
+              </form>
+            </mat-menu>
+            <!-- </div> -->
+          </div>
+          <div class="flex flex-col mr-6 green-separator">
+            <div
+              class="grid grid-cols-2 mb-2 text-[14px]"
+              *ngIf="selectedComplaint.type === 'Expedition'"
+            >
+              <div
+                class="inline-flex items-center w-full mb-3"
+                *ngFor="let item of detailsExp"
+              >
+                <div class="font-semibold mr-2">{{ item.label }}</div>
+                <span
+                  >{{
+                    item.label == "Client"
+                      ? selectedComplaint.customer.type === "entity"
+                        ? selectedComplaint.customer.entreprise_name
+                        : selectedComplaint.customer.first_name ||
+                          selectedComplaint.customer.last_name
+                        ? selectedComplaint.customer.first_name +
+                          " " +
+                          selectedComplaint.customer.last_name
+                        : selectedComplaint.customer.name
+                      : deepValue(selectedComplaint.details[0], item.value)
+                  }}
+                  {{ item.supp }}</span
+                >
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex" *ngIf="selectedComplaint.type !== 'Expedition'">
+                <div class="font-semibold mr-2">Client:</div>
+                  <p>
+                    {{ selectedComplaint?.customer?.first_name }}
+                    {{ selectedComplaint?.customer?.last_name }}
+                  </p>
+              </div>
+              <div class="flex" *ngIf="selectedComplaint.reason">
+                <div class="font-semibold mr-2">Motif:</div>
+                <p>
+                  {{ selectedComplaint?.reason?.reason }}
+                </p>
+              </div>
+              <div class="flex" *ngIf="selectedComplaint.object">
+                <div class="font-semibold mr-2">Objet:</div>
+                <p>
+                  {{ selectedComplaint?.object }}
+                </p>
+              </div>
+              <div class="flex" *ngIf="selectedComplaint.description">
+                <div class="font-semibold mr-2">Description:</div>
+                <p>{{ selectedComplaint.description }}</p>
+              </div>
+              <div>
+                <div class="font-semibold mr-2 mb-4">
+                  Images:
+                  <span class="font-normal"
+                    >({{ selectedComplaint?.document?.length }})</span
+                  >
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                  <div
+                    class="tags tags-gray"
+                    *ngFor="let file of selectedComplaint?.document | slice: 0:2"
+                    (click)="
+                      openImage({
+                        document: file,
+                        title: file.id + '.' + file.extension
+                      })
+                    "
+                  >
+                    <mat-icon>image</mat-icon> {{ fileName(file) }}
+                    <!-- <span><mat-icon>cancel</mat-icon></span> -->
+                  </div>
+                  <div
+                    class="tags-counter tags-counter-green"
+                    *ngIf="
+                      selectedComplaint?.document &&
+                      selectedComplaint?.document.length > 2
+                    "
+                  >
+                    + {{ selectedComplaint?.document.length - 2 }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="green-separator" *ngIf="selectedComplaint.childs.length === 0" >
+            <p class="mb-2">Tickets :</p>
+            <div
+              class="flex mb-4 block p-6 bg-white rounded-md border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer"
+              *ngFor="let task of selectedComplaint?.tasks"
+              (click) = "openTaskDetailDialog({ task: task, step: 'UNSOLVED' })"
+              >
+              <div class="w-1/3"><b>{{ task.uuid.split("-")[4].toUpperCase() }}</b></div>
+              <div class="w-1/3">
+                <span [class] = "'badge '+ statusTask[task.status]['color']" >{{ statusTask[task.status]["name"] }}</span>
+              </div>
+              <div class="w-1/3"><span>Crée le : </span>{{ task.created_at | date: "dd/MM/y HH:mm" | if_null }}</div>
+            </div>
+          </div>
+          <div
+            *ngFor="let item of selectedComplaint.childs"
+            class="right-grid-border mb-5"
+          >
+            <div class="mb-4">
+              <div class="font-semibold flex justify-between">
+                <div>
+                  {{ detailsComplaint[item?.type]["label"] }}:
+                <span class="font-normal">({{ item?.details?.length }})</span>
+                </div>
+
+                <div
+                  class="text-green cursor-pointer flex items-center my-4"
+                  [matMenuTriggerFor]="menu"
+                >
+                  <mat-icon>add_circle_outline</mat-icon>
+                  <span
+                    class="font-normal text-[16px] pl-3"
+                    >Créer un ticket</span
+                  >
+                </div>
+
+                <mat-menu #menu="matMenu" class="p-6" [overlapTrigger]="false">
+                  <p class="font-semibold text-green text-[17px] mb-6">Création d'un ticket</p>
+                  <form
+                    [formGroup]="taskForm"
+                    (ngSubmit)="onSubmit(item.id)"
+                    class="border-b-2"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <mat-form-field appearance="outline" class="w-[100%] mb-2">
+                      <mat-label>Motif</mat-label>
+                      <input matInput formControlName="description" />
+                    </mat-form-field>
+                    <mat-form-field
+                      *ngIf="isSuperAdmin"
+                      appearance="outline"
+                      class="w-[100%] mb-2"
+                    >
+                      <mat-label>Assigné à </mat-label>
+                      <mat-select formControlName="assigned_user">
+                      <mat-option
+                        *ngFor="let item of accounts$ | async"
+                        [value]="item.id"
+                      >
+                        <ng-container *ngIf="item.id != authUserId">
+                          {{
+                            item.name +
+                              " | Direction " +
+                              item.email.split("@")[0].split("-")[1]
+                          }}
+                        </ng-container>
+                        <ng-container *ngIf="item.id == authUserId">
+                          Moi | Direction
+                          {{ item.email.split("@")[0].split("-")[1] }}
+                        </ng-container>
+                      </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <div class="flex justify-end">
+                      <button
+                        type="submit"
+                        class=" mb-5 px-8 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight shadow-md disabled:opacity-25 hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+                      >
+                        Assigné
+                      </button>
+                    </div>
+                  </form>
+                </mat-menu>
+
+              </div>
+              <div class="flex flex-wrap gap-4 mt-4">
+                <span>{{ prepareIds(item.details) }}</span>
+              </div>
+
+            </div>
+
+            <div class="grid grid-cols-5 gap-4 mt-6">
+              <div>
+                <div class="font-semibold mr-2 mb-4">Motif:</div>
+                <p>{{ item?.reason?.reason }}</p>
+              </div>
+              <div class="col-span-2">
+                <div class="font-semibold mr-2 mb-4">Commentaire:</div>
+                <p>{{ item.description }}</p>
+              </div>
+              <div class="col-span-2">
+                <div class="font-semibold mr-2 mb-4">
+                  Images:
+                  <span class="font-normal"
+                    >({{ item?.document?.length }})</span
+                  >
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                  <div
+                    class="tags tags-gray"
+                    *ngFor="let file of item?.document | slice: 0:2"
+                    (click)="
+                      openImage({
+                        document: file,
+                        title: file.id + '.' + file.extension
+                      })
+                    "
+                  >
+                    <mat-icon>image</mat-icon> {{ fileName(file) }}
+                    <!-- <span><mat-icon>cancel</mat-icon></span> -->
+                  </div>
+                  <div
+                    class="tags-counter tags-counter-green"
+                    *ngIf="item?.document && item?.document.length > 2"
+                  >
+                    + {{ item?.document.length - 2 }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-span-2">
+                <div class="font-semibold mr-2 mb-4">
+                  Images: <span class="font-normal">(5)</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                  <div class="tags tags-gray">
+                    <mat-icon>image</mat-icon> Img1
+                    <span><mat-icon>cancel</mat-icon></span>
+                  </div>
+                  <div class="tags tags-gray">
+                    <mat-icon>image</mat-icon> Img2
+                    <span><mat-icon>cancel</mat-icon></span>
+                  </div>
+                  <div class="tags-counter tags-counter-green">+2</div>
+                </div>
+              </div> -->
+            </div>
+            <div class="mt-9" >
+              <p class="mb-2">Tickets :</p>
+              <div
+                class="flex mb-4 block p-6 bg-white rounded-md border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer"
+                *ngFor="let task of item?.tasks"
+                (click) = "openTaskDetailDialog({ task: task, step: 'UNSOLVED' })"
+                >
+                <div class="w-1/3"><b>{{ task.uuid.split("-")[4].toUpperCase() }}</b></div>
+                <div class="w-1/3">
+                  <span [class] = "'badge '+ statusTask[task.status]['color']" >{{ statusTask[task.status]["name"] }}</span>
+                </div>
+                <div class="w-1/3"><span>Crée le : </span>{{ task.created_at | date: "dd/MM/y HH:mm" | if_null}}</div>
+              </div>
+            </div>
+            <div class="w-full green-separator childs"></div>
+          </div>
+          <div *ngIf="isSuperAdmin">
+            <div [formGroup]="messageForm">
+              <label
+                for="about"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Commentaire
+              </label>
+              <div class="mt-3 grid grid-cols-6 gap-4">
+                <textarea
+                  id="about"
+                  name="about"
+                  rows="3"
+                  class="col-start-1 col-end-7 p-3 mb-5 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                  placeholder="Tapez votre commentaire"
+                  formControlName="message"
+                ></textarea>
+                <button
+                  type="button"
+                  class="mb-5 col-end-7 inline-block px-8 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase shadow-md disabled:opacity-25 hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+                  (click)="addMessage()"
+                >
+                  Ajouter
+                </button>
+              </div>
+            </div>
+            <div class="comment overflow-x-auto">
+              <div *ngFor="let message of selectedComplaint?.messages">
+                <div class="flex items-center">
+                  <div
+                    [class]="
+                      'w-1/6 flex ' +
+                      (loggedUser.id != message?.user?.id
+                        ? 'justify-end order-last'
+                        : '')
+                    "
+                  >
+                    <b>{{ message?.user?.name }}</b>
+                  </div>
+                  <div
+                    class="w-5/6 block p-6 bg-white rounded-[28px] border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                  >
+                    {{ message?.message }}
+                  </div>
+                </div>
+                <div
+                  [class]="
+                    'mt-2 mb-2 flex ' +
+                    (loggedUser.id != message?.user?.id
+                      ? 'justify-start'
+                      : 'justify-end')
+                  "
+                >
+                  <span>{{
+                    message.created_at | date: "dd/MM/y HH:mm" | if_null
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex flex-col items-center gap-4">
+        <div class="mb-6 font-semibold text-green text-[18px]">Statut</div>
+        <div class="flex flex-col">
+          <div
+            *ngFor="let item of status | keys; let i = index"
+            [class]="
+              'timeline-item ' +
+              (i < status[selectedComplaint.status]['id']
+                ? 'timeline-item-done'
+                : item == selectedComplaint.status && !status[item]['last']
+                ? 'timeline-item-now'
+                : !status[item]['last']
+                ? 'timeline-item-next'
+                : status[selectedComplaint.status]['type'] == 'sucess'
+                ? 'timeline-item-last'
+                : status[selectedComplaint.status]['type'] == 'error'
+                ? 'timeline-item-error'
+                : '')
+            "
+          >
+            <div
+              *ngIf="
+                !status[item]['last'] ||
+                (status[item]['last'] &&
+                  (selectedComplaint.status == item ||
+                    (status[item]['type'] == 'sucess' &&
+                      status[selectedComplaint.status]['type'] != 'error')))
+              "
+            >
+              <span
+                *ngIf="
+                  i < status[selectedComplaint.status]['id'] ||
+                  (status[selectedComplaint.status]['last'] &&
+                    status[selectedComplaint.status]['type'] != 'error')
+                "
+                ><mat-icon>done</mat-icon></span
+              >
+              <span
+                *ngIf="
+                  status[selectedComplaint.status]['last'] &&
+                  status[selectedComplaint.status]['type'] == 'error' &&
+                  item == selectedComplaint.status
+                "
+                ><mat-icon>close</mat-icon></span
+              >
+              <span
+                *ngIf="
+                  i >= status[selectedComplaint.status]['id'] &&
+                  !status[selectedComplaint.status]['last']
+                "
+                ><mat-icon>more_horiz</mat-icon></span
+              >
+              <p class="font-semibold">{{ status[item]["name"] }}</p>
+              <p
+                class="text-sm pt-1 pb-2"
+                *ngIf="selectedComplaint.status == 'IN_PROGRESS'"
+              >
+                {{ selectedComplaint?.task?.assigned_user?.name }}
+              </p>
+              <p *ngIf="item == selectedComplaint.status" class="text-xs">
+                {{
+                  selectedComplaint.updated_at | date: "dd/MM/y HH:mm" | if_null
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="reclamation-footer">
+    <div class="w-full flex flex-wrap justify-end items-center">
+      <div>
+        <button
+          [mat-dialog-close]="true"
+          type="button"
+          class="inline-block px-8 py-2.5 bg-white-800 font-semibold text-md underline leading-tight shadow-lg disabled:opacity-25 hover:bg-white-800 hover:shadow-lg focus:bg-white-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-white-800 active:shadow-lg transition duration-150 ease-in-out rounded-[28px]"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </mat-dialog-actions>
+</div>

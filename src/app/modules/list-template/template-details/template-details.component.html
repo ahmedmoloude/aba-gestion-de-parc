@@ -1,0 +1,119 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Détails template</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <mat-tab-group *ngIf="!spinner" mat-align-tabs="start" class="p-6">
+    <mat-tab label="Transport">
+      <table class="w-full text-left text-gray-500 mt-5 mb-5">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of transport | paginate : { id: 'pagination-1',  itemsPerPage: 5,  currentPage: transportPage}">
+            <td class="p-3">
+              {{ item.originable ? item.originable.name : "Tout" }}
+            </td>
+            <td class="p-3">
+              {{ item.destinationable ? item.destinationable.name : "Tout" }}
+            </td>
+            <td class="p-3">{{ item.basis_calcul?.title_affichage }}</td>
+            <td class="p-3">
+              {{
+              item.min === item.max && item.min == 1
+              ? "par unité"
+              : item.min + " - " + item.max
+              }}
+            </td>
+            <td class="p-3">
+              {{ item.calcul_val }}
+              {{ item.type_val === "PRICE" ? " DH" : "" }}
+              {{ item.type_val === "COEF" ? " %" : "" }}
+            </td>
+            <td class="p-3">
+              {{ item.val_sup + " DH / " + item.u_sup + " unité(s) sup" }}
+            </td>
+            <td class="p-3">
+              {{ item.max_poids + " Kg" }}
+            </td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon>more_vert</mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-10">
+        <pagination-controls id="pagination-1" (pageChange)="transportPage = $event"></pagination-controls>
+      </div>
+    </mat-tab>
+    <mat-tab label="Services">
+      <table class="w-full text-left text-gray-500 mt-5 mb-5">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumunsservice" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="
+              let item of services| paginate : { id: 'pagination-2', itemsPerPage: 5, currentPage: servicesPage }">
+            <td class="p-3">
+              {{ item.originable ? item.originable.name : "Tout" }}
+            </td>
+            <td class="p-3">
+              {{ item.destinationable ? item.destinationable.name : "Tout" }}
+            </td>
+            <td class="p-3">{{ item.rubric?.title_affichage }}</td>
+            <td class="p-3">{{ item.basis_calcul?.title_affichage }}</td>
+            <td class="p-3">
+              {{
+              item.min === item.max && item.min == 1
+              ? "par unité"
+              : item.min + " - " + item.max
+              }}
+            </td>
+            <td class="p-3">
+              {{ item.calcul_val }}
+              {{ item.type_val === "PRICE" ? " DH" : "" }}
+              {{ item.type_val === "COEF" ? " %" : "" }}
+            </td>
+            <td class="p-3">
+              {{ item.val_sup + " DH / " + item.u_sup + " unité(s) sup" }}
+            </td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon>more_vert</mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-10">
+        <pagination-controls id="pagination-2" (pageChange)="servicesPage = $event"></pagination-controls>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

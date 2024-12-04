@@ -1,0 +1,105 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Heritage d'une condition</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div *ngIf="isLoading" class="flex items-center justify-center m-4">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+  <form
+    *ngIf="!isLoading"
+    [formGroup]="heritedConditionForm"
+    (ngSubmit)="onFormSubmit()"
+  >
+    <div mat-dialog-content>
+      <div>
+        <div class="grid grid-cols-1 sm:grid-cols-2">
+          <div class="pb-3">
+            <label class="pb-5 pl-3 font-medium">Origine</label>
+            <select
+              class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+              formControlName="origine"
+              (change)="onChangeOrigin()"
+            >
+              <option value="">
+                -- Veuillez choisir une ville d'origine --
+              </option>
+              <option *ngFor="let item of origineSelect" [value]="item.id">
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+          <div class="pb-3">
+            <label class="pb-5 pl-3 font-medium">Destination</label>
+            <select
+              class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+              formControlName="destination"
+              (change)="onChangeDestination()"
+            >
+              <option value="">
+                -- Veuillez choisir une ville de destination --
+              </option>
+              <option *ngFor="let item of destinationSelect" [value]="item.id">
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+          <div class="pb-3">
+            <label class="pb-5 pl-3 font-medium">Categorie de produit</label>
+            <select
+              class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+              formControlName="categorie_produit"
+              (change)="onChangeProductCat()"
+            >
+              <option value="">
+                --Veuillez choisir une categorie de produit--
+              </option>
+              <option
+                *ngFor="let item of productCategorieSelect"
+                [value]="item.id"
+              >
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+          <div class="pb-3">
+            <label class="pb-5 pl-3 font-medium">Base de calcul</label>
+            <select
+              class="p-3 w-[95%] pr-12 border rounded-sm border-[#DBDBDB]"
+              formControlName="basis_calcul"
+            >
+              <option value="">-- Veuillez choisir un base de calcul --</option>
+              <option *ngFor="let item of calculBasicsSelect" [value]="item.id">
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-5 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close
+          >
+          Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <button
+            *ngIf="heritedConditionForm.valid"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            type="submit"
+          >
+            Heriter
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

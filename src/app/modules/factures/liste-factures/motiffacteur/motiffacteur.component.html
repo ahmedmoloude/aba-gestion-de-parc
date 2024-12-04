@@ -1,0 +1,36 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Motif</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form>
+      <div class="grid grid-cols-1 gap-2 pl-4 pr-4 mt-4">
+        <div>
+          <i-field [type]="'textarea'" [label]="'Motif'" [formControl]="motif"></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close>
+            Annuler
+          </button>
+        </div>
+        <div class="text-right" *ngIf="motif.valid">
+          <button *ngIf="!spinner" (click)="onAddMotif()"
+            class="bg-[#E10000] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]">
+            Confirmer
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

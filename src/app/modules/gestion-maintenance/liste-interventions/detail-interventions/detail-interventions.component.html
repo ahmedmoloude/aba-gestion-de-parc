@@ -1,0 +1,537 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <ng-container *ngIf="diagnostique$ | async as diagnostiquestate">
+    <div *ngIf="diagnostiquestate?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="diagnostiquestate?.dataState =='SUCCESS'">
+      <ng-container *ngIf="diagnostiquestate?.maintenanceIntervention as intervention">
+        <div class="grid grid-cols-1 gap-2">
+          <div>
+            <div class="flex col-start-1 col-end-3">
+              <mat-icon class="pt-1">local_shipping</mat-icon>
+              <h2 class="text-[#636363] font-semibold pl-2  cursor-pointer" [routerLink]="['/listeinterventions']">
+                Liste des demandes ><span class="text-[#0C8040]"> Intervention N° de requête “
+                  {{(intervention?.n_demande) || '---'}} “</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="ml-5 mr-5 mb-5 relative w-width">
+          <div class="rounded-full">
+            <div class="border-dashed"></div>
+          </div>
+          <div class="flex justify-between w-full gap-48">
+            <div class="relative" *ngIf="intervention?.date_demande">
+              <div>
+                <p class="absolute iconplace">
+                  <mat-icon class="text-white w-6 h-6 bg-[#0C8040] iconsteps">assignment_turned_in</mat-icon>
+                </p>
+              </div>
+              <div class="absolute top-3 w-36 -left-8">
+                <div class="flex h-5">
+                  <h3 class="text-[#636363] font-normal text-size">
+                    Date de demande :
+                  </h3>
+                </div>
+                <div class="flex h-5">
+                  <h3 class="text-black font-normal text-size">
+                    {{(intervention?.date_demande | date: 'dd/MM/yyyy') || '---'}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="relative" *ngIf="intervention?.diagnostiques[0]?.created_at">
+              <div>
+                <p class="absolute iconplace">
+                  <mat-icon class="text-white w-6 h-6 bg-[#0C8040] iconsteps">assignment_turned_in</mat-icon>
+                </p>
+              </div>
+              <div class="absolute top-3 w-36 -left-8">
+                <div class="flex h-5">
+                  <h3 class="text-[#636363] font-normal text-size">
+                    Date de diagnostique :
+                  </h3>
+                </div>
+                <div class="flex h-5">
+                  <h3 class="text-black font-normal text-size">
+                    {{(intervention?.diagnostiques[0]?.created_at | date: 'dd/MM/yyyy') || '---'}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="relative" *ngIf="intervention?.date_fin_prevu">
+              <div>
+                <p class="absolute iconplace">
+                  <mat-icon class="text-white w-6 h-6 bg-[#0C8040] iconsteps">assignment_turned_in</mat-icon>
+                </p>
+              </div>
+              <div class="absolute top-3 w-36 -left-8">
+                <div class="flex h-5">
+                  <h3 class="text-[#636363] font-normal text-size">
+                    Date fin prévue :
+                  </h3>
+                </div>
+                <div class="flex h-5">
+                  <h3 class="text-black font-normal text-size">
+                    {{(intervention?.date_fin_prevu | date: 'dd/MM/yyyy') || '---'}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="relative" *ngIf="intervention?.date_prise_charge">
+              <div>
+                <p class="absolute iconplace">
+                  <mat-icon class="text-white w-6 h-6 bg-[#0C8040] iconsteps">assignment_turned_in</mat-icon>
+                </p>
+              </div>
+              <div class="absolute top-3 w-36 -left-8">
+                <div class="flex h-5">
+                  <h3 class="text-[#636363] font-normal text-size">
+                    Date d’intervention :
+                  </h3>
+                </div>
+                <div class="flex h-5">
+                  <h3 class="text-black font-normal text-size">
+                    {{(intervention?.date_prise_charge | date: 'dd/MM/yyyy') || '---'}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="relative" *ngIf="intervention?.date_fin_reelle">
+              <div>
+                <p class="absolute iconplace">
+                  <mat-icon class="text-white w-6 h-6 bg-[#0C8040] iconsteps">assignment_turned_in</mat-icon>
+                </p>
+              </div>
+              <div class="absolute top-3 w-36 -left-8">
+                <div class="flex h-5">
+                  <h3 class="text-[#636363] font-normal text-size">
+                    Date fin réelle :
+                  </h3>
+                </div>
+                <div class="flex h-5">
+                  <h3 class="text-black font-normal text-size">
+                    {{(intervention?.date_fin_reelle | date: 'dd/MM/yyyy') || '---'}}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6 mt-14">
+          <div>
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+              <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Informations générales :
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <p class="text-[#000000] text-sm">Type de panne :
+                  <mat-icon class="cursor-pointer text-center" mat-button [matMenuTriggerFor]="menuType">
+                    cached
+                  </mat-icon>
+
+                  <mat-menu #menuType="matMenu">
+                    <table class="w-full text-left text-gray-500">
+                      <thead>
+                        <tr>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                            Type d'intervention :
+                          </th>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                            Type de panne :
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                          *ngFor="let type of intervention?.details">
+                          <td class="p-3">
+                            {{ type.type || '---'}}
+                          </td>
+                          <td class="p-3">
+                            {{ type.panne?.name || '---'}}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </mat-menu>
+                </p>
+              </div>
+              <div>
+                <p class="text-[#000000] text-sm">Date de prise en charge : <strong>{{(intervention?.date_prise_charge |
+                    date: 'dd/MM/yyyy') || '---'}}</strong></p>
+              </div>
+              <div>
+                <p class="text-[#000000] text-sm">Date fin prévue : <strong>{{(intervention?.date_fin_prevu | date:
+                    'dd/MM/yyyy') || '---'}}</strong></p>
+              </div>
+              <div>
+                <p class="text-[#000000] text-sm">Commentaire : <strong>{{(intervention?.commentaire ) ||
+                    '---'}}</strong></p>
+              </div>
+            </div>
+            <div class="flex mt-4">
+              <p class="flex items-center bg-[#636363] text-white rounded-lg w-2/5 p-2 justify-between">
+                Véhicule : {{intervention?.truck?.code_interne || '---'}}/{{ intervention?.truck?.matricule || '---' }}
+                <mat-icon class="pl-1 cursor-pointer"
+                  (click)="historiquevehicule(intervention?.truck)">remove_red_eye</mat-icon>
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+              <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Document :
+              </p>
+            </div>
+              <table class="w-full text-left text-gray-500 mt-3">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of headerColumuns" scope="col"
+                      class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div class="flex items-center">
+                        {{ header }}
+                      </div>
+                    </th>
+                    <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                      <div>Actions</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                    *ngFor="let item of intervention?.bons  | paginate: { itemsPerPage: 5, currentPage: p };">
+                    <td class="p-3">BON DE {{(item?.type ) || '---'}}</td>
+                    <td class="p-3">{{(item?.reference ) || '---'}}</td>
+                    <td class="p-3">{{(item?.created_at | date: 'dd/MM/yyyy') || '---'}}</td>
+                    <td class="p-3 text-center"><mat-icon class="cursor-pointer"
+                        (click)="printBonCommande(item)">cloud_download</mat-icon></td>
+                </tbody>
+              </table>
+              <!-- <div class="mt-10">
+                  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </div> -->
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6 mt-14 ">
+          <ng-container *ngFor="let category of categoryList | keyvalue; let i = index">
+            <div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px]  p-6 mt-4">
+
+              <div class="border-b-2 border-[#CEF4C9] mt-5">
+                <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                  Diagnostique :
+                </p>
+              </div>
+
+              <p>Catégorie : <span class="text-[#0C8040]  pl-4">{{category.key}}</span></p>
+
+              <mat-radio-group>
+                <mat-radio-button *ngIf="category.value[0]?.lieu_reparation == 'INTERNE'" value="INTERNE" checked>Interne</mat-radio-button>
+                <mat-radio-button *ngIf="category.value[0]?.lieu_reparation == 'EXTERNE'" value="EXTERNE" checked>Externe</mat-radio-button>
+              </mat-radio-group>
+              <!-- <mat-radio-button [value]="category.value[0]?.lieu_reparation" checked>{{category.value[0]?.lieu_reparation
+                | titlecase}}</mat-radio-button> -->
+
+              <div class="mt-4">
+                <div *ngIf="category?.value[0]?.lieu_reparation === 'INTERNE'">
+                  <div class="overflow-auto">
+                  <table class="w-3/4 text-left text-gray-500 mt-3" *ngIf="category?.value[0]?.piece_rechange">
+                    <thead>
+                      <tr>
+                        <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                        <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                        <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                        <!-- <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Demande d'achat</th> -->
+                        <!-- <th></th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of category.value"
+                        class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                        <td class="p-3">
+
+                          {{item?.piece_rechange?.reference || '---'}} / {{item?.piece_rechange?.name?.name || '---'}}
+                        </td>
+                        <td class="p-3">{{item?.type_piece_rechange || '---'}}</td>
+                        <td class="p-3">{{item?.quantity || 0}}</td>
+                        <!-- <td class="p-3">{{getQuantiteAAcheter(item?.quantity, item?.quantity_stock) || 0}}</td> -->
+                        <!-- <td class="p-3 flex">
+                          <p>
+                            <mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon>
+                            <mat-menu #menu="matMenu">
+                              <div class="grid grid-cols-2 gap-2 p-2">
+                                <div>
+                                  <p>PU : <strong> {{(item?.piece_rechange?.prix_unitaire | number) || '---'}} DH</strong></p>
+                                </div>
+                                <div>
+                                  <p>Total HT : <strong> {{(item?.total_ttc | number) || '---'}} DH</strong></p>
+                                </div>
+                                <div>
+                                  <p>TVA : <strong> {{((item?.total_ttc - item?.total_ht)
+                                      | number) || '---'}} DH</strong></p>
+                                </div>
+                                <div>
+                                  <p>Total TTC : <strong> {{(item?.total_ttc | number) || '---'}} DH</strong></p>
+                                </div>
+                              </div>
+                            </mat-menu>
+                          </p>
+                        </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                  <div class="mt-2 mb-2">
+                    <p class="text-[#0C8040]">Liste des intervenants :</p>
+                  </div>
+                  <div>
+                    <table class="w-3/4 text-left text-gray-500">
+                      <thead>
+                        <tr>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Code / Agent intervenant</th>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Fonction</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                          *ngFor="let reparator of category.value[0].diagnostique_reparateurs; let j = index">
+                          <td class="p-3">
+                            {{ reparator?.reparateur?.first_name + ' ' + reparator?.reparateur?.last_name || '---'}}
+                          </td>
+                          <td class="p-3">
+                            <p>Réparateur</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <div *ngIf="category?.value[0]?.lieu_reparation === 'EXTERNE'">
+
+                  <div class="overflow-auto">
+                    <table class="w-3/4 text-left text-gray-500" *ngIf="category.value[0]?.piece_rechange">
+                      <thead>
+                        <tr>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                          <!-- <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité à récupérer du stock</th>
+                          <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité à commander</th> -->
+                          <!-- <th></th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of category.value; let j = index"
+                          class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                          <td class="p-3">{{item?.piece_rechange?.reference || '---'}} /
+                            {{item?.piece_rechange?.name?.name ||'---'}}</td>
+                          <td class="p-3">{{item?.type_piece_rechange || '---'}}</td>
+                          <td class="p-3">{{item?.quantity|| 0}}</td>
+                          <!-- <td class="p-3 text-center">
+
+                          </td> -->
+                          <!-- <td class="p-3 ">
+                            <div class="flex">
+                              <p>
+                                <mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon>
+                              </p>
+                              <mat-menu #menu="matMenu">
+                                <div class="grid grid-cols-2 gap-2 p-2">
+                                  <div>
+                                    <p>PU : <strong> {{(item?.piece_rechange?.prix_unitaire | number) || '---'}} DH</strong></p>
+                                  </div>
+                                  <div>
+                                    <p>Total Ht : <strong>
+                                        {{(item?.total_ht | number )|| '---'}} DH</strong></p>
+                                  </div>
+                                  <div>
+                                    <p>TVA : <strong>
+                                        {{((item?.total_ttc - item?.total_ht) | number)|| '---'}} DH</strong></p>
+                                  </div>
+                                  <div>
+                                    <p>Total TTC : <strong>
+                                        {{(item?.total_ttc | number)|| '---'}} DH</strong></p>
+                                  </div>
+                                </div>
+                              </mat-menu>
+                            </div>
+                          </td> -->
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+
+        <!-- <div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px]  p-6 mt-4">
+          <div>
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+              <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Diagnostique
+              </p>
+            </div>
+            <div class="mt-3">
+              <p class="text-[#0C8040]">Lieu d’intervention :</p>
+            </div>
+            <mat-radio-button value="intervention?.lieu_reparation" [checked]="true"
+              class="mt-3 mb-3">{{(intervention?.lieu_reparation=='EXTERNE' )? 'Externe' :
+              'Interne'}}</mat-radio-button>
+
+            <div class="flex col-start-1 col-end-3">
+              <mat-icon>settings</mat-icon>
+              <h3 class="text-[#0C8040]  font-semibold pl-2">Pièce de rechange 1 :</h3>
+            </div>
+            <ng-container *ngFor="let category of categories | keyvalue">
+              <p>Catégorie : <span class="text-[#0C8040]  pl-4">{{category.key}}</span></p>
+              <div class="overflow-auto">
+                <table class="text-left w-3/4 text-gray-500 mt-3">
+                  <thead>
+                    <tr>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Demande d’achat</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of category.value"
+                      class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                      <td class="p-3">{{item?.piece_rechange?.reference || '---'}} / {{item?.piece_rechange?.name?.name
+                        ||
+                        '---'}}</td>
+                      <td class="p-3">{{item?.type_piece_rechange || '---'}}</td>
+                      <td class="p-3">{{item?.quantity || 0}}</td>
+                      <td class="p-3">{{item?.quantity || 0}}</td>
+                      <td class="p-3 flex">
+                        <p>Prix moyen TTC :</p>
+                        <p>{{item?.total_ttc || '---'}} Dhs</p>
+                        <p>
+                          <mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon>
+                          <mat-menu #menu="matMenu">
+                            <div class="grid grid-cols-2 gap-2 p-2">
+                              <div>
+                                <p>PU : <strong>{{item?.piece_rechange?.prix_unitaire || '---'}} DH</strong></p>
+                              </div>
+                              <div>
+                                <p>Total Ht : <strong>{{item?.total_ht || '---'}} DH</strong></p>
+                              </div>
+                            </div>
+                          </mat-menu>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                      <td class="p-3">08927152 / Démarreur Fiat 11</td>
+                      <td class="p-3">Remplacement</td>
+                      <td class="p-3">2</td>
+                      <td class="p-3">0</td>
+                      <td class="p-3 flex">
+                        <p><mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="intervention?.demande_interventions_reparateurs?.length>0"></ng-container>
+            <div class="mt-3">
+              <p class="text-[#0C8040]">Intervenant :</p>
+            </div>
+            <div class="overflow-auto">
+                <table class="text-left w-3/4 text-gray-500 mt-3">
+                  <thead>
+                    <tr>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Code / Agent intervenant</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Fonction</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of intervention.demande_interventions_reparateurs" class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                      <td class="p-3">
+                        {{(item?.reparateur?.matricule) || '---'}} - {{(item?.reparateur?.name) || '---'}}
+                      </td>
+                      <td class="p-3">
+                        <p>{{(item?.reparateur?.userable_type) || '---'}} </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+          <div>
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+              <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Diagnostique
+              </p>
+            </div>
+            <div class="mt-3">
+              <p class="text-[#0C8040]">Lieu d’intervention :</p>
+            </div>
+            <mat-radio-button value="1" checked="" class="mt-3 mb-3">Externe</mat-radio-button>
+            <div class="flex col-start-1 col-end-3">
+              <mat-icon>settings</mat-icon>
+              <h3 class="text-[#0C8040]  font-semibold pl-2">Pièce de rechange 2 :</h3>
+            </div>
+            <p>Catégorie : <span class="text-[#0C8040]  pl-4">Carrosserie</span></p>
+            <div class="overflow-auto">
+              <ng-container>
+                <table class="text-left w-3/4 text-gray-500 mt-3">
+                  <thead>
+                    <tr>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Nom de pièce</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Demande d’achat</th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800">
+                      <td class="p-3">08927152 / Démarreur Fiat 11</td>
+                      <td class="p-3">Remplacement</td>
+                      <td class="p-3">2</td>
+                      <td class="p-3">0</td>
+                      <td class="p-3 flex">
+                        <p><mat-icon [matMenuTriggerFor]="menu" class="cursor-pointer pl-2">info</mat-icon></p>
+                      </td>
+                    </tr>
+                    <mat-menu #menu="matMenu">
+                      <div class="grid grid-cols-2 gap-2 p-2">
+                        <div>
+                          <p>PU : <strong>30.00 DH</strong></p>
+                        </div>
+                        <div>
+                          <p>Total Ht : <strong>300.00 DH</strong></p>
+                        </div>
+                      </div>
+                    </mat-menu>
+                  </tbody>
+                </table>
+              </ng-container>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button mat-dialog-close [routerLink]="['/listeinterventions']"
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+              Annuler
+            </button>
+          </div>
+
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

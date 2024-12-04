@@ -1,0 +1,79 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">settings</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2 cursor-pointer">
+          <span routerLink="/piecesrechange">Pièces de rechange > </span>
+          <span routerLink="/mouvementstockglobal">Mouvement des stocks > </span>
+          <span class="text-[#0C8040]">Inventaire</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="inventory$ | async as inventoryState">
+    <div class="grid mt-4">
+      <app-shared-filter
+        [inputs]="inputsFiler"
+        (filter)="filtrer($event)">
+      </app-shared-filter>
+    </div>
+
+    <div *ngIf="inventoryState?.inventoriesState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+
+    <div class="mt-10">
+      <ng-container *ngIf="inventoryState?.inventoriesState == 'SUCCESS'">
+        <div *ngIf="inventoryState?.inventoryList?.length <= 0" class="flex flex-col items-center">
+          <h2>Le stock est vide</h2>
+        </div>
+        <ng-container *ngIf="inventoryState?.inventoryList?.length > 0">
+          <div class="overflow-auto">
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                  <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex justify-end"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                  *ngFor="let item of inventoryState?.inventoryList">
+                  <td class="p-3">{{ item?.piece_rechange?.name?.name || '---' }}</td>
+                  <td class="p-3">{{ item?.piece_rechange?.reference || '---' }}</td>
+                  <td class="p-3">{{ item?.piece_rechange?.family?.name || '---' }}</td>
+                  <td class="p-3">{{ (item?.stock_entree) || 0 }}</td>
+                  <td class="p-3">{{ (item?.stock_sortie) || 0 }}</td>
+                  <td class="p-3">{{ (item?.stock_theorique) || 0 }}</td>
+                  <td class="p-3">
+                    <app-add-inventory [stockReel]="item?.last_inventary?.stock_reel" [inventory]="item?.id"></app-add-inventory>
+                  </td>
+                  <td class="p-3">{{(item?.last_inventary?.ecart) || '---'}}</td>
+                  <td class="p-3">{{(item?.last_inventary?.user?.name) || '---'}}</td>
+                  <td class="p-3 text-center cursor-pointer" (click)="historiqueinventaire(item?.id, item?.piece_rechange)">
+                    <mat-icon mat-button>history</mat-icon>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-10">
+            <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems"
+              (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+            </p-paginator>
+          </div>
+        </ng-container>
+
+      </ng-container>
+    </div>
+
+  </ng-container>
+</div>

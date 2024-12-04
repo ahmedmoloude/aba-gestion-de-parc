@@ -1,0 +1,392 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">
+      Ajouter des documents administratifs
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div mat-dialog-content>
+    <form [formGroup]="createDocument" class="ml-5 mr-5">
+      <div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Assurance
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Code Interne</mat-label>
+              <input matInput type="text" formControlName="codeVehicule"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Matricule</mat-label>
+              <input matInput type="text" formControlName="matricule"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Société d'assurance</mat-label>
+              <mat-select formControlName="fournisseur">
+                <mat-option value="AXA">AXA</mat-option>
+                <mat-option value="SAHAM">SAHAM</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_assurance"  autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date d’expiration</mat-label>
+              <input matInput type="date" formControlName="end_date_assurance"  autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° de police</mat-label>
+              <input matInput type="text" formControlName="n_police"  autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Montant</mat-label>
+              <input matInput type="number" formControlName="montant_assurance"  autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_assurance" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white  border-[2px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageAssurance($event)"
+            />
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Vignette
+          </p>
+        </div>
+        <div class="grid grid-cols-7 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_vignette" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date d’expiration</mat-label>
+              <input matInput type="date" formControlName="end_date_vignette" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Tonnage</mat-label>
+              <!-- <input matInput type="number" formControlName="tonnage_id" autocomplete="off"/> -->
+              <mat-select formControlName="tonnage_id">
+                <mat-option *ngFor="let tonnage of tonnages" [value]="tonnage.id">
+                  {{ tonnage.name }} T
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant ( Jours )</mat-label>
+              <input matInput type="number" formControlName="rappel_vignette" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Puissance fiscale</mat-label>
+              <input matInput type="number" formControlName="puissance_fiscale" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Montant (DH)</mat-label>
+              <input matInput type="number" formControlName="montant_vignette" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageVignette($event)" />
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Visite technique
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Derniére visite technique</mat-label>
+              <input matInput type="date" formControlName="start_date_visite" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Prochaine visite technique</mat-label>
+              <input matInput type="date" formControlName="end_date_visite" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Ville</mat-label>
+              <input type="text"
+                placeholder="Ville"
+                aria-label="Ville"
+                matInput
+                (keyup)="filterCity($event)"
+                [matAutocomplete]="auto">
+              <mat-icon matPrefix class="my-icon">search</mat-icon>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="villeSelected($event)">
+                <mat-option *ngFor="let city of cities" [value]="city.name">
+                  {{ city.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Prestataire</mat-label>
+              <input matInput type="text" formControlName="prestataire" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Montant</mat-label>
+              <input matInput type="number" formControlName="montant_visite"  autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_visite" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageVisite($event)"/>
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Carte grise
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° carte grise</mat-label>
+              <input matInput type="text" formControlName="n_carte_grise" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_carte_grise" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="end_date_carte_grise" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° de châssis</mat-label>
+              <input matInput type="text" formControlName="n_chassis" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_carte_grise" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageGrise($event)"/>
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Autorisation de circulation
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° d’autorisation</mat-label>
+              <input matInput type="text" formControlName="n_autorisation" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Objet</mat-label>
+              <input matInput type="text" formControlName="objet" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_autorisation" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="end_date_autorisation" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_autorisation" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageAutorisation($event)"/>
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Carnet Tachygraphe
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° d’ordre</mat-label>
+              <input matInput type="text" formControlName="n_ordre" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Code</mat-label>
+              <input matInput type="text" formControlName="code" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_tachygraphe" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="end_date_tachygraphe" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_tachygraphe" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageTachygraphe($event)"/>
+          </div>
+        </div>
+        <div class="border-b-4 border-[#CEF4C9]">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Taxe d'essieu
+          </p>
+        </div>
+        <div class="grid grid-cols-6 gap-4 mt-5">
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>N° Taxe</mat-label>
+              <input matInput type="text" formControlName="n_taxe" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de début</mat-label>
+              <input matInput type="date" formControlName="start_date_essieu" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Date de fin</mat-label>
+              <input matInput type="date" formControlName="end_date_essieu" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Montant(DH)</mat-label>
+              <input matInput type="number" formControlName="montant_essieu" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="w-[100%] mb-4">
+              <mat-label>Rappel avant (Jours)</mat-label>
+              <input matInput type="number" formControlName="rappel_essieu" autocomplete="off"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <input
+              class="block w-full text-sm text-black bg-white rounded-[28px] border-[3px] border-[#DBDBDB] cursor-pointer focus:outline-none dark:placeholder-gray-400 p-3"
+              type="file"
+              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+              (change)="onSelectImageEssieu($event)"/>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 p-4 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Annuler
+          </button>
+        </div>
+        <!-- [disabled]="createDocument.invalid" -->
+        <div class="text-right">
+          <button (click)="addDocumentForm()"  *ngIf="!spinnerAdd" [disabled]="createDocument.invalid"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]" >
+            Enregistrer
+          </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

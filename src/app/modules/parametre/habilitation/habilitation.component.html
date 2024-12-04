@@ -1,0 +1,94 @@
+<div class="p-4">
+  <div class="grid grid-cols-2">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">Habilitation</h1>
+    </div>
+    <div class="text-right" *ngIf="!habilitation">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" (click)="openDialogRole()" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]">
+          Créer un rôle
+        </h2>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="!habilitation">
+    <ng-container *ngIf="role$ | async as RoleState">
+
+      <div *ngIf="RoleState?.rolesState =='LOADING'" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+
+      <div class="mt-10">
+        <ng-container *ngIf="RoleState?.rolesState == 'SUCCESS'">
+          <div *ngIf="RoleState?.roles?.length <= 0" class="flex flex-col items-center">
+            <h2>La liste des rôles est vide</h2>
+          </div>
+          <ng-container *ngIf="RoleState?.roles?.length > 0">
+            <table class="w-full text-left text-gray-500">
+              <thead>
+                <tr>
+                  <th *ngFor="let header of headerColumuns" scope="col"
+                    class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ header }}
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                  *ngFor="let item of RoleState?.roles  | paginate : {  id: 'pagination-role',  itemsPerPage: 6,  currentPage: page}">
+                  <td class="p-3"><span class="cursor-pointer" (click)="getRoleHabilities(item)">{{ (item?.name) ||
+                      '---' }}</span></td>
+                  <td class="p-3">{{ (item?.created_at | date:'dd/MM/yyyy' ) || '---' }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="mt-10">
+              <pagination-controls id="pagination-role" previousLabel="" nextLabel=""
+                (pageChange)="page = $event"></pagination-controls>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="habilitation">
+    <!-- <app-affect-role-habilitation (validate)="validateHabilities($event)"></app-affect-role-habilitation> -->
+    <div class="p-4">
+      <div class="text-center mb-4 mt-2">
+        <p class="text-lg">Rôle : <span class="text-[#0C8040]">{{role.name}}</span></p>
+      </div>
+
+      <div *ngIf="LoadSpinner" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+
+      <ng-container *ngIf="!LoadSpinner">
+        <app-affect-role-habilitation-test *ngFor="let elt of modulesList; let i = index" [modules]="elt"
+          [formGroup]="form?.get(elt.name)"></app-affect-role-habilitation-test>
+          <div class="grid grid-cols-2 gap-4 mt-16 mb-5">
+            <div>
+            </div>
+            <div class="text-right" *ngIf="permissionService.hasPermission('Configuration', 'Paramètre', 'C') || permissionService.hasPermission('Configuration', 'Paramètre', 'U')">
+              <button *ngIf="!vaildateSpinner"
+                class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-40 p-4 ml-9font-bold text-[18px]"
+                type="submit" (click)="addRoleHabilities()">
+                Valider
+              </button>
+              <span *ngIf="vaildateSpinner">
+                <mat-spinner [diameter]="40"></mat-spinner>
+              </span>
+            </div>
+          </div>
+      </ng-container>
+
+
+    </div>
+  </ng-container>
+
+</div>
+

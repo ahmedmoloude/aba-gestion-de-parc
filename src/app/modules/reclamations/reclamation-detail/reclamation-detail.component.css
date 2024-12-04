@@ -1,0 +1,142 @@
+::ng-deep .mat-dialog-container {
+  padding: 0px;
+  overflow: hidden;
+}
+
+::ng-deep .mat-dialog-title {
+  margin-bottom: 0px;
+}
+
+::ng-deep .detail-information.mat-menu-panel {
+  margin-left: 130px;
+}
+
+::ng-deep .mat-dialog-content {
+  margin-top: 40px;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding: 0px;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #fff;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before {
+  display: none !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple {
+  display: none !important;
+}
+
+/* ---------------- */
+.reclamation-row {
+  padding: 30px 0;
+  border-bottom: 3px solid #cef4c9;
+  width: 95%;
+  margin: auto;
+}
+
+.reclamation-footer {
+  width: 95%;
+  margin: auto;
+  margin-bottom: 25px;
+}
+
+.left-grid-border {
+  border-right: 1px solid rgba(112, 112, 112, 0.5019607843);
+  padding-right: 30px;
+}
+
+.green-separator {
+  padding-bottom: 20px;
+  border-bottom: 2px solid #cef4c9;
+  margin-bottom: 45px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 30px;
+}
+.timeline-item span {
+  position: absolute;
+  left: -12px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid #b2b2b2;
+  background-color: white;
+  color: #b2b2b2;
+}
+.timeline-item-now {
+  border-left: 2px solid #b2b2b2;
+  height: 150px;
+}
+.timeline-item-now span {
+  background-color: #0c8040;
+  border: 2px solid #0c8040;
+  color: white;
+}
+.timeline-item-done {
+  border-left: 2px solid #0c8040;
+  height: 150px;
+}
+.timeline-item-done span {
+  background-color: #0c8040;
+  border: 2px solid #0c8040;
+  color: white;
+}
+.timeline-item-next {
+  border-left: 2px solid #b2b2b2;
+  height: 50px;
+}
+.timeline-item-last span {
+  background-color: #0c8040;
+  border: 2px solid #0c8040;
+  color: white;
+}
+.timeline-item-error span {
+  background-color: #ea1515;
+  border: 2px solid #ea1515;
+  color: white;
+}
+
+/**/
+@media only screen and (max-width: 1200px) {
+  .grid-cols-4,
+  .grid-cols-3,
+  .grid-cols-5 {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+.comment {
+  max-height: 350px;
+}
+
+::ng-deep .mat-menu-panel {
+  max-width: none !important;
+  width: auto !important;
+}
+
+::ng-deep .mat-form-field-outline-start {
+  border-radius: 18px 0 0 18px !important;
+  min-width: 18px !important;
+}
+
+::ng-deep .mat-form-field-outline-end {
+  border-radius: 0 18px 18px 0 !important;
+}
+
+.right-grid-border {
+  border-left: 8px solid #0c8040;
+  padding-left: 25px;
+}
+
+.childs {
+  position: relative;
+  top: 30px;
+  left: -25px;
+}/*# sourceMappingURL=reclamation-detail.component.css.map */

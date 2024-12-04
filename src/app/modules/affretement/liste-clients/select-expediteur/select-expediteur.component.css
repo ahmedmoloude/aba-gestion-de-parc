@@ -1,0 +1,31 @@
+.icon-eselect{
+  position: absolute;
+  right: 0;
+  top: -25px;
+  bottom: 0;
+}
+
+.my-title-class {
+
+  font-size: 19px;
+
+}
+  .z-absolute {
+  position: absolute ;
+  z-index: 9999;
+  width: 330px;
+ }
+.div-wrapper {
+  position: relative;
+  width: 330px;
+ }
+label {
+  position: absolute;
+   left: 5px;
+   color: #808080;
+  top: -14px;
+  background-color: white;
+    font-size: 10px;
+   width: 90px;
+  text-align: center;
+}

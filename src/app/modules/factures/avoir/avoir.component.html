@@ -1,0 +1,99 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6 vehiculetabs"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">assignment</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">Avoirs</h2>
+    </div>
+    <div class="flex justify-end">
+      <div class="flex cursor-pointer" (click)="rapportavoir()" *ngIf="permissionService.hasPermission('Facturation', 'Avoir', 'R')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">assignment</mat-icon>
+        <h2 class="text-[#636363] font-semibold pr-3">Rapport des avoirs</h2>
+      </div>
+      <div class="flex cursor-pointer">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2">
+          <a [href]="link" target="_self">Exporter</a>
+        </h2>
+      </div>
+      <div class="flex cursor-pointer pl-5" (click)="adddialog()" *ngIf="permissionService.hasPermission('Facturation', 'Avoir', 'c')">
+        <mat-icon class="pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Ajouter</h2>
+      </div>
+    </div>
+  </div>
+  <div  *ngIf="loadAvoirs$ | async as avoirState">
+
+    <div *ngIf="avoirState?.avoirs?.length <= 0 && avoirState?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div class="grid mt-4" *ngIf="avoirState?.dataState == 'SUCCESS'">
+      <app-shared-filter
+        [inputs]="inputsFiler"
+        (filter)="filtrer($event)"
+      ></app-shared-filter>
+    </div>
+    <div *ngIf="avoirState?.avoirs?.length <= 0 && avoirState?.dataState == 'SUCCESS'" class="flex flex-col items-center">
+      <h2>La liste des avoirs est vide</h2>
+    </div>
+    <div *ngIf="avoirState?.avoirs?.length>0">
+      <ng-container>
+        <table class="w-full text-left text-gray-500">
+          <thead>
+            <tr>
+              <th
+                *ngFor="let header of headerColumuns"
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+              >
+                <div class="flex items-center">
+                  {{ header }}
+                </div>
+              </th>
+              <!-- <th
+                scope="col"
+                class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+              >
+                <div class="flex justify-end">Actions</div>
+              </th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+              *ngFor="let avoir of avoirState?.avoirs"
+            >
+              <td class="p-3">{{avoir?.reference || '---'}}</td>
+              <td class="p-3">{{(avoir?.created_at | date) || '---'}}</td>
+              <td class="p-3">{{avoir?.facture?.reference || '---'}}</td>
+              <td class="p-3">{{(avoir?.facture?.created_at | date) || '---'}}</td>
+              <td class="p-3">{{avoir?.base_calcule || '---'}}</td>
+              <td class="p-3">{{(avoir?.montant_avoir | number) || 0}}</td>
+              <td class="p-3">{{avoir?.type || '---'}}</td>
+              <td class="p-3">{{avoir?.motif || '---'}}</td>
+              <td class="p-3 text-center cursor-pointer">
+                <!-- <mat-icon mat-button (click)="reglementdialog()">tune</mat-icon> -->
+                <mat-icon  mat-button [matMenuTriggerFor]="menu1">more_vert</mat-icon>
+                <mat-menu #menu1="matMenu">
+                    <button mat-menu-item (click)="importPdfAvoir(avoir?.id, avoir?.reference )" *ngIf="permissionService.hasPermission('Facturation', 'Avoir', 'R')">
+                      <mat-icon>print</mat-icon>
+                      Imprimer
+                    </button>
+                    <button mat-menu-item (click)="reglementdialog()" *ngIf="permissionService.hasPermission('Facturation', 'Avoir', 'R')">
+                      <mat-icon>tune</mat-icon>
+                      Voir le Workflow
+                    </button>
+                </mat-menu>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-10">
+          <p-paginator [rows]="pagination?.pageSize" [totalRecords]="pagination?.totalItems" (onPageChange)="paginate($event)" [rowsPerPageOptions]="[10 , 25 , 50 , 100]">
+          </p-paginator>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

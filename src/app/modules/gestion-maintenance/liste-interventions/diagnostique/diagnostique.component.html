@@ -1,0 +1,215 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <ng-container *ngIf="diagnostique$ | async as diagnostiquestate">
+    <div *ngIf="diagnostiquestate?.dataState =='LOADING'" class="flex items-center justify-center mt-6">
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <ng-container *ngIf="diagnostiquestate?.dataState =='SUCCESS'">
+      <ng-container *ngIf="diagnostiquestate?.maintenanceIntervention as intervention">
+        <div class="grid grid-cols-1 gap-2">
+          <div>
+            <div class="flex col-start-1 col-end-3">
+              <mat-icon class="pt-1">local_shipping</mat-icon>
+              <h2 class="text-[#636363] font-semibold pl-2 cursor-pointer" [routerLink]="['/listeinterventions']">
+                Liste des demandes ><span class="text-[#0C8040]"> Intervention N° de requête “
+                  {{(intervention?.n_demande) || '---'}} “</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="border-b-2 border-[#CEF4C9] mt-5">
+          <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+            Informations générales :
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-4 mt-4">
+          <div>
+            <p class="text-[#000000] text-sm">Date de demande :
+              <strong>{{(intervention?.date_demande | date: 'dd/MM/yyyy') || '---'}}</strong>
+            </p>
+          </div>
+          <div>
+            <p class="text-[#000000] text-sm">Demandeur :<strong>{{ intervention?.demandeur?.name || '---' }}</strong>
+            </p>
+          </div>
+          <div>
+            <p class="text-[#000000] text-sm flex items-center">
+              Type de panne :
+              <mat-icon class="cursor-pointer text-center" mat-button [matMenuTriggerFor]="menuType">
+                cached
+              </mat-icon>
+
+              <mat-menu #menuType="matMenu">
+                <table class="w-full text-left text-gray-500">
+                  <thead>
+                    <tr>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                        Type d'intérvention
+                      </th>
+                      <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                        Type de panne
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                      *ngFor="let type of intervention?.details">
+                      <td class="p-3">
+                        {{ type.type || '---'}}
+                      </td>
+                      <td class="p-3">
+                        {{ type.panne?.name || '---'}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </mat-menu>
+            </p>
+          </div>
+          <!-- <div>
+            <p class="text-[#000000] text-sm">Type de panne :<strong>Pneu</strong></p>
+          </div> -->
+          <div>
+            <p class="text-[#000000] text-sm">Date de prise en charge :<strong>{{ (intervention?.date_prise_charge |
+                date : "dd/MM/yyyy") || '---' }}</strong></p>
+          </div>
+          <div>
+            <p class="text-[#000000] text-sm">Date fin prévue :<strong>{{ (intervention?.date_fin_prevu | date :
+                "dd/MM/yyyy") || '---' }}</strong></p>
+          </div>
+          <div>
+            <p class="text-[#000000] text-sm">Commentaire :<strong>{{(intervention?.commentaire ) || '---'}}</strong>
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-center mt-4">
+          <p class="flex items-center bg-[#636363] text-white rounded-lg w-1/5 p-2 justify-between">
+            Véhicule : {{intervention?.truck?.code_interne || '---'}}/{{ intervention?.truck?.matricule || '---' }}
+            <mat-icon class="pl-1 cursor-pointer"
+              (click)="historiquevehicule(intervention?.truck)">remove_red_eye</mat-icon>
+          </p>
+        </div>
+        <ng-container *ngIf="intervention.status === 'EN_ATTENTE'">
+          <div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px]  p-6 mt-4">
+            <div class="border-b-2 border-[#CEF4C9] mt-5">
+              <p class="bg-[#CEF4C9] text-[#000] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Diagnostique
+              </p>
+            </div>
+            <form [formGroup]="diagnostiqueForm">
+              <ng-container formArrayName="interventions">
+                <ng-container *ngFor="let intervention of interventions.controls; let j = index">
+                  <ng-container [formGroupName]="j">
+                    <div *ngIf="interventions.controls.length > 1" class="float-right">
+                      <mat-icon class="text-red-600 cursor-pointer" (click)="removeIntervention(j)">close</mat-icon>
+                    </div>
+                    <div class="mt-5 w-1/4">
+                      <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                        <mat-label>Catégorie d’intervention</mat-label>
+                        <mat-select formControlName="category" (selectionChange)="onCategoryChange(j)">
+                          <mat-option *ngFor="let category of interventions.get(''+j)?.get('filteredCategories')?.value" [value]="category.id">
+                            {{ category.name }}
+                          </mat-option>
+                        </mat-select>
+                        <!-- <mat-select formControlName="category">
+                          <mat-option *ngFor="let category of categories" [value]="category.id">
+                            {{category.name}}
+                          </mat-option>
+                        </mat-select> -->
+                      </mat-form-field>
+                    </div>
+                    <div formArrayName="rechanges">
+                      <table class="w-3/4 text-left text-gray-500">
+                        <thead>
+                          <tr>
+                            <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Référence / Nom de pièce</th>
+                            <th class="p-3 text-[#0C8040] font-normal whitespace-nowrap">Type</th>
+                            <th class="w-28 p-3 text-[#0C8040] font-normal whitespace-nowrap">Quantité</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                            *ngFor="let rechange of intervention.controls.rechanges.controls; let i = index"
+                            [formGroupName]="i">
+                            <td class="p-3">
+                              <div>
+                                <app-shared-autcomplete #searchComponent3 [hasIcon]="false" [type]="'single'"
+                                  [opended]="true" [contentStyle]="contentStyle" [inputStyle]="searchStyle"
+                                  [charToGetAll]="'*'" [data]="piecesRechange" [keys]="['reference', 'piece']"
+                                  [lengthToStart]="3" [display]="['reference','-', 'piece']" [placeholer]="''"
+                                  [label]="'Référence / Nom de pièce'"
+                                  (dataEvent)="selectPieceRechange($event, j, i)"></app-shared-autcomplete>
+                                <!-- <i-field [type]="'text'" [label]="'ID / Nom de client'" formControlName="customer"></i-field> -->
+                              </div>
+                              <!-- <mat-form-field appearance="fill" class="w-[100%]">
+                              <mat-label>Référence / Nom de pièce</mat-label>
+                              <mat-select formControlName="reference">
+                                <mat-option value="Carrosserie">
+                                  Carrosserie
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field> -->
+                            </td>
+                            <td class="p-3">
+                              <mat-form-field appearance="fill" class="w-[100%]">
+                                <mat-label>Type</mat-label>
+                                <mat-select formControlName="type">
+                                  <mat-option value="Remplacement">
+                                    Remplacement
+                                  </mat-option>
+                                  <mat-option value="Reparation">
+                                    Réparation
+                                  </mat-option>
+                                  <mat-option value="Echappement">
+                                    Échappement
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </td>
+                            <td class="p-3">
+                              <i-field [type]="'number'" [label]="'Quantité'" formControlName="quantite"></i-field>
+                            </td>
+                            <td>
+                              <mat-icon class="text-red-600 cursor-pointer" (click)="removeRechange(j, i)">delete</mat-icon>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="flex col-start-1 col-end-3 mt-4 mb-4" (click)="addRechange(j)">
+                      <mat-icon class="pt-1 cursor-pointer">add_circle</mat-icon>
+                      <button class="text-[#636363] pl-2 text-base pt-1">
+                        Ajouter une pièce de rechange
+                      </button>
+                    </div>
+                    <div class="border-t-2 border-[#0C8040]"></div>
+
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+
+              <div class="flex col-start-1 col-end-3 mt-5" (click)="addIntervention()">
+                <mat-icon class="pt-1">add_circle</mat-icon>
+                <button class="text-[#0C8040]  pl-2  text-base pt-1">Ajouter une catégorie d’intervention</button>
+              </div>
+            </form>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+            <div>
+              <button mat-dialog-close class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+                Annuler
+              </button>
+            </div>
+            <div class="text-right">
+              <button pButton pRipple type="submit" label="Valider" class="p-button-rounded p-button-success"
+                [disabled]="diagnostiqueForm.invalid" (click)="validationdocument()"></button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="intervention.status === 'DIAGNOSTIQUEE'">
+          <app-intervenir [intervention]="intervention" (intervenir)="createIntervention($event)"></app-intervenir>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

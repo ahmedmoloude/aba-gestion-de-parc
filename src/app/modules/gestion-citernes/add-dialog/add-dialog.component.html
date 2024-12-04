@@ -1,0 +1,112 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">{{ form_btn }} une citerne</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="createCiterne">
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4 mb-4 mt-4">
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>N° de citerne</mat-label>
+            <input matInput type="text" formControlName="n_citerne" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'N° de citerne'" formControlName="n_citerne" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Nom</mat-label>
+            <input matInput type="text" formControlName="name" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Nom'" formControlName="name" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Capacité (L)</mat-label>
+            <input matInput type="number" formControlName="capacite" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Capacité (L)'" formControlName="capacite" ></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4 mb-4">
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Qté réelle (L)</mat-label>
+            <input matInput type="number" formControlName="qte_reel" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Qté réelle (L)'" formControlName="qte_reel" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date d’installation</mat-label>
+            <input matInput type="date" formControlName="date_installation" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date d’installation'" formControlName="date_installation" ></i-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Sous parc</mat-label>
+            <mat-select matNativeControl required formControlName="parc_id">
+              <mat-option *ngFor="let parc of parcs" [value]="parc.id">{{ parc.name }}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <app-shared-autcomplete
+            #searchComponent1
+            [opended]="true"
+            [type]="'single'"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="parcs"
+            [keys]="['name']"
+            [lengthToStart]="3"
+            [display]="['name']"
+            [placeholer]="''"
+            [label]="'Rechercher le parc...'"
+            [hasIcon]="false"
+            [required]="createCiterne.controls.parc_id?.hasError('required')"
+            (dataEvent)="filterParc($event)"
+          >
+        </app-shared-autcomplete>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 pl-4 pr-4 mb-4">
+        <div>
+          <i-field [type]="'number'" [label]="'Stock min(L)'" formControlName="stock_min" ></i-field>
+        </div>
+        <div>
+          <i-field [type]="'number'" [label]="'Stock min souhaité(L)'" formControlName="stock_min_souhaite" ></i-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 pt-2 mr-3 font-bold text-[18px]" mat-dialog-close >
+            Abondonner
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button [disabled]="createCiterne.invalid" *ngIf="!spinnerAdd"
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addCiterne()">{{ form_btn }}
+          </button> -->
+          <button
+            [disabled]="createCiterne.invalid"
+            *ngIf="!spinnerAdd"
+            (click)="addCiterne()"
+            pButton pRipple
+            type="button"
+            [label]="form_btn"
+            class="p-button-rounded p-button-success">
+          </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="name text-left text-[#0C6080] pb-3 font-medium text-xs">
+  Condition
+  <span
+    *ngIf="this.loadedConditionsMetaIds.includes(condition?.meta_?.cond_id)"
+    class="ml-1 pt-1"
+    ><mat-icon style="scale: 0.9">cloud_download</mat-icon></span
+  >
+</div>
+<div class="grid grid-cols-2 gap-2 text-xs">
+  <div class="text-left">
+    <p class="pb-2">
+      Origine:
+      <strong>{{ condition.origine ? condition.origine.name : "Tout" }}</strong>
+    </p>
+    <p class="pb-2">
+      Catégorie de produit:
+      <strong>{{
+        condition.product_category
+          ? condition.product_category.title
+          : condition.type_product_category
+          ? condition.type_product_category
+          : "Tout"
+      }}</strong>
+    </p>
+    <!-- <p class="pb-2">Tranche: <strong>De 15 À 20</strong></p> -->
+  </div>
+  <div class="text-left">
+    <p class="pb-2">
+      Destination:
+      <strong>{{
+        condition.destination ? condition.destination.name : "Tout"
+      }}</strong>
+    </p>
+    <p class="pb-2">
+      Base de calcul:
+      <strong>{{ condition.basis_calcul?.title_affichage }}</strong>
+    </p>
+  </div>
+</div>
+<div class="border-b-2 border-[#B2B2B252]"></div>
+<div class="grid grid-cols-2 text-xs">
+  <div
+    *ngIf="disableActions$ | async"
+    class="flex cursor-pointer text-[#0C8040]"
+    (click)="openConditionDialog(true)"
+  >
+    <mat-icon class="pt-2">add_circle</mat-icon>
+    <p class="pl-1 pt-2">Détails</p>
+  </div>
+
+  <div
+    *ngIf="(disableActions$ | async) === false"
+    class="flex cursor-pointer text-[#0C8040]"
+    (click)="openConditionDialog(true)"
+  >
+    <mat-icon class="pt-2">add_circle</mat-icon>
+    <p class="pl-1 pt-2">Modifier</p>
+  </div>
+
+  <div
+    *ngIf="(disableActions$ | async) === false"
+    class="flex cursor-pointer text-[#D80404]"
+    (click)="onDeleteCondition()"
+  >
+    <mat-icon class="pt-2">delete</mat-icon>
+    <p class="pl-1 pt-2">Supprimer</p>
+  </div>
+</div>
+<div class="border-b-2 border-[#B2B2B252] pt-2"></div>
+<div class="pt-2 tranches" [ngClass]="{'tranches': tranches_visible}">
+  <div class="flex items-center justify-between">
+    <span class="text-start text-[#0C8040] text-xs">
+       Tranches :
+    </span>
+
+    <div>
+       <mat-icon *ngIf="tranches_visible" class="pt-2 cursor-pointer" (click)="tranches_visible = !tranches_visible">visibility_off</mat-icon>
+       <mat-icon *ngIf="!tranches_visible" class="pt-2 cursor-pointer" (click)="tranches_visible = !tranches_visible" >visibility</mat-icon>
+    </div>
+
+  </div>
+  <table  class="w-full text-left text-gray-500 text-xs" *ngIf="tranches_visible">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let header of filterHeaders"
+          scope="col"
+          class="text-[#0C8040] font-normal whitespace-nowrap"
+        >
+          <div class="flex items-center">
+            {{ header }}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="h-10 overflow-y-scroll">
+      <tr
+        class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+        *ngFor="let item of condition.tranches; let i = index"
+      >
+        <td>  {{"> " + formatCurrency(item?.min) }}</td>
+        <td> {{ formatCurrency(item?.max) ||  "&infin;" }}</td>
+        <td> {{ item?.type_val == 'PRICE' ? 'Prix fixe'  : 'Pourcentage'}}</td>
+        <td> {{ item?.type_val == 'PRICE' ?  formatCurrency(item?.calcul_val) + ' DH' : getPourcentage( item?.calcul_val) + '%'  }} </td>
+        <td> {{ formatCurrency(item.min_val)  + ' DH'}}</td>
+        <td> {{ formatCurrency(item.max_val)  + ' DH'}}</td>
+        <td *ngIf="condition?.basis_calcul?.title_affichage === 'Poids'"> {{ formatCurrency(item.min_by_package)  + ' DH'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

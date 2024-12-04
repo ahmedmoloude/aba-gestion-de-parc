@@ -1,0 +1,90 @@
+<div class="dialog">
+    <div
+      class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+    >
+      <h2 mat-dialog-title class="col-span-2">Intervenir </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+    <div mat-dialog-content>
+      <form [formGroup]="decision">
+        <div class="mt-4 mb-4 ml-3">
+            <p class="text-[#919191]">Motif de refus :</p>
+            <p class="text-black">{{ pointChargement.motif?.name }}</p>
+        </div>
+        <div>
+            <mat-form-field appearance="fill" class="w-[94%] mb-2 mt-2 ml-3 mr-3">
+              <mat-label>Décision</mat-label>
+              <mat-select matNativeControl required formControlName="statut">
+                <mat-option *ngFor="let item of status" [value]="item.status">{{ item.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        <!-- <div class="mt-5 mb-4 ml-3 mr-3">
+            <i-field
+            [type]="'textarea'"
+            [label]="'Commentaire'"
+            [cols]="30"
+            [rows]="2"
+            maxlength="500"
+          ></i-field>
+        </div> -->
+        <div class="mt-4 mb-4 ml-3">
+            <p class="text-[#919191]">Photos :</p>
+            <!-- <img src="../../../../../assets/img/Kawasaki.jpg" class="w-24 h-24 rounded-xl"/> -->
+            <div *ngIf="pointChargement.images.length">
+              <p-galleria
+                [(value)]="images"
+                [(visible)]="displayCustom"
+                [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{ 'max-width': '850px' }"
+                [numVisible]="7"
+                [circular]="true"
+                [fullScreen]="false"
+                [showItemNavigators]="true"
+                [showThumbnails]="false"
+                [baseZIndex]="3"
+                [showIndicators]="true" 
+                [showItemNavigatorsOnHover]="true"
+                [showIndicatorsOnItem]="true">
+              >
+                <ng-template pTemplate="item" let-item>
+                  <img
+                    [src]="item"
+                    style="width: 100%; display: block"
+                    class="img-vh"
+                  />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                  <div class="p-grid p-nogutter p-justify-center">
+                    <img [src]="item" style="display: block" />
+                  </div>
+                </ng-template>
+              </p-galleria>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+          <div>
+            <button
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+              mat-dialog-close
+            >
+            Fermer
+            </button>
+          </div>
+            <div class="text-right">
+                <button
+                  class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px] text-center"
+                  (click)="intervenir()" *ngIf="!spinner"
+                  >
+                  Valider
+                </button>
+                <span *ngIf="spinner">
+                  <mat-spinner [diameter]="40"></mat-spinner>
+                </span>
+              </div>
+          </div>
+        </form>
+    </div>
+</div>

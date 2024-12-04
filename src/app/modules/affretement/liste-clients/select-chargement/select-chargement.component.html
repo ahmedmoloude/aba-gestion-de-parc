@@ -1,0 +1,202 @@
+<div *ngIf="isSpinner" class="flex justify-center">
+  <mat-spinner [diameter]="20"></mat-spinner>
+</div>
+<!-- {{ customerChange|json}} -->
+
+<div
+  *ngIf="!isSpinner"
+  class="input-wrapper border rounded-sm p-2 bg-white"
+  #clicDiv
+>
+  <label for="my-input">Adresse de chargement</label>
+
+  <div *ngIf="toggleAddressList; else addressAdd">
+    <div class="relative cursor-pointer" (click)="toogleisOpen(true)">
+      <div
+        *ngIf="checkInfoLength()"
+        class="inline-block align-bottom leading-[1.7]"
+      >
+        <div class="flex">
+          <span class="font-normal text-[14px] pl-2">
+            {{
+              addressChange
+                ? addressChange.address ||  addressChange.adresse.adress
+                : "Sélectionner une adresse de chargement"
+            }}
+          </span>
+          <span class="float-right cursor-pointer"
+            ><mat-icon
+              style="top: auto"
+              [ngClass]="checkInfoLength() ? 'icon-eselect' : 'icomn-eselect'"
+              >expand_more</mat-icon
+            ></span
+          >
+        </div>
+      </div>
+
+      <!-- <span *ngIf="!checkInfoLength()" class="text-xs text-[#b4b2b2]"
+        >Sélectionner un destinataire</span
+      > -->
+
+      <div
+        *ngIf="isOpend"
+        class="absolute right-9 cursor-pointer"
+        style="top: -5px"
+        (click)="toggleAddressList = false"
+      >
+        <mat-icon
+          class="relative top-[5px] text-[#0C8040] text-[18px] text-right"
+          >add_circle</mat-icon
+        >
+        Ajouter
+      </div>
+    </div>
+
+    <div [ngClass]="isOpend ? 'show' : 'hidden'">
+      <div class="relative mt-5">
+        <input
+          type="text"
+          class="w-full p-2 pr-12 border rounded-3xl border-[#DBDBDB]"
+          placeholder="Recherche… ex address"
+          #inputAdress
+          [(ngModel)]="searchAddress"
+          (keyup)="filteredAddress()"
+        />
+
+        <span class="absolute inset-y-0 inline-flex items-center right-4">
+          <mat-icon>search</mat-icon>
+        </span>
+      </div>
+      <div class="mt-5 overflow-auto">
+        <div *ngFor="let address of filtredAddress" class="flex">
+          <div
+            class="flex items-center w-full cursor-pointer pl-4 pr-4 justify-between mb-2"
+            (click)="onAddressChange(address)"
+          >
+            <div class="font-normal text-[15px] pl-2">{{ address.adress }}</div>
+          </div>
+          <div>
+            <div
+              (click)="openDialogMaps('', false, address)"
+              class="flex cursor-pointer text-[13px] pl-8 text-right"
+            >
+              <mat-icon class="pt-1 text-[#0C8040] text-[16px]">place</mat-icon>
+              <h4 class="text-[#0C8040] mb-0">Localisation</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #addressAdd>
+    <p class="text-[#0C8040] cursor-pointer" (click)="toggleAddressList = true">
+      <mat-icon class="relative top-[5px]">keyboard_arrow_left</mat-icon>
+      Retourner vers la liste des adresses
+    </p>
+
+    <form
+      [formGroup]="addAddressForm"
+      (ngSubmit)="onSubmitNewAddress()"
+      class="mt-3"
+    >
+      <div class="grid grid-cols-2">
+        <div class="pl-2 pr-2 mb-4">
+          <div class="select-field">
+            <label class="select-label">pays </label>
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="country_id">
+                <mat-option *ngFor="let item of countries" [value]="item.id">{{
+                  item.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="pl-2 pr-2 mb-4">
+          <div class="select-field">
+            <label class="select-label">Ville </label>
+            <app-shared-autcomplete
+              #searchComponentVille
+              [charToGetAll]="'*'"
+              [data]="cities"
+              [keys]="['code', 'name']"
+              [lengthToStart]="1"
+              [display]="['code', 'name']"
+              [placeholer]="'Rechercher la ville ...'"
+              (dataEvent)="onCityChange($event)">
+            </app-shared-autcomplete>
+          </div>
+        </div>
+        <div class="pl-2 pr-2 mb-4">
+          <div class="select-field">
+            <label class="select-label">Zone </label>
+            <mat-form-field appearance="fill">
+              <mat-select
+                formControlName="zone_id"
+                (selectionChange)="onChangeZoneAgence($event)"
+              >
+                <mat-option *ngFor="let item of zoneByCity" [value]="item.id">{{
+                  item.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="pl-3 pr-3 mb-4">
+          <div class="select-field">
+            <label class="select-label">Secteur </label>
+
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="sector_id">
+                <mat-option
+                  *ngFor="
+                    let item of filteredSectors(addAddressForm.value?.zone_id)
+                  "
+                  [value]="item.id"
+                  >{{ item.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2">
+        <div class="flex pl-2 pr-3 mb-4 relative">
+          <i-field
+            [type]="'text'"
+            [label]="'Lieu'"
+            formControlName="adress"
+          ></i-field>
+          <mat-icon
+            class="pt-1 text-[#0C8040] cursor-pointer"
+            (click)="openDialogMaps('ACTIVITY', true)"
+            >place</mat-icon
+          >
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 md- mb-5 p-4">
+        <div class="leading-[5]">
+          <button
+            class="underline font-medium"
+            (click)="toggleAddressList = true"
+          >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <button
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            type="submit"
+            [disabled]="!addAddressForm.valid"
+          >
+            Ajouter
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</div>

@@ -1,0 +1,70 @@
+::ng-deep app-shared-autcomplete {
+    width:  100%;
+}
+.search-input{
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+}
+.search-icon{
+    color: #ccc;
+}
+.list{
+    box-shadow: -5px 0px 5px 0px #ccc, 5px 0px 5px 0px #ccc, 0px 5px 5px 0px #ccc;
+    margin-top: 0px;
+    width: 100%;
+    background: white;
+    position: absolute;
+    z-index: 99999999999999;
+    border-radius: 0 0 3px 3px;
+    border-top: none;
+    max-height: 255px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.list li {
+    padding: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #cccccc40;
+}
+.list li:hover{
+    background-color: #cccccc40;
+}
+::-webkit-scrollbar {
+    width: 0px;
+}
+.cursor-not-allowed{
+    cursor: not-allowed
+}
+.checkbox {
+    display: none;
+}
+  
+.checkbox + label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #333;
+    vertical-align: middle;
+}
+  
+.checkbox:checked + label:before {
+    content: "✔";
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    line-height: 19px;
+    background: #0c8040;
+    border-radius: 3px;
+}
+.label{
+    position: absolute;
+    background: white;
+    top: -34%;
+    left: 3%;
+    padding: 0px 10px;
+    font-size: 10px;
+    color: grey;
+}

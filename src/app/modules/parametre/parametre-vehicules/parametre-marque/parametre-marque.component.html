@@ -1,0 +1,51 @@
+<div class="p-4">
+  <!-- filter -->
+  <!-- <div class="grid grid-cols-3 gap-1 mb-6 mt-5">
+    <input
+      type="text"
+      class="p-3 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="%Marque"
+    />
+    <button mat-button class="text-white p-3 bg-btn-green text-[18px] w-[50%]">
+      <mat-icon class="mr-3">filter_list</mat-icon>
+      <span class="text-white">Filtre</span>
+    </button>
+  </div> -->
+  <!-- filter -->
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <!-- <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap" >
+            <div class="flex justify-end">Actions</div>
+          </th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800" *ngFor="let item of brands  | paginate : {  id: 'pagination-hors_normes',  itemsPerPage: 6,  currentPage: p}">
+          <td class="p-3">{{ item.name }}</td>
+          <!-- <td class="p-3 text-right cursor-pointer">
+            <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Modification</button>
+              <button mat-menu-item>Supprimer</button>
+            </mat-menu>
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="pagination-hors_normes" previousLabel="" nextLabel=""
+      (pageChange)="p = $event"></pagination-controls>
+  </ng-container>
+</div>

@@ -1,0 +1,518 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2">
+    <div class="flex">
+      <mat-icon class="pt-[5px]">local_shipping</mat-icon>
+      <h2 class="text-[#0C8040] font-semibold pl-2">Detail Commercial</h2>
+    </div>
+  </div>
+  <div
+    class="bg-[#E3FFDF] p-3 font-medium w-20 rounded-[18px] mb-5 text-center"
+  >
+    Détails :
+  </div>
+  <div class="detail-vehicules pt-4 pb-4 mb-5">
+    <div class="border-b-4 border-[#0C8040]">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Informations personnelles
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Photo :</p>
+        <img [src]="img_src" />
+      </div>
+    </div>
+    <div class="grid grid-cols-8 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Matricule :</p>
+        <p class="font-medium">{{ kpis?.commercial?.matricule }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">CIN :</p>
+        <p class="font-medium">{{ kpis?.commercial?.cin }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Date de fin CIN :</p>
+        <p class="font-medium">{{ kpis?.commercial?.end_date_cin }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Nom :</p>
+        <p class="font-medium">{{ kpis?.commercial?.last_name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Prènom :</p>
+        <p class="font-medium">{{ kpis?.commercial?.first_name }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Date de naissance :</p>
+        <p class="font-medium">{{ kpis?.commercial?.birth_date }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Lieu de naissance :</p>
+        <p class="font-medium">{{ kpis?.commercial?.birth_place }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Ville :</p>
+        <p class="font-medium">{{ kpis?.commercial?.town }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Situation familiale :</p>
+        <p class="font-medium">{{ kpis?.commercial?.family_situation }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Nombre d’enfants :</p>
+        <p class="font-medium">{{ kpis?.commercial?.children_number }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Adresse :</p>
+        <p class="font-medium">{{ kpis?.commercial?.adress }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Situation du personnel :
+      </p>
+    </div>
+    <div class="grid grid-cols-8 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Direction :</p>
+        <p class="font-medium">{{ kpis?.commercial?.direction }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Département :</p>
+        <p class="font-medium">{{ kpis?.commercial?.departement }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Service :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Lieu de naissance :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Fonction :</p>
+        <p class="font-medium">{{ kpis?.commercial?.function }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Code :</p>
+        <p class="font-medium">{{ kpis?.commercial?.code }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Contrat
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Type de contrat :</p>
+        <p class="font-medium">{{ kpis?.commercial?.contract_type }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Sté d’interim :</p>
+        <p class="font-medium">{{ kpis?.commercial?.interim_company }}</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Date d’entrée :</p>
+        <p class="font-medium">{{ kpis?.commercial?.entry_date }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Contact
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">GSM professionnel :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.gsm_professionnel }}
+        </p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">GSM personnel :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.gsm_personnel }}
+        </p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Fixe professionnel :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.fixe_professionnel }}
+        </p>
+      </div>
+      <!-- <div>
+        <p class="text-[#0C8040] text-[13px]">GSM</p>
+        <p class="font-medium">{{parseJson(kpis?.commercial?.contact).gsm_personnel}}</p>
+      </div> -->
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-52 p-2 rounded-[12px_12px_0px_0px]">
+        Contact en cas d’urgence
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Contact 1 :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.contact_1 }}
+        </p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">GSM :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.contact_1_gsm }}
+        </p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Situation CNSS
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">N° de CNSS :</p>
+        <p class="font-medium">{{ kpis?.commercial?.cnss_number }}</p>
+      </div>
+    </div>
+    <div class="border-b-4 border-[#0C8040] mt-5">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Expériences
+      </p>
+    </div>
+    <div class="grid grid-cols-6 gap-4 mt-4">
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Niveau d’études :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Expérience pro. :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Formation et diplômes :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Dernier employeur :</p>
+        <p class="font-medium">-</p>
+      </div>
+      <div>
+        <p class="text-[#0C8040] text-[13px]">Email :</p>
+        <p class="font-medium">
+          {{ parseJson(kpis?.commercial?.contact)?.email }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="border-t-2 border-[#F2FCF1] mt-5 mb-5"></div>
+  <div class="cards w-[100%] pl-3 mt-6">
+    <!-- <div class="flex items-center justify-between">
+      <h3 class="font-medium">Sélectionnez les sous-panneaux à afficher</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>sélectionner une année</mat-label>
+        <mat-select (selectionChange)="onchange_year($event)">
+          <mat-option value="">--Tout--</mat-option>
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div> -->
+
+    <div class="flex items-center justify-between">
+      <h3 class="font-medium">Sélectionnez les sous-panneaux à afficher</h3>
+
+      <div class="flex gap-2">
+        <mat-form-field appearance="fill">
+          <mat-label>sélectionner une année</mat-label>
+          <mat-select
+          (selectionChange)="onchange_year($event)"
+          >
+            <mat-option value=""
+              >--Tout--</mat-option
+            >
+            <mat-option
+              *ngFor="let year of years"
+              [value]="year"
+            >
+              {{year}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>sélectionner un client</mat-label>
+          <mat-select
+          (selectionChange)="on_change_customer($event)"
+          >
+            <mat-option value=""
+              >--Tout--</mat-option
+            >
+            <mat-option
+              *ngFor="let customer of customers"
+              [value]="customer.id"
+            >
+              {{customer.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 sm:grid-cols-3 mb-5">
+      <div class="mr-6 cursor-pointer" (click)="set_current_relation('QUOTE')">
+        <mat-card [class]="{ active: current_relation === 'QUOTE' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation === 'QUOTE'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            {{ kpis?.nb_devis }}</mat-card-title
+          >
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'QUOTE' ? 'subtitleActive' : ''"
+            >Total</mat-card-subtitle
+          >
+          <mat-card-actions>
+            <button
+              [ngClass]="
+                current_relation == 'QUOTE'
+                  ? 'text-white font-bold'
+                  : 'text-[#0C8040] font-bold'
+              "
+              mat-button
+            >
+              Nbre de devis
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer" (click)="set_current_relation('OFFER')">
+        <mat-card [class]="{ active: current_relation === 'OFFER' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation == 'OFFER'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            {{ kpis?.nb_offer }}
+          </mat-card-title>
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'OFFER' ? 'subtitleActive' : ''"
+          >
+            Total
+          </mat-card-subtitle>
+          <mat-card-actions
+            [ngClass]="
+              current_relation == 'OFFER'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            <button mat-button>Nbre d'offre Commerciale</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div
+        class="mr-6 cursor-pointer"
+        (click)="set_current_relation('PROSPECTS')"
+      >
+        <mat-card [class]="{ active: current_relation === 'PROSPECTS' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation == 'PROSPECTS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+            >{{ kpis?.nb_prospects }}</mat-card-title
+          >
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'PROSPECTS' ? 'subtitleActive' : ''"
+          >
+            Total
+          </mat-card-subtitle>
+          <mat-card-actions
+            [ngClass]="
+              current_relation == 'PROSPECTS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            <button mat-button>Nbre de prospects</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 sm:grid-cols-3 mb-5">
+      <div
+        class="mr-6 cursor-pointer"
+        (click)="set_current_relation('CUSTOMERS')"
+      >
+        <mat-card [class]="{ active: current_relation === 'CUSTOMERS' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation == 'CUSTOMERS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+            >{{ kpis?.nb_customers }}</mat-card-title
+          >
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'CUSTOMERS' ? 'subtitleActive' : ''"
+            >Total</mat-card-subtitle
+          >
+          <mat-card-actions
+            [ngClass]="
+              current_relation == 'CUSTOMERS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            <button mat-button>Nbre de client</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer" (click)="set_current_relation('TASKS')">
+        <mat-card [class]="{ active: current_relation === 'TASKS' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation == 'TASKS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+            >{{ kpis?.nb_tasks }}</mat-card-title
+          >
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'TASKS' ? 'subtitleActive' : ''"
+            >Total</mat-card-subtitle
+          >
+          <mat-card-actions
+            [ngClass]="
+              current_relation == 'TASKS'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            <button mat-button>Nbre de taches</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer" (click)="set_current_relation('RDV')">
+        <mat-card [class]="{ active: current_relation === 'RDV' }">
+          <mat-card-title
+            [ngClass]="
+              current_relation == 'RDV'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+            >{{ kpis?.nb_rdv }}</mat-card-title
+          >
+          <mat-card-subtitle
+            [ngClass]="current_relation === 'RDV' ? 'subtitleActive' : ''"
+            >Total</mat-card-subtitle
+          >
+          <mat-card-actions
+            [ngClass]="
+              current_relation == 'RDV'
+                ? 'text-white font-bold'
+                : 'text-[#0C8040] font-bold'
+            "
+          >
+            <button mat-button>Nbre de rendez-vous</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 sm:grid-cols-3 mb-5">
+      <div class="mr-6 cursor-pointer">
+        <mat-card>
+          <mat-card-title class="text-[#0C8040] font-bold"
+            >{{ kpis?.taux_cnv_prospect_to_customer }}%</mat-card-title
+          >
+          <mat-card-subtitle>Total</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-button>Taux de conversion prospect/client</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer">
+        <mat-card>
+          <mat-card-title class="text-[#0C8040] font-bold"
+            >{{ kpis?.taux_devis_to_offer }}%</mat-card-title
+          >
+          <mat-card-subtitle>Total</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-button>
+              Taux de conversion devis/offre commerciales
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer">
+        <mat-card>
+          <mat-card-title class="text-[#0C8040] font-bold">0</mat-card-title>
+          <mat-card-subtitle>Total</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-button>Créances</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer mt-4">
+        <mat-card>
+          <mat-card-title class="text-[#0C8040] font-bold">{{
+            kpis?.nb_bl
+          }}</mat-card-title>
+          <mat-card-subtitle>Total</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-button>BL en attente</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="mr-6 cursor-pointer mt-4">
+        <mat-card>
+          <mat-card-title class="text-[#0C8040] font-bold"
+            >{{ kpis?.ca }} DH</mat-card-title
+          >
+          <mat-card-subtitle>Total</mat-card-subtitle>
+          <mat-card-actions>
+            <button mat-button>C.A.</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    <app-gestions-devis
+      *ngIf="current_relation == 'QUOTE'"
+      [merchant_uuid]="uuid"
+    >
+    </app-gestions-devis>
+    <app-offer-commerciales
+      *ngIf="current_relation == 'OFFER'"
+      [merchant_uuid]="uuid"
+    ></app-offer-commerciales>
+    <app-gestion-prospects
+      *ngIf="current_relation == 'PROSPECTS'"
+      [merchant_uuid]="uuid"
+    ></app-gestion-prospects>
+    <app-gestion-comptes-client
+      *ngIf="current_relation == 'CUSTOMERS'"
+      [merchant_uuid]="uuid"
+    ></app-gestion-comptes-client>
+    <app-gestion-rendezvous
+      *ngIf="current_relation == 'RDV'"
+      [merchant_uuid]="uuid"
+    >
+    </app-gestion-rendezvous>
+    <app-gestion-tasks
+      *ngIf="current_relation == 'TASKS'"
+      [merchant_uuid]="uuid"
+    ></app-gestion-tasks>
+  </div>
+</div>

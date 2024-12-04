@@ -1,0 +1,224 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">Création d'une offre commerciale</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="offreform">
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill" class="w-[100%] mb-4 mt-3">
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="title" type="text" />
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-[100%] mb-4">
+        <mat-label>Type de service</mat-label>
+        <mat-select formControlName="id_service">
+          <mat-option value=""
+            >-- Sélectionner le type de service --</mat-option
+          >
+          <mat-option
+            *ngFor="let type of typeServices"
+            [value]="type.id"
+          >
+            {{ type.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="offreform.value.id_service == 2" appearance="fill" class="w-[100%] mb-4">
+        <mat-label>Type d'affrétement</mat-label>
+        <mat-select formControlName="type_affretement_id">
+          <mat-option value=""
+            >-- Sélectionner le type d'affrétement --</mat-option
+          >
+          <mat-option
+          *ngFor="let type of typeAffretement"
+            [value]="type.id"
+          >
+            {{type.title}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <div *ngIf="submitted && f.title.errors" class="pl-8 pb-5 text-red-500">
+        <div *ngIf="f.title.errors.required">Nom est obligatoire</div>
+      </div>
+      <mat-form-field class="w-[100%] mb-4" appearance="fill">
+        <mat-label>Client</mat-label>
+        <input
+          type="text"
+          formControlName="client"
+          placeholder="Client"
+          (ngModelChange)="modelChangeFn($event)"
+          matInput
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of options"
+            ng-show="isShown"
+            (click)="to_fill(option.id, option.name)"
+            class="cl_name"
+            [ngValue]="option.id"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div *ngIf="submitted && f.client.errors" class="pl-8 pb-5 text-red-500">
+        <div *ngIf="f.client.errors.required">
+          Vous devez choisissez un client
+        </div>
+      </div>
+      <mat-form-field appearance="fill" class="w-[100%] mb-4">
+        <mat-label>Code client</mat-label>
+        <input
+          matInput
+          formControlName="id_customer"
+          [readonly]="true"
+          [disabled]="true"
+          type="text"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-[100%] mb-4">
+        <mat-label>Date d'activation</mat-label>
+        <input matInput formControlName="start_date" [matDatepicker]="debut" />
+        <mat-datepicker-toggle matSuffix [for]="debut"></mat-datepicker-toggle>
+        <mat-datepicker #debut></mat-datepicker>
+      </mat-form-field>
+      <div
+        *ngIf="submitted && f.start_date.errors"
+        class="pl-8 pb-5 text-red-500"
+      >
+        <div *ngIf="f.start_date.errors.required">
+          Vous devez choisissez une date d'activation
+        </div>
+      </div>
+      <mat-checkbox
+        class="example-margin"
+        formControlName="has_indexation"
+        name="has_indexation"
+        class="w-[100%] mb-4"
+        >Prix d'indexation</mat-checkbox>
+        
+        <div class="grid grid-cols-2 gap-2" *ngIf="hasIndexation">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Prix de référence</mat-label>
+            <input
+              matInput
+              formControlName="prix_reference"
+              type="number"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Part du carburant (%)</mat-label>
+            <input
+              matInput
+              formControlName="part_carburant"
+              type="number"
+            />
+          </mat-form-field>
+        </div>
+      <mat-checkbox
+        class="example-margin"
+        formControlName="end_date_check_box"
+        name="date_expiration_enable"
+        class="w-[100%] mb-4"
+        >Date d’expiration</mat-checkbox
+      >
+      <mat-form-field appearance="fill" class="w-[100%] mb-4">
+        <mat-label>Date d’expiration</mat-label>
+        <input
+          matInput
+          [min]="f.start_date.value"
+          formControlName="end_date"
+          [matDatepicker]="expiration"
+          [disabled]="!f.end_date_check_box.value"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="expiration"
+          [disabled]="!f.end_date_check_box.value"
+        ></mat-datepicker-toggle>
+        <mat-datepicker
+          #expiration
+          [disabled]="!f.end_date_check_box.value"
+        ></mat-datepicker>
+      </mat-form-field>
+      <div
+        *ngIf="submitted && f.end_date.errors"
+        class="pl-8 pb-5 text-red-500"
+      >
+        <div *ngIf="f.end_date.errors.required">
+          Vous devez choisir une date d’expiration
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 mt-2">
+        <h3 mat-dialog-title class="col-span-2">Limitations :</h3>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Volume Max</mat-label>
+            <input matInput formControlName="limit_vl_max" type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Poids max</mat-label>
+            <input matInput formControlName="limit_wg_max" type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Quantité max</mat-label>
+            <input matInput formControlName="limit_qt_max" type="number" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 mt-6">
+        <h3 mat-dialog-title class="col-span-2">Potentiel négocié :</h3>
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Volume Max</mat-label>
+            <input matInput formControlName="potential_vl_max" type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Poids max</mat-label>
+            <input matInput formControlName="potential_wg_max" type="number" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%]">
+            <mat-label>Quantité max</mat-label>
+            <input matInput formControlName="potential_qt_max" type="number" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-center p-5">
+      <mat-spinner *ngIf="loading" [diameter]="35"></mat-spinner>
+    </div>
+    <div *ngIf="!loading" class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 pt-2 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+          Abandonner
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button
+          (click)="onSubmit()"
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+        >
+          Enregistrer
+        </button> -->
+        <button 
+            (click)="onSubmit()" 
+            pButton pRipple 
+            type="button" 
+            label="Enregistrer"
+            class="p-button-rounded p-button-success">
+          </button>
+      </div>
+    </div>
+  </form>
+</div>

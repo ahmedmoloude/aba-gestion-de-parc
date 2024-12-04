@@ -1,0 +1,65 @@
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-1 gap-2 mb-4">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon class="pt-1">local_shipping</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">
+          Type d'affrètement
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between mb-5">
+    <form [formGroup]="form">
+      <div
+      class="flex justify-end cursor-pointer">
+      <i-field [type]="'text'" [label]="'Type'" formControlName="title"></i-field>
+      <mat-checkbox formControlName="has_minimum_price" class="ml-3" #checkbox>Min Prix</mat-checkbox>
+      <button *ngIf="!isSaving"
+              (click)="submit()"
+              class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-48 p-0 ml-3 font-bold text-[15px] h-9">
+              Valider
+          </button>
+          <button *ngIf="isSaving"
+              class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-48 p-0 ml-3 font-bold text-[15px] h-9">
+              Chargement...
+          </button>
+    </div>
+    </form>
+  </div>
+  <ng-container>
+    <table class="w-full text-left text-gray-500 mb-4">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let header of headerColumuns"
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="!isLoading">
+          <tr
+          class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let type of typeAffretements">
+          <td class="p-3">{{type.title}}</td>
+          <td class="p-3">{{ (type.has_minimum_price ? 'Oui': 'Non') }}</td>
+          <td class="p-3">{{type.created_at | date:"dd/MM/yyy"}}</td>
+        </tr>
+        </ng-container>
+        <ng-container *ngIf="isLoading">
+          <tr>
+            <td colspan="3">Chargement en cours...</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container>
+</div>

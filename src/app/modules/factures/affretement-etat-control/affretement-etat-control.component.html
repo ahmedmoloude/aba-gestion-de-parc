@@ -1,0 +1,163 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <div mat-dialog-title class="col-span-2">
+      <div class="flex">
+        <mat-icon class="pt-[5px]">assignment</mat-icon>
+        <h2 class="text-[#636363] font-semibold pl-2">
+          Factures > Génération de facture >
+          <span class="text-[#0C8040] pl-2">État de contrôle</span>
+        </h2>
+      </div>
+    </div>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content class="m-3">
+    <div class="grid grid-cols-4 gap-4 mt-4">
+      <div>
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>Ville</mat-label>
+          <mat-select matNativeControl required>
+            <mat-option> Casa </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>Recouvreur</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>Client</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+      </div>
+      <!-- <div>
+      <div class="flex items-start">
+        <button
+          class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px] p-3"
+        >
+          <span class="text-white">Préfacturation</span>
+        </button>
+      </div>
+    </div> -->
+    </div>
+    <div class="bg-[#0C8040] rounded-[18px] w-[50%] p-[10px] text-white mt-5">
+      <div class="grid grid-cols-2 divide-x">
+        <div>Ville : Casa</div>
+        <div class="pl-6">Recouvreur : AG. Recouvrement</div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="bg-white mb-5  rounded-[18px]"
+        *ngFor="let facture of factures | paginate: { itemsPerPage: 5, currentPage: p }; let i = index" >
+        <div
+          class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 items-center">
+          <div class="width-block">
+              <div class="flex">
+                  <p class="text-[14px] text-[#000000]">
+                    Client : {{(facture?.customer?.code) ? facture.customer.code : '---'}} - {{(facture?.customer?.name) ? (facture.customer.name | titlecase) : '---'}}
+                  </p>
+                  <div class="cursor-pointer" (click)="onclick(i)">
+                      <mat-icon class="pl-1">
+                          {{ !isVisible(i) ? "visibility" : "visibility_off" }}
+                      </mat-icon>
+                  </div>
+              </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">Nbre de demande : {{facture?.demandes?.length}}</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">Palettes : {{(calculateSum(facture?.demandes, 'marchandise_globale') | number) || '---'}} </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">HT : {{(calculateSumOfTarifs(facture?.demandes).ht | number) || '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">TVA 14% : {{(calculateSumOfTarifs(facture?.demandes).tva_transport | number) || '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">TVA 20% : {{(calculateSumOfTarifs(facture?.demandes).tva_service | number) || '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="pl-1">
+                <p class="text-[14px] text-[#000000]">TTC : {{(calculateSumOfTarifs(facture?.demandes).ttc | number) || '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="isVisible(i)">
+          <table class="w-full text-left text-gray-500">
+            <thead>
+              <tr>
+                <th
+                  *ngFor="let header of headerColumuns"
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+                <!-- <th
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+                >
+                  <div class="flex justify-end">Actions</div>
+                </th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let expedition of facture.demandes; let j = index">
+                <td class="p-3">{{(expedition?.created_at) ? (expedition?.created_at | date :'dd/MM/yyyy') : '---'}}</td>
+                <td class="p-3">{{(expedition?.reference) ? expedition?.reference : '---'}}</td>
+                <td class="p-3">{{(expedition?.marchandise_globale?.port?.title) ? (expedition?.marchandise_globale?.port?.title) : '---' }}</td>
+                <td class="p-3">{{facture?.customer?.name || '---'}}</td>
+                <td class="p-3">{{expedition?.destinataires.join(',') || '---'}}</td>
+                <td class="p-3">{{expedition?.destinations.join(',') || '---'}}</td>
+                <td class="p-3">{{expedition?.marchandise_globale?.nbr_palette || 0}}</td>
+                <td class="p-3">{{expedition?.marchandise_globale?.poids || 0}}</td>
+                <td class="p-3">{{  (calculateSumOfHT(expedition?.expedition_tarif_details) | number) || '---'}} Dhs</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+      <div class="mt-10">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,326 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Visualisation globale</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div  *ngIf="bill$ | async as factureState">
+    <div>
+      <div *ngIf="factureState?.dataState =='Loading'" class="flex items-center justify-center mt-6">
+        <mat-spinner [diameter]="80"></mat-spinner>
+      </div>
+      <div mat-dialog-content *ngIf=" factureState?.dataState =='Success'">
+        <div  *ngIf="factureState?.facture as facture">
+          <div class="grid grid-cols-1 gap-4 mb-5 p-4">
+            <div class="border-b-4 border-[#0C8040]">
+              <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+                Facture N° {{facture?.reference}}
+              </p>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-4 pl-3 pr-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Total Expéditions</p>
+                <p class="text-[16px] text-[#000000]">{{facture?.count_expedition}}</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Total Colis</p>
+                <p class="text-[12px] text-[#000000]">{{facture?.count_colis}}</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Montant avoir</p>
+                <p class="text-[12px] text-[#000000]">{{(facture?.montant_avoir) ? (facture?.montant_avoir | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Poids total</p>
+                <p class="text-[12px] text-[#000000]">{{facture?.poids}} Kg</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 mt-2 mb-2">
+            <p class="text-[#636363] text-[16px] font-normal pl-2">Transport</p>
+          </div>
+          <div class="grid grid-cols-4 gap-4 pl-3 pr-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Total HT</p>
+                <p class="text-[16px] text-[#000000]">{{(totalTransportTarifs?.ht) ? (totalTransportTarifs?.ht | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">TVA</p>
+                <p class="text-[12px] text-[#000000]">14%</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Montant TVA</p>
+                <p class="text-[12px] text-[#000000]">{{(totalTransportTarifs?.tva) ? (totalTransportTarifs?.tva | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">TTC</p>
+                <p class="text-[12px] text-[#000000]">{{(totalTransportTarifs?.ttc) ? (totalTransportTarifs?.ttc | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 mt-2 mb-2">
+            <p class="text-[#636363] text-[16px] font-normal pl-2">Service</p>
+          </div>
+          <div class="grid grid-cols-4 gap-4 pl-3 pr-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">Total HT</p>
+                <p class="text-[16px] text-[#000000]">{{(totalTarifDetails?.ht) ? (totalTarifDetails?.ht | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">TVA</p>
+                <p class="text-[12px] text-[#000000]">20%</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">MontantTVA</p>
+                <p class="text-[12px] text-[#000000]">{{(totalTarifDetails?.tva) ? (totalTarifDetails?.tva | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+              </div>
+              <div class="pl-3">
+                <p class="text-[#0C8040] text-[16px] font-normal">TTC</p>
+                <p class="text-[12px] text-[#000000]">{{(totalTarifDetails?.ttc) ? (totalTarifDetails?.ttc | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+
+          </div>
+          <ng-container *ngIf="visible">
+            <div *ngFor="let item of amountsSumByService | keyvalue">
+              <div *ngIf="item?.key!='transport' && item?.key!='transport retour'" class="grid grid-cols-4 gap-4 pl-3 pr-3 mt-5">
+                <div class="flex items-center">
+                  <div class="pl-3">
+                    <p class="text-[16px] text-[#000000]">{{(rubricsObject[item?.key]) || item?.key || '---'}}</p>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <div class="icon ml-1">
+                    <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                  </div>
+                  <div class="pl-3">
+                    <p class="text-[#0C8040] text-[16px] font-normal">Valeur Dhs</p>
+                    <p class="text-[12px] text-[#000000]">{{(item?.value?.ht) ? (item.value.ht | number) : 0}}</p>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <div class="icon ml-1">
+                    <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                  </div>
+                  <div class="pl-3">
+                    <p class="text-[#0C8040] text-[16px] font-normal">TVA</p>
+                    <p class="text-[12px] text-[#000000]">20 %</p>
+                    <!-- <p class="text-[12px] text-[#000000]">{{(item?.tva) ? (item?.tva *100 | number) : 0}} %</p> -->
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <div class="icon ml-1">
+                    <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                  </div>
+                  <div class="pl-3">
+                    <p class="text-[#0C8040] text-[16px] font-normal">TTC</p>
+                    <p class="text-[12px] text-[#000000]">{{(item?.value?.ttc) ? (item.value.ttc | number) : 0}} Dhs</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div *ngFor="let expedition of facture?.expeditions">
+              <div
+                *ngFor="let item of expedition?.expedition_tarif_details">
+                <div *ngIf="item?.service!='transport' && item?.service!='transport retour'" class="grid grid-cols-4 gap-4 pl-3 pr-3 mt-5">
+                  <div class="flex items-center">
+                    <div class="pl-3">
+                      <p class="text-[16px] text-[#000000]">{{(rubricsObject[item?.service]) || item?.service || '---'}}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                    </div>
+                    <div class="pl-3">
+                      <p class="text-[#0C8040] text-[16px] font-normal">TVA</p>
+                      <p class="text-[12px] text-[#000000]">{{(item?.tva) ? (item?.tva*100 | number) : '---'}} %</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                    </div>
+                    <div class="pl-3">
+                      <p class="text-[#0C8040] text-[16px] font-normal">Valeur Dhs</p>
+                      <p class="text-[12px] text-[#000000]">{{(item?.ht) ? (item.ht | number) : '---'}}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="icon ml-1">
+                      <mat-icon class="text-[19px] text-[#138742]">ballot</mat-icon>
+                    </div>
+                    <div class="pl-3">
+                      <p class="text-[#0C8040] text-[16px] font-normal">TTC</p>
+                      <p class="text-[12px] text-[#000000]">{{(item?.ttc) ? (item?.ttc | number) : '---'}} Dhs</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div  style="max-height: 200px; overflow-y: scroll; background-color: aqua;">
+            </div> -->
+
+          </ng-container>
+          <div class="pl-3 pr-3 mt-5"  *ngIf="facture?.expeditions?.length>0">
+            <button (click)="onclick()" type="button" class="text-white border-[#636363] btn-filter text-[20px] bg-[#636363] rounded-xl max-w-[272px] w-[272px]">
+              {{ReadMore?"Détail des services":"Minimiser"}}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div>
+      <div class="grid grid-cols-1 gap-4 pl-3 pr-3">
+        <div class="flex mt-5">
+          <h2 class="text-[#636363] mb-0">Total :</h2>
+        </div>
+        <div *ngIf="factureState?.facture as factureGlobale"
+          class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] border-[4px] border-[#0C8040] rounded-[8px] h-[115px] items-center">
+          <div class="width-content">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">local_shipping</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#0C8040] text-[16px] font-normal">Total HT :</p>
+                <p class="text-[14px] text-[#000000]">{{(factureGlobale?.montant_ht) ? (factureGlobale?.montant_ht | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content ml-2">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">money</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#138742] text-[16px] font-normal">Taux de remise</p>
+                <p class="text-[14px] text-[#000000]">{{(factureGlobale?.remise && factureGlobale?.remise?.nature != 'Fix' ) ? (factureGlobale.remise.taux | number) : '---'}} %</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content ml-2">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">money</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#138742] text-[16px] font-normal">MT remise</p>
+                <p class="text-[14px] text-[#000000]">{{(factureGlobale?.remise_montant) ? (factureGlobale.remise_montant | number) : '---' }} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content ml-2">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">money</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#138742] text-[16px] font-normal">MT TVA 14%</p>
+                <p class="text-[14px] text-[#000000]">{{(totalTransportTarifs?.tva) ? (totalTransportTarifs?.tva | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content ml-2">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">money</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#138742] text-[16px] font-normal">MT TVA 20%</p>
+                <p class="text-[14px] text-[#000000]">{{(totalTarifDetails?.tva) ? (totalTarifDetails?.tva | number) : '---'}} Dhs</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="width-content ml-2">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[16px] text-[#138742]">money</mat-icon>
+              </div>
+              <div class="pl-1">
+                <p class="text-[#138742] text-[16px] font-normal">NET TTC</p>
+                <p class="text-[14px] text-[#000000]">{{(factureGlobale?.montant_recalcule) ? (factureGlobale?.montant_recalcule | number) : ((factureGlobale?.montant_ttc) ? (factureGlobale?.montant_ttc | number) : '---')}} Dhs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+        <div>
+          <button
+            class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+            mat-dialog-close>
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

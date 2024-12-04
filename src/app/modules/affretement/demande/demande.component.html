@@ -1,0 +1,66 @@
+<div *ngIf="!demande.ignore" class="demande cursor-pointer" [ngStyle]="demande.style" cdkDrag>
+    <div class="table text-xs">
+        <div class="mb-2 table-row">
+            <span class="pr-4 table-cell pb-1 font-normal">N° demande: </span>
+            <!-- <span class="table-cell text-center pb-1">
+                <mat-icon class="recline button-glow" (click)="openDialogrecline()">airline_seat_recline_normal</mat-icon>
+            </span> -->
+        </div>
+        <div class="mb-2 table-row">
+            <strong class="pr-4 table-cell text-sm">{{ demande.reference }}</strong>
+            <span class="table-cell text-left" *ngFor="let item of demande?.vehicules"><i class="pi pi-truck text-xs mr-1"></i>{{ item?.truck_type?.name }} : {{ item?.tonnage?.name }} T </span>
+        </div>
+        <div class="table-row">
+            <span class="pr-4 table-cell">Expéditeur: </span>
+            <!-- <span class="table-cell text-left"><strong class="text-lg">T</strong> 6T</span> -->
+        </div>
+        <div class="mb-2 table-row">
+            <strong class="pr-4 table-cell pb-2 text-sm font-bold">{{ demande.client?.first_name }} {{ demande.client?.first_name }}</strong>
+        </div>
+        <div class="mb-2 table-row">
+            <!-- [routerLink]="['/detailsAffretement', demande.uuid]" -->
+            <span class="pr-4 pb-1 flex cursor-pointer" (click)="detailsAffretement(demande.uuid)" ><mat-icon>remove_red_eye</mat-icon><span class="underline">Détails</span></span>
+            <span class="table-cell text-center pb-1"><mat-icon class="edit" (click)="openDialogedit(demande)">edit</mat-icon></span>
+            <mat-icon  class="linked">check</mat-icon>
+        </div>
+        <div class="right absolute" *ngIf="demande.icon == 'right'">
+            <i class="pi pi-angle-right"></i>
+            <i class="pi pi-angle-right"></i>
+        </div>
+        <div class="left absolute" *ngIf="demande.icon == 'left'">
+            <i class="pi pi-angle-left"></i>
+            <i class="pi pi-angle-left"></i>
+        </div>
+    </div>
+</div>
+<div cdkDrag *ngIf="demande.ignore" class="ignore" [ngStyle]="demande.style">
+<!-- <div class="table text-xs">
+    <div class="mb-2 table-row">
+        <span class="pr-4 table-cell pb-1 font-normal">N° demande: </span>
+        <span class="table-cell text-left pb-1"><i class="pi pi-clock text-xs mr-1"></i>08:00</span>
+    </div>
+    <div class="mb-2 table-row">
+        <strong class="pr-4 table-cell text-sm">{{demande.numero}}</strong>
+        <span class="table-cell text-left"><i class="pi pi-truck text-xs mr-1"></i>Ridel</span>
+    </div>
+    <div class="table-row">
+        <span class="pr-4 table-cell">Expéditeur: </span>
+        <span class="table-cell text-left"><strong class="text-lg">T</strong> 6T</span>
+    </div>
+    <div class="mb-2 table-row">
+        <strong class="pr-4 table-cell pb-2 text-sm font-bold">Packea </strong>
+    </div>
+    <div class="mb-2 table-row">
+        <span class="pr-4 pb-1 flex cursor-pointer"><mat-icon>remove_red_eye</mat-icon><span class="underline">Détails</span></span>
+        <span class="table-cell text-center pb-1"><mat-icon class="edit">edit</mat-icon></span>
+    </div>
+    <div class="right absolute" *ngIf="demande.icon == 'right'">
+        <i class="pi pi-angle-right"></i>
+        <i class="pi pi-angle-right"></i>
+    </div>
+    <div class="left absolute" *ngIf="demande.icon == 'left'">
+        <i class="pi pi-angle-left"></i>
+        <i class="pi pi-angle-left"></i>
+    </div>
+</div> -->
+</div>

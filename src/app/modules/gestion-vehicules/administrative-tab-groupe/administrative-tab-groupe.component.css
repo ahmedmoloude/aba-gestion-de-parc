@@ -1,0 +1,44 @@
+.example-tab-icon {
+    margin-right: 8px;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-label{
+    padding-left: 0px;
+    justify-content: left;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-label-active{
+    color: #0C8040;
+  }
+  ::ng-deep .tabs-utilisateur .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #0C8040;
+}
+/* .detail-vehicules{
+  background: transparent linear-gradient(180deg, #E2FFDE 0%, #FEFEFE 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 20px #00000029;
+  border-radius: 18px;
+} */
+.img-vh{
+  width: 396px;
+  height: 237px;
+  object-fit: contain;
+}
+.btn-history{
+  background-color: #9D9D9D;
+  width: 32px;
+  height: 32px;
+  margin: 5px 10px 0px 10px;
+}
+
+::ng-deep .pi-chevron-right:before,
+::ng-deep .pi-chevron-left:before {
+  color: black;
+}
+::ng-deep .p-galleria-item-nav {
+  top: 30% !important;
+}
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-next-icon ,
+::ng-deep .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon{
+  font-size: 1.5rem !important;
+}
+::ng-deep .p-galleria .p-galleria-indicators {
+  padding: 0.2rem !important;
+}

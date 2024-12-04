@@ -1,0 +1,72 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">{{ button }} une limitation</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <form [formGroup]="createLimitation">
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-select placeholder="Champ" formControlName="type">
+          <mat-option *ngFor="let type of types" value="{{ type.name }}"> {{type.libelle}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field  appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-select placeholder="Tranche Type " formControlName="valeur_type">
+          <mat-option  value="min_max"> nombre  </mat-option>
+          <mat-option  value="min_max_value"> valeur  </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="createLimitation.value.valeur_type == 'min_max_value'" appearance="fill" class="w-[100%] pl-7 pr-7 mb-4">
+        <mat-select placeholder="Type de champ" formControlName="accepted_value_type">
+          <mat-option  value="NUMBER_ONLY"> numeric  </mat-option>
+          <mat-option  value="ALPHABETIC"> alphabetic  </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'number'" [label]="'Valeur minimal'" formControlName="min" ></i-field>
+        </div>
+        <div class="w-[100%] pl-7 pr-7 mb-4">
+          <i-field [type]="'number'" [label]="'Valeur maximal'" formControlName="max" ></i-field>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+      <div>
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+        Abondonner
+        </button>
+      </div>
+      <div class="text-right">
+        <!-- <button
+          class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+          (click)="addLimitation()" *ngIf="!spinner"       
+          type="submit"
+          [disabled]="createLimitation.invalid">
+          {{ button }}
+        </button> -->
+          <button
+            *ngIf="!spinner" 
+            (click)="addLimitation()" 
+            [disabled]="createLimitation.invalid"
+            pButton pRipple 
+            type="submit" 
+            label="Ajouter"
+            class="p-button-rounded p-button-success">
+          </button>
+
+        <span *ngIf="spinner">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </span>
+
+      </div>
+    </div>
+  </form>
+</div>

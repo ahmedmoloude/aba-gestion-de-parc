@@ -1,0 +1,396 @@
+<div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6">
+  <h1 class="text-[#06152B] text-[22px] font-normal pb-3 mb-5">Calendrier</h1>
+  <div class="grid grid-cols-5">
+    <div class="col-span-2 contents">
+      <div>
+        <h3 class="mb-[10px] text-left ">Statut</h3>
+        <div class="flex">
+          <div class="indicator" style="background-color: #1a73e7"></div>
+          <div>
+            <p>RDV : Planifié</p>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="indicator" style="background-color: #0c8040"></div>
+          <div>
+            <p>RDV : Honoré</p>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="indicator" style="background-color: #ffa500"></div>
+          <div>
+            <p>RDV :Non Honoré</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-1" class="span">
+        <!-- <h3 class="text-center pl-16">Légende</h3> -->
+        <div class="flex">
+          <div class="indicator text-right" style="background-color: red"></div>
+          <div>
+            <p>RDV : Annulé</p>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="indicator text-right" style="background-color: #905ce0"></div>
+          <div>
+            <p>Tâche</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2 ml-12">
+        <h3 class="flex">Commerciaux <span class="number-commercial">{{users?.length}}</span></h3>
+        <div class="h-28 max-h-28 overflow-auto w-4/5">
+          <div class="flex" *ngFor="let item of users">
+            <div class="indicator" [style.background-color]="item.color"></div>
+            <div>
+              <p>{{ item.first_name }} {{ item.last_name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-right mb-5 flex justify-end items-center col-span-1">
+      <mat-form-field appearance="fill">
+        <mat-label>Choisir un commercial</mat-label>
+        <mat-select (selectionChange)="userChange($event)">
+          <!-- <mat-option [value]="userAuth">{{ userAuyhentifie.name }}</mat-option> -->
+          <mat-option *ngFor="let item of users" value="{{ item.id }}">
+            {{ item.first_name }} {{ item.last_name }}
+          </mat-option>
+          <mat-option value="0"> Tout </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="flex cursor-pointer ml-5" [matMenuTriggerFor]="menu"
+        *ngIf="permissionService.hasPermission('Gestion commerciale', 'Calendrier', 'R')">
+        <mat-icon class="pt-[5px]">cloud_download</mat-icon>
+        <h2 class="text-[#0C8040] font-semibold pl-2">Exporter</h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="spinnerNavigate" class="flex items-center justify-center mt-6 mb-6"
+    style="position: absolute; top: 50%; left: 50%; z-index: 10">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <!-- <div
+    *ngIf="spinnerGetAllData"
+    class="flex items-center justify-center mt-6 mb-6"
+  >
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div> -->
+
+  <ejs-schedule style="margin-top: -20px" [ngClass]="{ navigate: spinnerNavigate }"
+    [ngClass]="{ 'loader': spinnerGetAllData }" width="100%" height="550px" [firstDayOfWeek]="1"
+    [selectedDate]="selectedDate" [views]="views" [eventSettings]="eventSettings" [showQuickInfo]="showQuickInfo"
+    (dragStart)="onDragStart($event)" (dragStop)="onDragStop($event)" (popupOpen)="onPopupOpen($event)"
+    (popupClose)="onPopupClosed($event)" (navigating)="navigating($event)" (eventRendered)="oneventRendered($event)">
+
+    <ng-template #quickInfoTemplatesHeader let-data>
+      <div class="text-right mr-3" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Calendrier', 'R')">
+        <button mat-raised-button color="primary" (click)="Voirhistorique(data)"
+          class="w-2/4 cursor-pointer history-btn" matTooltip="Afficher l'historique" matTooltipPosition="above">
+          <mat-icon>history</mat-icon>
+          Afficher l'historique
+        </button>
+      </div>
+
+      <div *ngIf="data.elementType == 'event'">
+        <div class="e-popup-content">
+          <div class="e-description flex" *ngIf="data.Subject">
+            <div>
+              <mat-icon class="icon-event" matTooltip="Objet" matTooltipPosition="above">subject</mat-icon>
+            </div>
+            <div class="e-description-details e-text-ellipsis">
+              <strong>
+                {{ data.typeActivity == "RDV" ? "Rendez-vous" : "" }}
+                {{ data.typeActivity == "Task" ? "Tâche" : "" }}
+              </strong>
+              : {{ data.Subject }}
+            </div>
+          </div>
+          <div class="e-description flex" *ngIf="data.typeActivity === 'RDV'">
+            <div>
+              <mat-icon class="icon-event" matTooltip="Type de rendez-vous"
+                matTooltipPosition="above">phonelink</mat-icon>
+            </div>
+            <div class="e-description-details e-text-ellipsis">
+              {{ data.type }}
+            </div>
+          </div>
+          <div class="e-description flex" *ngIf="data.client">
+            <div>
+              <mat-icon class="icon-event" matTooltip="Client" matTooltipPosition="above">
+                account_balance</mat-icon>
+            </div>
+            <div class="e-description-details e-text-ellipsis">
+              <strong>
+                {{ data.client?.is_prospect == false ? "Client" : "Prospect" }}
+              </strong>
+              : {{ data.client?.name }}
+            </div>
+          </div>
+          <div class="e-description flex">
+            <div>
+              <mat-icon class="icon-event" matTooltip="Commercial" matTooltipPosition="above">perm_identity</mat-icon>
+            </div>
+            <div class="e-description-details e-text-ellipsis">
+              {{ data.user?.first_name }} {{ data.user?.last_name }}
+            </div>
+          </div>
+          <div class="e-description" *ngIf="data.typeActivity == 'Rdv'">
+            <div class="e-description-icon e-icons" matTooltip="Description" matTooltipPosition="above"></div>
+            <div class="e-description-details e-text-ellipsis">
+              {{ data.type }}
+            </div>
+          </div>
+          <!-- <div class="e-description" *ngIf="data.historiques.length > 1">
+            <div *ngIf="data.Status != data.historiques['1'].status">
+              <div class="e-description-icon e-icons"></div>
+              <div class="e-description-details e-text-ellipsis">
+                Le status est changé {{ data.historiques["1"].status }} ==>
+                {{ data.Status }}
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="e-description" *ngIf="data.historiques.length > 1">
+            <div
+              *ngIf="
+                data.EndTime != data.historiques['1'].endTime ||
+                data.StartTime != data.historiques['1'].startTime
+              "
+            >
+              <div class="e-description-icon e-icons"></div>
+              <div class="e-description-details e-text-ellipsis">
+                La date est reporté [
+                {{ data.historiques["1"].startTime | date: "dd-MM-yyyy HH:MM" }}
+                ==>
+                {{ data.historiques["1"].endTime | date: "dd-MM-yyyy HH:MM" }}]
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- <ng-template #editorTemplate class="relative">
+      <div class="w-100 h-100" class="popup-loader" *ngIf="!showPopup">
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+      <div>
+      <div class="grid grid-cols-1 mb-6">
+        <mat-radio-group
+          aria-label="Select an option"
+          name="type"
+          (change)="onChange($event)"
+        >
+          <mat-radio-button value="Rendez-vous" [checked]="rdvType"
+            >Rendez-vous</mat-radio-button
+          >
+          <mat-radio-button value="Tache" [checked]="tacheType"
+            >Tâche</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div class="mb-8">
+          <label class="e-textlabel">Objet</label>
+          <input
+            id="Subject"
+            class="e-field e-input"
+            type="text"
+            value=""
+            name="Subject"
+            style="width: 100%"
+            required
+          />
+        </div>
+        <div class="mb-8">
+          <app-shared-autcomplete
+            [type]="'single'"
+            #searchComponent1
+            [inputStyle]="dropDownStyle"
+            [charToGetAll]="'*'"
+            [data]="dataClients"
+            [keys]="['code', 'first_name', 'last_name']"
+            [lengthToStart]="3"
+            [display]="['code', 'first_name', 'last_name']"
+            [placeholer]="'Rechercher Client/Prospect'"
+            (dataEvent)="onClientChange($event)"
+          ></app-shared-autcomplete>
+
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div class="mb-8" [style.display]="rdvType ? 'block' : 'none'">
+          <label class="e-textlabel block">Type</label>
+          <input
+            id="type"
+            class="e-field e-input"
+            type="text"
+            value=""
+            name="type"
+            style="width: 100%"
+            [required]="rdvType"
+          />
+        </div>
+        <div class="mb-8">
+          <label class="e-textlabel">Assigné à</label>
+          <input
+            type="text"
+            id="user_id"
+            name="user_id"
+            class="e-field"
+            style="width: 100%"
+            [required]="tacheType"
+          />
+        </div>
+        <div [style.display]="edit ? 'block' : 'none'">
+          <div class="mb-8" [style.display]="tacheType ? 'block' : 'none'">
+            <label class="e-textlabel">Status Task</label>
+            <input
+              type="text"
+              id="StatusTask"
+              name="StatusTask"
+              class="e-field"
+              style="width: 100%"
+              [required]="tacheType"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-2">
+        <div [style.display]="edit ? 'block' : 'none'">
+          <div class="mb-8" [style.display]="rdvType ? 'block' : 'none'">
+            <label class="e-textlabel">Statut RDV</label>
+            <input
+              (change)="statutChange($event)"
+              type="text"
+              id="Status"
+              name="Status"
+              class="e-field"
+              style="width: 100%"
+              [required]="rdvType"
+            />
+          </div>
+        </div>
+        <div [style.display]="edit && showMotif ? 'block' : 'none'">
+          <div class="mb-8" [style.display]="rdvType ? 'block' : 'none'">
+            <label class="e-textlabel">Motif</label>
+            <input
+              type="text"
+              id="motif"
+              name="motif"
+              class="e-field motif"
+              style="width: 100%"
+              [required]="tacheType"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div class="mb-8">
+          <label class="e-textlabel">De</label>
+          <input
+            id="StartTime"
+            class="e-field"
+            type="text"
+            name="StartTime"
+            required
+          />
+        </div>
+        <div class="mb-8">
+          <label class="e-textlabel">À</label>
+          <input
+            id="EndTime"
+            class="e-field"
+            type="text"
+            name="EndTime"
+            required
+          />
+        </div>
+      </div>
+      <div class="mb-8 grid grid-cols-1">
+        <label class="e-textlabel">Description / Compte rendu</label>
+        <textarea
+          id="Description"
+          class="e-field e-input"
+          name="Description"
+          rows="3"
+          cols="50"
+          style="width: 100%; resize: vertical"
+          required
+        ></textarea>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2">
+        <div class="mb-8">
+          <label class="e-textlabel">Lieu / lien</label>
+          <input
+            id="Location"
+            class="e-field e-input"
+            type="text"
+            name="Location"
+            style="width: 100%"
+            required
+          />
+        </div>
+        <div class="mb-8">
+          <label class="e-textlabel">Importance</label>
+          <input
+            type="text"
+            id="priority"
+            name="priority"
+            class="e-field"
+            style="width: 100%"
+            required
+          />
+        </div>
+      </div>
+      </div>
+    </ng-template> -->
+  </ejs-schedule>
+</div>
+
+<!-- <div *ngIf="excel" style="visibility: hidden">
+  <gc-spread-sheets
+    [backColor]="spreadBackColor"
+    [hostStyle]="hostStyle"
+    (workbookInitialized)="workbookInit($event)"
+  >
+  </gc-spread-sheets>
+</div> -->
+<mat-menu #menu="matMenu" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Calendrier', 'R')">
+  <div class="p-3" (click)="$event.stopPropagation()">
+    <form class="mt-7 mb-7" [formGroup]="export">
+      <div class="grid grid-cols-1 gap-3 exportrdv">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date début</mat-label>
+            <input matInput type="date" formControlName="start_date" (change)="setDateDebut($event)" [max]="end_time"
+              [min]="end_time_6" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date fin</mat-label>
+            <input matInput type="date" formControlName="end_date" (change)="setDateFin($event)" [min]="start_time"
+              [max]="start_time_6" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 mt-2">
+        <div class="text-left">
+          <button mat-button class="bg-btn-green text-[18px] text-white p-3 w-full" (click)="exportExcel($event)"
+            [disabled]="export.invalid">
+            Valider
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-menu>

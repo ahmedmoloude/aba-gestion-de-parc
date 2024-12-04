@@ -1,0 +1,61 @@
+<div class="dialog"> 
+    <form [formGroup]="editPlanifiedCovoyage">
+        <h1 class="text-[#06152B] text-[22px] font-normal">Voyage automatique</h1>
+        <div class="grid grid-cols-2 gap-4 p-4">
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Jour</mat-label>
+                    <mat-select matNativeControl formControlName="day">
+                        <mat-option *ngFor="let jour of jours" [value]="jour.index">
+                        {{ jour.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <!-- *ngIf="spinner" -->
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Axe d'acheminement</mat-label>
+                    <mat-select matNativeControl formControlName="axe_id">
+                        <mat-option *ngFor="let axe of axes" [value]="axe.id">
+                        {{ axe.title }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 p-4">
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Date de départ</mat-label>
+                    <input matInput type="time" formControlName="start_hour"/>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                    <mat-label>Date d'arrivée</mat-label>
+                    <input matInput type="time" formControlName="end_hour"/>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-5 p-4">
+            <div>
+                <button
+                    class="cursor-pointer underline w-32 p-4 mr-3 font-bold text-[18px]"
+                    mat-dialog-close>
+                    Annuler
+                </button>
+            </div>
+            <div class="flex justify-end">
+                <button
+                    class="cursor-pointer bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+                    (click)="updatePlanifiedCovoyage()" *ngIf="!spinnerAdd" [disabled]="editPlanifiedCovoyage.invalid"><!--[disabled]="createAxe.invalid" -->
+                    Modifier
+                </button>
+                <span *ngIf="spinnerAdd">
+                    <mat-spinner [diameter]="40"></mat-spinner>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>

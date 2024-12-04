@@ -1,0 +1,52 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h1 mat-dialog-title class="col-span-2">Liste des N° de support</h1>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content class="ml-3 mr-3 mb-4">
+    <div class="overflow-x-auto relative">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerEnvoi"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of supports; let i = index"
+          >
+            <td class="p-3">
+              <strong>{{ i + 1 }}</strong>
+            </td>
+            <td class="p-3">
+              <strong>{{ item }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mt-5 mb-5 p-4">
+    <div>
+      <button
+        class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+        mat-dialog-close
+      >
+        Fermer
+      </button>
+    </div>
+  </div>
+</div>

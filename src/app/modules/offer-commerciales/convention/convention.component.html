@@ -1,0 +1,82 @@
+<div *ngIf="grid?.isLoading" class="flex items-center justify-center m-4">
+  <mat-spinner [diameter]="60"></mat-spinner>
+</div>
+<ng-container *ngIf="!grid?.isLoading">
+  <div
+    *ngIf="rubric_type === 'transport'"
+    class="name text-left text-xs text-[#9D7507] pb-3 font-medium"
+  >
+    Convention transport
+  </div>
+  <div
+    *ngIf="rubric_type === 'services-parent'"
+    class="name text-left text-xs text-[#9D7507] pb-3 font-medium"
+  >
+    Convention services
+  </div>
+  <div class="grid grid-cols-1">
+    <div class="text-left text-xs">
+      <p *ngIf="rubric_type === 'transport'" class="pb-2">
+        {{ grid.title }}
+        <span *ngIf="grid.type === 'template'" class="ml-3 badge badge-info">{{
+          "Template"
+        }}</span>
+        <span *ngIf="grid.type === 'public'" class="ml-3 badge badge-primary">{{
+          "Publique"
+        }}</span>
+        <span *ngIf="grid.type === 'offer'" class="ml-3 badge badge-warning">{{
+          "Offre"
+        }}</span>
+      </p>
+      <!--  -->
+      <p *ngIf="rubric_type === 'services'" class="pb-2">
+        <strong>{{ grid.title }}</strong>
+      </p>
+      <!--  -->
+      <p *ngIf="rubric_type === 'services-parent'" class="pb-2">
+        {{ (services$ | async)[0].parent_grid.title }}
+        <span
+          *ngIf="(services$ | async)[0].parent_grid.type === 'template'"
+          class="ml-3 badge badge-info"
+          >{{ "Template" }}</span
+        >
+        <span
+          *ngIf="(services$ | async)[0].parent_grid.type === 'public'"
+          class="ml-3 badge badge-primary"
+          >{{ "Publique" }}</span
+        >
+        <span
+          *ngIf="(services$ | async)[0].parent_grid.type === 'offer'"
+          class="ml-3 badge badge-warning"
+          >{{ "Offre" }}</span
+        >
+      </p>
+      <!-- <p class="pb-2">Référence: <strong>45187</strong></p>
+      <p class="pb-2">Client: <strong>Marjane</strong></p> -->
+    </div>
+  </div>
+  <div class="border-b-2 border-[#B2B2B252]"></div>
+  <div
+    class="grid grid-cols-2"
+    *ngIf="
+      (disableActions$ | async) === false &&
+      ['transport', 'services'].includes(rubric_type)
+    "
+  >
+    <div
+      class="flex cursor-pointer text-[#0C8040]"
+      (click)="openConditionDialog(false)"
+    >
+      <mat-icon class="pt-2">add_circle</mat-icon>
+      <p class="pl-1 pt-2 text-xs">Créer une condition</p>
+    </div>
+    <div
+      *ngIf="rubric_type === 'transport'"
+      class="flex cursor-pointer text-[#D80404] text-xs justify-center"
+      (click)="onDeleteConvention()"
+    >
+      <mat-icon class="pt-2">delete</mat-icon>
+      <p class="pl-1 pt-2">Supprimer</p>
+    </div>
+  </div>
+</ng-container>

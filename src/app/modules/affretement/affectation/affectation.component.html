@@ -1,0 +1,325 @@
+<!-- <div class="calendar">
+    <div class="week-switcher">
+      <button (click)="previousWeek()">Previous week</button>
+      <span>{{ formatDate(currentWeekStart) }} - {{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</span>
+      <button (click)="nextWeek()">Next week</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Lundi</th>
+          <th>Mardi</th>
+          <th>Mercredi</th>
+          <th>Jeudi</th>
+          <th>Vendredi</th>
+          <th>Samedi</th>
+          <th>Dimanche</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ formatDate(currentWeekStart.getTime() + 0*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 1*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 2*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 3*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 4*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 5*24*60*60*1000) }}</td>
+          <td>{{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+  
+  <div class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-4 mr-4 p-4">
+    <h2><i class="pi pi-calendar text-xl mr-4"></i>Calendrier</h2>
+    <div class="grid grid-cols-12">
+        <div [ngClass]="'col-span-'+div_cols">
+            <div class="grid grid-cols-12 mb-2">
+                <div class="col-span-6 flex">
+                    <div class="mr-4">
+                        <input [id]="1" type="checkbox" checked class="checkbox checkbox-success checkbox-md" [(ngModel)]="isAllChecked" (change)="cocherTous()" />
+                        <label [for]="1" class="block w-full cursor-pointer font-semibold">
+                            Tout 
+                        </label>
+                    </div>
+                    <div class="mr-4">
+                        <input [id]="2" type="checkbox" class="checkbox checkbox-success checkbox-md" [(ngModel)]="isAttenteChecked" (change)="enAttente()"/>
+                        <label [for]="2" class="block w-full cursor-pointer font-semibold">
+                            En attente d’affectation
+                        </label>
+                    </div>
+                    <div class="mr-4">
+                        <input [id]="3" type="checkbox" class="checkbox checkbox-success checkbox-md" [(ngModel)]="isValideChecked" (change)="valide()"/>
+                        <label [for]="3" class="block w-full cursor-pointer font-semibold">
+                            Validée
+                        </label>
+                    </div>
+                </div>
+                <div class="col-span-6 text-right">
+                    <div class="week-switcher">
+                        <button (click)="previousWeek()"><i class="pi pi-angle-left text-xl text-blue-500 mr-2"></i></button>
+                        <span class="week">{{ formatDate(currentWeekStart) }} - {{ formatDate(currentWeekStart.getTime() + 6*24*60*60*1000) }}</span>
+                        <button (click)="nextWeek()"><i class="pi pi-angle-right text-xl text-blue-500 ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+                <mat-spinner [diameter]="50"></mat-spinner>
+            </div>
+
+            <div *ngIf="!spinner"> 
+                <div class="header">
+                    <div class="days">
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[0], 0)"> 
+                            <h3>Lundi, {{ formatToDay(0) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[0]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[0]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[1], 1)">
+                            <h3>Mardi, {{formatToDay(1) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[1]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[1]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[2], 2)">
+                            <h3>Mercredi, {{formatToDay(2) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[2]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[2]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[3], 3)">
+                            <h3>Jeudi, {{formatToDay(3) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[3]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[3]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[4], 4)">
+                            <h3>Vendredi, {{formatToDay(4) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[4]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[4]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[5], 5)">
+                            <h3>Samedi, {{formatToDay(5) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[5]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[5]) }} validé</p>
+                            </div>
+                        </div>
+                        <div class="day-name cursor-pointer" (click)="affectation(filteredData[6], 6)">
+                            <h3>Dimanche, {{formatToDay(6) }}</h3>
+                            <div class="total-in-day border-y">
+                                <p class="txt-orange">{{ countEnAttente(filteredData[6]) }} en attente</p>
+                                <p class="txt-green">{{ countValide(filteredData[6]) }} validé</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calendar-container" *ngIf="!affectation_pop_up">
+                    <div class="calendar">
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[0]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[1]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[2]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[3]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[4]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[5]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <div class="init-td">&nbsp;</div>
+                            <div>
+                                <app-demande [demande]="item" *ngFor="let item of filteredData[6]" (dataEvent)="eventEdited($event)"></app-demande>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calendar-container mt-5" *ngIf="affectation_pop_up">
+                    <div class="calendar mt-5" >
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex justify-between">
+                              <div class="flex">
+                                <!-- <mat-icon class="pt-[5px]">local_shipping</mat-icon> -->
+                                <h2 class="text-[#0C8040] font-semibold pl-2">Listes des demande</h2>
+                              </div>
+                              <div class="flex items-baseline">
+                                <p class="text-base font-medium">{{ formatDate(currentWeekStart.getTime() + date_affectation*24*60*60*1000) }}</p>
+                              </div>
+                            </div>
+                            <div class="flex justify-end" (click)="affectation_pop_up = false">
+                              <div class="flex cursor-pointer" (click)="slide(12)">
+                                <mat-icon>close</mat-icon>
+                                <p class="text-[#ccc] font-semibold pl-2">Fermer</p>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10" *ngIf="!spinner">
+                        <div
+                          class="flex flex-row justify-between pl-3 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[84px] items-center"
+                          *ngFor="let item of data_affectation" >
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">N° demande</p>
+                                <p class="text-[12px] text-[#000000]">{{ item.reference }}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Client</p>
+                                <p class="text-[12px] text-[#000000]">{{ item.client?.first_name }} {{ item.client?.last_name }}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Catégories demandées</p>
+                                <p class="text-[12px] text-[#000000]" *ngFor="let v of item.vehicules">
+                                    {{ v.truck_type?.name }} : {{ v.tonnage?.name }}T
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Tonnage</p>
+                                <div class="flex">
+                                  <p class="text-[12px] text-[#000000]"></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div> -->
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Origine</p>
+                                <div class="flex">
+                                  <p class="text-[12px] text-[#000000]">{{ item?.origin_city?.name }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Destination</p>
+                                <div class="flex">
+                                    <p class="text-[12px] text-[#000000]">{{ item?.dest_city?.name }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Distance entre villes</p>
+                                <div class="flex">
+                                    <p class="text-[12px] text-[#000000]">{{ item?.distane_between_cities?.distance  }} KM</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Date fin</p>
+                                <div class="flex">
+                                  <p class="text-[12px] text-[#000000]">{{ item.date_fin | date: 'dd/MM/yyyy'}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Conducteur</p>
+                                <div class="flex" *ngFor="let driver of item?.affectations">
+                                  <p class="text-[12px] text-[#000000]" >{{ driver?.driver?.first_name }}</p> 
+                                  <p class="text-[12px] text-[#000000]" >{{ driver?.driver?.last_name }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+                          <div class="width-content">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <p class="text-[#b5b5b5] text-[10px]">Véhicule</p>
+                                <div class="flex" *ngFor="let truck of item?.affectations">
+                                  <p class="text-[12px] text-[#000000]">{{ truck?.truck?.matricule }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <mat-divider [vertical]="true" class="mx-auto" *ngIf="!affectation_pop_up_col"></mat-divider>
+                          <div class="width-content" *ngIf="!affectation_pop_up_col">
+                            <div class="flex items-center">
+                              <div class="pl-3">
+                                <button *ngIf="!item?.affectations?.length" class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5" (click)="affecter(item)">
+                                  Affecter
+                                </button>
+                                <button *ngIf="item?.affectations?.length" class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5" (click)="desaffecter(item.uuid)">
+                                  Désaffecter 
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+

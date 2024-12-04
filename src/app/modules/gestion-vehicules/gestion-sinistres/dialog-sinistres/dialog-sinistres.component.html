@@ -1,0 +1,363 @@
+<div class="dialog">
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Ajouter {{ radio }} {{ vehicule.code_interne }}</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="border-b-4 border-[#0C8040] ml-4 mr-4">
+      <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+        Information
+      </p>
+    </div>
+    <div class="pl-5 mb-5 mt-4">
+      <mat-radio-group aria-label="Select an option" (change)="typeChange($event)">
+        <mat-radio-button value="INFRACTION">Infraction</mat-radio-button>
+        <mat-radio-button value="ACCIDENT" checked class="ml-3 mr-3">Accident</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <form [formGroup]="addSinistre" class="ml-5 mr-5">
+
+      <div class="grid grid-cols-2 gap-4 mt-5">
+        <div *ngIf="radio == 'ACCIDENT' ">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Assureur
+              <i *ngIf="addSinistre.controls.prestataire_id?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select placeholder="Prestataire" formControlName="prestataire_id">
+              <mat-option *ngFor="let item of prestataires" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+            <!-- <input matInput type="text" formControlName="assureur" autocomplete="off"/> -->
+          </mat-form-field>
+        </div>
+        <div class="flex">
+          <div>
+            <mat-form-field appearance="fill" class="list-frmrigth w-[100%] mb-4" >
+              <mat-label>Type de mission
+              <i *ngIf="addSinistre.controls.missionable_id?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+              <mat-select matNativeControl (selectionChange)="modeleSelected($event)">
+                <mat-option value="Tour" >Tournée</mat-option>
+                <mat-option value="Covoyage" >Covoyage</mat-option>
+                <mat-option value="Transfert" >Transfert</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill" class="list-frmleft w-[100%] mb-4" >
+              <mat-select matNativeControl formControlName="missionable_id">
+                <mat-option *ngFor="let item of missions" [value]="item.id">{{ item.reference }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type
+              <i *ngIf="addSinistre.controls.motif?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="motif" autocomplete="off">
+              <mat-option  value="Éclairage">Éclairage</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-5" ><!--*ngIf="radio == 'ACCIDENT' "-->
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Adresse
+              <i *ngIf="addSinistre.controls.adresse?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="text" formControlName="adresse" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Adresse'" formControlName="adresse" ></i-field>
+        </div>
+        <div>
+          <app-shared-autcomplete
+            [hasIcon]="false"
+            [type]="'single'"
+            [contentStyle]="contentStyle"
+            [inputStyle]="searchStyle"
+            [charToGetAll]="'*'"
+            [data]="cities"
+            [keys]="['code', 'name']"
+            [lengthToStart]="3"
+            [display]="['code', 'name']"
+            [placeholer]="''"
+            [label]="'Destination...'"
+            [required]="addSinistre.controls.city_id?.hasError('required')"
+            (dataEvent)="filterCity($event)">
+          </app-shared-autcomplete>
+        </div>
+      </div>
+
+      <div *ngIf="radio == 'INFRACTION' ">
+        <mat-form-field appearance="fill" class="w-[100%] mb-2 mt-4">
+          <mat-label>Documents Saisie
+              <i *ngIf="addSinistre.controls.type_prelevement?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+          <mat-select formControlName="type_prelevement">
+            <mat-option value="Carte grise">Carte Grise </mat-option>
+            <mat-option value="Permis">Permis </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-5">
+        <div>
+          <!-- <input
+            type="datetime-local"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="Date" formControlName="date_sinistre" autocomplete="off"
+          /> -->
+          <i-field [type]="'datetime-local'" [label]="'Date'" formControlName="date_sinistre" ></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Conducteur
+              <i *ngIf="addSinistre.controls.driver_id?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="driver_id">
+              <mat-option *ngFor="let driver of drivers" value="{{ driver.id }}">
+                {{ driver.first_name }} {{ driver.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 mt-5" *ngIf="radio == 'ACCIDENT' ">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type de constat
+              <i *ngIf="addSinistre.controls.type_constat?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="type_constat">
+              <mat-option  value="A l’amiable">A l’amiable</mat-option>
+              <mat-option  value="PV">PV</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Référence de constat
+              <i *ngIf="addSinistre.controls.reference_constat?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="text" formControlName="reference_constat" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'text'" [label]="'Référence de constat'" formControlName="reference_constat" ></i-field>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Responsabilité
+              <i *ngIf="addSinistre.controls.responsabilite?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="responsabilite">
+              <mat-option  value="SDTM">SDTM</mat-option>
+              <mat-option  value="Autrui">Autrui</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 mt-5" *ngIf="radio == 'INFRACTION' ">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Payé
+              <i *ngIf="addSinistre.controls.paye?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="paye" (selectionChange)="payeSelected($event)">
+              <mat-option  value="1">Oui</mat-option>
+              <mat-option  value="0">Non</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Montant
+              <i *ngIf="addSinistre.controls.montant?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="number" formControlName="montant" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Montant(DH)'" formControlName="montant" ></i-field>
+        </div>
+        <div *ngIf="paye">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Nature de paiement
+              <i *ngIf="addSinistre.controls.nature_paiement?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="nature_paiement">
+              <mat-option  value="Sur place">Sur place</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="paye">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Payeur
+              <i *ngIf="addSinistre.controls.nature_paiement?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="nature_paiement">
+              <mat-option  value="SDTM">SDTM</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="!paye">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date d'écheance
+              <i *ngIf="addSinistre.controls.date_echeance?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="date" formControlName="date_echeance" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'date'" [label]="'Date d\'écheance'" formControlName="date_echeance" ></i-field>
+        </div>
+        <div *ngIf="!paye">
+          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Rappel
+              <i *ngIf="addSinistre.controls.rappel?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <input matInput type="number" formControlName="rappel" autocomplete="off"/>
+          </mat-form-field> -->
+          <i-field [type]="'number'" [label]="'Rappel'" formControlName="rappel" ></i-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 mt-5 mb-4">
+        <!-- <mat-form-field class="w-[100%] mb-4">
+          <mat-label>Description
+              <i *ngIf="addSinistre.controls.Description?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+          <textarea matInput placeholder="Description" formControlName="description" autocomplete="off"></textarea>
+        </mat-form-field> -->
+        <i-field [type]="'textarea'" [label]="'Description'" formControlName="description" ></i-field>
+      </div>
+
+      <div class="border-b-4 border-[#0C8040] ml-4 mr-4">
+        <p
+          class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">
+          Photo
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-5" *ngIf="radio == 'INFRACTION' ">
+        <div>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Type
+              <i *ngIf="addSinistre.controls.type_image?.hasError('required')" class="text-danger">
+                *
+              </i>
+            </mat-label>
+            <mat-select formControlName="type_image">
+              <mat-option  value="PV">PV</mat-option>
+              <mat-option  value="Document">Document</mat-option>
+              <mat-option  value="Photo">Photo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div>
+        <div class="flex">
+          <mat-icon class="pt-[5px]">perm_media</mat-icon>
+          <h2 class="text-[#000000] font-semibold pl-2">Accident</h2>
+        </div>
+      </div> -->
+      <div class="flex mt-4">
+        <div *ngFor="let image of images; let i = index">
+          <button class="btn-remove" (click)="removeImage(i)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <div *ngIf="display_img">
+            <img [src]="image.file" class="w-48 mb-3 rounded-xl image-vehicule" />
+          </div>
+          <!-- <p class="text-center">{{ image.name }}</p> -->
+        </div>
+        <div class="file-images flex justify-center items-center cursor-pointer">
+          <input #imgInput hidden="true" type="file" onclick="this.value=null" (change)="onSelectImage($event)"
+            accept=".jpeg,.png,.svg" />
+          <div class="text-center" (click)="imgInput.click()">
+            <mat-icon>add_circle</mat-icon>
+            <p class="text-xs">Ajouter une image</p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="flex mt-4">
+        <div *ngIf="file">
+          <img
+              [src]="image_src"
+              class="w-48 mb-3 rounded-xl"
+              *ngIf="display_img" />
+        </div>
+        <div class="file-images flex">
+          <input
+            #imgInput
+            hidden="true"
+            type="file"
+            onclick="this.value=null"
+            (change)="onSelectImage($event)"
+            accept="image/jpeg,image/png/">
+          <button mat-flat-button (click)="imgInput.click()">
+            <mat-icon>add_circle</mat-icon>
+            <p>Télécharger un<br> document</p>
+          </button>
+        </div>
+      </div> -->
+      <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4">
+        <div>
+          <button class="underline w-32 pt-2 font-bold text-[18px]" mat-dialog-close >
+            Annuler
+          </button>
+        </div>
+        <div class="text-right">
+          <!-- <button
+            class="bg-[#0C8040] text-[#fff] border-[#0C8040] rounded-[28px] shadow-[0px_3px_6px_#00000029] w-32 p-4 mr-3 font-bold text-[18px]"
+            (click)="addSinistreForm()" [disabled]="addSinistre.invalid" *ngIf="!spinnerAdd">
+            Enregistrer
+          </button> -->
+          <button
+            [disabled]="addSinistre.invalid" *ngIf="!spinnerAdd"
+            (click)="addSinistreForm()"
+            pButton pRipple
+            type="submit"
+            label="Enregistrer"
+            class="p-button-rounded p-button-success">
+          </button>
+          <span *ngIf="spinnerAdd">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

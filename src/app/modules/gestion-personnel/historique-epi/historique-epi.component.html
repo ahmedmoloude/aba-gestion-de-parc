@@ -1,0 +1,112 @@
+<div class="dialog h-screen overflow-auto bg-[#E9E9E9]" >
+  <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] pt-4 pl-4 pr-4">
+    <h2 mat-dialog-title class="col-span-2 text-[#0C8040]">Historique EPI</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div class="pl-3" *ngIf=" !isLoading ">
+    <p><strong>Total téléphone :</strong> {{telePhonneTotale}}</p>
+    <p><strong>Total casque :</strong> {{casqueTotale}}</p>
+    <p><strong>Total Chaussure de sécurité :</strong> {{ChaussureSecuriteTotale}}</p>
+    <p><strong>Total Chaussure de gents :</strong> {{GantsTotale}}</p>
+  </div>
+  <div class="flex mt-3 ml-3" *ngIf=" !isLoading ">
+    <div class="w-5/6">
+      <div class="flex flex-row mb-5" [formGroup]="form">
+        <div class="basis-1/3">
+          <mat-form-field appearance="fill">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type" >
+              <mat-option value="Télephone" >
+                Télephonne
+              </mat-option>
+              <mat-option value="Casque" >
+                Casque
+              </mat-option>
+              <mat-option value="Chaussure de sécurité" >
+                Chaussure de sécurité	
+              </mat-option>
+              <mat-option value="gants" >
+                Gants
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="basis-1/3">
+        <mat-form-field appearance="fill" class="w-[100%] mb-4">
+          <mat-label>Date d'attribution :</mat-label>
+          <input
+          formControlName="date_attr"
+            matInput
+            [matDatepicker]="date_attr"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="date_attr"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #date_attr></mat-datepicker>
+        </mat-form-field>
+      </div>
+        <div class="basis-1/3">
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Date mise à jours  :</mat-label>
+            <input
+            formControlName="date_mise_à_jours"
+              matInput
+              [matDatepicker]="mise__a_jours_date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="mise__a_jours_date"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #mise__a_jours_date></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6 flex items-start">
+      <button (click)="filtrer()"
+        style="margin-left: 35%; width: 60%;"
+        class="text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filter</span>
+      </button>
+    </div>
+  </div>
+  <ng-container *ngIf=" !isLoading ">
+    <table class="w-full text-left text-gray-500 bg-[#E9E9E9]">
+      <thead>
+        <tr>
+          <th
+            *ngFor="let header of headerColumuns"
+            scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex items-center">
+              {{ header }}  
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of epis"
+        >
+          <td class="p-3">{{item.type}}</td>
+          <td class="p-3">{{item.num_serie}}</td>
+          <td class="p-3">{{item.attribute_date}}</td>
+          <td class="p-3">{{item.amount}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+<div class="mt-10">
+  <div *ngIf="isLoading" class="flex justify-center">
+    <mat-spinner class="p-4 mr-3" [diameter]="40"></mat-spinner>
+  </div>
+</div>
+</div>
+

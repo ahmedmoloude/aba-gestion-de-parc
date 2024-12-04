@@ -1,0 +1,97 @@
+<div [ngClass]="merchant_uuid ? '' : 'bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6'">
+  <div class="grid grid-cols-2" *ngIf="!merchant_uuid">
+    <div>
+      <h1 class="text-[#06152B] text-[22px] font-normal">
+        Gestion des Rendez-vous
+      </h1>
+    </div>
+    <div class="text-right">
+      <div class="flex col-end-7 col-span-2 justify-end cursor-pointer" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Rendez-Vous', 'R')">
+        <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+        <h2 class="text-[#0C8040] font-normal pl-2 leading-[1.2]" (click)="openDialog(client, user)">
+          Rendez-vous
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <app-shared-filter [inputs]="inputsFiler" [extraInputs]="extraInputsFilter"
+      (filter)="filter($event)"></app-shared-filter>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!spinner">
+    <div class="overflow-x-auto relative mt-4">
+      <table class="w-full text-left text-gray-500">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headerColumuns" scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+            <th scope="col" class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+              <div class="flex justify-end">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor=" let item of rendezVous | paginate : { itemsPerPage: 6, currentPage: page  } ">
+            <td class="p-3" [matTooltip]="item.subject" matTooltipPosition="above">{{ item.subject | truncate: [15,
+              "..."]
+              }}</td>
+            <td class="p-3">{{ item.startTime }}</td>
+            <td class="p-3">{{ item.endTime }}</td>
+            <td class="p-3" [matTooltip]="item.client?.name" matTooltipPosition="above">{{ item.client?.name | truncate:
+              [20, "..."] }}</td>
+            <td class="p-3">{{ item.type }}</td>
+            <td class="p-3">{{ item.priority }}</td>
+            <!-- <td class="p-3"><span><i [ngStyle]="{'color': getColorByStatus(item.status)}" class="text-xs pi pi-circle-fill
+              "></i></span> {{ item.status }}</td> -->
+            <td class="p-3">
+              <div class="flex flex-row  items-center">
+                <div [ngStyle]="{'background': getColorByStatus(item.status)}" class="w-3 h-3 mr-2
+                "></div> <span>{{ item.status }}</span>
+              </div>
+            </td>
+            <td class="p-3"> {{ item.user?.first_name }} {{ item.user?.last_name }} </td>
+            <td class="p-3" [matTooltip]="item.description" matTooltipPosition="above"> {{ item.description | truncate:
+              [15, "..."] }}</td>
+            <td class="p-3">{{ item.motif || ''}}</td>
+            <td class="p-3">
+              <a *ngIf="item.file" href="{{ url + item.id + '/' }}{{ item.file }} " target="_blank">
+                <mat-icon>file_copy</mat-icon>
+              </a>
+            </td>
+            <td class="p-3 text-right cursor-pointer">
+              <mat-icon mat-button [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialogEdit(item, client, user)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Rendez-Vous', 'U')">
+                  <mat-icon>edit</mat-icon>
+                  Modifier
+                </button>
+                <button mat-menu-item (click)="deletTask(item.uuid)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Rendez-Vous', 'D')">
+                  <mat-icon>delete</mat-icon>
+                  Supprimer
+                </button>
+                <button mat-menu-item (click)="Voirhistorique(item)" *ngIf="permissionService.hasPermission('Gestion commerciale', 'Rendez-Vous', 'R')">
+                  <mat-icon>history</mat-icon>
+                  Historique
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-10" *ngIf=" rendezVous?.length > 0">
+      <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+    </div>
+  </ng-container>
+</div>

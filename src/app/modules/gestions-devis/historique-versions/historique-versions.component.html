@@ -1,0 +1,129 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4"
+  >
+    <h2 mat-dialog-title class="col-span-2">
+      {{
+        dialogData.display_timeline ? "Workflow du devis" : "Versions des devis"
+      }}
+    </h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="overflow-x-auto relative px-3">
+      <!-- history -->
+      <table
+        *ngIf="!dialogData.display_timeline"
+        class="w-full text-left text-gray-500"
+      >
+        <thead>
+          <tr>
+            <th
+              *ngFor="let header of headerColumuns"
+              scope="col"
+              class="p-3 text-[#0C8040] font-normal whitespace-nowrap"
+            >
+              <div class="flex items-center">
+                {{ header }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+            *ngFor="let item of dialogData.quote.versions"
+          >
+            <td class="p-3">{{ "V" + item.version }}</td>
+            <td class="p-3">
+              <span> {{ item.start_date }}</span>
+            </td>
+            <td class="p-3">
+              <span> {{ item.end_date || "---" }}</span>
+            </td>
+
+            <td class="p-3">
+              <span> {{ item.author?.name || item.author?.first_name }}</span>
+            </td>
+            <td class="p-3">
+              <span> {{ item.updated_at }}</span>
+            </td>
+            <td class="p-3">
+              <span> {{ item.motif || "---" }}</span>
+            </td>
+
+            <td class="p-3">
+              <span
+                *ngIf="item.status === 'REJECTED'"
+                class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+                >Non Accepté</span
+              >
+              <span
+                *ngIf="item.status === 'CANCELED'"
+                class="text-white bg-red-400 pl-3 pr-3 pt-1 pb-1 rounded-[20px] mr-2"
+                >Archivé</span
+              >
+            </td>
+            <td class="p-3">
+              <button
+                (click)="downloadOffer(item.id)"
+                class="bg-[#808080] text-[#fff] rounded-[10px] shadow-[0px_3px_6px_#00000029] w-18 px-3 pt-1 text-[12px]"
+              >
+                <mat-icon>picture_as_pdf</mat-icon>
+              </button>
+            </td>
+            <td class="p-3">
+              <button
+                (click)="showQuoteGridDetails(item.uuid)"
+                class="bg-[#808080] text-[#fff] rounded-[10px] shadow-[0px_3px_6px_#00000029] w-18 px-3 pt-1 text-[12px]"
+              >
+                <mat-icon>settings</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- timeline -->
+      <div
+        *ngIf="
+          dialogData.display_timeline && dialogData.quote.last_version.length
+        "
+        class="items-center gap-1 flex-wrap"
+      >
+      <div class="custom-table">
+        <div class="table-header">
+          <div class="header-item">Rôle</div>
+          <div class="header-item">Utilisateur</div>
+          <div class="header-item">Niveau</div>
+          <div class="header-item">Statut</div>
+        </div>
+        <div class="table-row-w" *ngFor="let validation of validations; let i = index">
+          <div class="row-item">{{ validation.role_name || '--' }}</div>
+          <div class="row-item">{{ validation.user_name || '--' }}</div>
+          <div class="row-item">{{ validation.niveau }}</div>
+          <div class="row-item" *ngIf="validation.status == 'PENDING'"><mat-icon [matTooltip]="'En attente'"
+            matTooltipPosition="above">hourglass_empty</mat-icon></div>
+          <div class="row-item" *ngIf="validation.status == 'DONE'"><mat-icon style="color: #098140" [matTooltip]="'Validée'"
+            matTooltipPosition="above">check_circle</mat-icon></div>
+          <div class="row-item" *ngIf="validation.status == 'REJECTED'"><mat-icon style="color: red" [matTooltip]="'Refusée'"
+            matTooltipPosition="above">cancel</mat-icon></div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="mt-2 mb-2 p-4">
+      <div class="text-right">
+        <button
+          class="underline w-32 p-4 mr-3 font-bold text-[18px]"
+          mat-dialog-close
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

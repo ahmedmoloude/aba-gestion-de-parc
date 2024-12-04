@@ -1,0 +1,83 @@
+<div class="flex flex-row justify-between p-6">
+  <div class="flex flex-row justify-between items-center header-title pl-10">
+    <!-- <mat-icon [svgIcon]="icon"></mat-icon>
+    <h1>{{title}}</h1> -->
+    <mat-icon [svgIcon]="icon_title" class="icon-header"></mat-icon>
+    <h1 class="ml-4 pl-2">{{ title }}</h1>
+  </div>
+
+  <div class="grow flex flex-row items-center" [ngClass]="style">
+    <ng-template appDynamicHeaderHost></ng-template>
+  </div>
+
+  <div class="flex flex-row justify-between items-center">
+    <!-- <div class="relative content-notification mr-4">
+      <mat-icon class="notification">notifications</mat-icon>
+      <span class="warn-badge absolute">9</span>
+    </div> -->
+    <div class="flex flex-row justify-between">
+      <img
+        class="rounded avatar mr-2"
+        src="../../../../assets/img/user.png"
+        alt="Default avatar"
+      />
+      <div>
+        <strong class="user-name font-medium">{{ user.name }}</strong>
+        <p class="user-role font-medium"></p>
+        <p
+          *ngIf="user.role?.name === 'super_admin_bo'"
+          class="user-role font-medium"
+        >
+          Super Admin
+        </p>
+        <p
+          *ngIf="user.role?.name === 'commercial_bo'"
+          class="user-role font-medium"
+        >
+          Commercial
+        </p>
+        <p
+          *ngIf="user.role?.name === 'admin_commercial_bo'"
+          class="user-role font-medium"
+        >
+          Directeur commercial
+        </p>
+        <p *ngIf="user.role?.name === 'adv_bo'" class="user-role font-medium">
+          Adv
+        </p>
+        <p
+          *ngIf="user.role?.name === 'admin_adv_bo'"
+          class="user-role font-medium"
+        >
+          Directeur adv
+        </p>
+        <p
+          *ngIf="user.role?.name === 'admin_planifier_bo'"
+          class="user-role font-medium"
+        >
+          Responsable Tournée
+        </p>
+      </div>
+      <div class="justify-start">
+        <button
+          style="margin-top: -10px"
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          #t="matMenuTrigger"
+          aria-label="Example icon-button with a menu"
+        >
+          <mat-icon class="drop-down-icon">arrow_drop_down</mat-icon>
+        </button>
+        <div class="menu-container">
+          <div *ngIf="t.menuOpen" class="arrow-right"></div>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item  (click)="logout()">
+              <mat-icon>power_settings_new</mat-icon>
+              <span>Déconnexion</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

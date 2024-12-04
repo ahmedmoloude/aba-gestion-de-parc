@@ -1,0 +1,349 @@
+
+<div
+  class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
+>
+  <div class="grid grid-cols-2 gap-2">
+    <div>
+      <div class="flex col-start-1 col-end-3">
+        <mat-icon>swap_calls</mat-icon>
+
+        <h2 class="text-[#0C8040] font-semibold pl-2">Liste des tournées</h2>
+      </div>
+    </div>
+    <div
+    *ngIf="permissionService.hasPermission('Tournée', 'Liste des tournées', 'C')"
+      class="flex col-end-7 col-span-2 justify-end cursor-pointer"
+      (click)="openDialog()"
+    >
+      <mat-icon class="text-[#0C8040] pt-[5px]">add_circle</mat-icon>
+
+      <h2 class="text-[#0C8040] font-normal pl-2">Tournée de ramassage</h2>
+    </div>
+  </div>
+
+  <div class="flex mt-4">
+    <div class="w-5/6">
+      <div class="flex flex-row">
+        <div class="basis-1/3">
+          <!-- <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="dd-mm-yyyy"
+            [(ngModel)]="filters.from_date"
+          /> -->
+          <mat-form-field appearance="fill" class="w-11/12 mb-4">
+            <mat-label>Date de Début</mat-label>
+            <input
+              matInput
+              [(ngModel)]="filters.from_date"
+              class="h-input"
+              type="date"
+            />
+          </mat-form-field>
+        </div>
+        <div class="basis-1/3">
+          <!-- <input
+            type="date"
+            class="p-3 w-11/12 pr-12 border rounded-3xl border-[#DBDBDB]"
+            placeholder="dd-mm-yyyy"
+            [(ngModel)]="filters.to_date"
+          /> -->
+          <mat-form-field appearance="fill" class="w-11/12 mb-4">
+            <mat-label>Date de Fin</mat-label>
+            <input
+              matInput
+              [(ngModel)]="filters.to_date"
+              type="date"
+              class="h-input"
+            />
+          </mat-form-field>
+        </div>
+        <div class="basis-1/3">
+          <mat-form-field appearance="fill" class="w-11/12 mb-4" >
+            <mat-label>Statut de la tournée</mat-label>
+            <mat-select matNativeControl required #tourStatusSelect [(ngModel)]="selectedTourStatus">
+              <mat-option value="INITIALIZED">Initiée</mat-option>
+              <mat-option value="PLANED">Planifiée</mat-option>
+              <mat-option value="STARTED">Démarrée</mat-option>
+              <mat-option value="DONE">clôturée</mat-option>
+              <mat-option value="RENFORT">Renfort</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="w-1/6">
+      <!-- <button
+        (click)="fetchTours()"
+        class="flex items-center justify-center text-white btn-filter text-[20px] bg-btn-green max-w-[170px] w-[170px]"
+      >
+        <mat-icon class="mr-3">filter_list</mat-icon>
+        <span class="text-white">Filtre</span>
+      </button> -->
+      <button 
+        (click)="fetchTours()" 
+        pButton pRipple 
+        type="submit" 
+        label="Filtre"
+        icon="pi pi-filter" iconPos="left" 
+        class="p-button-rounded p-button-success">
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="spinner" class="flex items-center justify-center mt-6 mb-6">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <div class="mt-10" *ngIf="!spinner">
+    <div class="mt-36 mb-36 text-center" *ngIf="tours.length == 0 ">
+      <p class="text-[#636363] text-[22px]">La Liste des tournées est vide</p>
+    </div>
+    <div *ngIf="tours.length > 0 ">
+      <ng-container>
+        <div
+          class="flex flex-row justify-between pl-0 pr-3 bg-white mb-5 shadow-[0px_3px_20px_#00000029] rounded-[18px] h-[103px]"
+          *ngFor="
+            let item of tours 
+          "
+        >
+          <div
+            class="flex place-items-center align-middle items-center width-info"
+          >
+            <div class="pl-2 pr-2 place-items-center items-center">
+              <p class="text-[12px] text-[#000000]">
+                {{ item.reference }}
+              </p>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">place</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Ville:</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.zone?.city?.name }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >my_location</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Zone :</p>
+                <p class="text-[12px] text-[#000000]">{{ item.zone?.name }}</p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >access_time</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">
+                  Date et heure de départ :
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ getDate(item.start_time) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >access_time</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">
+                  Date et heure d'arrivée :
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ getDate(item.end_time) }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >perm_identity</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Chauffeur :</p>
+                <p
+                  class="text-[12px] text-[#000000]"
+                  matTooltip="{{ item.driver?.name }}"
+                >
+                  {{ item.driver?.name || "--" | truncate: [12, "..."] }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >transfer_within_a_station</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Ramasseur :</p>
+                <p
+                  class="text-[12px] text-[#000000]"
+                  matTooltip="{{ item.driver?.name }}"
+                >
+                  {{ item.driver?.name || "--" | truncate: [12, "..."] }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >local_shipping</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Véhicule :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.truck?.tonnage ? item.truck?.tonnage?.name + " T" : "--" }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">subtitles</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Matricule :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.truck?.matricule || "--" }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >where_to_vote</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Nombre d'expéditions :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ getTourExpeditionStats(item?.planifiedPassages).expeditions_count  }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">bar_chart</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Nombre de colis:</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ getTourExpeditionStats(item?.planifiedPassages).colis_count  }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="block width-content mt-3">
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]"
+                  >where_to_vote</mat-icon
+                >
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Nombre de visites :</p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ item.items.length }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="icon ml-1">
+                <mat-icon class="text-[19px] text-[#138742]">bar_chart</mat-icon>
+              </div>
+              <div class="pl-0">
+                <p class="text-[#b5b5b5] text-[10px]">Progression:</p>
+                <p class="text-[12px] text-[#000000]">
+                  <!-- item.progression -->
+                  <mat-progress-bar
+                    mode="determinate"
+                    [color]="updateProgressColor(getTourProgress(item).percent)"
+                    [value]="getTourProgress(item).percent"
+                  >
+                  </mat-progress-bar>
+                </p>
+                <p class="text-[12px] text-[#000000]">
+                  {{ getTourProgress(item).value + "/" + item.items.length }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="mx-auto"></mat-divider>
+          <div class="flex items-center pl-4 justify-end">
+            <span
+              *ngIf="item.status === 'INITIALIZED'"
+              class="text-white bg-orange-400 px-3 py-2 rounded-[20px] mr-5"
+              >Initié
+            </span>
+            <span
+              *ngIf="item.status === 'PLANED'"
+              class="text-white bg-[#728FCE] px-3 py-2 rounded-[20px] mr-2"
+              >Planifié
+            </span>
+            <span
+              *ngIf="item.status === 'STARTED'"
+              class="text-white bg-green-500 px-3 py-2 rounded-[20px] mr-2"
+              >Démarré
+            </span>
+            <span
+              *ngIf="item.status === 'DONE'"
+              class="text-white bg-red-400 px-3 py-2 rounded-[20px] mr-2"
+              >clôturée
+            </span>
+  
+            <mat-icon *ngIf="item.is_renfort_tour" class="text-[19px]"
+              >local_shipping</mat-icon
+            >
+          
+           
+
+            <mat-icon  class="cursor-pointer ml-1 text-[22px] text-[#138742]"
+            
+            (click)="downloadPdf(item?.id)"
+            >print</mat-icon><span></span>
+
+            <mat-icon
+            (click)="getTourDetails(item)"
+            class="cursor-pointer ml-1 text-[22px] text-[#138742]"
+            >menu</mat-icon
+          >
+
+          </div>
+        </div>
+      </ng-container>
+      <div class="mt-10" *ngIf="tours.length!=0">
+        <app-pagination [Links]="links" (getPage)="getTheNext($event)"></app-pagination>
+      </div>
+    </div>
+  </div>
+</div>

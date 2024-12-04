@@ -1,0 +1,121 @@
+<div class="dialog">
+  <div
+    class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-[12px_12px_0px_0px] p-4">
+    <h2 mat-dialog-title class="col-span-2">Modifier les demandes</h2>
+    <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <div mat-dialog-content *ngIf="bill$ | async as factureState">
+    <div  *ngIf="factureState?.dataState =='Loading'" class="flex items-center justify-center mt-6 mb-6">
+      <mat-spinner [diameter]="60"></mat-spinner>
+    </div>
+    <div *ngIf="factureState?.facture && factureState?.dataState =='Success'" class="m-3 mb-5">
+      <div class="grid grid-cols-4 gap-4 mb-3 mt-3">
+        <div>
+          <div class="w-full" #myComponent>
+            <div class="relative">
+                <span  class="label show-label">ID / Nom de client:</span>
+                <input type="text" class="input block w-full p-2 border-[#DBDBDB]" [value]="factureState?.facture?.customer?.name || '---'"  readonly/>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="w-full" #myComponent>
+            <div class="relative">
+                <span  class="label show-label">Numéro d'envoie:</span>
+                <input type="text" class="input block w-full p-2 border-[#DBDBDB]" [value]="factureState?.facture?.reference || '---'"  readonly/>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="w-full" #myComponent>
+            <div class="relative">
+                <span  class="label show-label">Période:</span>
+                <input type="text" class="input block w-full p-2 border-[#DBDBDB]"
+                value=" Du {{(factureState?.facture?.start_date | date :'dd/MM/yyyy' || '---')}} - Au {{(factureState?.facture?.end_date | date :'dd/MM/yyyy' || '---')}}"  readonly/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="factureState?.facture?.demandes?.length>0">
+        <div class="overflow-auto">
+          <table class="w-full text-left text-gray-500 block overflow-auto">
+            <thead>
+              <tr>
+                <th *ngIf="permissionService.hasPermission('Facturation', 'Liste des factures', 'U') && (demandes.length > 1)"
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <mat-checkbox
+                    (change)="$event ? toggleAllRows() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <th
+                  *ngFor="let header of headerColumuns"
+                  scope="col"
+                  class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ header }}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+                *ngFor="let expedition of factureState?.facture?.demandes">
+                <td class="p-3" *ngIf="permissionService.hasPermission('Facturation', 'Liste des factures', 'U') && (demandes.length > 1)">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(expedition) : null"
+                      [checked]="selection.isSelected(expedition)"
+                      [aria-label]="checkboxLabel(expedition)">
+                    </mat-checkbox>
+                    <!-- <mat-checkbox *ngIf="!expedition?.is_light" disabled="true" checked></mat-checkbox> -->
+                </td>
+                <td class="p-3">{{(expedition?.created_at | date :'dd/MM/yyyy' || '---')}}</td>
+                <td class="p-3">{{(expedition?.reference) ? expedition?.reference : '---'}}</td>
+                <td class="p-3">{{factureState?.facture?.customer?.name || '---'}}</td>
+                <td class="p-3">{{expedition?.destinations.join(',') || '---'}}</td>
+                <td class="p-3">{{expedition?.destinataires.join(',') || '---'}}</td>
+                <td class="p-3">{{expedition?.camions.name || '---'}}</td>
+                <td class="p-3">{{expedition?.marchandise_globale?.nbr_palette || 0}}</td>
+                <td class="p-3">{{expedition?.marchandise_globale.poids || 0}}</td>
+                <td class="p-3">{{expedition?.marchandise_globale.valeur_declare || 0}}</td>
+                <td class="p-3">{{expedition?.documents_fonds?.Fonds || 0}}</td>
+                <td class="p-3">{{expedition?.documents_fonds?.BL || 0}}</td>
+                <td class="p-3">{{expedition?.documents_fonds?.Facture || 0}}</td>
+                <td class="p-3">{{(expedition?.marchandise_globale.port.title) ? (expedition?.marchandise_globale.port.title) : '---' }}</td>
+                <td class="p-3">{{(expedition?.tarifs.ht  | number) || 0}}</td>
+                <td class="p-3">{{(expedition?.tarifs.ht_transport | number )|| 0}}</td>
+                <td class="p-3">{{(expedition?.tarifs.ht_service  | number) || 0}}</td>
+                <td class="p-3">{{(expedition?.tarifs.tva_transport | number) || 0}}</td>
+                <td class="p-3">{{(expedition?.tarifs.tva_service  | number) || 0}}</td>
+                <td class="p-3">{{(expedition?.tarifs.ttc | number) || 0}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-2 p-4" *ngIf="!(isAllSelected()|| (!selection.hasValue()) || demandes.length<1) ">
+          <div>
+            <button mat-dialog-close
+              class="underline w-32 p-4 mr-3 font-bold text-[18px]">
+              Annuler
+            </button>
+          </div>
+          <div class="text-right">
+            <button *ngIf="!spinner" (click)="regenerateFacture()" pButton pRipple label="Valider" class="p-button-rounded p-button-success"></button>
+            <span *ngIf="spinner">
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </span>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</div>

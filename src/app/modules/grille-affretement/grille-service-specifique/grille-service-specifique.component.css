@@ -1,0 +1,27 @@
+tr:nth-child(even) {
+    background-color: #F2FCF1;
+  }
+
+  .active{
+    background: #0c8040;
+      color: white;
+      padding: 5px 20px;
+      border-radius: 8px;
+      pointer-events: none;
+  }
+  .inactive{
+    background: #f34646;
+      color: white;
+      padding: 5px 20px;
+      border-radius: 8px;
+  }
+  .loading{
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .text-loading{
+    position: absolute;
+    font-size: 26px;
+    left: 33%;
+    top: 10%;
+  }

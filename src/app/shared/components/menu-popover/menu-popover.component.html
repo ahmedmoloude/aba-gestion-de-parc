@@ -1,0 +1,29 @@
+<div class="justify-start">
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    #t="matMenuTrigger"
+    aria-label="Example icon-button with a menu"
+  >
+    <mat-icon class="cursor-pointer text-[19px] text-[#138742]">menu</mat-icon>
+  </button>
+  <div class="menu-container">
+    <div *ngIf="t.menuOpen" class="arrow-right"></div>
+    <mat-menu #menu="matMenu" class="myMenu">
+      <button class="items-center" mat-menu-item>
+        <mat-icon class="text-[24px] text-[#138742]">menu</mat-icon>
+        <span class="label">Détails</span>
+      </button>
+      <mat-divider class="px-8 custom-divider"></mat-divider>
+      <button class="items-center" mat-menu-item>
+        <mat-icon class="text-[19px] text-[#138742]">edit</mat-icon>
+        <span class="label">Modifier</span>
+      </button>
+      <mat-divider class="px-8 custom-divider"></mat-divider>
+      <button class="items-center" mat-menu-item>
+        <mat-icon class="text-[19px] text-[#138742]">delete</mat-icon>
+        <span class="label">Supprimer</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

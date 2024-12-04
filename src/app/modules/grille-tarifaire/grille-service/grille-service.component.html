@@ -1,0 +1,93 @@
+<div class="overflow-x-auto relative mt-4">
+  <!-- <div class="relative mt-5 mb-5">
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Origine"
+    >
+      <option>Origine 1</option>
+      <option>Origine 2</option>
+    </select>
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Destination"
+    >
+      <option>Destination 1</option>
+      <option>Destination 2</option>
+    </select>
+    <select
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Base de calcul"
+    >
+      <option>Base de calcul 1</option>
+      <option>Base de calcul 2</option>
+    </select>
+    <input
+      type="text"
+      class="p-3 w-1/5 pr-12 mx-2 border rounded-3xl border-[#DBDBDB]"
+      placeholder="Prix"
+    />
+    <button mat-button class="text-white p-3 bg-btn-green text-[18px]">
+      <mat-icon class="mr-1">filter_list</mat-icon>
+      <span class="text-white">Filter</span>
+    </button>
+  </div> -->
+
+  <div *ngIf="isLoading$ | async" class="flex items-center justify-center mt-6">
+    <mat-spinner [diameter]="80"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="(isLoading$ | async) === false">
+    <table class="w-full text-left text-gray-500">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headerColumuns" scope="col"
+            class="p-3 text-[#0C8040] font-normal whitespace-nowrap">
+            <div class="flex items-center">
+              {{ header }}
+            </div>
+          </th>
+          <!--<th
+            scope="col"
+            class="p-3 text-g[#0C8040] font-normal whitespace-nowrap"
+          >
+            <div class="flex justify-end">Actions</div>
+          </th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row bg-white whitespace-nowrap border-b border-gray-800"
+          *ngFor="let item of grids | paginate: {id: 'pagination-services',itemsPerPage: 6,currentPage: page }">
+          <td class="p-3">{{item.originable?.name == null ? "Tout" : item.originable?.name }}</td>
+          <td class="p-3">{{ item.destinationable?.name == null ? "Tout" : item.destinationable?.name }}</td>
+          <td class="p-3">{{ item.rubric.title_affichage }}</td>
+          <td class="p-3">
+            {{ item.basis_calcul.title_affichage }}
+          </td>
+          <td class="p-3">
+            {{
+            item.type_val === "COEF"
+            ? convertToPourcentage(item.calcul_val)
+            : item.calcul_val
+            }}
+            {{ item.type_val === "PRICE" ? " DH" : "" }}
+            {{ item.type_val === "COEF" ? " %" : "" }}
+          </td>
+          <td class="p-3">{{ item.min == null ? "-" : item.min }}</td>
+          <td class="p-3">{{ item.max == null ? "-" : item.max }}</td>
+          <td class="p-3">{{ item.u_sup == null ? "-" : item.u_sup }}</td>
+          <td class="p-3">{{ item.val_sup == null ? "-" : item.val_sup }}</td>
+          <!--<td class="p-3 text-right cursor-pointer">
+            <mat-icon>more_vert</mat-icon>
+          </td>-->
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-10">
+      <pagination-controls id="pagination-services" previousLabel="" nextLabel=""
+        (pageChange)="page = $event"></pagination-controls>
+    </div>
+  </ng-container>
+</div>
