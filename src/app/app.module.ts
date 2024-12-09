@@ -300,6 +300,8 @@ import { DialogVoirReceptionComponent } from './modules/affretement/documents-fu
 import { DialogBordereauVersementComponent } from './modules/affretement/documents-funds/dialog-bordereau-versement/dialog-bordereau-versement.component';
 import { VoirBordereauVersementComponent } from './modules/affretement/documents-funds/voir-bordereau-versement/voir-bordereau-versement.component';
 import { DialogReferenceChequeComponent } from './modules/affretement/documents-funds/dialog-reference-cheque/dialog-reference-cheque.component';
+import { ReportMenuComponent } from './modules/tower-control/report-menu/report-menu.component';
+import { ReportDialogComponent } from './modules/tower-control/report-dialog/report-dialog.component';
 
 @NgModule({
   declarations: [
@@ -555,7 +557,9 @@ import { DialogReferenceChequeComponent } from './modules/affretement/documents-
     DialogVoirReceptionComponent,
     DialogBordereauVersementComponent,
     VoirBordereauVersementComponent,
-    DialogReferenceChequeComponent
+    DialogReferenceChequeComponent,
+    ReportMenuComponent,
+    ReportDialogComponent
 ],
   imports: [
     DragDropModule,

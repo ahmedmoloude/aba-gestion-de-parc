@@ -694,4 +694,10 @@ export const ROUTES = {
     params :1
   },
 
+  towercontrol : {
+    path: 'towercontrol',
+    route: '/towercontrol',
+    name: 'towercontrol',
+  },
+
 };

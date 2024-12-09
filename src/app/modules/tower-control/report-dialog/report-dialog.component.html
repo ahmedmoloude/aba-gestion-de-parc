@@ -1,0 +1,109 @@
+
+<div class="min-w-[500px]">
+    <!-- Header -->
+    <div class="p-4 bg-[#E6F3FF] rounded-t-lg flex justify-between items-center">
+      <h2 class="text-[#0C8041] text-lg font-medium">{{ dialogTitles[data.type] }}</h2>
+      <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <div class="p-6">
+      <!-- Date Range Mode -->
+      <div *ngIf="getDialogMode() === 'date-range'" class="space-y-4">
+        <div class="flex items-center gap-4">
+          <span class="text-[#0C8041] w-16">début:</span>
+          <div class="flex-1 relative">
+            <input 
+              type="text"
+              [(ngModel)]="startDate"
+              placeholder="jj/mm/aaaa"
+              class="w-full p-2 border border-[#0C8041] rounded-lg pl-10"
+            >
+            <mat-icon class="absolute left-2 top-2 text-[#0C8041]">calendar_today</mat-icon>
+          </div>
+        </div>
+  
+        <div class="flex items-center gap-4">
+          <span class="text-[#0C8041] w-16">fin:</span>
+          <div class="flex-1 relative">
+            <input 
+              type="text"
+              [(ngModel)]="endDate"
+              placeholder="jj/mm/aaaa"
+              class="w-full p-2 border border-[#0C8041] rounded-lg pl-10"
+            >
+            <mat-icon class="absolute left-2 top-2 text-[#0C8041]">calendar_today</mat-icon>
+          </div>
+        </div>
+  
+        <div *ngIf="showSequenceInput()" class="mt-4">
+          <input 
+            type="text"
+            [(ngModel)]="sequenceNumber"
+            placeholder="N sequence"
+            class="w-full p-2 border border-[#0C8041] rounded-lg"
+          >
+        </div>
+      </div>
+  
+      <!-- Confirmation Mode -->
+      <div *ngIf="getDialogMode() === 'confirmation'" class="py-4">
+        <p class="text-[#0C8041] text-lg text-center">
+          veuillez comfirmer le téléchargement du rapport:
+        </p>
+      </div>
+  
+      <!-- File Select Mode -->
+      <div *ngIf="getDialogMode() === 'file-select'" class="space-y-4">
+        <button class="w-full text-left border border-[#0C8041] rounded-lg p-4 text-[#0C8041] hover:bg-[#0C8041]/5">
+          <span class="text-lg tracking-wide">sélectionner un fichier</span>
+          <mat-icon class="float-right">expand_more</mat-icon>
+        </button>
+        
+        <div class="bg-gray-50 p-4 rounded-lg" *ngIf="getFileSelectInfo()">
+          <div class="flex gap-2">
+            <mat-icon class="text-[#0C8041]">info</mat-icon>
+            <div>
+              <h3 class="font-medium">{{ getFileSelectInfo()?.title }}</h3>
+              <p class="text-sm text-gray-600">{{ getFileSelectInfo()?.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Footer -->
+    <div class="p-4 flex justify-between">
+      <button 
+        (click)="onCancel()"
+        class="px-6 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50"
+      >
+        Annuler
+      </button>
+      
+      <button 
+        *ngIf="getDialogMode() === 'date-range'"
+        (click)="onExtract()"
+        class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+      >
+        Extrait
+      </button>
+  
+      <button 
+        *ngIf="getDialogMode() === 'confirmation'"
+        (click)="onConfirm()"
+        class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+      >
+        confirmer
+      </button>
+  
+      <button 
+        *ngIf="getDialogMode() === 'file-select'"
+        (click)="onDownload()"
+        class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+      >
+        télécharger
+      </button>
+    </div>
+  </div>

@@ -123,6 +123,7 @@ import { FacturationSpecialOffersComponent } from './modules/facturation-special
 import { EditFacturationSpecialOffersComponent } from './modules/edit-facturation-special-offers/edit-facturation-special-offers.component';
 import { DemandesLightComponent } from './modules/affretement/demandes-light/demandes-light.component';
 import { NewDemandeLightComponent } from './modules/affretement/new-demande-light/new-demande-light.component';
+import { ReportMenuComponent } from './modules/tower-control/report-menu/report-menu.component';
 
 
 const routes: Routes = [
@@ -963,6 +964,12 @@ const routes: Routes = [
         component: UpdateAffretementDevisComponent,
         canActivate: [AuthGuard],
       },
+
+      {
+        path : 'towercontrol',
+        component : ReportMenuComponent,
+        canActivate : [AuthGuard]
+      }
     ],
   },
   { path: '**', redirectTo: 'reclamations' },

@@ -1,0 +1,15 @@
+<div class="p-5 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div *ngFor="let item of menuItems" 
+           (click)="openDialog(item.type)"
+           class="flex items-center gap-4 p-4 rounded-lg border border-[#0C8041]/20 hover:bg-[#0C8041]/5 cursor-pointer transition-colors duration-200 bg-white">
+        <span class="material-icons text-[#0C8041]">
+          {{item.icon}}
+        </span>
+        <span class="text-[#0C8041] font-medium">
+          {{item.title}}
+        </span>
+      </div>
+    </div>
+  </div>
+  
