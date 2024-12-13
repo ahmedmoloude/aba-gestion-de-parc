@@ -1,3 +1,10 @@
 .bg-login {
   background-image: url("../../../assets/img/bg-login.png");
 }/*# sourceMappingURL=login.component.css.map */
+
+.logo{
+  width: 60% !important;
+  /* text-align: center; */
+  margin: 0 auto !important;
+  margin-bottom: 20px !important;
+}

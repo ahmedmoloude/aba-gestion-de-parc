@@ -12,10 +12,10 @@
       <!-- Date Range Mode -->
       <div *ngIf="getDialogMode() === 'date-range'" class="space-y-4">
         <div class="flex items-center gap-4">
-          <span class="text-[#0C8041] w-16">début:</span>
+          <span class="text-[#0C8041] w-16">Début:</span>
           <div class="flex-1 relative">
             <input 
-              type="text"
+              type="date"
               [(ngModel)]="startDate"
               placeholder="jj/mm/aaaa"
               class="w-full p-2 border border-[#0C8041] rounded-lg pl-10"
@@ -25,10 +25,10 @@
         </div>
   
         <div class="flex items-center gap-4">
-          <span class="text-[#0C8041] w-16">fin:</span>
+          <span class="text-[#0C8041] w-16">Fin:</span>
           <div class="flex-1 relative">
             <input 
-              type="text"
+              type="date"
               [(ngModel)]="endDate"
               placeholder="jj/mm/aaaa"
               class="w-full p-2 border border-[#0C8041] rounded-lg pl-10"

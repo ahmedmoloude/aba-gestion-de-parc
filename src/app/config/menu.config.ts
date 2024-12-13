@@ -197,11 +197,23 @@ export const MENU = [
         ]
       },
       {
-          label: 'Tower Control',
-          routeName: ROUTES['towercontrol'].name,
+          label: 'Telematics System',
+          routeName: '',
           isMenu: true
   
-      }
+      },
+      {
+        label: 'Tower Control',
+        routeName: ROUTES['towercontrol'].name,
+        isMenu: true
+
+    },
+    {
+      label: 'Dashcam IA',
+      routeName: '',
+      isMenu: true
+
+  }
 
 
 ];
