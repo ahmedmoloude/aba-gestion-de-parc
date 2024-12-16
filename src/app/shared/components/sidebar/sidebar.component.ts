@@ -84,6 +84,7 @@ export class SidebarComponent implements OnInit {
   }
   ngOnInit(): void {
 
+    
     // this.store.select(selectAuthUser).subscribe((user) => {
     //   const role = user?.role?.name;
     //   const abilities = (user?.abilities.length) ? user?.abilities[0].abilities : [];

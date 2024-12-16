@@ -6,6 +6,10 @@ export const MENU = [
 
 
 
+
+    
+
+
       {
         label: 'Fleet management',
         routeName: null,
@@ -213,6 +217,13 @@ export const MENU = [
       routeName: '',
       isMenu: true
 
+  },
+
+
+  {
+    label: 'Paramètres',
+    routeName: 'parametre',
+    isMenu: true,
   }
 
 
