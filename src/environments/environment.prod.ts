@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: true,
-  URL: 'http://197.230.172.211:8000/api/',
-  STORAGE: 'http://197.230.172.211:8000/storage',
+  URL: 'http://197.230.172.211:5000/api/',
+  STORAGE: 'http://197.230.172.211:5000/storage',
 };
 /*
  * For easier debugging in development mode, you can import the following file
