@@ -22,7 +22,6 @@ import { VehiculeService } from 'app/core/services/vehicule.service';
 import * as moment from 'moment';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
-// import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @Component({
   selector: 'app-dialog-vehicules',
@@ -112,33 +111,23 @@ export class DialogVehiculesComponent implements OnInit {
       .select(selectAllCityAgence)
       .subscribe((res) => (this.cities = res));
 
-    // this.store.select(selectEnvbrandPayload).subscribe((res) => {
-    //   // console.log(" brand========>", res)
-    //   this.brands = res
-    // });
-
     this.store.select(selectEnvparcPayload).subscribe((res) => {
-      // console.log(" parc========>", res)
       this.parcs = res;
     });
 
     this.store.select(selectEnvtonnagePayload).subscribe((res) => {
-      // console.log(" tonnage========>", res)
       this.tonnages = res;
     });
 
     this.store.select(selectEnvtruckCategoryPayload).subscribe((res) => {
-      // console.log(" categories========>", res)
       this.categories = res;
     });
 
     this.store.select(selectTruckService).subscribe((res) => {
-      // console.log(" services========>", res)
       this.services = res;
     });
 
     this.store.select(selectEnvtruckTypePayload).subscribe((res) => {
-      // console.log(" type========>", res)
       this.types = res;
     });
 
@@ -146,7 +135,6 @@ export class DialogVehiculesComponent implements OnInit {
       (data) => {
         console.log('data', data);
         this.colors = data['response'];
-        // console.log('colors', this.colors);
         setTimeout(() => {
           this.searchComponents.toArray()[8]?.selectObject(this.item?.color);
         });
@@ -160,7 +148,6 @@ export class DialogVehiculesComponent implements OnInit {
       (data) => {
         console.log('data', data);
         this.brands = data['response'];
-        // console.log('brands', this.brands);
         setTimeout(() => {
           this.searchComponents.toArray()[3]?.selectObject(this.item?.brand);
         });
@@ -196,24 +183,23 @@ export class DialogVehiculesComponent implements OnInit {
     if (this.data['type'] == 'add') {
       this.form_btn = 'Ajouter';
       console.log('form set');
-      //  Marque - type - N° dechâssis - date d'entrée - Carburant - tonnage - kilométrage initial - taille de réservoir - puissance fiscal -
       this.createVehicule = new FormGroup({
-        activity: new FormControl('', Validators.required),
-        code_interne: new FormControl('', Validators.required),
-        city_id: new FormControl('', Validators.required),
-        parc_id: new FormControl('', Validators.required),
-        service: new FormControl('', Validators.required),
-        n_chassis: new FormControl('', Validators.required),
-        brand_id: new FormControl('', Validators.required),
-        zone_id: new FormControl('', Validators.required),
-        modele_id: new FormControl('', Validators.required),
-        truck_type_id: new FormControl('', Validators.required),
-        tonnage_id: new FormControl('', Validators.required),
-        date_entree_vehicule: new FormControl('', Validators.required),
-        km_initial: new FormControl('', [Validators.required, Validators.min(0)]),
-        carburant: new FormControl('', Validators.required),
-        taille_reservoir: new FormControl('', [ Validators.required,Validators.min(0)]),
-        puissance_fiscale: new FormControl('', [Validators.required,Validators.min(0)]),
+        activity: new FormControl(''),
+        code_interne: new FormControl(''),
+        city_id: new FormControl(''),
+        parc_id: new FormControl(''),
+        service: new FormControl(''),
+        n_chassis: new FormControl(''),
+        brand_id: new FormControl(''),
+        zone_id: new FormControl(''),
+        modele_id: new FormControl(''),
+        truck_type_id: new FormControl(''),
+        tonnage_id: new FormControl(''),
+        date_entree_vehicule: new FormControl(''),
+        km_initial: new FormControl('', [Validators.min(0)]),
+        carburant: new FormControl(''),
+        taille_reservoir: new FormControl('', [Validators.min(0)]),
+        puissance_fiscale: new FormControl('', [Validators.min(0)]),
         truck_category_id: new FormControl(''),
         color_id: new FormControl(''),
         date_sortie: new FormControl(''),
@@ -222,36 +208,23 @@ export class DialogVehiculesComponent implements OnInit {
         consomation_carburant_reel: new FormControl('', [Validators.min(0)]),
         adblue: new FormControl(''),
         nbr_scelle: new FormControl(''),
-        carNumberPart1 :  new FormControl(""),
-        carNumberPart2 :  new FormControl("" ,[ Validators.maxLength(1), Validators.pattern('^[A-Za-z\u0600-\u06FF]$')]),
-        carNumberPart3 :  new FormControl("" , [Validators.maxLength(2)]),
-        matricule: new FormControl('',Validators.pattern(/^\d+ [A-Za-z\u0600-\u06FF] \d{1,2}$/)),
+        carNumberPart1: new FormControl(''),
+        carNumberPart2: new FormControl('', [Validators.maxLength(1), Validators.pattern('^[A-Za-z\u0600-\u06FF]$')]),
+        carNumberPart3: new FormControl('', [Validators.maxLength(2)]),
+        matricule: new FormControl('', Validators.pattern(/^\d+ [A-Za-z\u0600-\u06FF] \d{1,2}$/)),
         gamme_id: new FormControl(''),
         city: new FormControl(''),
         capacite_consommation: new FormControl({ value: '', disabled: true }, [Validators.min(0)]),
-        taux_consommation_theorique: new FormControl({ value: '', disabled: true },[Validators.min(0)]),
+        taux_consommation_theorique: new FormControl({ value: '', disabled: true }, [Validators.min(0)]),
         taux_consommation_reel: new FormControl({ value: '', disabled: true }, [Validators.min(0)]),
         n_w: new FormControl(''),
         commentaire: new FormControl(''),
-        // status: new FormControl("", Validators.required),
-        // kilometrage: new FormControl({ value: '', disabled: true }, [Validators.min(0)]),
-        // type_reforme: new FormControl({ value: '', disabled: true }),
-        // date_entree: new FormControl({ value: '', disabled: true }),
-        // date_reforme: new FormControl({ value: '', disabled: true }),
-        // date_vente: new FormControl(""),
-        // gps: new FormControl("", Validators.required),
-        // date_installation_gps : new FormControl({ value: '', disabled: true }),
-        // // date_installation_gps: new FormControl(),
-        // imei_gps: new FormControl({ value: '', disabled: true }),
-        // prestataire: new FormControl({ value: '', disabled: true }),
       });
     } else {
-      this.form_btn = "Modifier"
-      this.code = this.item.code_interne
-      console.log("length service id=======> ", this.item.services.length)
-      for(var i=0; i< this.item.services.length; i++){
-        // console.log("for service=======> ", this.item.services[i])
-        // console.log("for id=======> ", this.item.services[i].id)
+      this.form_btn = 'Modifier';
+      this.code = this.item.code_interne;
+      console.log('length service id=======> ', this.item.services.length);
+      for (var i = 0; i < this.item.services.length; i++) {
         this.servicesId.push(this.item.services[i].id);
       }
       console.log('sevice_id', this.servicesId);
@@ -259,24 +232,24 @@ export class DialogVehiculesComponent implements OnInit {
       let matricule = this.item.matricule.split(' ');
 
       this.createVehicule = new FormGroup({
-        city_id: new FormControl(this.item.city_id, Validators.required),
-        parc_id: new FormControl(this.item.parc_id, Validators.required),
-        service: new FormControl(this.servicesId, Validators.required),
-        brand_id: new FormControl(this.item.brand_id, Validators.required),
-        gamme_id: new FormControl(this.item.gamme_id, Validators.required),
-        zone_id: new FormControl(this.item.zone_id, Validators.required),
-        modele_id: new FormControl(this.item.modele_id, Validators.required),
-        puissance_fiscale: new FormControl(this.item.puissance_fiscale, Validators.required),
-        truck_type_id: new FormControl(this.item.truck_type_id, Validators.required),
-        tonnage_id: new FormControl(this.item.tonnage_id, Validators.required),
-        km_initial: new FormControl(this.item.km_initial, Validators.required),
-        activity: new FormControl(this.item.activity, Validators.required),
-        status: new FormControl(this.item.last_status?.status, Validators.required),
-        date_entree_vehicule: new FormControl(this.item.date_entree_vehicule, Validators.required),
-        code_interne: new FormControl( this.item.code_interne,Validators.required),
-        n_chassis: new FormControl(this.item.n_chassis, Validators.required),
-        carburant: new FormControl(this.item.carburant, Validators.required),
-        taille_reservoir: new FormControl(this.item.taille_reservoir, Validators.required),
+        city_id: new FormControl(this.item.city_id),
+        parc_id: new FormControl(this.item.parc_id),
+        service: new FormControl(this.servicesId),
+        brand_id: new FormControl(this.item.brand_id),
+        gamme_id: new FormControl(this.item.gamme_id),
+        zone_id: new FormControl(this.item.zone_id),
+        modele_id: new FormControl(this.item.modele_id),
+        puissance_fiscale: new FormControl(this.item.puissance_fiscale),
+        truck_type_id: new FormControl(this.item.truck_type_id),
+        tonnage_id: new FormControl(this.item.tonnage_id),
+        km_initial: new FormControl(this.item.km_initial),
+        activity: new FormControl(this.item.activity),
+        status: new FormControl(this.item.last_status?.status),
+        date_entree_vehicule: new FormControl(this.item.date_entree_vehicule),
+        code_interne: new FormControl(this.item.code_interne),
+        n_chassis: new FormControl(this.item.n_chassis),
+        carburant: new FormControl(this.item.carburant),
+        taille_reservoir: new FormControl(this.item.taille_reservoir),
         date_sortie: new FormControl(this.item.date_sortie),
         color_id: new FormControl(this.item.color_id),
         city: new FormControl(this.item.city?.name),
@@ -286,10 +259,10 @@ export class DialogVehiculesComponent implements OnInit {
         consomation_carburant_reel: new FormControl(this.item.consomation_carburant_reel),
         nbr_scelle: new FormControl(this.item.nbr_scelle),
         adblue: new FormControl(this.item.adblue),
-        carNumberPart1 :  new FormControl(matricule[0]),
-        carNumberPart2 :  new FormControl(matricule[1] ,[ Validators.maxLength(1), Validators.pattern('^[A-Za-z\u0600-\u06FF]$')]),
-        carNumberPart3 :  new FormControl(matricule[2] , [Validators.maxLength(2)]),
-        matricule: new FormControl(this.item.matricule,Validators.pattern(/^\d+ [A-Za-z\u0600-\u06FF] \d{1,2}$/)),
+        carNumberPart1: new FormControl(matricule[0]),
+        carNumberPart2: new FormControl(matricule[1], [Validators.maxLength(1), Validators.pattern('^[A-Za-z\u0600-\u06FF]$')]),
+        carNumberPart3: new FormControl(matricule[2], [Validators.maxLength(2)]),
+        matricule: new FormControl(this.item.matricule, Validators.pattern(/^\d+ [A-Za-z\u0600-\u06FF] \d{1,2}$/)),
         capacite_consommation: new FormControl(this.item.capacite_consommation),
         taux_consommation_theorique: new FormControl(this.item.taux_consommation_theorique),
         taux_consommation_reel: new FormControl(this.item.taux_consommation_reel),
@@ -320,25 +293,9 @@ export class DialogVehiculesComponent implements OnInit {
       this.vente = false;
 
       if (this.item.last_status?.status == 'REFORME') {
-        console.log('STATYUS REFORME');
-        // this.createVehicule
-        //   .get('kilometrage')
-        //   .setValidators(Validators.required);
-        // this.createVehicule
-        //   .get('type_reforme')
-        //   .setValidators(Validators.required);
         this.createVehicule
           .get('date_entree')
           .setValidators(Validators.required);
-        // this.createVehicule
-        //   .get('date_reforme')
-        //   .setValidators(Validators.required);
-
-        // this.createVehicule.get('kilometrage').setValue(this.item.last_status?.kilometrage)
-        // this.createVehicule.get('type_reforme').setValue(this.item.last_status?.type_reforme)
-        // this.createVehicule.get('date_entree').setValue(this.item.last_status?.date_entree)
-        // this.createVehicule.get('date_reforme').setValue(this.item.last_status?.date_reforme)
-
         this.createVehicule.controls['kilometrage'].enable();
         this.createVehicule.controls['type_reforme'].enable();
         this.createVehicule.controls['date_entree'].enable();
@@ -346,9 +303,6 @@ export class DialogVehiculesComponent implements OnInit {
       }
 
       if (this.item.last_status?.status == 'Vendue') {
-        // this.createVehicule
-        //   .get('date_vente')
-        //   .setValidators(Validators.required);
         this.createVehicule
           .get('date_vente')
           .setValue(this.item.last_status?.date_vente);
@@ -381,65 +335,44 @@ export class DialogVehiculesComponent implements OnInit {
 
       this.zones = this.item.city?.zones;
       this.modeles = this.item.brand?.modeles;
-      // console.log("zone  ", this.zones)
-      // console.log(" modeles ", this.modeles)
       this.gammes = this.modeles?.find(
         (m) => m.id == this.item.modele_id
       )?.gammes;
-      // console.log("gammes ", this.gammes)
       this.display_img = true;
       this.images_aff = this.item.images;
       console.log('IMAGES', this.images_aff);
-      // this.image_src = this.url + this.item.id + '/' + this.item.image;
-      // console.log("IMG SRC ", this.image_src)
     }
   }
 
   formatMatricule(event: any) {
-    // Obtenez la valeur actuelle du champ
     let inputValue: string = event.target.value;
-
-    // Supprimez tous les caractères non numériques et non alphabétiques
     inputValue = inputValue.replace(/[^0-9a-zA-Z\u0600-\u06FF]/g, '');
-
-    // Appliquez le modèle spécifique (NNNN L N)
     let formattedValue = '';
     for (let i = 0; i < inputValue.length; i++) {
-      // if (i === 4 || i === 6) {
-      //   formattedValue += ' ';
-      // }
       if ((i < 4 && /^[0-9]$/.test(inputValue[i])) || (i === 5 && /^[A-Za-z\u0600-\u06FF]$/.test(inputValue[i])) || (i === 7 && /^[0-9]$/.test(inputValue[i]))) {
         formattedValue += inputValue[i];
       }
     }
-
-    // Mettez à jour la valeur du champ avec le format appliqué
     this.createVehicule.controls.matricule.setValue(formattedValue);
   }
 
   limitInputLength(event: any): void {
     const inputValue: string = event.target.value;
-
-    // Limitez la longueur à 4 caractères
     if (inputValue.length > 4) {
       event.target.value = inputValue.slice(0, 3);
     }
-    console.log('carNumberPart1',this.createVehicule.controls.carNumberPart1.value);
-
+    console.log('carNumberPart1', this.createVehicule.controls.carNumberPart1.value);
   }
+
   limitInputOneLength(event: any): void {
     const inputValue: string = event.target.value;
-
-    // Limitez la longueur à 4 caractères
     if (inputValue.length > 2) {
-      event.target.value = inputValue.slice(0,1);
+      event.target.value = inputValue.slice(0, 1);
     }
-    console.log('carNumberPart3',this.createVehicule.controls.carNumberPart3.value);
-
+    console.log('carNumberPart3', this.createVehicule.controls.carNumberPart3.value);
   }
 
   onChange(event) {
-    // this.servicesId = [];
     this.change = false;
     this.servicesId = new Array();
     console.log('event', event.value);
@@ -500,7 +433,6 @@ export class DialogVehiculesComponent implements OnInit {
         (modele) => modele.id == event.id
       )?.gammes;
       setTimeout(() => {
-        // this.searchComponents.toArray()[3].selectObject(this.item?.modele)
         this.searchComponents.toArray()[5].selectObject(this.item?.gamme);
       });
     }
@@ -511,9 +443,7 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule.controls['brand_id'].setValue(event.id);
       this.modeles = this.brands?.find((brand) => brand.id == event.id).modeles;
       setTimeout(() => {
-        // this.searchComponents.toArray()[2].selectObject(this.item?.brand)
         this.searchComponents.toArray()[4].selectObject(this.item?.modele);
-        // this.searchComponents.toArray()[4].selectObject(this.item?.gamme)
       });
     }
   }
@@ -541,14 +471,7 @@ export class DialogVehiculesComponent implements OnInit {
     this.reforme = false;
     this.vente = false;
     if ($event.value == 'REFORME') {
-      // this.createVehicule.get('kilometrage').setValidators(Validators.required);
-      // this.createVehicule
-      //   .get('type_reforme')
-      //   .setValidators(Validators.required);
       this.createVehicule.get('date_entree').setValidators(Validators.required);
-      // this.createVehicule
-      //   .get('date_reforme')
-      //   .setValidators(Validators.required);
       this.reforme = true;
       this.createVehicule.controls['kilometrage'].enable();
       this.createVehicule.controls['type_reforme'].enable();
@@ -556,7 +479,6 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule.controls['date_reforme'].enable();
     }
     if ($event.value == 'Vendue') {
-      // this.createVehicule.get('date_vente').setValidators(Validators.required);
       this.vente = true;
     }
   }
@@ -566,7 +488,6 @@ export class DialogVehiculesComponent implements OnInit {
     this.createVehicule.controls['imei_gps'].disable();
     this.createVehicule.controls['prestataire'].disable();
     this.gps = false;
-    // console.log("status Gps", $event.value);
     if ($event.value == 1) {
       this.gps = true;
       this.createVehicule.controls['date_installation_gps'].enable();
@@ -588,18 +509,8 @@ export class DialogVehiculesComponent implements OnInit {
     this.createVehicule.controls['taux_consommation_theorique'].disable();
     this.createVehicule.controls['taux_consommation_reel'].disable();
     this.gps = false;
-    // console.log("status Gps", $event.value);
     if ($event.value == 1) {
       this.gps = true;
-      // this.createVehicule
-      //   .get('capacite_consommation')
-      //   .setValidators(Validators.required);
-      // this.createVehicule
-      //   .get('taux_consommation_theorique')
-      //   .setValidators(Validators.required);
-      // this.createVehicule
-      //   .get('taux_consommation_reel')
-      //   .setValidators(Validators.required);
       this.createVehicule.controls['capacite_consommation'].enable();
       this.createVehicule.controls['taux_consommation_theorique'].enable();
       this.createVehicule.controls['taux_consommation_reel'].enable();
@@ -638,18 +549,17 @@ export class DialogVehiculesComponent implements OnInit {
 
   addVehicule() {
     this.createVehicule.controls.matricule.setValue(
-      this.createVehicule.controls.carNumberPart1.value + ' ' + this.createVehicule.controls.carNumberPart2.value + ' ' +this.createVehicule.controls.carNumberPart3.value
+      this.createVehicule.controls.carNumberPart1.value + ' ' + this.createVehicule.controls.carNumberPart2.value + ' ' + this.createVehicule.controls.carNumberPart3.value
     );
     console.log('this.createVehicule');
     console.log(this.createVehicule);
     console.log(this.createVehicule.value);
 
-
-    if (this.createVehicule.invalid) {
-      console.log('INVALID');
-      this._toast.warn('Veuillez remplir tous les champs obligatoires');
-      return;
-    }
+    // if (this.createVehicule.invalid) {
+    //   console.log('INVALID');
+    //   this._toast.warn('Veuillez remplir tous les champs obligatoires');
+    //   return;
+    // }
     if (
       !(
         this.createVehicule.controls.n_w.value ||
@@ -668,7 +578,7 @@ export class DialogVehiculesComponent implements OnInit {
       }
     }
     for (var key in this.createVehicule.value) {
-      if(!(key == 'carNumberPart1' || key== 'carNumberPart2' || key== 'carNumberPart3')) {
+      if (!(key == 'carNumberPart1' || key == 'carNumberPart2' || key == 'carNumberPart3')) {
         if (this.createVehicule.value[key]) {
           formData.append(key, this.createVehicule.value[key]);
         }
@@ -677,7 +587,6 @@ export class DialogVehiculesComponent implements OnInit {
 
     if (this.data['type'] == 'add') {
       if (this.images.length) {
-        // formData.append('image', this.file)
         for (var i = 0; i < this.images.length; i++) {
           console.log('images[]', this.images[i]);
           formData.append('images[]', this.images[i]);
@@ -685,30 +594,25 @@ export class DialogVehiculesComponent implements OnInit {
       } else {
         formData.append('images[]', null);
       }
-        this.store.dispatch(addVehicule({ data: formData }));
-        this.store.select(selectEnvVehiculeIsLoading).subscribe((res) => {
-          console.log('spinner', res);
-          this.spinnerAdd = res;
-        });
-        this.store.select(selectEnvVehiculeStatus).subscribe((res) => {
-          console.log('status', res);
-          if (res == 'SUCCESS') {
-            this.dialogRef.close();
-          }
-        });
-      // } else {
-      //   this._toast.error("Remplir l'image !");
-      // }
+      this.store.dispatch(addVehicule({ data: formData }));
+      this.store.select(selectEnvVehiculeIsLoading).subscribe((res) => {
+        console.log('spinner', res);
+        this.spinnerAdd = res;
+      });
+      this.store.select(selectEnvVehiculeStatus).subscribe((res) => {
+        console.log('status', res);
+        if (res == 'SUCCESS') {
+          this.dialogRef.close();
+        }
+      });
     } else {
       if (this.change) {
         for (var i = 0; i < this.servicesId.length; i++) {
-          // console.log(this.servicesId[i], "array id service[i]")
           formData.append('service_ids[]', this.servicesId[i]);
         }
       }
 
       if (this.images.length) {
-        // formData.append('image', this.file)
         for (var i = 0; i < this.images.length; i++) {
           console.log('images[]', this.images[i]);
           formData.append('images[]', this.images[i]);
@@ -716,21 +620,17 @@ export class DialogVehiculesComponent implements OnInit {
       } else {
         formData.append('images[]', null);
       }
-      // if (!this.images.length && !this.images_aff.length) {
-      //   this._toast.error("Remplir l'image !");
-      // } else {
-        this.store.dispatch(
-          updateVehicule({ data: formData, uuid: this.item.uuid })
-        );
-        this.store.select(selectEnvVehiculeIsLoading).subscribe((res) => {
-          this.spinnerAdd = res;
-        });
-        this.store.select(selectEnvVehiculeStatus).subscribe((res) => {
-          if (res == 'SUCCESS') {
-            this.dialogRef.close(true);
-          }
-        });
-      // }
+      this.store.dispatch(
+        updateVehicule({ data: formData, uuid: this.item.uuid })
+      );
+      this.store.select(selectEnvVehiculeIsLoading).subscribe((res) => {
+        this.spinnerAdd = res;
+      });
+      this.store.select(selectEnvVehiculeStatus).subscribe((res) => {
+        if (res == 'SUCCESS') {
+          this.dialogRef.close(true);
+        }
+      });
     }
   }
 

@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  URL: 'http://197.230.172.211:8000/api/',
-  STORAGE: 'http://197.230.172.211:8000/storage',
-  // URL: 'http://10.125.249.241:8000/api/',
-  // STORAGE: 'http://10.125.249.241:8000/storage',
+  // URL: 'http://197.230.172.211:8000/api/',
+  // STORAGE: 'http://197.230.172.211:8000/storage',
+  URL: 'http://localhost:7777/api/',
+  STORAGE: 'http://localhost:7777/storage',
   // URL: 'https://sdtm-preprod-api.devcorp.fr/api/',
   // STORAGE: 'https://sdtm-preprod-api.devcorp.fr/storage',
   // URL: 'http://192.168.1.139:8000/api/',
