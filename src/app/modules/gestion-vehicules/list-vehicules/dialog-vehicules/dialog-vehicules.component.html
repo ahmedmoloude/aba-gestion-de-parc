@@ -119,20 +119,18 @@
             <div>
               <i-field [type]="'text'" [label]="'Code interne'" formControlName="code_interne"></i-field>
             </div>
-            <div>
-              <i-field [type]="'text'" [label]="'WW'" formControlName="n_w"></i-field>
-            </div>
-            <!-- <div>
-              <i-field [type]="'text'" [label]="'Immatriculation'" formControlName="matricule" (input)="formatMatricule($event)" [maxlength]="8"></i-field>
-              <div class="invalid">* Le matricule doit suivre le format suivant "NNNN L N" ex "1234 A 5" </div>
-            </div> -->
-            <div>
-              <div class=" flex ">
-                <i-field [type]="'number'" [label]="'1234'" formControlName="carNumberPart1"[minValue]="0"></i-field>
-                <i-field [type]="'text'" [label]="'A'" formControlName="carNumberPart2" [maxlength]="1" ></i-field>
-                <i-field [type]="'number'" [label]="'5'" formControlName="carNumberPart3" [minValue]="0" [maxValue]="99" (input)="limitInputOneLength($event)" [maxlength]="2" ></i-field>
-              </div>
-            </div>
+             <!-- WW Format -->
+  <div *ngIf="isWWFormat(createVehicule.get('matricule')?.value)">
+    <i-field [type]="'text'" [label]="'WW'" formControlName="n_w"></i-field>
+  </div>
+            
+
+  <div *ngIf="!isWWFormat(createVehicule.get('matricule')?.value)" class="flex">
+    <i-field [type]="'number'" [label]="'1234'" formControlName="carNumberPart1" [minValue]="0"></i-field>
+    <i-field [type]="'text'" [label]="'A'" formControlName="carNumberPart2" [maxlength]="1"></i-field>
+    <i-field [type]="'number'" [label]="'5'" formControlName="carNumberPart3" 
+      [minValue]="0" [maxValue]="99" (input)="limitInputOneLength($event)" [maxlength]="2"></i-field>
+  </div>
           </div>
           <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
             <div>

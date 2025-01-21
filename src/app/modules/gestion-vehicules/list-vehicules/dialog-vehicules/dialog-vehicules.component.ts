@@ -179,6 +179,14 @@ export class DialogVehiculesComponent implements OnInit {
     this.maxSize = 281 - event.target.value.length;
   }
 
+
+
+  isWWFormat(matricule: string): boolean {
+    return matricule.startsWith('WW');
+  }
+
+  
+
   setForm() {
     if (this.data['type'] == 'add') {
       this.form_btn = 'Ajouter';
@@ -224,13 +232,20 @@ export class DialogVehiculesComponent implements OnInit {
       this.form_btn = 'Modifier';
       this.code = this.item.code_interne;
       console.log('length service id=======> ', this.item.services.length);
+      
+      // Handle services
       for (var i = 0; i < this.item.services.length; i++) {
         this.servicesId.push(this.item.services[i].id);
       }
       console.log('sevice_id', this.servicesId);
+  
+      // Check matricule format and setup form accordingly
+      const isWW = this.isWWFormat(this.item.matricule);
+      let matriculeParts = isWW ? ['', '', ''] : this.item.matricule.split('-');
+  
 
-      let matricule = this.item.matricule.split(' ');
 
+      console.log('matriculeParts ' , matriculeParts)
       this.createVehicule = new FormGroup({
         city_id: new FormControl(this.item.city_id),
         parc_id: new FormControl(this.item.parc_id),
@@ -259,10 +274,19 @@ export class DialogVehiculesComponent implements OnInit {
         consomation_carburant_reel: new FormControl(this.item.consomation_carburant_reel),
         nbr_scelle: new FormControl(this.item.nbr_scelle),
         adblue: new FormControl(this.item.adblue),
-        carNumberPart1: new FormControl(matricule[0]),
-        carNumberPart2: new FormControl(matricule[1], [Validators.maxLength(1), Validators.pattern('^[A-Za-z\u0600-\u06FF]$')]),
-        carNumberPart3: new FormControl(matricule[2], [Validators.maxLength(2)]),
-        matricule: new FormControl(this.item.matricule, Validators.pattern(/^\d+ [A-Za-z\u0600-\u06FF] \d{1,2}$/)),
+        carNumberPart1: new FormControl(isWW ? { value: '', disabled: true } : matriculeParts[0], [Validators.required, Validators.min(0)]),
+        carNumberPart2: new FormControl(isWW ? { value: '', disabled: true } : matriculeParts[1], [
+          Validators.required,
+          Validators.maxLength(1),
+          Validators.pattern('^[A-Za-z\u0600-\u06FF]$')
+        ]),
+        carNumberPart3: new FormControl(isWW ? { value: '', disabled: true } : matriculeParts[2], [
+          Validators.required,
+          Validators.maxLength(2),
+          Validators.min(0),
+          Validators.max(99)
+        ]),
+        matricule: new FormControl(this.item.matricule),
         capacite_consommation: new FormControl(this.item.capacite_consommation),
         taux_consommation_theorique: new FormControl(this.item.taux_consommation_theorique),
         taux_consommation_reel: new FormControl(this.item.taux_consommation_reel),
@@ -271,10 +295,11 @@ export class DialogVehiculesComponent implements OnInit {
         date_entree: new FormControl(this.item.date_entree),
         date_reforme: new FormControl(this.item.date_reforme),
         date_vente: new FormControl(this.item.date_vente),
-        n_w: new FormControl(this.item.n_w),
+        n_w: new FormControl(isWW ? this.item.matricule : ''),
         commentaire: new FormControl(this.item.commentaire),
       });
-
+  
+      // Clear and update validators
       this.createVehicule.get('date_vente').clearValidators();
       this.createVehicule.get('date_vente').updateValueAndValidity();
       this.createVehicule.get('kilometrage').clearValidators();
@@ -285,30 +310,31 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule.get('date_entree').updateValueAndValidity();
       this.createVehicule.get('date_reforme').clearValidators();
       this.createVehicule.get('date_reforme').updateValueAndValidity();
+  
+      // Disable reform-related controls initially
       this.createVehicule.controls['kilometrage'].disable();
       this.createVehicule.controls['type_reforme'].disable();
       this.createVehicule.controls['date_entree'].disable();
       this.createVehicule.controls['date_reforme'].disable();
       this.reforme = false;
       this.vente = false;
-
+  
+      // Handle REFORME status
       if (this.item.last_status?.status == 'REFORME') {
-        this.createVehicule
-          .get('date_entree')
-          .setValidators(Validators.required);
+        this.createVehicule.get('date_entree').setValidators(Validators.required);
         this.createVehicule.controls['kilometrage'].enable();
         this.createVehicule.controls['type_reforme'].enable();
         this.createVehicule.controls['date_entree'].enable();
         this.createVehicule.controls['date_reforme'].enable();
       }
-
+  
+      // Handle Vendue status
       if (this.item.last_status?.status == 'Vendue') {
-        this.createVehicule
-          .get('date_vente')
-          .setValue(this.item.last_status?.date_vente);
+        this.createVehicule.get('date_vente').setValue(this.item.last_status?.date_vente);
         this.vente = true;
       }
-
+  
+      // Handle REFORME controls
       if (this.item.status == 'REFORME') {
         this.createVehicule.controls['kilometrage'].enable();
         this.createVehicule.controls['type_reforme'].enable();
@@ -320,7 +346,8 @@ export class DialogVehiculesComponent implements OnInit {
         this.createVehicule.controls['date_entree'].disable();
         this.createVehicule.controls['date_reforme'].disable();
       }
-
+  
+      // Handle Adblue settings
       if (this.item.adblue == true) {
         this.createVehicule.controls['adblue'].setValue('1');
         this.createVehicule.controls['capacite_consommation'].enable();
@@ -332,7 +359,8 @@ export class DialogVehiculesComponent implements OnInit {
         this.createVehicule.controls['taux_consommation_theorique'].disable();
         this.createVehicule.controls['taux_consommation_reel'].disable();
       }
-
+  
+      // Set related data
       this.zones = this.item.city?.zones;
       this.modeles = this.item.brand?.modeles;
       this.gammes = this.modeles?.find(
