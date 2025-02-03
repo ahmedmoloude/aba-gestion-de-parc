@@ -18,64 +18,82 @@ export class DemandeEffects {
               private affretementService: AffretementService,
               private _toast: ToastService ) {}
 
-  loadDemandes$ = createEffect( () => this.actions$.pipe(
-    ofType(DemandeActions.DemandeActionstypes.LOAD_DEMANDES),
-    exhaustMap((action: any) => {
-      return this.affretementService.getDemandesDocuments(0, action.data).pipe(
-        map((resp: DemandesResponse) => {
-          console.log('demandes');
-          console.log(resp);
-          if(resp.success) {
-            return DemandeActions.loadDemandesSuccess({data: resp.response})
-          } else {
-            this._toast.error('une erreur est survenue!');
-            return DemandeActions.loadDemandesFailure(
-              {
-                action: 'Load Demandes',
-                error: resp.message
-              }
-            )
-          }
-        }),
-        catchError((err) => of(DemandeActions.loadDemandesFailure(
-          {
-            action: 'Load Demandes',
-            error: err
-          }
-        )))
-      )
-    })
-  ));
 
-  loadClosedDemandes$ = createEffect( () => this.actions$.pipe(
-    ofType(DemandeActions.DemandeActionstypes.LOAD_CLOSED_DEMANDES),
-    exhaustMap((action: any) => {
-      return this.affretementService.getDemandesDocuments(1, action.data).pipe(
-        map((resp: DemandesResponse) => {
-          console.log(' closed demandes');
-          console.log(resp);
-          if(resp.success) {
-            return DemandeActions.loadClosedDemandesSuccess({data: resp.response})
-          } else {
-            this._toast.error('une erreur est survenue!');
-            return DemandeActions.loadClosedDemandesFailure(
-              {
-                action: 'Load Closed Demandes',
-                error: resp.message
-              }
-            )
-          }
-        }),
-        catchError((err) => of(DemandeActions.loadClosedDemandesFailure(
-          {
-            action: 'Load Closed Demandes',
-            error: err
-          }
-        )))
-      )
-    })
-  ));
+              loadDemandes$ = createEffect(() =>
+                this.actions$.pipe(
+                  ofType(DemandeActions.DemandeActionstypes.LOAD_DEMANDES),
+                  exhaustMap((action: any) => {
+                    return this.affretementService
+                      .getDemandesDocuments(0, action.data, action.page, action.itemsPerPage)
+                      .pipe(
+                        map((resp: any) => {
+                          if (resp.success) {
 
+
+                            console.log('response   load demandes ' , resp)
+                            return DemandeActions.loadDemandesSuccess({
+                              data: resp.response,
+                              pagination: resp.pagination, // Assuming the API returns pagination data
+                            });
+                          } else {
+                            this._toast.error('Une erreur est survenue!');
+                            return DemandeActions.loadDemandesFailure({
+                              action: 'Load Demandes',
+                              error: resp.message,
+                            });
+                          }
+                        }),
+                        catchError((err) =>
+                          of(
+                            DemandeActions.loadDemandesFailure({
+                              action: 'Load Demandes',
+                              error: err,
+                            })
+                          )
+                        )
+                      );
+                  })
+                )
+              );
+
+
+
+              loadClosedDemandes$ = createEffect(() =>
+                this.actions$.pipe(
+                  ofType(DemandeActions.DemandeActionstypes.LOAD_CLOSED_DEMANDES),
+                  exhaustMap((action: any) => {
+                    return this.affretementService
+                      .getDemandesDocuments(1, action.data, action.page, action.itemsPerPage)
+                      .pipe(
+                        map((resp: any) => {
+                          if (resp.success) {
+
+                            console.log('response   load closed  demandes ' , resp)
+
+                            return DemandeActions.loadClosedDemandesSuccess({
+                              data: resp.response,
+                              pagination: resp.pagination, // Assuming the API returns pagination data
+                            });
+                          } else {
+                            this._toast.error('Une erreur est survenue!');
+                            return DemandeActions.loadClosedDemandesFailure({
+                              action: 'Load Closed Demandes',
+                              error: resp.message,
+                            });
+                          }
+                        }),
+                        catchError((err) =>
+                          of(
+                            DemandeActions.loadClosedDemandesFailure({
+                              action: 'Load Closed Demandes',
+                              error: err,
+                            })
+                          )
+                        )
+                      );
+                  })
+                )
+              );
   updateDemandeDocumentStatus$ = createEffect( () => this.actions$.pipe(
     ofType(DemandeActions.DemandeActionstypes.UPDATE_DEMANDE_DOCUMENT_STATUS),
     exhaustMap((action: any) => {

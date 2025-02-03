@@ -65,6 +65,7 @@ export class DocumentsFundsComponent implements OnInit {
     },
   ];
   p: number = 1;
+  itemsPerPage: number = 5; // Number of items per page
   spinner: boolean = false;
   demandes = [];
 
@@ -80,56 +81,51 @@ export class DocumentsFundsComponent implements OnInit {
               public permissionService: PermissionService) { }
 
   ngOnInit(): void {
-    this.store.dispatch(loadDemandes({data:null}));
-    this.store.dispatch(loadClosedDemandes({data: null}));
-    this.demande$.subscribe(
-      (data) => {
-        this.demandes = data.demandes;
-        this.demandes?.forEach(e => {
-          this.countStatus += (e.document_counts.SCANNED + e.document_counts.RECOVER);
-          console.log(this.countStatus);
+    this.loadDemandes();
+  }
 
-        })
-      }
+
+  loadDemandes(page: number = 1) {
+    this.store.dispatch(
+      loadDemandes({ data: null, page: page, itemsPerPage: this.itemsPerPage })
+    );
+    this.store.dispatch(
+      loadClosedDemandes({ data: null, page: page, itemsPerPage: this.itemsPerPage })
     );
   }
-
-  getStatus(status: string) {
-    switch (status) {
-      case 'EN_COURS':
-        return 'En cours';
-      case 'SCANNED':
-        return 'Scanné';
-      case 'RECOVER':
-        return 'Récupéré';
-      case 'DELIVERED':
-        return 'Remis';
-      default:
-        return '---';
-    }
+  
+  onPageChange(page: number) {
+    this.p = page;
+    this.loadDemandes(page);
   }
 
-  filtrer($event){
-    // this.spinner = true;
-    console.log("FILTER RDV", $event)
+  
+
+
+  filtrer($event) {
     let formValue = $event;
-    if(Object.keys(formValue)?.length > 0) {
+    if (Object.keys(formValue)?.length > 0) {
       let demande = formValue.n_demande;
-      if(this.selected.value==0){
-        this.store.dispatch(loadDemandes({data:demande}));
-      } else if (this.selected.value==1){
-        this.store.dispatch(loadClosedDemandes({data:demande}));
+      if (this.selected.value == 0) {
+        this.store.dispatch(
+          loadDemandes({
+            data: demande,
+            page: this.p,
+            itemsPerPage: this.itemsPerPage,
+          })
+        );
+      } else if (this.selected.value == 1) {
+        this.store.dispatch(
+          loadClosedDemandes({
+            data: demande,
+            page: this.p,
+            itemsPerPage: this.itemsPerPage,
+          })
+        );
       }
     } else {
-      this.store.dispatch(loadDemandes({data: null}));
-      this.store.dispatch(loadClosedDemandes({data: null}));
-
+      this.loadDemandes(this.p);
     }
-
-
-
-
-    // this.store.dispatch(FactureActions.loadFactures({data: facture}));
   }
 
   getIndex(){
@@ -202,9 +198,9 @@ export class DocumentsFundsComponent implements OnInit {
     refDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
-          this.store.dispatch(loadDemandes({data:null}));
+          this.store.dispatch(loadDemandes({data:null , page : 1 , itemsPerPage : this.itemsPerPage}));
           if (data.status == 'RECOVER'){
-            this.store.dispatch(loadClosedDemandes({data:null}));
+            this.store.dispatch(loadClosedDemandes({data:null , page : 1 , itemsPerPage : this.itemsPerPage}));
           }
         }
       }

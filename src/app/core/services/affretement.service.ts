@@ -168,14 +168,25 @@ export class AffretementService {
     return this.http.get(Config.api.affretement.selectable_services);
   }
 
+
   getDemandesDocuments(
     status: 0 | 1,
-    demande: string
+    demande: string,
+    page: number = 1,
+    itemsPerPage: number = 10
   ): Observable<DemandesResponse> {
+    let params = new HttpParams()
+      .set('cloture', status.toString())
+      .set('page', page.toString())
+      .set('itemsPerPage', itemsPerPage.toString());
+  
+    if (demande) {
+      params = params.set('demande', demande);
+    }
+  
     return this.http.get<DemandesResponse>(
-      `${Config.api.affretement.getDemandesDocuments}?cloture=${status}${
-        demande ? '&demande=' + demande : ''
-      }`
+      Config.api.affretement.getDemandesDocuments,
+      { params }
     );
   }
 

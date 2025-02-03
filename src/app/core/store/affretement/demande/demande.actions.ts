@@ -22,16 +22,27 @@ export enum DemandeActionstypes {
   DELIVER_DEMANDE_DOCUMENTS_FAILURE = '[Document] Deliver Demande Documents Failure',
 }
 
-/* Load Demandes Actions*/
+
 export const loadDemandes = createAction(
-  DemandeActionstypes.LOAD_DEMANDES,
-  props<{ data: string }>()
+  '[Demande] Load Demandes',
+  props<{ data: any; page: number; itemsPerPage: number }>()
+);
+
+export const loadClosedDemandes = createAction(
+  '[Demande] Load Closed Demandes',
+  props<{ data: any; page: number; itemsPerPage: number }>()
 );
 
 export const loadDemandesSuccess = createAction(
   DemandeActionstypes.LOAD_DEMANDES_SUCCESS,
-  props<{ data: any }>()
+  props<{ data: any; pagination: any }>() // Add pagination to the success action
 );
+
+export const loadClosedDemandesSuccess = createAction(
+  DemandeActionstypes.LOAD_CLOSED_DEMANDES_SUCCESS,
+  props<{ data: any; pagination: any }>() // Add pagination to the success action
+);
+
 
 export const loadDemandesFailure = createAction(
   DemandeActionstypes.LOAD_DEMANDES_FAILURE,
@@ -39,17 +50,6 @@ export const loadDemandesFailure = createAction(
 );
 /* End Load Demandes Actions*/
 
-/* Load Closed Demandes Actions*/
-
-export const loadClosedDemandes = createAction(
-  DemandeActionstypes.LOAD_CLOSED_DEMANDES,
-  props<{ data: string }>()
-);
-
-export const loadClosedDemandesSuccess = createAction(
-  DemandeActionstypes.LOAD_CLOSED_DEMANDES_SUCCESS,
-  props<{ data: any }>()
-);
 
 export const loadClosedDemandesFailure = createAction(
   DemandeActionstypes.LOAD_CLOSED_DEMANDES_FAILURE,

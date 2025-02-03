@@ -219,8 +219,9 @@
                   </tbody>
                 </table>
               </div>
+            
               <div class="mt-10">
-                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
               </div>
 
               <ng-container *ngIf="permissionService.hasPermission('Affrètement', 'Liste des documents et fonds', 'U')">
@@ -359,8 +360,10 @@
                   </tr>
                 </tbody>
               </table>
+            
+
               <div class="mt-10">
-                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
               </div>
             </div>
           </div>
