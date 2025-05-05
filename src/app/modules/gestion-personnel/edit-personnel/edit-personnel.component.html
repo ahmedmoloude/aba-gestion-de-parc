@@ -288,57 +288,30 @@ class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
       <div class="grid grid-cols-3 gap-4 mt-5">
         <div>
           <mat-form-field appearance="fill" class="w-[100%] mb-4">
-            <mat-label>Direction</mat-label>
-            <mat-select formControlName="direction" matNativeControl required>
-              <mat-option value="Gestion de parc">Gestion de parc</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field appearance="fill" class="w-[100%] mb-4">
-            <mat-label>Département</mat-label>
-            <mat-select formControlName="departement" matNativeControl required>
-              <mat-option value="Logistique">Logistique</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field appearance="fill" class="w-[100%] mb-4">
-            <mat-label>Service</mat-label>
-            <mat-select multiple formControlName="service_id" matNativeControl required>
-              <mat-option *ngFor="let service of services"  [value]="service.id">
-                {{service.name}}
+            <mat-label>Entity</mat-label>
+            <mat-select formControlName="entity_id">
+              <mat-option *ngFor="let entity of entities" [value]="entity.id">
+                {{ entity.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-      </div>
-      <div class="grid grid-cols-3 gap-4 mt-3">
         <div>
-     <mat-form-field appearance="fill" class="w-[100%] mb-4">
-              <mat-label>Parc</mat-label>
-              <mat-select formControlName="parc" matNativeControl required>
-                <mat-option *ngFor="let parc of parcs" [value]="parc.id">{{parc.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+          <mat-form-field appearance="fill" class="w-[100%] mb-4">
+            <mat-label>Projet</mat-label>
+            <mat-select formControlName="projet_id">
+              <mat-option *ngFor="let projet of projets" [value]="projet.id">
+                {{ projet.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div>
-          <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
-            <mat-label>Date d'entrée</mat-label>
-            <input
-              formControlName="entry_date"
-              matInput
-              required
-              [matDatepicker]="entree"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="entree"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #entree></mat-datepicker>
-          </mat-form-field> -->
           <i-field [type]="'date'" [label]="'Date d\'entrée'" formControlName="entry_date" (changeValue)="setDateDebut($event)"></i-field>
         </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-3">
+        
         <div>
           <mat-form-field appearance="fill" class="w-[100%] mb-4">
             <mat-label>code interne</mat-label>
@@ -436,14 +409,14 @@ class="bg-[#fff] shadow-[0px_3px_30px_#00000029] rounded-[20px] ml-6 mr-6 p-6"
             </mat-select>
           </mat-form-field>
         </div>
-        <div>
+        <!-- <div>
           <mat-form-field appearance="fill" class="w-[100%] mb-4">
             <mat-label>Rôle</mat-label>
             <mat-select formControlName="role_id" matNativeControl required >
               <mat-option *ngFor="let item of tempRoles" [value]="item.id">{{item?.name}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
       <div *ngIf="Conducteur && !isCommerciale" class="grid grid-cols-3 gap-4 mt-3" >
         <div>

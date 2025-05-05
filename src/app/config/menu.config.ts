@@ -145,11 +145,11 @@ export const MENU = [
               }
             ]
           },
-          {
-            label: 'Gestion des citernes',
-            routeName: ROUTES['gestionciternes'].name,
-            isMenu: true
-          },
+          // {
+          //   label: 'Gestion des citernes',
+          //   routeName: ROUTES['gestionciternes'].name,
+          //   isMenu: true
+          // },
       {
         // addpersonnel
         isMenu: false,

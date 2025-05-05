@@ -1,0 +1,59 @@
+<div class="dialog">
+    <!-- Header -->
+    <div class="grid grid-cols-3 gap-4 bg-[#E9E9E9] rounded-t-[12px] p-4 pb-2 mb-3">
+      <h2 mat-dialog-title class="col-span-2 text-xl font-semibold">
+        Affectation Véhicule
+      </h2>
+      <div class="text-right cursor-pointer" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+  
+    <!-- Content -->
+    <div mat-dialog-content class="p-4 pt-2">
+      <form [formGroup]="createAffectation">
+        <div class="grid grid-cols-2 gap-4">
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Chauffeur</mat-label>
+            <mat-select formControlName="chauffeur_id">
+              <mat-option *ngFor="let conducteur of conducteurs" [value]="conducteur.id">
+                {{ conducteur.first_name }} {{ conducteur.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Mission</mat-label>
+            <mat-select formControlName="mission">
+              <mat-option value="Ramassage">Ramassage</mat-option>
+              <mat-option value="Convoyage">Convoyage</mat-option>
+              <mat-option value="Transfert">Transfert</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Date d'affectation</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date_affectation" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+  
+        </div>
+      </form>
+    </div>
+  
+    <!-- Actions -->
+    <div mat-dialog-actions align="end" class="p-4">
+      <button mat-button mat-dialog-close>Annuler</button>
+      <button
+        type="button"
+        class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded shadow"
+        [disabled]="createAffectation.invalid || spinnerAdd"
+        (click)="addAffectation()"
+      >
+        <span>Affecter</span>
+      </button>
+    </div>
+  </div>
+  

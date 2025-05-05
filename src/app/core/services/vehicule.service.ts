@@ -121,6 +121,10 @@ export class VehiculeService {
     return this.http.post(Config.api.vehicule.tonnage + '/' + uuid, data);
   }
 
+  ImportTrucks(data: any) {
+    return this.http.post(Config.api.vehicule.import, data);
+  }
+
   deletTonnage(uuid: any) {
     return this.http.delete(Config.api.vehicule.tonnage + '/' + uuid);
   }

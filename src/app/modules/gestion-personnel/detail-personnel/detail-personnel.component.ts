@@ -29,6 +29,8 @@ export class DetailPersonnelComponent implements OnInit {
   pro_experience :any;
   former_job : any ;
   diplome : any ;
+  entity: any;
+  projet: any;
   email :any ;
   constructor(
     public dialog: MatDialog,
@@ -68,6 +70,8 @@ export class DetailPersonnelComponent implements OnInit {
   getPersonnel(uuid){
     this.personelservice.getPersonnelByUiid(uuid).subscribe((res:any) => {
       this.personnel = res.response;
+      this.entity = this.personnel.entity?.name
+      this.projet = this.personnel.projet?.name
       this.gsm_professionnel = JSON.parse(this.personnel.contact)?.gsm_professionnel
       this.gsm_personnel = JSON.parse(this.personnel.contact)?.gsm_personnel
       this.fixe_professionnel =JSON.parse(this.personnel.contact)?.fixe_professionnel

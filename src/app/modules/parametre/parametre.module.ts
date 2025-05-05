@@ -63,6 +63,10 @@ import { ParamtreRamassageComponent } from './paramtre-ramassage/paramtre-ramass
 import { ParamtreLivraisonComponent } from './paramtre-livraison/paramtre-livraison.component';
 import { DialgLivraisonComponent } from './paramtre-livraison/dialg-livraison/dialg-livraison.component';
 import { DialogRamassageComponent } from './paramtre-ramassage/dialog-ramassage/dialog-ramassage.component';
+import { ParametreEntityComponent } from './parametre-entity/parametre-entity.component';
+import { DialogEntityComponent } from './parametre-entity/dialog-entity/dialog-entity.component';
+import { ParametreProjetComponent } from './parametre-projet/parametre-projet.component';
+import { DialogProjetComponent } from './parametre-projet/dialog-projet/dialog-projet.component';
 
 @NgModule({
   declarations: [
@@ -123,8 +127,15 @@ import { DialogRamassageComponent } from './paramtre-ramassage/dialog-ramassage/
     ParamtreRamassageComponent,
     ParamtreLivraisonComponent,
     DialgLivraisonComponent,
-    DialogRamassageComponent
+    DialogRamassageComponent,
+    ParametreEntityComponent,
+    DialogEntityComponent,
+    ParametreProjetComponent,
+    DialogProjetComponent
 
+  ],
+  exports: [
+    
   ],
   imports: [
     CommonModule,

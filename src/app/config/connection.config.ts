@@ -254,6 +254,17 @@ export class
     const deleteNature: string = this.url + 'nature_depence';
     const deleteSupplier: string = this.url + 'fournisseur_depence';
 
+    // entity
+    const getEntities: string = this.url + 'entities';
+    const deleteEntity: string = this.url + 'entity';
+    const createEntity: string = this.url + 'entity';
+
+    // projets
+    const getProjets: string = this.url + 'projets';
+
+    // ActivityTruck
+    const getActivityTrucks: string = this.url + 'activity_trucks';
+
     //Auth
     return {
       defaultDrivers: {
@@ -646,6 +657,20 @@ export class
         missionInfraction: this.url + 'missionInfraction',
         gps: this.url + 'gps',
         associer_gps : this.url + 'associer_gps',
+        affectation_conducteur: this.url + 'affecter_truck',
+        import : this.url + 'import_trucks',
+      },
+      entity: {
+        getAll: getEntities,
+        delete: deleteEntity,
+        create: createEntity
+      },
+      projet:{
+        getAll : getProjets,
+        create : this.url + 'projet',
+      },
+      activityTruck : {
+        getAll: getActivityTrucks
       },
       personnels: {
         personnels: this.url + 'personnels',
@@ -666,6 +691,7 @@ export class
         getEpisWithFiltre: this.url + 'getEpisWithFiltre',
         Conducteur_disponible: this.url + 'conducteur_dispo_affectation',
         getTruckDispoCount: this.url + 'truck_disponible_count',
+        list_conducteur: this.url + 'conducteur_list',
         export : this.url + 'export-personnels'
       },
       services: {

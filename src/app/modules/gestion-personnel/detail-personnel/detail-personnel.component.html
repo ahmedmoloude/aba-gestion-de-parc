@@ -75,14 +75,14 @@
     </div>
     <div class="grid grid-cols-8 gap-4 mt-4">
       <div>
-        <p class="text-[#0C8040] text-[11px]">Direction :</p>
-        <p class="font-medium">{{ personnel.direction==='null' ? '' : personnel.direction }}</p>
+        <p class="text-[#0C8040] text-[11px]">Entité :</p>
+        <p class="font-medium">{{ personnel.entity ==='null' ? '' : personnel.entity.name }}</p>
       </div>
       <div>
-        <p class="text-[#0C8040] text-[11px]">Département :</p>
-        <p class="font-medium">{{ personnel.departement==='null' ? '' :personnel.departement }}</p>
+        <p class="text-[#0C8040] text-[11px]">Projet :</p>
+        <p class="font-medium">{{ personnel.projet ==='null' ? '' :personnel.projet.name }}</p>
       </div>
-      <div>
+      <!-- <div>
         <p class="text-[#0C8040] text-[11px]">Service :</p>
         <p class="font-medium number-service cursor-pointer" [matMenuTriggerFor]="menu">{{personnel.service.length}}</p>
         <mat-menu #menu="matMenu" class="p-3">
@@ -92,7 +92,7 @@
       <div>
         <p class="text-[#0C8040] text-[11px]">Parc :</p>
         <p class="font-medium">{{ personnel.parc?.name==='null' ? '' : personnel.parc?.name }}</p>
-      </div>
+      </div> -->
       <div>
         <p class="text-[#0C8040] text-[11px]">Lieu de naissance :</p>
         <p class="font-medium">{{ personnel.birth_place==='null' ? '' : personnel.birth_place }}</p>
@@ -101,10 +101,10 @@
         <p class="text-[#0C8040] text-[11px]">Fonction :</p>
         <p class="font-medium">{{ personnel.function === 'null' ?'' : personnel.function }}</p>
       </div>
-      <div>
+      <!-- <div>
         <p class="text-[#0C8040] text-[11px]">Rôle :</p>
         <p class="font-medium">{{ personnel?.role?.name || '---'  }}</p>
-      </div>
+      </div> -->
       <div>
         <p class="text-[#0C8040] text-[11px]">Code :</p>
         <p class="font-medium">{{ personnel.code === 'null' ? '' : personnel.code }}</p>
@@ -113,14 +113,14 @@
         <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
         <p class="font-medium" *ngFor="let tonnage of personnel.tonnages">{{ tonnage.name }}T</p>
       </div> -->
-      <div>
+      <!-- <div>
         <p class="text-[#0C8040] text-[11px]">Tonnage :</p>
         <p class="font-medium text-[#0C8040] cursor-pointer" [matMenuTriggerFor]="menu1">
           <mat-icon>remove_red_eye</mat-icon></p>
         <mat-menu #menu1="matMenu" class="p-3">
           <p *ngFor="let tonnage of personnel.tonnages">{{ tonnage.name }}T</p>
         </mat-menu>
-      </div>
+      </div> -->
     </div>
     <div class="border-b-4 border-[#0C8040] mt-5">
       <p class="bg-[#0C8040] text-[#fff] w-48 p-2 rounded-[12px_12px_0px_0px]">

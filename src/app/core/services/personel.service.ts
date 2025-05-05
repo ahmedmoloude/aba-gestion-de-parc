@@ -71,6 +71,10 @@ export class PersonelService {
     return this.http.get(Config.api.personnels.tonnage)
   }
 
+  getConducteurs(){
+    return this.http.get(Config.api.personnels.list_conducteur);
+  }
+
   personnelbyFunction(filters: any = null, fonction : string) {
     let params = new HttpParams();
     params =  params.set('function', fonction.toString());

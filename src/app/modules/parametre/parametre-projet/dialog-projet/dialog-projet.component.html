@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{ formBtn }} Projet</h2>
+<form [formGroup]="projetForm" (ngSubmit)="submit()" class="form">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Nom du projet</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+  <div class="actions">
+    <button mat-raised-button color="primary" type="submit" [disabled]="projetForm.invalid">{{ formBtn }}</button>
+    <button mat-button mat-dialog-close>Annuler</button>
+  </div>
+</form>

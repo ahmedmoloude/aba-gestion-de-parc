@@ -1,5 +1,6 @@
 import { DialogRemplacerComponent } from './dialog-remplacer/dialog-remplacer.component';
 import { DialogVehiculesComponent } from './dialog-vehicules/dialog-vehicules.component';
+import { AffecationVehiculeComponent } from 'app/affecation-vehicule/affecation-vehicule.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -30,6 +31,9 @@ import * as moment from 'moment';
 import { PermissionService } from 'app/core/services/permission.service';
 import { Paginator } from 'app/core/models/paginator.model';
 import { selectPagination } from 'app/core/store/pagination/pagination.selectors';
+import { EntityService } from 'app/core/services/entity/entity.service';
+import { ActivityTruckService } from 'app/activity-truck.service';
+import { ImportVehiculeDialogComponent } from 'app/list-vehicules/import-vehicule-dialog/import-vehicule-dialog.component';
 
 @Component({
   selector: 'app-list-vehicules',
@@ -58,45 +62,36 @@ export class ListVehiculesComponent implements OnInit {
   types : any;
   gammes : any;
   total : any;
+  entity: any;
+  activity: any;
 
   headerColumuns = [
-    // 'Date de création',
-    // 'Crée par',
+    'Entité',
     'Ville',
-    'Sous parc',
     'Activité',
-    'Service',
-    'Code interne',
     'Immatriculation',
     'Marque',
     'Gamme',
-    'Type',
-    'Tonnage',
     'Modèle',
     'DMC',
     'Date d\'entrée',
     'Index kilométrique',
     'Carburant',
     'Statut',
-
+    'Affecter'
   ];
   inputsFiler = [
+    {
+      name: 'entity',
+      placeholder: 'Entité',
+      type: 'select',
+      options: [],
+    },
     {
       name: 'city_id',
       placeholder: 'Ville',
       type: 'select',
       options: [],
-    },
-    {
-      name: 'parc_id',
-      placeholder: 'Sous parc',
-      type: 'select',
-      options: [],
-    },
-    {
-      name: 'code_interne',
-      placeholder: 'Code',
-      type: 'text'
     },
     {
       name: 'matricule',
@@ -119,21 +114,6 @@ export class ListVehiculesComponent implements OnInit {
     {
       name: 'activity',
       placeholder: 'Activité',
-      type: 'select',
-      options: [
-        {
-          text: 'Messagerie',
-          value: 'Messagerie',
-        },
-        {
-          text: 'Affrèttement',
-          value: 'Afferetement',
-        }
-      ]
-    },
-    {
-      name: 'service_id',
-      placeholder: 'Service',
       type: 'select',
       options: []
     },
@@ -175,18 +155,6 @@ export class ListVehiculesComponent implements OnInit {
     {
       name: 'modele_id',
       placeholder: 'Modéle',
-      type: 'select',
-      options: []
-    },
-    {
-      name: 'truck_type_id',
-      placeholder: 'Type',
-      type: 'select',
-      options: [],
-    },
-    {
-      name: 'tonnage_id',
-      placeholder: 'Tonnage',
       type: 'select',
       options: []
     },
@@ -281,8 +249,11 @@ export class ListVehiculesComponent implements OnInit {
     private boGridService : BoGridService,
     private vehiculeService : VehiculeService,
     private ressourceService: RessouresService,
+    private EntityService: EntityService,
+    private ActivityTruckService: ActivityTruckService,
     public datepipe: DatePipe,
-    public permissionService: PermissionService
+    public permissionService: PermissionService,
+    
   ) {}
 
   ngOnInit(): void {
@@ -312,10 +283,40 @@ export class ListVehiculesComponent implements OnInit {
 
     // this.setForm();
 
+    this.EntityService.getEntities().subscribe(
+      (data) => {
+        this.entity = data['response'];
+        for(var i=0; i<this.entity.length; i++){
+          this.inputsFiler["0"].options.push({
+            'text' : this.entity[i].name,
+            'value' : this.entity[i].id,
+          })
+        }
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    this.ActivityTruckService.getActivityTrucks().subscribe(
+      (data) => {
+        this.activity = data['response'];
+        for(var i=0; i<this.activity.length; i++){
+          this.extraInputsFilter["0"].options.push({
+            'text' : this.activity[i].name,
+            'value' : this.activity[i].id,
+          })
+        }
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
     this.store.select(selectAllCityAgence).subscribe((res) => {
       this.cities = res
       for(var i=0; i<this.cities.length; i++){
-        this.inputsFiler["0"].options.push({
+        this.inputsFiler["1"].options.push({
           'text' : this.cities[i].name,
           'value' : this.cities[i].id,
         })
@@ -326,7 +327,7 @@ export class ListVehiculesComponent implements OnInit {
       console.log(" brand========>", res)
       this.brands = res
       for(var i=0; i<this.brands.length; i++){
-        this.extraInputsFilter["3"].options.push({
+        this.extraInputsFilter["2"].options.push({
           'text' : this.brands[i].name,
           'value' : this.brands[i].id,
         })
@@ -337,7 +338,7 @@ export class ListVehiculesComponent implements OnInit {
       console.log(" gammes========>", res)
       this.gammes = res
       for(var i=0; i<this.gammes.length; i++){
-        this.extraInputsFilter["4"].options.push({
+        this.extraInputsFilter["3"].options.push({
           'text' : this.gammes[i].name,
           'value' : this.gammes[i].id,
         })
@@ -348,34 +349,34 @@ export class ListVehiculesComponent implements OnInit {
       console.log(" modele========>", res)
       this.modeles = res
       for(var i=0; i<this.modeles.length; i++){
-        this.extraInputsFilter["5"].options.push({
+        this.extraInputsFilter["4"].options.push({
           'text' : this.modeles[i].name,
           'value' : this.modeles[i].id,
         })
       }
     });
 
-    this.store.select(selectEnvparcPayload).subscribe((res) => {
-      // console.log(" parc========>", res)
-      this.parcs = res
-      for(var i=0; i<this.parcs.length; i++){
-        this.inputsFiler["1"].options.push({
-          'text' : this.parcs[i].name,
-          'value' : this.parcs[i].id,
-        })
-      }
-    });
+    // this.store.select(selectEnvparcPayload).subscribe((res) => {
+    //   // console.log(" parc========>", res)
+    //   this.parcs = res
+    //   for(var i=0; i<this.parcs.length; i++){
+    //     this.inputsFiler["1"].options.push({
+    //       'text' : this.parcs[i].name,
+    //       'value' : this.parcs[i].id,
+    //     })
+    //   }
+    // });
 
-    this.store.select(selectEnvtonnagePayload).subscribe((res) => {
-      // console.log(" tonnage========>", res)
-      this.tonnages = res
-      for(var i=0; i<this.tonnages.length; i++){
-        this.extraInputsFilter["7"].options.push({
-          'text' : this.tonnages[i].name + 'T',
-          'value' : this.tonnages[i].id,
-        })
-      }
-    });
+    // this.store.select(selectEnvtonnagePayload).subscribe((res) => {
+    //   // console.log(" tonnage========>", res)
+    //   this.tonnages = res
+    //   for(var i=0; i<this.tonnages.length; i++){
+    //     this.extraInputsFilter["7"].options.push({
+    //       'text' : this.tonnages[i].name + 'T',
+    //       'value' : this.tonnages[i].id,
+    //     })
+    //   }
+    // });
 
     // this.store.select(selectEnvtruckCategoryPayload).subscribe((res) => {
     //   // console.log(" categories========>", res)
@@ -388,27 +389,27 @@ export class ListVehiculesComponent implements OnInit {
     //   }
     // });
 
-    this.store.select(selectTruckService).subscribe((res) => {
-      // console.log(" services========>", res)
-      this.services = res
-      for(var i=0; i<this.services.length; i++){
-        this.extraInputsFilter["1"].options.push({
-          'text' : this.services[i].name,
-          'value' : this.services[i].id,
-        })
-      }
-    });
+    // this.store.select(selectTruckService).subscribe((res) => {
+    //   // console.log(" services========>", res)
+    //   this.services = res
+    //   for(var i=0; i<this.services.length; i++){
+    //     this.extraInputsFilter["1"].options.push({
+    //       'text' : this.services[i].name,
+    //       'value' : this.services[i].id,
+    //     })
+    //   }
+    // });
 
-    this.store.select(selectEnvtruckTypePayload).subscribe((res) => {
-      // console.log(" type========>", res)
-      this.types = res
-      for(var i=0; i<this.types.length; i++){
-        this.extraInputsFilter["6"].options.push({
-          'text' : this.types[i].name,
-          'value' : this.types[i].id,
-        })
-      }
-    });
+    // this.store.select(selectEnvtruckTypePayload).subscribe((res) => {
+    //   // console.log(" type========>", res)
+    //   this.types = res
+    //   for(var i=0; i<this.types.length; i++){
+    //     this.extraInputsFilter["6"].options.push({
+    //       'text' : this.types[i].name,
+    //       'value' : this.types[i].id,
+    //     })
+    //   }
+    // });
   }
 
   filtrer($event){
@@ -464,6 +465,13 @@ export class ListVehiculesComponent implements OnInit {
     });
   }
 
+  openImportDialog(): void {
+    this.dialog.open(ImportVehiculeDialogComponent, {
+      width: '400px'
+    });
+  }
+
+
   // setForm(){
   //   this.filter = new FormGroup({
   //     type: new FormControl("", Validators.required),
@@ -490,6 +498,30 @@ export class ListVehiculesComponent implements OnInit {
       data: { item },
     });
   }
+
+  AffectationVehiculeDialog(item): void {
+    const dialogRef = this.dialog.open(AffecationVehiculeComponent, {
+      disableClose: true,
+      width: '831px',
+      data: { item },
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.refresh) {
+        this.refreshVehiculesList();
+      }
+    });
+  }
+
+  refreshVehiculesList(): void {
+    this.store.dispatch(fetchVehicules({
+      data: this.filterData ?? null,
+      per_page: this.per_page,
+      page: 1
+    }));
+  }
+  
+  
 
   detailsVehi(uuid) {
     this._router.navigate([`detailsvehicules/${uuid}`]);
@@ -540,7 +572,7 @@ export class ListVehiculesComponent implements OnInit {
             Sous_Parc: vehicule.parc?.name,
             Activité: vehicule.activity,
             Service: this.joinService(vehicule.services),
-            Code_interne: vehicule.code_interne,
+            // Code_interne: vehicule.code_interne,
             Immatriculation: vehicule.matricule,
             Marque: vehicule.brand?.name,
             Gamme: vehicule.gamme?.name,
@@ -592,7 +624,7 @@ export class ListVehiculesComponent implements OnInit {
             Activité: vehicule.activity,
             Service: this.joinService(vehicule.services),
             Zone: vehicule.zone.name,
-            Code_interne: vehicule.code_interne,
+            // Code_interne: vehicule.code_interne,
             Immatriculation: vehicule.matricule,
             Marque: vehicule.brand?.name,
             Gamme: vehicule.gamme?.name,

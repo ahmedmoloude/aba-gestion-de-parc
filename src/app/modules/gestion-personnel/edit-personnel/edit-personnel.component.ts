@@ -16,6 +16,8 @@ import { RoleState, StateEnum } from 'app/core/store/role/role.reducer';
 import { loadRoles } from 'app/core/store/role/role.actions';
 import { selectEnvPayloadAgence } from 'app/core/store/agence/agence.selectors';
 import { PHONE_REGEX } from 'app/shared/validators/validators';
+import { EntityService } from 'app/core/services/entity/entity.service';
+import { ProjetService } from 'app/core/services/projet/projet.service';
 
 @Component({
   selector: 'app-edit-personnel',
@@ -23,7 +25,7 @@ import { PHONE_REGEX } from 'app/shared/validators/validators';
   styleUrls: ['./edit-personnel.component.css'],
 })
 export class EditPersonnelComponent implements OnInit {
-  tonnages : any = [];
+  // tonnages : any = [];
   status :any= [
     {
     value:true,
@@ -34,7 +36,7 @@ export class EditPersonnelComponent implements OnInit {
     name : 'Inactive'
   }
     ];
-  personnel_tonnages : any = [];
+  // personnel_tonnages : any = [];
   zonnes :any=[];
   parcs : any = [];
   isCommerciale:boolean = false;
@@ -54,7 +56,9 @@ export class EditPersonnelComponent implements OnInit {
   isLoading: boolean = false;
   uuid: any;
   personnel!: any;
-  services: any;
+  // services: any;
+  entities: any;
+  projets: any;
   alert_config: {
     title: 'le personnel a été ajouté avec succès';
     icon: 'success';
@@ -76,6 +80,8 @@ export class EditPersonnelComponent implements OnInit {
     private route: ActivatedRoute,
     private ressouresService: RessouresService,
     private store: Store<AppState>,
+    private EntityService: EntityService,
+    private ProjetService: ProjetService,
   ) {
     this.f = this.formbuilder.group({
       matricule: [''],
@@ -92,10 +98,10 @@ export class EditPersonnelComponent implements OnInit {
       cnss_number: [''],
       gsm_personnel: [''],
       email: [''],
-      direction: [''],
-      departement: [''],
-      service_id: [''],
-      parc: [''],
+      // direction: [''],
+      // departement: [''],
+      // service_id: [''],
+      // parc: [''],
       entry_date: [''],
       contract_type: [''],
       interim_company: [''],
@@ -136,9 +142,27 @@ export class EditPersonnelComponent implements OnInit {
       this.agencies = res;
     });
 
-    this.getTonnage()
+    this.EntityService.getEntities().subscribe(
+      (data) => {
+        this.entities = data['response'];
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    this.ProjetService.getProjets().subscribe(
+      (data) => {
+        this.projets = data['response'];
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    // this.getTonnage()
     this.getPersonnel()
-    this.getServices()
+    // this.getServices()
     this.getAllZonnes()
     this.role$.subscribe(
       (resp) => {
@@ -182,12 +206,14 @@ export class EditPersonnelComponent implements OnInit {
     formData.append('cnss_number', this.f.value.cnss_number);
     formData.append('gsm_personnel', this.f.value.gsm_personnel);
     formData.append('email', this.f.value.email);
-    formData.append('direction', this.f.value.direction);
-    formData.append('departement', this.f.value.departement);
-    formData.append('service', this.f.value.service);
-    formData.append('parc', this.f.value.parc);
+    // formData.append('direction', this.f.value.direction);
+    // formData.append('departement', this.f.value.departement);
+    // formData.append('service', this.f.value.service);
+    // formData.append('parc', this.f.value.parc);
+    formData.append('entity_id', this.f.value.entity_id);
+    formData.append('projet_id', this.f.value.projet_id);
     formData.append('entry_date', this.convert(this.f.value.entry_date));
-    formData.append('service_id', this.f.value.service_id);
+    // formData.append('service_id', this.f.value.service_id);
     formData.append('contract_type', this.f.value.contract_type);
     formData.append('interim_company', this.f.value.interim_company);
     formData.append('code', this.f.value.code);
@@ -317,11 +343,11 @@ export class EditPersonnelComponent implements OnInit {
     }
     this.tempRoles = this.roles.filter(r => r.function == event.value)
   }
-  getTonnage(){
-    this.personelservice.getTonnage().subscribe((res:any)=>{
-      this.tonnages = res.response
-    })
-  }
+  // getTonnage(){
+  //   this.personelservice.getTonnage().subscribe((res:any)=>{
+  //     this.tonnages = res.response
+  //   })
+  // }
   // getParcs(){
   //   this.personelservice.getParc().subscribe((res:any)=>{
   //     this.parcs = res
@@ -329,17 +355,17 @@ export class EditPersonnelComponent implements OnInit {
   // }
   getPersonnel(){
     this.uuid = this.route.snapshot.params.uuid;
-     var tonnage_of_personnel = []
-     var service_of_personnel = []
+    //  var tonnage_of_personnel = []
+    //  var service_of_personnel = []
      var zonne_of_personnel = []
     this.personelservice.getPersonnelByUiid(this.uuid).subscribe((res:any) => {
       this.personnel = res.response
-      res.response.tonnages.forEach(element => {
-        tonnage_of_personnel.push(element.id)
-      });
-      res.response.service.forEach(element => {
-        service_of_personnel.push(element.id)
-      });
+      // res.response.tonnages.forEach(element => {
+      //   tonnage_of_personnel.push(element.id)
+      // });
+      // res.response.service.forEach(element => {
+      //   service_of_personnel.push(element.id)
+      // });
       res.response.zonnes.forEach(element => {
         zonne_of_personnel.push(element.id)
       });
@@ -356,8 +382,10 @@ export class EditPersonnelComponent implements OnInit {
         departement: new FormControl(this.personnel.departement == null ? ' ':this.personnel.departement,Validators.required ),
         parc: new FormControl(this.personnel.parc_id==null ? ' ' : this.personnel.parc_id, Validators.required),
         contract_type: new FormControl(this.personnel.contract_type ==null ? ' ':  this.personnel.contract_type,Validators.required),
-        affectation : new FormControl(tonnage_of_personnel, Validators.required),
-        service_id: new FormControl(service_of_personnel, Validators.required),
+        // affectation : new FormControl(tonnage_of_personnel, Validators.required),
+        // service_id: new FormControl(service_of_personnel, Validators.required),
+        entity_id: new FormControl(this.personnel.entity_id , Validators.required),
+        projet_id: new FormControl(this.personnel.projet_id , Validators.required),
         function : new FormControl(this.personnel.function == null ? ' ' : this.personnel.function, Validators.required),
         role_id : new FormControl(this.personnel.role_id, Validators.required),
         email: new FormControl(JSON.parse(this.personnel.contact)?.email == null ? '' : JSON.parse(this.personnel.contact)?.email, Validators.required),
@@ -415,11 +443,11 @@ export class EditPersonnelComponent implements OnInit {
       this.isLoding = false
     })
   }
-  getServices(){
-    this.typeServiceService.getAllServices().subscribe((res) => {
-      this.services = res;
-    });
-  }
+  // getServices(){
+  //   this.typeServiceService.getAllServices().subscribe((res) => {
+  //     this.services = res;
+  //   });
+  // }
   setForm(){
     this.f = new FormGroup({
       matricule: new FormControl('', Validators.required),
@@ -428,10 +456,12 @@ export class EditPersonnelComponent implements OnInit {
       last_name: new FormControl('', Validators.required),
       birth_date: new FormControl('', Validators.required),
       email: new FormControl('',Validators.required),
-      direction: new FormControl('', Validators.required),
-      departement: new FormControl('', Validators.required),
-      service_id: new FormControl('', Validators.required),
-      parc: new FormControl('', Validators.required),
+      // direction: new FormControl('', Validators.required),
+      // departement: new FormControl('', Validators.required),
+      // service_id: new FormControl('', Validators.required),
+      // parc: new FormControl('', Validators.required),
+      entity_id: new FormControl('',Validators.required),
+      projet_id: new FormControl('',Validators.required),
       entry_date: new FormControl('', Validators.required),
       contract_type: new FormControl('', Validators.required),
       gsm_professionnel: new FormControl('', [Validators.required, Validators.pattern(PHONE_REGEX)]),

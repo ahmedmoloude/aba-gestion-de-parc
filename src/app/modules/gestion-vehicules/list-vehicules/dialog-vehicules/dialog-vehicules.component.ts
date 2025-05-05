@@ -19,6 +19,8 @@ import { Inject } from '@angular/core';
 import { SharedAutcompleteComponent } from 'app/shared/components/shared-autcomplete/shared-autcomplete.component';
 import { selectAllCityAgence } from 'app/core/store/resources/resources.selectors';
 import { VehiculeService } from 'app/core/services/vehicule.service';
+import { EntityService } from 'app/core/services/entity/entity.service';
+import {ActivityTruckService } from 'app/activity-truck.service'
 import * as moment from 'moment';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
@@ -41,6 +43,8 @@ export class DialogVehiculesComponent implements OnInit {
   services: any;
   types: any;
   image_src: string;
+  entities: any;
+  activities: any;
   zones: any;
   files: any;
   code: any;
@@ -96,6 +100,8 @@ export class DialogVehiculesComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogVehiculesComponent>,
     private boGridService: BoGridService,
     private vehiculeService: VehiculeService,
+    private EntityService: EntityService,
+    private ActivityTruckService: ActivityTruckService,
     private _toast: ToastService
   ) {}
 
@@ -106,7 +112,6 @@ export class DialogVehiculesComponent implements OnInit {
     this.type = this.data['type'];
     console.log('type item', this.type, this.item);
     this.setForm();
-
     this.store
       .select(selectAllCityAgence)
       .subscribe((res) => (this.cities = res));
@@ -131,13 +136,31 @@ export class DialogVehiculesComponent implements OnInit {
       this.types = res;
     });
 
-    this.vehiculeService.getColor().subscribe(
+    // this.vehiculeService.getColor().subscribe(
+    //   (data) => {
+    //     console.log('data', data);
+    //     this.colors = data['response'];
+    //     setTimeout(() => {
+    //       this.searchComponents.toArray()[8]?.selectObject(this.item?.color);
+    //     });
+    //   },
+    //   (error) => {
+    //     console.log('error', error);
+    //   }
+    // );
+
+    this.EntityService.getEntities().subscribe(
       (data) => {
-        console.log('data', data);
-        this.colors = data['response'];
-        setTimeout(() => {
-          this.searchComponents.toArray()[8]?.selectObject(this.item?.color);
-        });
+        this.entities = data['response'];
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    this.ActivityTruckService.getActivityTrucks().subscribe(
+      (data) => {
+        this.activities = data['response'];
       },
       (error) => {
         console.log('error', error);
@@ -149,7 +172,7 @@ export class DialogVehiculesComponent implements OnInit {
         console.log('data', data);
         this.brands = data['response'];
         setTimeout(() => {
-          this.searchComponents.toArray()[3]?.selectObject(this.item?.brand);
+          this.searchComponents.toArray()[1]?.selectObject(this.item?.brand);
         });
       },
       (error) => {
@@ -161,16 +184,16 @@ export class DialogVehiculesComponent implements OnInit {
   ngAfterViewInit() {
     if (this.data['type'] == 'edit') {
       this.searchComponents.toArray()[0]?.selectObject(this.item?.city);
-      this.searchComponents.toArray()[1]?.selectObject(this.item?.parc);
-      this.searchComponents.toArray()[2]?.selectObject(this.item?.zone);
-      this.searchComponents.toArray()[3]?.selectObject(this.item?.brand);
-      this.searchComponents.toArray()[4]?.selectObject(this.item?.modele);
-      this.searchComponents.toArray()[5]?.selectObject(this.item?.gamme);
-      this.searchComponents.toArray()[6]?.selectObject(this.item?.truck_type);
-      this.searchComponents
-        .toArray()[7]
-        ?.selectObject(this.item?.truck_category);
-      this.searchComponents.toArray()[8]?.selectObject(this.item?.color);
+      // this.searchComponents.toArray()[1]?.selectObject(this.item?.parc);
+      // this.searchComponents.toArray()[2]?.selectObject(this.item?.zone);
+      this.searchComponents.toArray()[1]?.selectObject(this.item?.brand);
+      this.searchComponents.toArray()[2]?.selectObject(this.item?.modele);
+      this.searchComponents.toArray()[3]?.selectObject(this.item?.gamme);
+      // this.searchComponents.toArray()[6]?.selectObject(this.item?.truck_type);
+      // this.searchComponents
+      //   .toArray()[7]
+      //   ?.selectObject(this.item?.truck_category);
+      // this.searchComponents.toArray()[8]?.selectObject(this.item?.color);
     }
   }
 
@@ -192,10 +215,10 @@ export class DialogVehiculesComponent implements OnInit {
       this.form_btn = 'Ajouter';
       console.log('form set');
       this.createVehicule = new FormGroup({
-        activity: new FormControl(''),
-        code_interne: new FormControl(''),
+        activity_id: new FormControl(''),
         city_id: new FormControl(''),
         parc_id: new FormControl(''),
+        entity_id: new FormControl(''),
         service: new FormControl(''),
         n_chassis: new FormControl(''),
         brand_id: new FormControl(''),
@@ -230,9 +253,9 @@ export class DialogVehiculesComponent implements OnInit {
       });
     } else {
       this.form_btn = 'Modifier';
-      this.code = this.item.code_interne;
+      // this.code = this.item.code_interne;
       console.log('length service id=======> ', this.item.services.length);
-      
+      console.log('this.item',this.item)
       // Handle services
       for (var i = 0; i < this.item.services.length; i++) {
         this.servicesId.push(this.item.services[i].id);
@@ -249,7 +272,8 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule = new FormGroup({
         city_id: new FormControl(this.item.city_id),
         parc_id: new FormControl(this.item.parc_id),
-        service: new FormControl(this.servicesId),
+        service: new FormControl(this.item.zone_id),
+        entity_id: new FormControl(this.item.entity_id),
         brand_id: new FormControl(this.item.brand_id),
         gamme_id: new FormControl(this.item.gamme_id),
         zone_id: new FormControl(this.item.zone_id),
@@ -258,10 +282,9 @@ export class DialogVehiculesComponent implements OnInit {
         truck_type_id: new FormControl(this.item.truck_type_id),
         tonnage_id: new FormControl(this.item.tonnage_id),
         km_initial: new FormControl(this.item.km_initial),
-        activity: new FormControl(this.item.activity),
+        activity_id: new FormControl(this.item.activity_id),
         status: new FormControl(this.item.last_status?.status),
         date_entree_vehicule: new FormControl(this.item.date_entree_vehicule),
-        code_interne: new FormControl(this.item.code_interne),
         n_chassis: new FormControl(this.item.n_chassis),
         carburant: new FormControl(this.item.carburant),
         taille_reservoir: new FormControl(this.item.taille_reservoir),
@@ -272,6 +295,7 @@ export class DialogVehiculesComponent implements OnInit {
         date_circulation: new FormControl(this.item.date_circulation),
         consomation_carburant: new FormControl(this.item.consomation_carburant),
         consomation_carburant_reel: new FormControl(this.item.consomation_carburant_reel),
+        index_km: new FormControl(this.item.index_km),
         nbr_scelle: new FormControl(this.item.nbr_scelle),
         adblue: new FormControl(this.item.adblue),
         carNumberPart1: new FormControl(isWW ? { value: '', disabled: true } : matriculeParts[0], [Validators.required, Validators.min(0)]),
@@ -413,7 +437,7 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule.controls['city_id'].setValue(event.id);
       this.zones = this.cities?.find((city) => city.id == event.id).zones;
       setTimeout(() => {
-        this.searchComponents.toArray()[2].selectObject(this.item?.zone);
+        // this.searchComponents.toArray()[2].selectObject(this.item?.zone);
       });
     }
   }
@@ -461,7 +485,7 @@ export class DialogVehiculesComponent implements OnInit {
         (modele) => modele.id == event.id
       )?.gammes;
       setTimeout(() => {
-        this.searchComponents.toArray()[5].selectObject(this.item?.gamme);
+        this.searchComponents.toArray()[2].selectObject(this.item?.gamme);
       });
     }
   }
@@ -471,7 +495,7 @@ export class DialogVehiculesComponent implements OnInit {
       this.createVehicule.controls['brand_id'].setValue(event.id);
       this.modeles = this.brands?.find((brand) => brand.id == event.id).modeles;
       setTimeout(() => {
-        this.searchComponents.toArray()[4].selectObject(this.item?.modele);
+        this.searchComponents.toArray()[1].selectObject(this.item?.modele);
       });
     }
   }

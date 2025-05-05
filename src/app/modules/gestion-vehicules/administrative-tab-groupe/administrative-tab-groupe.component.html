@@ -161,10 +161,10 @@
         </p>
       </div>
       <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
-        <div>
+        <!-- <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Code interne :</p>
           <p class="font-medium">{{ vehicule.code_interne }}</p>
-        </div>
+        </div> -->
         <div>
           <p class="text-[#0C8040] text-[11px] font-medium">WW :</p>
           <p class="font-medium">{{ vehicule.n_w }}</p>
@@ -223,14 +223,14 @@
             {{ vehicule.date_entree_vehicule | date: "dd/MM/yyyy" }}
           </p>
         </div>
-        <div>
+        <!-- <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Couleur :</p>
           <p class="font-medium">{{ vehicule.color?.name }}</p>
         </div>
         <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Nombre de scellé</p>
           <p class="font-medium">{{ vehicule.nbr_scelle }}</p>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
@@ -243,31 +243,35 @@
       </div>
       <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
         <div>
+          <p class="text-[#0C8040] text-[11px] font-medium">Entité :</p>
+          <p class="font-medium">{{ vehicule?.entity?.name }}</p>
+        </div>
+        <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Ville :</p>
           <p class="font-medium">{{ vehicule?.city?.name }}</p>
         </div>
-        <div>
+        <!-- <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Sous parc :</p>
           <p class="font-medium">{{ vehicule?.parc?.name }}</p>
-        </div>
+        </div> -->
         <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Activité :</p>
-          <p class="font-medium">Activite 1</p>
+          <p class="font-medium">{{ vehicule?.activity?.name }}</p>
         </div>
-        <div>
+        <!-- <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Service :</p>
           <p class="font-medium" [matTooltip]="joinService(vehicule.services)" matTooltipPosition="above">
             {{ joinService(vehicule.services) | truncate: [15, "..."] }}
           </p>
-        </div>
+        </div> -->
       </div>
-      <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div>
-      <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
+      <!-- <div class="border-b-2 pt-3 pb-3 border-[#00000029]"></div> -->
+      <!-- <div class="grid grid-cols-4 gap-4 mt-4 pl-3 pb-3">
         <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Zone :</p>
           <p class="font-medium">{{ vehicule?.zone?.name }}</p>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="grid grid-cols-2 gap-4 mt-4">
@@ -284,10 +288,10 @@
           <p class="text-[#0C8040] text-[11px] font-medium">Carburant :</p>
           <p class="font-medium">{{ vehicule?.carburant }}</p>
         </div>
-        <div>
+        <!-- <div>
           <p class="text-[#0C8040] text-[11px] font-medium">Tonnage :</p>
           <p class="font-medium">{{ vehicule?.tonnage?.name }}T</p>
-        </div>
+        </div> -->
         <div>
           <p class="text-[#0C8040] text-[11px] font-medium">
             Kilométrage initial

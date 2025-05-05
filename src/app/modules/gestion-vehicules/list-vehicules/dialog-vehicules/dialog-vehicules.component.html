@@ -52,13 +52,16 @@
           </div>
           <div class="grid grid-cols-3 gap-3 pt-8 pl-3 pr-3">
             <div>
-              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
-                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities" [keys]="['code', 'name']"
-                [lengthToStart]="3" [display]="['code', 'name']" [placeholer]="''" [label]="'Rechercher la ville...'"
-                [hasIcon]="false" (dataEvent)="filterCity($event)">
-              </app-shared-autcomplete>
+              <mat-form-field appearance="fill" class="w-[100%] mb-4">
+                <mat-label>Entity</mat-label>
+                <mat-select formControlName="entity_id">
+                  <mat-option *ngFor="let entity of entities" [value]="entity.id">
+                    {{ entity.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <div>
+            <!-- <div> -->
               <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
                 <mat-label>Sous Parc</mat-label>
                 <mat-select formControlName="parc_id">
@@ -67,30 +70,30 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field> -->
-              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+              <!-- <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
                 [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="parcs" [keys]="['name']" [lengthToStart]="3"
                 [display]="['name']" [placeholer]="''" [label]="'Rechercher le parc...'" [hasIcon]="false"
                 (dataEvent)="filterParc($event)">
-              </app-shared-autcomplete>
-            </div>
+              </app-shared-autcomplete> -->
+            <!-- </div> -->
             <div>
               <mat-form-field appearance="fill" class="w-[100%] mb-4">
                 <mat-label>Activité</mat-label>
-                <mat-select formControlName="activity">
-                  <mat-option value="Messagerie">Messagerie </mat-option>
-                  <mat-option value="Afferetement">Affrèttement </mat-option>
+                <mat-select formControlName="activity_id">
+                  <mat-option *ngFor="let activity of activities" [value]="activity.id">
+                    {{ activity.name }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
             <div>
-              <mat-form-field appearance="fill" class="w-[100%] mb-4">
-                <mat-label>Service</mat-label>
-                <mat-select multiple (selectionChange)="onChange($event)" formControlName="service">
-                  <mat-option *ngFor="let service of services" [value]="service.id">{{ service.name }}</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+                [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="cities" [keys]="['code', 'name']"
+                [lengthToStart]="3" [display]="['code', 'name']" [placeholer]="''" [label]="'Rechercher la ville...'"
+                [hasIcon]="false" (dataEvent)="filterCity($event)">
+              </app-shared-autcomplete>
             </div>
-            <div>
+            <!-- <div> -->
               <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
                 <mat-label>Zone</mat-label>
                 <mat-select formControlName="zone_id">
@@ -99,12 +102,12 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field> -->
-              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+              <!-- <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
                 [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="zones" [keys]="['name']" [lengthToStart]="3"
                 [display]="['name']" [placeholer]="''" [label]="'Rechercher la zone...'" [hasIcon]="false"
                 (dataEvent)="filterZone($event)">
-              </app-shared-autcomplete>
-            </div>
+              </app-shared-autcomplete> -->
+            <!-- </div> -->
           </div>
         </div>
         <div class="bg-white shadow-[0px_3px_20px_#00000029] rounded-[16px] mt-5">
@@ -116,9 +119,9 @@
             </p>
           </div>
           <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3 mt-7">
-            <div>
+            <!-- <div>
               <i-field [type]="'text'" [label]="'Code interne'" formControlName="code_interne"></i-field>
-            </div>
+            </div> -->
              <!-- WW Format -->
   <div *ngIf="isWWFormat(createVehicule.get('matricule')?.value)">
     <i-field [type]="'text'" [label]="'WW'" formControlName="n_w"></i-field>
@@ -207,8 +210,8 @@
                 [minValue]=date_sortie></i-field>
             </div>
           </div>
-          <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
-            <div>
+          <!-- <div class="grid grid-cols-3 gap-3 mb-8 pl-3 pr-3">
+            <div> -->
               <!-- <mat-form-field appearance="fill" class="w-[100%] mb-4">
                   <mat-label>Couleur</mat-label>
                   <mat-select formControlName="color_id">
@@ -217,7 +220,7 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field> -->
-              <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
+              <!-- <app-shared-autcomplete #searchComponent1 [opended]="true" [type]="'single'" [contentStyle]="contentStyle"
                 [inputStyle]="searchStyle" [charToGetAll]="'*'" [data]="colors" [keys]="['name']" [lengthToStart]="3"
                 [display]="['name']" [placeholer]="''" [label]="'Rechercher la couleur...'" [hasIcon]="false"
                 (dataEvent)="filterColor($event)">
@@ -226,7 +229,7 @@
             <div>
               <i-field [type]="'number'" [label]="'Nombre de scellé'" formControlName="nbr_scelle"></i-field>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="grid grid-cols-2 gap-4 mt-4">
@@ -249,7 +252,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div>
+            <!-- <div>
               <mat-form-field appearance="fill" class="w-[100%] mb-4">
                 <mat-label>Tonnage</mat-label>
                 <mat-select formControlName="tonnage_id">
@@ -258,7 +261,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+            </div> -->
             <div>
               <i-field [type]="'number'" [label]="'Kilommetrage initial (KM)'" formControlName="km_initial"></i-field>
             </div>
@@ -310,6 +313,12 @@
             <div>
               <i-field [type]="'number'" [label]="'Puissance fiscale (CV)'"
                 formControlName="puissance_fiscale"></i-field>
+            </div>
+            <div *ngIf="type == 'edit'" class="flex">
+              <div>
+                <i-field [type]="'number'" [label]="'Index Km'"
+                  formControlName="index_km"></i-field>
+              </div>
             </div>
           </div>
         </div>

@@ -22,6 +22,9 @@
           <button mat-menu-item (click)="exportExcelDetails()">
             <span>Exporter Détails</span>
           </button>
+          <button mat-menu-item (click)="openImportDialog()">
+            <span>Importer</span>
+          </button>
         </mat-menu>
       </div>
       <div class="flex cursor-pointer" *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'C')">
@@ -79,6 +82,12 @@
                 <mat-icon>autorenew</mat-icon>
                 Remplacer
               </button>
+              <button mat-menu-item 
+                      *ngIf="!item.is_affected && permissionService.hasPermission('Gestion de parc', 'Véhicules', 'U')" 
+                      (click)="AffectationVehiculeDialog(item)">
+                <mat-icon>autorenew</mat-icon>
+                Affectation
+              </button>
               <button mat-menu-item (click)="deletTruck(item.uuid)"
                 *ngIf="permissionService.hasPermission('Gestion de parc', 'Véhicules', 'D')">
                 <mat-icon>delete</mat-icon>
@@ -87,22 +96,16 @@
             </mat-menu>
             <!-- <td class="p-2">{{ item.created_at | date: 'dd/MM/yyyy' }}</td>
               <td class="p-2">{{ item.user_id == null ? "SYSTEME" :   item.user?.name  }}</td> -->
+              <td class="p-2">{{ item.entity?.name }}</td>
             <td class="p-2">{{ item.city?.name }}</td>
-            <td class="p-2">{{ item.parc?.name }}</td>
-            <td class="p-2">{{ item?.activity }}</td>
-            <td class="p-2" [matTooltip]="joinService(item.services)" matTooltipPosition="above"> {{
-              joinService(item?.services) | truncate: [15, "..."] }}
-            </td>
-            <td class="p-2">{{ item?.code_interne }}</td>
+            <td class="p-2">{{ item?.activity?.name }}</td>
             <td class="p-2">{{ item?.matricule }}</td>
             <td class="p-2">{{ item?.brand?.name }}</td>
             <td class="p-2">{{ item?.gamme?.name }}</td>
-            <td class="p-2">{{ item?.truck_type?.name }}</td>
-            <td class="p-2">{{ item?.tonnage?.name }} T</td>
             <td class="p-2">{{ item?.modele?.name }}</td>
             <td class="p-2">{{ item?.date_circulation | date: 'dd/MM/yyyy'}}</td>
             <td class="p-2">{{ item?.date_entree_vehicule | date: 'dd/MM/yyyy'}}</td>
-            <td class="p-2">{{ item?.km_reel }} Km</td>
+            <td class="p-2">{{ item?.index_km ? item?.index_km : '0' }} Km</td>
             <td class="p-2">{{ item?.carburant }}</td>
             <td class="p-2">
               <div class="flex flex-row  items-center">
@@ -110,7 +113,10 @@
                 <span>{{ item?.last_status?.status }}</span>
               </div>
             </td>
-            <!-- <td class="p-2">{{ item.status }}</td> -->
+            <td class="p-2">
+              <span *ngIf="item.is_affected == true; else nonAffecte">Oui</span>
+              <ng-template #nonAffecte><span>Non</span></ng-template>
+            </td>
           </tr>
         </tbody>
       </table>

@@ -8,6 +8,8 @@ import { TypeServiceService } from '../../../../app/core/services/type-service.s
 import { RessouresService } from '../../../../app/core/services/ressoures.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/core/store/app.states';
+import { EntityService } from 'app/core/services/entity/entity.service';
+import { ProjetService } from 'app/core/services/projet/projet.service';
 import {
   FormControl,
   FormGroup,
@@ -78,6 +80,8 @@ export class AddPersonnelComponent implements OnInit {
   cities: any;
   isLoading: boolean = false;
   services: any;
+  entities: any;
+  projets: any;
   alert_config: {
     title: 'le personnel a été ajouté avec succès';
     icon: 'success';
@@ -97,6 +101,8 @@ export class AddPersonnelComponent implements OnInit {
     private boGridService: BoGridService,
     private _toast: ToastService,
     private ressouresService: RessouresService,
+    private EntityService: EntityService,
+    private ProjetService: ProjetService,
     private store: Store<AppState>
   ) {}
   ngOnInit(): void {
@@ -106,6 +112,24 @@ export class AddPersonnelComponent implements OnInit {
     // this.getParcs()
     this.setForm();
     this.getAllZonnes();
+
+    this.EntityService.getEntities().subscribe(
+      (data) => {
+        this.entities = data['response'];
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    this.ProjetService.getProjets().subscribe(
+      (data) => {
+        this.projets = data['response'];
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
 
     this.store.select(selectEnvparcPayload).subscribe((res) => {
       // console.log(" parc========>", res)
@@ -339,14 +363,12 @@ export class AddPersonnelComponent implements OnInit {
         Validators.pattern(PHONE_REGEX),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      direction: new FormControl('', Validators.required),
-      departement: new FormControl('', Validators.required),
-      service_id: new FormControl('', Validators.required),
-      parc: new FormControl('', Validators.required),
+      entity_id: new FormControl(''),
+      projet_id: new FormControl(''), 
       contract_type: new FormControl('', Validators.required),
       code: new FormControl('', Validators.required),
       function: new FormControl('', Validators.required),
-      role_id: new FormControl(null, Validators.required),
+      role_id: new FormControl(11),
       gsm_professionnel: new FormControl('', [
         Validators.required,
         Validators.pattern(PHONE_REGEX),

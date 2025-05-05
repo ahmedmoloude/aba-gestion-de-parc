@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ form_btn }} une entité</h2>
+
+<div mat-dialog-content>
+  <form [formGroup]="createEntity" (ngSubmit)="addEntity()">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Nom de l'entité</mat-label>
+      <input matInput formControlName="name" placeholder="Nom de l'entité" />
+      <mat-error *ngIf="createEntity.get('name')?.hasError('required')">
+        Ce champ est requis.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="mt-4 flex justify-end">
+      <button mat-stroked-button type="button" (click)="dialogRef.close()">Annuler</button>
+      <button
+        mat-flat-button
+        color="primary"
+        class="ml-4"
+        type="submit"
+        [disabled]="createEntity.invalid || spinnerAdd"
+      >
+        <mat-spinner *ngIf="spinnerAdd" diameter="20"></mat-spinner>
+        <span *ngIf="!spinnerAdd">{{ form_btn }}</span>
+      </button>
+    </div>
+  </form>
+</div>

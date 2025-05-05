@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Import véhicule</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="importForm">
+    <!-- <mat-label>Select Excel File</mat-label> -->
+    <input type="file" (change)="onFileSelected($event)" accept=".xls,.xlsx" />
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="importExcel()">Import</button>
+</mat-dialog-actions>
