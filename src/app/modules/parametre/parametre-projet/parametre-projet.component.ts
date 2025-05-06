@@ -51,6 +51,25 @@ export class ParametreProjetComponent implements OnInit {
     });
   }
 
+  openDialogAjoutertype(type = "add", item = null): void {
+      const dialogRef = this.dialog.open(DialogProjetComponent, {
+        disableClose: true,
+        width: '582px',
+        data: { type, item },
+      });
+  
+      dialogRef.afterClosed().subscribe((data) => {
+        if (data) {
+          if (type === 'edit') {
+            this.projets = this.projets.filter(obj => obj.uuid !== item.uuid);
+            this.projets.unshift(data);
+          } else {
+            this.projets.unshift(data);
+          }
+        }
+      });
+    }
+
   // delete(uuid: string) {
   //   Swal.fire({
   //     title: 'Confirmer la suppression ?',
