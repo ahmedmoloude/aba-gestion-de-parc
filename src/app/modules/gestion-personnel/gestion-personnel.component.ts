@@ -15,6 +15,8 @@ import { RoleState, StateEnum } from 'app/core/store/role/role.reducer';
 import { loadRoles } from 'app/core/store/role/role.actions';
 import { TypeServiceService } from 'app/core/services/type-service.service';
 import { selectEnvparcPayload } from 'app/core/store/parc/parc.selectors';
+import { EntityService } from 'app/core/services/entity/entity.service';
+import { ProjetService } from 'app/core/services/projet/projet.service';
 @Component({
   selector: 'app-gestion-personnel',
   templateUrl: './gestion-personnel.component.html',
@@ -22,7 +24,7 @@ import { selectEnvparcPayload } from 'app/core/store/parc/parc.selectors';
 })
 export class GestionPersonnelComponent implements OnInit {
   page: number = 1;
-  // Nom - prénom - Code interne - direction - département - service - parc - fonction - type de contrat
+  // Nom - prénom - Code interne - entity - département - service - parc - fonction - type de contrat
   inputsFiler = [
     {
       name: 'last_name',
@@ -40,26 +42,16 @@ export class GestionPersonnelComponent implements OnInit {
       type: 'text'
     },
     {
-      name: 'direction',
-      placeholder: 'Direction',
+      name: 'entity',
+      placeholder: 'Entité',
       type: 'select',
-      options: [
-        {
-          text: 'Gestion de parc',
-          value: 'Gestion de parc'
-        }
-      ]
+      options: []
     },
     {
-      name: 'departement',
-      placeholder: 'Département',
+      name: 'projet',
+      placeholder: 'Projet',
       type: 'select',
-      options: [
-        {
-          text: 'Logistique',
-          value: 'Logistique'
-        }
-      ]
+      options: []
     },
     {
       name: 'service',
@@ -147,7 +139,8 @@ export class GestionPersonnelComponent implements OnInit {
     email: '',
   };
   PersonnelsArray;
-
+  entities = [];
+  projets = [];
   parcs = [];
   services = [];
 
@@ -158,13 +151,47 @@ export class GestionPersonnelComponent implements OnInit {
     public dialog: MatDialog,
     public permissionService: PermissionService,
     private typeServiceService: TypeServiceService,
+    private EntityService: EntityService,
+    private ProjetService: ProjetService,
   ) {}
 
   ngOnInit(): void {
     this.getAllPersonnels();
     this.store.dispatch(loadRoles());
     this.getServicesandParcs();
+
+    this.EntityService.getEntities().subscribe(
+      (data) => {
+        this.entities = data['response'];
+        for(var i=0; i<this.entities.length; i++){
+          this.inputsFiler["3"].options.push({
+            'text' : this.entities[i].name,
+            'value' : this.entities[i].id,
+          })
+        }
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+    this.ProjetService.getProjets().subscribe(
+      (data) => {
+        this.projets = data['response'];
+        for(var i=0; i<this.projets.length; i++){
+          this.inputsFiler["3"].options.push({
+            'text' : this.projets[i].name,
+            'value' : this.projets[i].id,
+          })
+        }
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
   }
+  
   getAllPersonnels(filter = null) {
     let Array = [];
     this.isLoading = true;
@@ -181,9 +208,9 @@ export class GestionPersonnelComponent implements OnInit {
             gsm_personnel: JSON.parse(element?.contact)?.gsm_personnel,
             availablity: element?.availablity,
             parc: element?.parc?.name,
-            departement: element?.departement,
+            projet: element?.projet,
             service: element?.service,
-            direction: element?.direction,
+            entity: element?.entity,
             contract_type: element?.contract_type,
           });
         }
@@ -235,9 +262,9 @@ export class GestionPersonnelComponent implements OnInit {
               gsm_personnel: JSON.parse(element?.contact).gsm_personnel,
               availablity: element?.availablity,
               parc: element?.parc.name,
-              departement: element?.departement,
+              projet: element?.projet,
               service: element?.service,
-              direction: element?.direction,
+              entity: element?.entity,
               contract_type: element?.contract_type,
             });
           }
@@ -263,9 +290,9 @@ export class GestionPersonnelComponent implements OnInit {
           gsm_personnel: JSON.parse(element?.contact)?.gsm_personnel,
           availablity: element?.availablity,
           parc: element?.parc?.name,
-          departement: element?.departement,
+          projet: element?.projet,
           service: element?.service,
-          direction: element?.direction,
+          entity: element?.entity,
           contract_type: element?.contract_type,
         });
       });

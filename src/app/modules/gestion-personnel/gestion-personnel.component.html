@@ -108,10 +108,10 @@
             <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
           </div>
           <div class="pl-0">
-            <p class="text-[#b5b5b5] text-[9px] font-medium">Direction :</p>
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Entité :</p>
             <div class="flex">
               <p class="text-[12px] text-[#000000]">
-                {{personel?.direction || '---' }}
+                {{personel?.entity?.name || '---' }}
               </p>
             </div>
           </div>
@@ -123,10 +123,10 @@
             <mat-icon class="text-[19px] text-[#138742]">Code</mat-icon>
           </div>
           <div class="pl-0">
-            <p class="text-[#b5b5b5] text-[9px] font-medium">Département :</p>
+            <p class="text-[#b5b5b5] text-[9px] font-medium">Projet :</p>
             <div class="flex">
               <p class="text-[12px] text-[#000000]">
-                {{personel?.departement || '---'}}
+                {{personel?.projet?.name || '---'}}
               </p>
             </div>
           </div>

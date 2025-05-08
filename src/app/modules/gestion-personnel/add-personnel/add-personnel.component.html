@@ -283,14 +283,14 @@
             </mat-form-field>
           </div>
           <div>
-            <div *ngIf="f.value.function == 'DRIVER'">
+            <!-- <div *ngIf="f.value.function == 'DRIVER'">
               <mat-form-field appearance="fill" class="w-[100%] mb-4">
                 <mat-label>Affectation</mat-label>
                 <mat-select multiple formControlName="affectation" matNativeControl [required]="Conducteur">
                   <mat-option *ngFor="let tonnage of tonnages" [value]="tonnage.id">{{ tonnage.name }}T</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+            </div> -->
 
             <div *ngIf="f.value.function == 'COMMERCIAL'">
               <mat-form-field appearance="fill" class="w-[100%] mb-4">

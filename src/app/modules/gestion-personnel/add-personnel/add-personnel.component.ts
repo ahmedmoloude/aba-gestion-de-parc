@@ -374,7 +374,7 @@ export class AddPersonnelComponent implements OnInit {
         Validators.pattern(PHONE_REGEX),
       ]),
       entry_date: new FormControl(''),
-      affectation: new FormControl(''),
+      // affectation: new FormControl(''),
       dirver_licence_numero: new FormControl(''),
       dirver_licence_type: new FormControl(''),
       end_date_cin: new FormControl(''),

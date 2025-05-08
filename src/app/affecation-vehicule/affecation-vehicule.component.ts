@@ -33,7 +33,7 @@ export class AffecationVehiculeComponent implements OnInit {
   setForm(): void {
     this.createAffectation = new FormGroup({
       chauffeur_id: new FormControl('', Validators.required),
-      mission: new FormControl('', Validators.required),
+      mission: new FormControl(''),
       truck_id: new FormControl(this.data?.item?.id || '', Validators.required),
       date_affectation: new FormControl('', Validators.required),
     });
