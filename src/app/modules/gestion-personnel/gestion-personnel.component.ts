@@ -54,20 +54,6 @@ export class GestionPersonnelComponent implements OnInit {
       options: []
     },
     {
-      name: 'service',
-      placeholder: 'Service',
-      type: 'select',
-      options:[]
-    }
-  ];
-  extraInputsFiler = [
-    {
-      name: 'parc',
-      placeholder: 'Parc',
-      type: 'select',
-      options:[]
-    },
-    {
       name: 'function',
       placeholder: 'Fonction',
       type: 'select',
@@ -102,6 +88,8 @@ export class GestionPersonnelComponent implements OnInit {
         },
       ]
     },
+  ];
+  extraInputsFiler = [
     {
       name: 'type_contrat',
       placeholder: 'Type de contrat ',
@@ -141,8 +129,8 @@ export class GestionPersonnelComponent implements OnInit {
   PersonnelsArray;
   entities = [];
   projets = [];
-  parcs = [];
-  services = [];
+  // parcs = [];
+  // services = [];
 
   constructor(
     private _router: Router,
@@ -158,7 +146,7 @@ export class GestionPersonnelComponent implements OnInit {
   ngOnInit(): void {
     this.getAllPersonnels();
     this.store.dispatch(loadRoles());
-    this.getServicesandParcs();
+    // this.getServicesandParcs();
 
     this.EntityService.getEntities().subscribe(
       (data) => {
@@ -179,7 +167,7 @@ export class GestionPersonnelComponent implements OnInit {
       (data) => {
         this.projets = data['response'];
         for(var i=0; i<this.projets.length; i++){
-          this.inputsFiler["3"].options.push({
+          this.inputsFiler["4"].options.push({
             'text' : this.projets[i].name,
             'value' : this.projets[i].id,
           })
@@ -207,9 +195,9 @@ export class GestionPersonnelComponent implements OnInit {
             email: JSON.parse(element?.contact)?.email,
             gsm_personnel: JSON.parse(element?.contact)?.gsm_personnel,
             availablity: element?.availablity,
-            parc: element?.parc?.name,
+            // parc: element?.parc?.name,
             projet: element?.projet,
-            service: element?.service,
+            // service: element?.service,
             entity: element?.entity,
             contract_type: element?.contract_type,
           });
@@ -221,28 +209,28 @@ export class GestionPersonnelComponent implements OnInit {
     });
   }
 
-    getServicesandParcs(){
-      this.typeServiceService.getAllServices().subscribe((res) => {
-        this.services = res;
-        for (const item of this.services) {
-              this.inputsFiler["5"].options.push({
-              'text' : item.name,
-              'value' : item.id,
-            })
-          }
-      }
-    );
-    this.store.select(selectEnvparcPayload).subscribe((res) => {
-      // console.log(" parc========>", res)
-      this.parcs = res;
-      for (const item of this.parcs) {
-        this.extraInputsFiler["0"].options.push({
-          'text' : item.name,
-          'value' : item.id,
-        })
-      }
-    });
-  }
+  //   getServicesandParcs(){
+  //     this.typeServiceService.getAllServices().subscribe((res) => {
+  //       this.services = res;
+  //       for (const item of this.services) {
+  //             this.inputsFiler["5"].options.push({
+  //             'text' : item.name,
+  //             'value' : item.id,
+  //           })
+  //         }
+  //     }
+  //   );
+  //   this.store.select(selectEnvparcPayload).subscribe((res) => {
+  //     // console.log(" parc========>", res)
+  //     this.parcs = res;
+  //     for (const item of this.parcs) {
+  //       this.extraInputsFiler["0"].options.push({
+  //         'text' : item.name,
+  //         'value' : item.id,
+  //       })
+  //     }
+  //   });
+  // }
 
   getPersonnel() {
     this.isLoading = true;
@@ -261,9 +249,9 @@ export class GestionPersonnelComponent implements OnInit {
               email: JSON.parse(element?.contact).email,
               gsm_personnel: JSON.parse(element?.contact).gsm_personnel,
               availablity: element?.availablity,
-              parc: element?.parc.name,
+              // parc: element?.parc.name,
               projet: element?.projet,
-              service: element?.service,
+              // service: element?.service,
               entity: element?.entity,
               contract_type: element?.contract_type,
             });
@@ -289,9 +277,9 @@ export class GestionPersonnelComponent implements OnInit {
           email: JSON.parse(element?.contact)?.email,
           gsm_personnel: JSON.parse(element?.contact)?.gsm_personnel,
           availablity: element?.availablity,
-          parc: element?.parc?.name,
+          // parc: element?.parc?.name,
           projet: element?.projet,
-          service: element?.service,
+          // service: element?.service,
           entity: element?.entity,
           contract_type: element?.contract_type,
         });
